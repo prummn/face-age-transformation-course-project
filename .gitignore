@@ -1,0 +1,12 @@
+# Local research scripts, caches and rendered previews
+/tmp/
+
+# Python caches
+__pycache__/
+*.py[cod]
+
+# Windows and editor noise
+Thumbs.db
+Desktop.ini
+.vscode/
+.idea/

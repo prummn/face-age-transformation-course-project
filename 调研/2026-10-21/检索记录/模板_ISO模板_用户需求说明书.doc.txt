@@ -1,0 +1,59 @@
+  SUBJECT  \* MERGEFORMAT  <项目名称> 
+用户需求说明书
+
+版本 <1.0>
+修订历史记录
+版本/状态 作者 参与者 起止日期 备注                                   
+目录
+  TOC \o "1-3" \h \z \u    HYPERLINK \l "_Toc104171751"   0. 文档介绍	  PAGEREF _Toc104171751 \h   2  
+  HYPERLINK \l "_Toc104171752"   0.1 文档目的	  PAGEREF _Toc104171752 \h   2  
+  HYPERLINK \l "_Toc104171753"   0.2 文档范围	  PAGEREF _Toc104171753 \h   2  
+  HYPERLINK \l "_Toc104171754"   0.3 读者对象	  PAGEREF _Toc104171754 \h   2  
+  HYPERLINK \l "_Toc104171755"   0.4 参考文档	  PAGEREF _Toc104171755 \h   2  
+  HYPERLINK \l "_Toc104171756"   0.5 术语与缩写解释	  PAGEREF _Toc104171756 \h   2  
+  HYPERLINK \l "_Toc104171757"   1. 产品介绍	  PAGEREF _Toc104171757 \h   2  
+  HYPERLINK \l "_Toc104171758"   2. 产品用户群体	  PAGEREF _Toc104171758 \h   2  
+  HYPERLINK \l "_Toc104171759"   3. 同类产品情况	  PAGEREF _Toc104171759 \h   2  
+  HYPERLINK \l "_Toc104171760"   4. 产品应当遵循的标准或规范	  PAGEREF _Toc104171760 \h   3  
+  HYPERLINK \l "_Toc104171761"   5. 产品的功能性需求	  PAGEREF _Toc104171761 \h   3  
+  HYPERLINK \l "_Toc104171762"   5.0 功能性需求分类	  PAGEREF _Toc104171762 \h   3  
+  HYPERLINK \l "_Toc104171763"   5.n功能（特征描叙） N	  PAGEREF _Toc104171763 \h   3  
+  HYPERLINK \l "_Toc104171764"   5.n.m Function N.M	  PAGEREF _Toc104171764 \h   3  
+  HYPERLINK \l "_Toc104171765"   6. 产品的非功能性需求	  PAGEREF _Toc104171765 \h   3  
+  HYPERLINK \l "_Toc104171766"   6.1 用户界面需求	  PAGEREF _Toc104171766 \h   3  
+  HYPERLINK \l "_Toc104171767"   6.2 软硬件环境需求	  PAGEREF _Toc104171767 \h   4  
+  HYPERLINK \l "_Toc104171768"   6.3 产品质量需求	  PAGEREF _Toc104171768 \h   4  
+  HYPERLINK \l "_Toc104171769"   6.n 其它需求	  PAGEREF _Toc104171769 \h   4  
+  HYPERLINK \l "_Toc104171770"   附录A:	  PAGEREF _Toc104171770 \h   4  
+  0. 文档介绍
+0.1 文档目的
+0.2 文档范围
+0.3 读者对象
+0.4 参考文档
+提示：列出本文档的所有参考文献（包括非正式出版物），格式如下：
+[序号标识符] 作者，文献名称，出版单位（或归属单位），日期
+例如：
+[P1-MF] Author，计量开发规范，机构名称，日期
+0.5 术语与缩写解释
+缩写、术语 解 释                 …     1. 产品介绍
+产品介绍主要说明产品特征、用途，项目背景等
+2. 产品用户群体
+（1）描述本产品面向的用户（客户、最终用户）的特征，
+（2）说明产品对他们的用处，带来的利益，用户可能的购买比例
+3. 同类产品情况
+作为参考依据
+4. 产品应当遵循的标准或规范
+阐述本产品应当遵循什么标准、规范或业务规则 
+5. 产品的功能性需求
+5.0 功能性需求分类
+提示：将功能性需求先粗分再细分，下表中的 Feature A, Function A.1等符号应当被替换成有含义的名称。
+功能类别 子功能  Feature A Function A.1   Function A.2   …  Feature B Function B.1   Function B.2   …  …  
+    5.n功能（特征描叙） N
+5.n.m Function N.M
+功能描述：
+6. 产品的非功能性需求
+6.1 用户界面需求
+需求名称 详细要求                       6.2 软硬件环境需求
+需求名称 详细要求                 …    6.3 产品质量需求
+主要质量属性 详细要求  正确性    健壮性    可靠性    运行效率    易用性    友好性    安全性    可扩展性    兼容性    可移植性    …    6.n 其它需求
+附录A:
