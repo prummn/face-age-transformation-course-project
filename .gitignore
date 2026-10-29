@@ -1,5 +1,6 @@
 # Local research scripts, caches and rendered previews
 /tmp/
+/.superpowers/
 
 # Python caches
 __pycache__/
