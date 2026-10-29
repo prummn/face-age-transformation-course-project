@@ -39,7 +39,7 @@ body[data-view="s-mirror"]{overflow:hidden}.app:has(#s-mirror:not([hidden])){hei
 }
 
 
-#s-input .review{margin:32px 0 20px}#s-input .review canvas{width:112px;height:140px}#s-input .age-edit{justify-content:center;margin:30px 0}#s-input .field-label{text-align:center}#s-input .actions{margin-top:30px}#s-input .age-options{margin-top:22px}#generationModeNote{text-align:center}#s-grid .result-tools{grid-template-columns:1fr}#s-grid .page-photo canvas{height:66dvh}.journal-tools{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}.journal-tools button{font-size:15px;padding:12px 8px;border:0}#taskDetails{margin:20px 0}
+#s-input .review{margin:32px 0 20px}#s-input .review canvas{width:112px;height:140px}#s-input .age-edit{justify-content:center;margin:30px 0}#s-input .field-label{text-align:center}#s-input .actions{margin-top:30px}#s-input .age-options{margin-top:22px}#generationModeNote{text-align:center}#s-grid .result-tools{grid-template-columns:1fr 1fr}#s-grid .page-photo canvas{height:66dvh}.journal-tools{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}.journal-tools button{font-size:15px;padding:12px 8px;border:0}#taskDetails{margin:20px 0}
 @media(min-width:600px) and (min-height:600px){#s-grid .page-photo canvas{height:calc(var(--preview-height)*.66)}}
 </style>
 </head>
@@ -76,7 +76,7 @@ body[data-view="s-mirror"]{overflow:hidden}.app:has(#s-mirror:not([hidden])){hei
   <div class="page-track" id="pageTrack" aria-label="左右滑动浏览年龄"></div>
   <div class="page-controls"><button id="pagePrev" aria-label="上一页">←</button><div class="page-dots" id="pageDots"></div><button id="pageNext" aria-label="下一页">→</button></div>
 
-  <div class="result-tools"><button class="primary" id="bShare">保存这一页</button></div>
+  <div class="result-tools"><button class="primary" id="bShare">保存这一页</button><button id="bRetakeResults">再拍一张</button></div>
   <p class="small" id="resultDisclosure">演示滤镜</p>
  </section>
  <section id="s-detail" hidden><h2 id="detailMeta">前后对比</h2><div class="view-select"><button class="active" id="bCropView">人脸对比</button><button id="bPasteView">回贴原图</button></div><div class="cmp" id="cmp"><canvas id="cmpA"></canvas><canvas id="cmpB"></canvas><span class="cmp-label left" id="lblA">原始照片</span><span class="cmp-label right" id="lblB">目标年龄</span><div class="handle" id="handle"></div></div><label class="visually-hidden" for="split">对比分割线</label><input type="range" id="split" min="0" max="100" value="50"><div class="row actions"><button id="bBack">返回手记</button><button class="primary" id="bSave">保存对比</button></div><p class="help-line" id="detailDisclosure">演示滤镜 · 外观模拟</p></section>
@@ -120,6 +120,7 @@ function release(c){if(c instanceof HTMLCanvasElement){c.width=0;c.height=0;}els
 function show(id){
  if(id!=='s-grid')stopPlay();
  S.state=id;
+ $('#bHome').setAttribute('aria-label',id==='s-grid'?'返回主页':id==='s-detail'&&S.detailReturn==='s-overview'?'返回总览':S.results.size?'返回结果':'返回取景');
  $('#journalTools').hidden=!S.results.size;
  document.body.dataset.view=id;
  document.querySelectorAll('main>section').forEach(el=>el.hidden=el.id!==id);
@@ -135,6 +136,7 @@ function stopCamera(){if(S.stream)S.stream.getTracks().forEach(t=>t.stop());S.st
 function resetTracking(){F.faces=[];F.tracks=[];F.selectedId=null;F.lastBox=null;F.lastSeen=0;F.stableSince=0;F.countStart=0;F.lastVideoTime=-1;F.quality=null;renderFaceChoices();}
 function toWaiting(){
  S.epoch++;stopGeneration();stopPlay();stopCamera();
+ S.editSnapshot=null;S.detailReturn='s-grid';$('#clearDialog').hidden=true;
  if(comparisonImages?.temporary)release(comparisonImages.right);comparisonImages=null;S.manual=false;
  const sensitive=[S.face,S.original,...S.results.values()];sensitive.forEach(release);
  S.face=S.original=S.transform=S.age=S.ageInfo=S.pick=null;S.quality=null;S.source=null;S.targets=[18,30,45,60,75];S.results.clear();S.tasks.clear();S.pages=[];S.staticFaces=[];S.staticSelected=null;S.manualBox=null;S.log=[];S.pageIndex=0;S.view='crop';resetTracking();
@@ -318,7 +320,7 @@ async function confirmFace(){
  if(adapters().estimate){$('#estimateStatus').textContent='正在估计当前年龄…';try{const info=await adapters().estimate(S.face);if(epoch!==S.epoch||ageRevision!==S.ageRevision)return;if(!Number.isFinite(info.age))throw new Error('年龄结果无效');S.age=clamp(Math.round(info.age),1,99);S.ageInfo=info;$('#currentAgeInput').value=S.age;$('#estimateStatus').textContent='模型估龄，可按实际情况修正。';$('#ageDetails').textContent=JSON.stringify(info,null,2);renderDifferences();}catch(error){if(epoch===S.epoch&&ageRevision===S.ageRevision)$('#estimateStatus').textContent='估龄暂不可用，请手动填写。';}}
  if(epoch===S.epoch&&ageRevision===S.ageRevision&&S.age!==null&&S.state==='s-input'&&(S.mode!=='mirror'||!quality.warnings.length)){S.targets=defaultTargets(S.age).slice(0,6);await continueFromInput();}
 }
-function showInput(){if(!S.face)return;stopGeneration();closeOptions();show('s-input');const c=$('#previewCv');c.width=c.height=FACE;c.getContext('2d').drawImage(S.face,0,0);if(S.age!==null)$('#currentAgeInput').value=S.age;$('#agePromptTitle').textContent=S.age===null?'补充当前年龄':'调整年龄';$('#targetEditor').open=false;$('#qualityWarning').textContent=S.quality?.warnings[0]||'';$('#qualityWarning').hidden=!S.quality?.warnings.length;renderTargetChips();notice('#inputNotice','');$('#generationModeNote').textContent=adapters().generate?'':'演示滤镜';}
+function showInput(){if(!S.face)return;stopGeneration();if(S.state!=='s-input')S.editSnapshot=S.results.size?{age:S.age,ageInfo:S.ageInfo,targets:[...S.targets],estimateStatus:$('#estimateStatus').textContent}:null;closeOptions();show('s-input');const c=$('#previewCv');c.width=c.height=FACE;c.getContext('2d').drawImage(S.face,0,0);if(S.age!==null)$('#currentAgeInput').value=S.age;$('#agePromptTitle').textContent=S.age===null?'补充当前年龄':'调整年龄';$('#targetEditor').open=false;$('#qualityWarning').textContent=S.quality?.warnings[0]||'';$('#qualityWarning').hidden=!S.quality?.warnings.length;renderTargetChips();notice('#inputNotice','');$('#generationModeNote').textContent=adapters().generate?'':'演示滤镜';}
 function renderTargetChips(){const el=$('#targetChips');el.replaceChildren();S.targets.forEach(t=>{const b=document.createElement('button');b.className='selected';b.textContent=`${t} 岁 ×`;b.setAttribute('aria-label',`移除 ${t} 岁`);b.onclick=()=>{S.targets=S.targets.filter(n=>n!==t);renderTargetChips();};el.append(b);});renderDifferences();}
 function renderDifferences(){const age=validInteger($('#currentAgeInput').value,1,99);$('#targetDifferences').textContent=age===null?'填写当前年龄后显示年龄差。':S.targets.map(t=>`${t} 岁（${t-age>=0?'+':''}${t-age} 年）`).join(' · ');}
 function appendTarget(n){if(n===null||n<5||n>90){notice('#inputNotice','目标年龄须在 5–90 岁之间。',true);return false;}if(S.targets.includes(n)){notice('#inputNotice','这个年龄已经选过了。',true);return false;}if(S.targets.length>=CONFIG.maxTargets){notice('#inputNotice','最多选择 8 个目标年龄，先移除一个再添加。',true);return false;}S.targets.push(n);S.targets.sort((a,b)=>a-b);renderTargetChips();notice('#inputNotice','');return true;}
@@ -383,6 +385,12 @@ function ageFace(srcCanvas,cur,tgt){
 
 
 
+
+
+
+
+
+
 // Real generation can replace this adapter; status and retry are shared by both paths.
 function generateWithTimeout(args){
  return new Promise((resolve,reject)=>{let settled=false;const timer=setTimeout(()=>{settled=true;reject(new Error('处理超时，可重试'));},CONFIG.timeoutMs);
@@ -391,7 +399,7 @@ function generateWithTimeout(args){
 async function continueFromInput(){
  if(!S.face)return;const age=validInteger($('#currentAgeInput').value,1,99);if(age===null){notice('#inputNotice','当前年龄需要填写 1–99 之间的整数。',true);$('#currentAgeInput').focus();return;}
  if(!S.targets.length||S.targets.length>8){notice('#inputNotice','请选择 1–8 个目标年龄。',true);return;}
- stopGeneration();S.ageRevision=(S.ageRevision||0)+1;S.age=age;S.results.forEach(release);S.results.clear();S.tasks=new Map(S.targets.map(t=>[t,{state:'queued',elapsed:0,error:''}]));S.demonstration=!adapters().generate;S.log=[];
+ stopGeneration();S.editSnapshot=null;S.ageRevision=(S.ageRevision||0)+1;S.age=age;S.results.forEach(release);S.results.clear();S.tasks=new Map(S.targets.map(t=>[t,{state:'queued',elapsed:0,error:''}]));S.demonstration=!adapters().generate;S.log=[];
  show('s-warp');$('#taskDetails').open=false;renderTasks();await runTargets([...S.targets]);
 }
 async function runTargets(targets){
@@ -414,9 +422,9 @@ async function runTargets(targets){
 function renderTasks(){
  const list=$('#taskList');list.replaceChildren();let done=0,failed=0;
  S.tasks.forEach((task,t)=>{const li=document.createElement('li'),name=document.createElement('span'),status=document.createElement('small');name.textContent=`${t} 岁`;status.textContent={queued:'等待',running:'处理中',done:`完成 · ${(task.elapsed/1000).toFixed(2)} s`,failed:'失败',cancelled:'已取消'}[task.state];li.append(name,status);if(task.state==='done')done++;if(task.state==='failed'){failed++;const retry=document.createElement('button');retry.textContent='重试';retry.disabled=S.generating;retry.onclick=()=>runTargets([t]);li.append(retry);li.title=task.error;}list.append(li);});
- $('#progressFill').style.width=`${(done+failed)/Math.max(1,S.tasks.size)*100}%`;$('#taskSummary').textContent=failed?`${done} 个年龄已完成，${failed} 个暂未成功，可重试。`:`${done} / ${S.tasks.size} 个年龄`;$('#bShowResults').disabled=!done;if(failed)$('#taskDetails').open=true;
+ $('#progressFill').style.width=`${(done+failed)/Math.max(1,S.tasks.size)*100}%`;$('#taskSummary').textContent=failed?`${done} 个年龄已完成，${failed} 个暂未成功，可重试。`:`${done} / ${S.tasks.size} 个年龄`;$('#bShowResults').disabled=!done;$('#bCancelGenerate').textContent=!S.generating&&done?'返回结果':'取消并返回设置';if(failed)$('#taskDetails').open=true;
 }
-function cancelGenerate(){stopGeneration();S.tasks.forEach(t=>{if(['queued','running'].includes(t.state))t.state='cancelled';});showInput();}
+function cancelGenerate(){if(!S.generating&&S.results.size){returnToResults();return;}stopGeneration();S.tasks.forEach(t=>{if(['queued','running'].includes(t.state))t.state='cancelled';});showInput();}
 
 // Photographs turn as pages; the grid remains a secondary contact sheet for FR10.
 function buildPages(){
@@ -442,7 +450,7 @@ function pasteBack(result){
  const out=canvas(S.original.width,S.original.height),g=out.getContext('2d');g.drawImage(S.original,0,0);const masked=canvas(),mg=masked.getContext('2d');mg.drawImage(result,0,0);mg.globalCompositeOperation='destination-in';const mask=mg.createRadialGradient(128,128,62,128,128,126);mask.addColorStop(0,'#fff');mask.addColorStop(.65,'#fff');mask.addColorStop(1,'transparent');mg.fillStyle=mask;mg.fillRect(0,0,FACE,FACE);g.setTransform(...S.transform.inverse);g.drawImage(masked,0,0);g.setTransform(1,0,0,1,0,0);release(masked);return out;
 }
 let comparisonImages=null;
-function openDetail(target){if(!S.results.has(target))return;S.pick=target;S.view='crop';$('#split').value=50;show('s-detail');prepareComparison();}
+function openDetail(target){if(!S.results.has(target))return;S.detailReturn=S.state==='s-overview'?'s-overview':'s-grid';S.pick=target;S.view='crop';$('#split').value=50;$('#bBack').textContent=S.detailReturn==='s-overview'?'返回总览':'返回手记';show('s-detail');prepareComparison();}
 function prepareComparison(){
  if(!S.face||!S.results.has(S.pick))return;
  if(comparisonImages?.temporary)release(comparisonImages.right);
@@ -467,6 +475,16 @@ function saveOverview(){
 }
 
 // Phone interaction never depends on staying in the camera view.
+function returnToResults(){if(!S.results.size){toWaiting();return;}if(!S.pages.length||S.pages.some(p=>p.t!==null&&S.results.get(p.t)!==p.image))buildPages();else{show('s-grid');goPage(S.pageIndex);}}
+function leaveComparison(){if(comparisonImages?.temporary)release(comparisonImages.right);comparisonImages=null;if(S.detailReturn==='s-overview')show('s-overview');else returnToResults();}
+function navigateBack(){
+ if(S.state==='s-detail'){leaveComparison();return;}
+ if(S.state==='s-overview'){returnToResults();return;}
+ if(S.state==='s-input'&&S.results.size){if(S.editSnapshot){S.age=S.editSnapshot.age;S.ageInfo=S.editSnapshot.ageInfo;S.targets=[...S.editSnapshot.targets];$('#currentAgeInput').value=S.age;$('#estimateStatus').textContent=S.editSnapshot.estimateStatus;S.editSnapshot=null;}returnToResults();return;}
+ if(S.state==='s-warp'){if(S.generating){stopGeneration();S.tasks.forEach(t=>{if(['running','queued'].includes(t.state))t.state='cancelled';});}if(S.results.size){buildPages();return;}showInput();return;}
+ toWaiting();
+}
+function retake(){const useCamera=S.source==='camera';toWaiting();if(useCamera)startCamera();}
 $('#bStartCamera').onclick=startCamera;$('#bCapture').onclick=capture;$('#bUpload').onclick=()=>$('#file').click();$('#file').onchange=e=>{const f=e.target.files[0];if(f)loadImage(f);e.target.value='';};
 $('#bSwitchCamera').onclick=()=>{S.facing=S.facing==='user'?'environment':'user';startCamera();};$('#faceOverlay').addEventListener('pointerdown',selectFaceAt);
 $('#experienceMode').onchange=e=>{S.mode=e.target.value;F.stableSince=F.countStart=0;notice('#hudText',S.mode==='mirror'?'稳定停留后自动拍摄；离开 5 秒清空。':'点按拍摄，结果不会随离开镜头消失。');};
@@ -474,12 +492,12 @@ $('#bManual').onclick=enableManual;$('#bSelectConfirm').onclick=confirmFace;$('#
 $('#currentAgeInput').oninput=manualAgeEdited;
 $('#targetKind').onchange=()=>{const relative=$('#targetKind').value==='delta',input=$('#targetAgeInput');input.min=relative?-98:5;input.max=relative?98:90;input.placeholder=relative?'例如 -10 或 +20':'5–90 岁';input.value='';};
 $('#agePresets').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.preset){S.targets=b.dataset.preset==='decades'?[10,20,30,40,50,60,70,80]:[8,20,45,75];renderTargetChips();notice('#inputNotice','已替换目标年龄，可继续添加或移除。');return;}const age=validInteger($('#currentAgeInput').value,1,99);if(age===null){notice('#inputNotice','先填写当前年龄。',true);return;}appendTarget(age+Number(b.dataset.delta));};
-$('#bContinue').onclick=continueFromInput;$('#bRetakeInput').onclick=toWaiting;$('#bRetakePreview').onclick=toWaiting;$('#bEditAge').onclick=showInput;$('#bCancelGenerate').onclick=cancelGenerate;$('#bShowResults').onclick=buildPages;
+$('#bContinue').onclick=continueFromInput;$('#bRetakeInput').onclick=retake;$('#bRetakePreview').onclick=retake;$('#bRetakeResults').onclick=retake;$('#bEditAge').onclick=showInput;$('#bCancelGenerate').onclick=cancelGenerate;$('#bShowResults').onclick=buildPages;
 $('#pagePrev').onclick=()=>{stopPlay();goPage(S.pageIndex-1);};$('#pageNext').onclick=()=>{stopPlay();goPage(S.pageIndex+1);};$('#pageTrack').addEventListener('pointerdown',stopPlay,{passive:true});$('#bPlay').onclick=()=>{closeOptions();if(S.state!=='s-grid'){show('s-grid');goPage(S.pageIndex);}S.autoTimer?stopPlay():startPlay();};
-$('#bOverview').onclick=()=>{closeOptions();buildOverview();};$('#bOverviewBack').onclick=()=>{show('s-grid');goPage(S.pageIndex);};$('#bOverviewSave').onclick=saveOverview;$('#bShare').onclick=sharePick;$('#bBack').onclick=()=>{show('s-grid');goPage(S.pageIndex);};$('#bSave').onclick=savePick;$('#bTaskStatus').onclick=()=>{closeOptions();show('s-warp');$('#taskDetails').open=true;renderTasks();};
+$('#bOverview').onclick=()=>{closeOptions();buildOverview();};$('#bOverviewBack').onclick=returnToResults;$('#bOverviewSave').onclick=saveOverview;$('#bShare').onclick=sharePick;$('#bBack').onclick=leaveComparison;$('#bSave').onclick=savePick;$('#bTaskStatus').onclick=()=>{closeOptions();show('s-warp');$('#taskDetails').open=true;renderTasks();};
 $('#split').oninput=updateSplit;$('#bCropView').onclick=()=>{S.view='crop';prepareComparison();};$('#bPasteView').onclick=()=>{S.view='paste';prepareComparison();};
 $('#bReset').onclick=()=>{closeOptions();if(S.face||S.original){$('#clearDialog').hidden=false;$('#bClearCancel').focus();}else{toWaiting();toast('本次数据已清除。');}};
-$('#bHome').onclick=()=>{if(S.face||S.original)$('#clearDialog').hidden=false;else show('s-mirror');};
+$('#bHome').onclick=navigateBack;
 $('#bClearCancel').onclick=()=>$('#clearDialog').hidden=true;$('#bClearConfirm').onclick=()=>{$('#clearDialog').hidden=true;toWaiting();toast('本次数据已清除。');};
 function closeOptions(){$('#infoSheet').hidden=true;$('#bInfo').setAttribute('aria-expanded','false');$('#bInfo').focus();}
 $('#bInfo').setAttribute('aria-haspopup','dialog');$('#bInfo').setAttribute('aria-expanded','false');

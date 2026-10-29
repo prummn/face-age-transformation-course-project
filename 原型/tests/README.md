@@ -10,6 +10,7 @@ node 原型/tests/mobile-flow.cjs
 node 原型/tests/edge-cases.cjs
 node 原型/tests/immersive-layout.cjs
 node 原型/tests/postcapture-flow.cjs
+node 原型/tests/navigation-flow.cjs
 ```
 
 后两项使用被 Git 忽略的 `tmp/qa_portrait.jpg` 与 `tmp/qa_two_faces.jpg`。测试肖像来自 MediaPipe 官方测试素材 https://storage.googleapis.com/mediapipe-assets/portrait.jpg ，不作为产品示例分发。双脸样本由该肖像裁取顶部62%后左右并排组成。请先在tmp放好这些测试文件；测试会将截图、导出PNG也写入tmp。
