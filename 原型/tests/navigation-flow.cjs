@@ -2,7 +2,7 @@ const {chromium}=require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const assert=require('node:assert/strict');
 (async()=>{
  const browser=await chromium.launch({headless:true,...(process.env.CHROME_PATH?{executablePath:process.env.CHROME_PATH}:{})});
- const seed=async page=>{await page.goto('http://localhost:65512/');await page.evaluate(async()=>{S.original=canvas(640,640);S.original.getContext('2d').fillRect(0,0,640,640);S.source='upload';S.staticFaces=[{id:1,x:.2,y:.2,w:.5,h:.5,manual:true}];S.staticSelected=1;window.AgeMirrorAdapters={estimate:async()=>({age:32})};await confirmFace();});};
+ const seed=async page=>{await page.goto('http://localhost:65512/');await page.evaluate(async()=>{S.original=canvas(640,640);S.original.getContext('2d').fillRect(0,0,640,640);S.source='upload';S.staticFaces=[{id:1,x:.2,y:.2,w:.5,h:.5,manual:true}];S.staticSelected=1;window.AgeMirrorAdapters={estimate:async()=>({age:32})};await confirmFace();stopPlay();goPage(0);});};
  const cases=[
   ['results return directly home and end session',async page=>{await page.locator('#bHome').click();assert.equal(await page.evaluate(()=>S.state),'s-mirror');assert.equal(await page.evaluate(()=>S.results.size),0);assert.equal(await page.locator('#clearDialog').isVisible(),false);}],
   ['results expose retake and allow another photo',async page=>{assert.equal(await page.locator('#bRetakeResults').count(),1);await page.locator('#bRetakeResults').click();assert.equal(await page.evaluate(()=>S.state),'s-mirror');await page.locator('#file').setInputFiles('tmp/qa_portrait.jpg');await page.waitForFunction(()=>S.state==='s-grid');assert.ok(await page.evaluate(()=>S.results.size)>0);}],

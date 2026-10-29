@@ -13,11 +13,8 @@ const fs=require('node:fs');
  console.log('DETECTION',await page.evaluate(()=>({kind:DET.kind,faces:S.staticFaces.length,points:S.staticFaces[0].oval.length})));
  assert.equal(await page.evaluate(()=>DET.kind),'mesh');
  await page.screenshot({path:'tmp/mobile-selection.png',fullPage:true});
- await page.waitForFunction(()=>S.state==='s-input');
- await page.locator('#currentAgeInput').fill('25');
- await page.locator('#bContinue').click();
- await page.waitForFunction(()=>S.state==='s-grid');
- assert.equal(await page.locator('.age-page').count(),6);
+ await page.waitForFunction(()=>S.state==='s-grid');await page.evaluate(()=>{stopPlay();goPage(0);});await page.waitForTimeout(500);
+ assert.equal(await page.locator('.age-page').count(),5);
  const touch=await page.context().newCDPSession(page);const bounds=await page.locator('#pageTrack').boundingBox();const y=Math.min(bounds.y+120,700);
  await touch.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:320,y}]});
  for(let x=300;x>=65;x-=25){await touch.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x,y}]});await page.waitForTimeout(20);}
@@ -32,7 +29,7 @@ const fs=require('node:fs');
  await page.screenshot({path:'tmp/mobile-compare.png',fullPage:true});
  const dl=page.waitForEvent('download');await page.locator('#bSave').click();const d=await dl;await d.saveAs('tmp/export-compare.png');assert.ok(fs.statSync('tmp/export-compare.png').size>10000);
  await page.locator('#bBack').click();await page.locator('#bInfo').click();await page.locator('#bOverview').click();
- assert.equal(await page.locator('.overview-card').count(),6);
+ assert.equal(await page.locator('.overview-card').count(),5);
  await page.screenshot({path:'tmp/mobile-overview.png',fullPage:true});
  for(const viewport of [{width:320,height:568},{width:844,height:390},{width:1280,height:900}]){
   await page.setViewportSize(viewport);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'overflow '+JSON.stringify(viewport));
