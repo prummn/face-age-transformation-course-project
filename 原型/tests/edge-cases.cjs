@@ -10,7 +10,7 @@ const assert=require('node:assert/strict');
  assert.equal(await page.locator('#bSelectConfirm').isDisabled(),true);
  await page.locator('#staticFaceChoices button').nth(1).click();assert.equal(await page.evaluate(()=>S.staticSelected),2);
  await page.screenshot({path:'tmp/mobile-multiple.png',fullPage:true});await page.locator('#bSelectConfirm').click();
- await page.locator('#currentAgeInput').fill('40');await page.locator('#targetKind').selectOption('delta');await page.locator('#targetAgeInput').fill('-10');
+ await page.locator('#currentAgeInput').fill('40');await page.locator('.age-options summary').click();await page.locator('#targetKind').selectOption('delta');await page.locator('#targetAgeInput').fill('-10');
  await page.evaluate(()=>{S.targets=[20,50];renderTargetChips();});await page.locator('#addTarget').click();assert.deepEqual(await page.evaluate(()=>S.targets),[20,30,50]);
  // Real result can fail independently, retry, and time out; it must never become a simulated success.
  await page.evaluate(()=>{window.AgeMirrorAdapters={generate:async({image,targetAge})=>{if(targetAge===30)throw new Error('QA service failure');return image;}};});
@@ -26,8 +26,8 @@ const assert=require('node:assert/strict');
  // Simulated camera uses an actual decoded photo and MediaPipe inference, not stubbed landmarks.
  await page.route('**/qa-live.jpg',r=>r.fulfill({path:'tmp/qa_portrait.jpg',contentType:'image/jpeg'}));
  await page.evaluate(async()=>{const img=new Image();img.src='/'+encodeURIComponent('qa-live.jpg');await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;});window.qaCam=canvas(640,480);const g=qaCam.getContext('2d');g.drawImage(img,0,0,640,480);window.qaCamTimer=setInterval(()=>{g.drawImage(img,0,0,640,480);},80);navigator.mediaDevices.getUserMedia=async()=>qaCam.captureStream(15);});
- await page.locator('#bStartCamera').click();await page.waitForFunction(()=>S.stream&&F.faces[0]?.oval?.length===36,{},{timeout:15000});
- assert.equal(await page.evaluate(()=>F.faces[0].oval.length),36);await page.screenshot({path:'tmp/mobile-live.png',fullPage:true});await page.locator('#bCapture').click();await page.waitForFunction(()=>S.state==='s-input');assert.equal(await page.evaluate(()=>S.stream),null);console.log('PASS simulated live stream, real contours and capture stops phone camera');
+ await page.locator('#bStartCamera').click();const contour=await page.waitForFunction(()=>S.stream&&F.faces[0]?.oval?.length===36?F.faces[0].oval.length:false,{},{timeout:15000});
+ assert.equal(await contour.jsonValue(),36);await page.screenshot({path:'tmp/mobile-live.png',fullPage:true});await page.locator('#bCapture').click();await page.waitForFunction(()=>S.state==='s-input');assert.equal(await page.evaluate(()=>S.stream),null);console.log('PASS simulated live stream, real contours and capture stops phone camera');
  await page.evaluate(()=>{toWaiting();clearInterval(window.qaCamTimer);delete window.AgeMirrorAdapters;});
  await page.locator('#file').setInputFiles('tmp/qa_portrait.jpg');await page.waitForFunction(()=>S.staticFaces.length===1);
  await page.evaluate(()=>{window.AgeMirrorAdapters={estimate:()=>new Promise(resolve=>window.qaAgeResolve=resolve)};});

@@ -38,7 +38,7 @@ const fs=require('node:fs');
   await page.setViewportSize(viewport);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'overflow '+JSON.stringify(viewport));
  }
  await page.setViewportSize({width:390,height:844});
- await page.locator('#bReset').click();await page.locator('#bClearConfirm').click();
+ await page.locator('#bInfo').click();await page.locator('#bReset').click();await page.locator('#bClearConfirm').click();
  assert.equal(await page.evaluate(()=>S.original),null);assert.equal(await page.evaluate(()=>comparisonImages),null);
  assert.equal(await page.evaluate(()=>[...document.querySelectorAll('canvas')].some(c=>c.width&&c.height&&c.getContext('2d').getImageData(0,0,c.width,c.height).data.some((v,i)=>i%4===3&&v))),false);
  assert.deepEqual(errors,[]);
