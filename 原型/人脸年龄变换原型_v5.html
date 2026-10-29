@@ -38,6 +38,9 @@ body[data-view="s-mirror"]{overflow:hidden}.app:has(#s-mirror:not([hidden])){hei
  .toast{max-width:calc(var(--preview-width) - 32px);bottom:max(40px,calc(100dvh - var(--preview-height) - 8px))}
 }
 
+
+#s-input .review{margin:32px 0 20px}#s-input .review canvas{width:112px;height:140px}#s-input .age-edit{justify-content:center;margin:30px 0}#s-input .field-label{text-align:center}#s-input .actions{margin-top:30px}#s-input .age-options{margin-top:22px}#generationModeNote{text-align:center}#s-grid .result-tools{grid-template-columns:1fr}#s-grid .page-photo canvas{height:66dvh}.journal-tools{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}.journal-tools button{font-size:15px;padding:12px 8px;border:0}#taskDetails{margin:20px 0}
+@media(min-width:600px) and (min-height:600px){#s-grid .page-photo canvas{height:calc(var(--preview-height)*.66)}}
 </style>
 </head>
 <body>
@@ -56,32 +59,32 @@ body[data-view="s-mirror"]{overflow:hidden}.app:has(#s-mirror:not([hidden])){hei
   <div class="row actions"><button id="bManual">手动框选</button><button class="primary" id="bSelectConfirm">确认人脸</button></div><p class="manual-help" id="manualHelp" hidden>在照片上拖动框选完整人脸，也可多次调整；随后点击“确认人脸”。</p>
  </section>
  <section id="s-input" hidden>
-  <h2>你的年龄手记</h2>
-  <div class="review"><canvas id="previewCv" width="256" height="256"></canvas><div><h3>当前照片</h3><p class="small" id="estimateStatus">估龄模型尚未接入，请填写当前年龄。</p><button class="text" id="bRetakeInput">换一张照片</button></div></div>
-  <details class="secondary-detail"><summary>照片检查</summary><div class="quality-list" id="qualitySummary"></div></details>
+  <h2 id="agePromptTitle">补充当前年龄</h2>
+  <div class="review"><canvas id="previewCv" width="256" height="256"></canvas><div><p class="small" id="estimateStatus">估龄模型尚未接入，请填写当前年龄。</p><button class="text" id="bRetakeInput">换一张照片</button></div></div>
+  <p class="notice" id="qualityWarning" hidden></p><div id="qualitySummary" hidden></div>
   <label class="field-label" for="currentAgeInput">当前年龄</label><div class="age-edit"><button id="ageMinus" aria-label="减少一岁">−</button><input id="currentAgeInput" type="number" min="1" max="99" step="1" inputmode="numeric" placeholder="年龄"><button id="agePlus" aria-label="增加一岁">＋</button><span>岁</span></div>
-  <label class="field-label">想看的年龄</label><div class="pills" id="targetChips"></div>
-  <details class="secondary-detail age-options"><summary>更多年龄选项</summary><div class="pills" id="agePresets"><button data-preset="decades">每十岁</button><button data-preset="stages">四个人生阶段</button><button data-delta="10">+10 年</button><button data-delta="20">+20 年</button><button data-delta="40">+40 年</button></div>
+  <details class="secondary-detail age-options" id="targetEditor"><summary>更改目标年龄</summary><div class="pills" id="targetChips"></div><div class="pills" id="agePresets"><button data-preset="decades">每十岁</button><button data-preset="stages">四个人生阶段</button><button data-delta="10">+10 年</button><button data-delta="20">+20 年</button><button data-delta="40">+40 年</button></div>
   <label class="field-label" for="targetKind">添加方式</label><select id="targetKind"><option value="age">目标年龄</option><option value="delta">增加 / 减少年数</option></select>
   <div class="target-entry"><input id="targetAgeInput" type="number" min="5" max="90" step="1" inputmode="numeric" placeholder="5–90 岁" aria-label="添加目标年龄或年龄差"><button id="addTarget">添加</button></div><p class="small" id="targetDifferences"></p></details>
   <p class="notice" id="inputNotice" role="status" aria-live="polite"></p><p class="help-line" id="generationModeNote">演示滤镜</p>
-  <div class="row actions"><button id="bRetakePreview">重新拍摄</button><button class="primary" id="bContinue">制作年龄手记</button></div>
-  <details class="help-line"><summary>处理说明</summary><p id="ageDetails">当前年龄由你填写。年龄估计模型接入后，此处显示分类分布与回归结果。</p></details>
+  <div class="row actions"><button id="bRetakePreview">重新拍摄</button><button class="primary" id="bContinue">查看年龄变化</button></div>
+  <p id="ageDetails" hidden></p>
  </section>
- <section id="s-warp" hidden><h2>正在制作</h2><p class="lead" id="taskSummary">正在制作预览，每个年龄独立处理。</p><div class="generation-progress"><div id="progressFill"></div></div><ul class="task-list" id="taskList"></ul><div class="row actions"><button id="bCancelGenerate">取消并返回设置</button><button class="primary" id="bShowResults" disabled>查看已完成</button></div><details class="help-line"><summary>处理记录</summary><pre id="taskLog" style="white-space:pre-wrap;overflow-wrap:anywhere"></pre></details></section>
+ <section id="s-warp" hidden><h2>正在制作</h2><p class="lead" id="taskSummary">正在制作预览，每个年龄独立处理。</p><div class="generation-progress"><div id="progressFill"></div></div><details class="secondary-detail" id="taskDetails"><summary>处理详情</summary><ul class="task-list" id="taskList"></ul></details><div class="row actions"><button id="bCancelGenerate">取消并返回设置</button><button class="primary" id="bShowResults" disabled>查看已完成</button></div><details class="help-line"><summary>处理记录</summary><pre id="taskLog" style="white-space:pre-wrap;overflow-wrap:anywhere"></pre></details></section>
  <section id="s-grid" hidden>
   <div class="page-heading"><div><h2>年龄手记</h2></div><small id="pageCounter">01 / 01</small></div>
   <div class="page-track" id="pageTrack" aria-label="左右滑动浏览年龄"></div>
   <div class="page-controls"><button id="pagePrev" aria-label="上一页">←</button><div class="page-dots" id="pageDots"></div><button id="pageNext" aria-label="下一页">→</button></div>
 
-  <div class="result-tools"><button class="primary" id="bShare">保存这一页</button><button id="bOverview">年龄总览</button></div>
-  <div class="result-sub"><button class="text" id="bEditAge">调整年龄</button><button class="text" id="bPlay">自动翻阅</button><button class="text" id="bTaskStatus">处理状态</button></div><p class="small" id="resultDisclosure">演示滤镜</p>
+  <div class="result-tools"><button class="primary" id="bShare">保存这一页</button></div>
+  <p class="small" id="resultDisclosure">演示滤镜</p>
  </section>
  <section id="s-detail" hidden><h2 id="detailMeta">前后对比</h2><div class="view-select"><button class="active" id="bCropView">人脸对比</button><button id="bPasteView">回贴原图</button></div><div class="cmp" id="cmp"><canvas id="cmpA"></canvas><canvas id="cmpB"></canvas><span class="cmp-label left" id="lblA">原始照片</span><span class="cmp-label right" id="lblB">目标年龄</span><div class="handle" id="handle"></div></div><label class="visually-hidden" for="split">对比分割线</label><input type="range" id="split" min="0" max="100" value="50"><div class="row actions"><button id="bBack">返回手记</button><button class="primary" id="bSave">保存对比</button></div><p class="help-line" id="detailDisclosure">演示滤镜 · 外观模拟</p></section>
  <section id="s-overview" hidden><h2>年龄总览</h2><div class="overview-grid" id="overviewGrid"></div><div class="row actions"><button id="bOverviewBack">返回手记</button><button class="primary" id="bOverviewSave">导出拼图</button></div></section>
  </main>
 </div>
 <div class="dialog" id="infoSheet" hidden role="dialog" aria-modal="true" aria-labelledby="infoTitle"><div class="dialog-card"><div class="sheet-heading"><h2 id="infoTitle">选项</h2><button class="icon-button" id="bInfoClose" aria-label="关闭选项"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></div>
+ <div class="journal-tools" id="journalTools" hidden><button id="bEditAge">修正年龄与目标</button><button id="bOverview">年龄总览</button><button id="bPlay">自动翻阅</button><button id="bTaskStatus">处理状态</button></div>
  <div class="setting-row"><label for="experienceMode">拍摄方式</label><select id="experienceMode"><option value="phone">手动拍摄</option><option value="mirror">自动镜子</option></select></div>
  <label class="setting-row" for="showMask"><span>面部区域</span><input type="checkbox" id="showMask" checked></label>
  <details class="secondary-detail"><summary>检测状态</summary><p id="statusText">本地演示</p><p id="modelStatus">使用镜头或照片时加载检测。</p><p id="cameraMetrics"></p></details>
@@ -117,6 +120,7 @@ function release(c){if(c instanceof HTMLCanvasElement){c.width=0;c.height=0;}els
 function show(id){
  if(id!=='s-grid')stopPlay();
  S.state=id;
+ $('#journalTools').hidden=!S.results.size;
  document.body.dataset.view=id;
  document.querySelectorAll('main>section').forEach(el=>el.hidden=el.id!==id);
  $('#statusText').textContent=DET.ready?'本地检测':'本地演示';
@@ -133,7 +137,7 @@ function toWaiting(){
  S.epoch++;stopGeneration();stopPlay();stopCamera();
  if(comparisonImages?.temporary)release(comparisonImages.right);comparisonImages=null;S.manual=false;
  const sensitive=[S.face,S.original,...S.results.values()];sensitive.forEach(release);
- S.face=S.original=S.transform=S.age=S.ageInfo=S.pick=null;S.source=null;S.targets=[18,30,45,60,75];S.results.clear();S.tasks.clear();S.pages=[];S.staticFaces=[];S.staticSelected=null;S.manualBox=null;S.log=[];S.pageIndex=0;S.view='crop';resetTracking();
+ S.face=S.original=S.transform=S.age=S.ageInfo=S.pick=null;S.quality=null;S.source=null;S.targets=[18,30,45,60,75];S.results.clear();S.tasks.clear();S.pages=[];S.staticFaces=[];S.staticSelected=null;S.manualBox=null;S.log=[];S.pageIndex=0;S.view='crop';resetTracking();
  document.querySelectorAll('canvas').forEach(c=>{c.getContext('2d').clearRect(0,0,c.width,c.height);});
  probe.getContext('2d').clearRect(0,0,probe.width,probe.height);
  ['#pageTrack','#pageDots','#overviewGrid','#taskList','#qualitySummary','#ageDetails','#taskLog','#staticFaceChoices'].forEach(id=>$(id).replaceChildren());
@@ -286,6 +290,7 @@ async function prepareSelection(){
  notice('#selectNotice',S.staticFaces.length?'':'未检测到人脸，请手动框选。',!S.staticFaces.length);renderStaticChoices();drawStaticOverlay();
  $('#bSelectConfirm').disabled=S.staticSelected===null;
  if(!S.staticFaces.length)enableManual();
+ else if(S.staticFaces.length===1)await confirmFace();
 }
 function drawSource(){const c=$('#sourceCv');c.width=S.original.width;c.height=S.original.height;c.getContext('2d').drawImage(S.original,0,0);}
 function staticFace(){return S.manual?S.manualBox:S.staticFaces.find(f=>f.id===S.staticSelected);}
@@ -309,11 +314,11 @@ async function confirmFace(){
  const f=staticFace();if(!f||!S.original)return;const epoch=S.epoch;S.ageRevision=(S.ageRevision||0)+1;const ageRevision=S.ageRevision;
  stopGeneration();S.results.forEach(release);S.results.clear();S.tasks.clear();release(S.face);const result=alignFace(S.original,f);S.face=result.face;S.transform=result.transform;
  const quality=qualityOf(S.original,f);$('#qualitySummary').textContent=`亮度 ${quality.brightness} / 255 · 清晰度 ${quality.blur}${quality.angle===null?' · 手动区域，未做关键点对齐':` · 倾斜 ${Math.abs(quality.angle).toFixed(0)}°`}${quality.warnings.length?'\n'+quality.warnings.join(' '):'\n图像检查通过，可继续。'}${f.manual?'\n手动框选未验证人脸与朝向。':''}`;
- S.age=null;S.ageInfo=null;$('#estimateStatus').textContent='填写当前年龄';$('#currentAgeInput').value='';showInput();
+ S.age=null;S.ageInfo=null;S.quality=quality;$('#estimateStatus').textContent='估龄模型尚未接入，请补填年龄。';$('#currentAgeInput').value='';showInput();
  if(adapters().estimate){$('#estimateStatus').textContent='正在估计当前年龄…';try{const info=await adapters().estimate(S.face);if(epoch!==S.epoch||ageRevision!==S.ageRevision)return;if(!Number.isFinite(info.age))throw new Error('年龄结果无效');S.age=clamp(Math.round(info.age),1,99);S.ageInfo=info;$('#currentAgeInput').value=S.age;$('#estimateStatus').textContent='模型估龄，可按实际情况修正。';$('#ageDetails').textContent=JSON.stringify(info,null,2);renderDifferences();}catch(error){if(epoch===S.epoch&&ageRevision===S.ageRevision)$('#estimateStatus').textContent='估龄暂不可用，请手动填写。';}}
- if(S.mode==='mirror'&&S.age!==null&&S.source==='camera'&&!quality.warnings.length){S.targets=defaultTargets(S.age).slice(0,6);continueFromInput();}
+ if(epoch===S.epoch&&ageRevision===S.ageRevision&&S.age!==null&&S.state==='s-input'&&(S.mode!=='mirror'||!quality.warnings.length)){S.targets=defaultTargets(S.age).slice(0,6);await continueFromInput();}
 }
-function showInput(){if(!S.face)return;stopGeneration();show('s-input');const c=$('#previewCv');c.width=c.height=FACE;c.getContext('2d').drawImage(S.face,0,0);if(S.age!==null)$('#currentAgeInput').value=S.age;renderTargetChips();notice('#inputNotice','');$('#generationModeNote').textContent=adapters().generate?'已连接生成模块':'演示滤镜';}
+function showInput(){if(!S.face)return;stopGeneration();closeOptions();show('s-input');const c=$('#previewCv');c.width=c.height=FACE;c.getContext('2d').drawImage(S.face,0,0);if(S.age!==null)$('#currentAgeInput').value=S.age;$('#agePromptTitle').textContent=S.age===null?'补充当前年龄':'调整年龄';$('#targetEditor').open=false;$('#qualityWarning').textContent=S.quality?.warnings[0]||'';$('#qualityWarning').hidden=!S.quality?.warnings.length;renderTargetChips();notice('#inputNotice','');$('#generationModeNote').textContent=adapters().generate?'':'演示滤镜';}
 function renderTargetChips(){const el=$('#targetChips');el.replaceChildren();S.targets.forEach(t=>{const b=document.createElement('button');b.className='selected';b.textContent=`${t} 岁 ×`;b.setAttribute('aria-label',`移除 ${t} 岁`);b.onclick=()=>{S.targets=S.targets.filter(n=>n!==t);renderTargetChips();};el.append(b);});renderDifferences();}
 function renderDifferences(){const age=validInteger($('#currentAgeInput').value,1,99);$('#targetDifferences').textContent=age===null?'填写当前年龄后显示年龄差。':S.targets.map(t=>`${t} 岁（${t-age>=0?'+':''}${t-age} 年）`).join(' · ');}
 function appendTarget(n){if(n===null||n<5||n>90){notice('#inputNotice','目标年龄须在 5–90 岁之间。',true);return false;}if(S.targets.includes(n)){notice('#inputNotice','这个年龄已经选过了。',true);return false;}if(S.targets.length>=CONFIG.maxTargets){notice('#inputNotice','最多选择 8 个目标年龄，先移除一个再添加。',true);return false;}S.targets.push(n);S.targets.sort((a,b)=>a-b);renderTargetChips();notice('#inputNotice','');return true;}
@@ -374,6 +379,10 @@ function ageFace(srcCanvas,cur,tgt){
 
 
 
+
+
+
+
 // Real generation can replace this adapter; status and retry are shared by both paths.
 function generateWithTimeout(args){
  return new Promise((resolve,reject)=>{let settled=false;const timer=setTimeout(()=>{settled=true;reject(new Error('处理超时，可重试'));},CONFIG.timeoutMs);
@@ -383,7 +392,7 @@ async function continueFromInput(){
  if(!S.face)return;const age=validInteger($('#currentAgeInput').value,1,99);if(age===null){notice('#inputNotice','当前年龄需要填写 1–99 之间的整数。',true);$('#currentAgeInput').focus();return;}
  if(!S.targets.length||S.targets.length>8){notice('#inputNotice','请选择 1–8 个目标年龄。',true);return;}
  stopGeneration();S.ageRevision=(S.ageRevision||0)+1;S.age=age;S.results.forEach(release);S.results.clear();S.tasks=new Map(S.targets.map(t=>[t,{state:'queued',elapsed:0,error:''}]));S.demonstration=!adapters().generate;S.log=[];
- show('s-warp');renderTasks();await runTargets([...S.targets]);
+ show('s-warp');$('#taskDetails').open=false;renderTasks();await runTargets([...S.targets]);
 }
 async function runTargets(targets){
  if(!S.face)return;const epoch=S.epoch,revision=++S.revision,sourceImage=S.face,sourceAge=S.age;S.generating=true;
@@ -405,7 +414,7 @@ async function runTargets(targets){
 function renderTasks(){
  const list=$('#taskList');list.replaceChildren();let done=0,failed=0;
  S.tasks.forEach((task,t)=>{const li=document.createElement('li'),name=document.createElement('span'),status=document.createElement('small');name.textContent=`${t} 岁`;status.textContent={queued:'等待',running:'处理中',done:`完成 · ${(task.elapsed/1000).toFixed(2)} s`,failed:'失败',cancelled:'已取消'}[task.state];li.append(name,status);if(task.state==='done')done++;if(task.state==='failed'){failed++;const retry=document.createElement('button');retry.textContent='重试';retry.disabled=S.generating;retry.onclick=()=>runTargets([t]);li.append(retry);li.title=task.error;}list.append(li);});
- $('#progressFill').style.width=`${(done+failed)/Math.max(1,S.tasks.size)*100}%`;$('#taskSummary').textContent=`当前 ${S.age} 岁（${S.ageInfo?'估计 / 已确认':'手动填写'}） · ${done} 项完成，${failed} 项失败${S.demonstration?' · 演示滤镜':' · 生成模块'}。${failed?'当前年龄和已完成结果已保留，可稍后重试。':''}`;$('#bShowResults').disabled=!done;
+ $('#progressFill').style.width=`${(done+failed)/Math.max(1,S.tasks.size)*100}%`;$('#taskSummary').textContent=failed?`${done} 个年龄已完成，${failed} 个暂未成功，可重试。`:`${done} / ${S.tasks.size} 个年龄`;$('#bShowResults').disabled=!done;if(failed)$('#taskDetails').open=true;
 }
 function cancelGenerate(){stopGeneration();S.tasks.forEach(t=>{if(['queued','running'].includes(t.state))t.state='cancelled';});showInput();}
 
@@ -466,8 +475,8 @@ $('#currentAgeInput').oninput=manualAgeEdited;
 $('#targetKind').onchange=()=>{const relative=$('#targetKind').value==='delta',input=$('#targetAgeInput');input.min=relative?-98:5;input.max=relative?98:90;input.placeholder=relative?'例如 -10 或 +20':'5–90 岁';input.value='';};
 $('#agePresets').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.preset){S.targets=b.dataset.preset==='decades'?[10,20,30,40,50,60,70,80]:[8,20,45,75];renderTargetChips();notice('#inputNotice','已替换目标年龄，可继续添加或移除。');return;}const age=validInteger($('#currentAgeInput').value,1,99);if(age===null){notice('#inputNotice','先填写当前年龄。',true);return;}appendTarget(age+Number(b.dataset.delta));};
 $('#bContinue').onclick=continueFromInput;$('#bRetakeInput').onclick=toWaiting;$('#bRetakePreview').onclick=toWaiting;$('#bEditAge').onclick=showInput;$('#bCancelGenerate').onclick=cancelGenerate;$('#bShowResults').onclick=buildPages;
-$('#pagePrev').onclick=()=>{stopPlay();goPage(S.pageIndex-1);};$('#pageNext').onclick=()=>{stopPlay();goPage(S.pageIndex+1);};$('#pageTrack').addEventListener('pointerdown',stopPlay,{passive:true});$('#bPlay').onclick=()=>S.autoTimer?stopPlay():startPlay();
-$('#bOverview').onclick=buildOverview;$('#bOverviewBack').onclick=()=>{show('s-grid');goPage(S.pageIndex);};$('#bOverviewSave').onclick=saveOverview;$('#bShare').onclick=sharePick;$('#bBack').onclick=()=>{show('s-grid');goPage(S.pageIndex);};$('#bSave').onclick=savePick;$('#bTaskStatus').onclick=()=>{show('s-warp');renderTasks();};
+$('#pagePrev').onclick=()=>{stopPlay();goPage(S.pageIndex-1);};$('#pageNext').onclick=()=>{stopPlay();goPage(S.pageIndex+1);};$('#pageTrack').addEventListener('pointerdown',stopPlay,{passive:true});$('#bPlay').onclick=()=>{closeOptions();if(S.state!=='s-grid'){show('s-grid');goPage(S.pageIndex);}S.autoTimer?stopPlay():startPlay();};
+$('#bOverview').onclick=()=>{closeOptions();buildOverview();};$('#bOverviewBack').onclick=()=>{show('s-grid');goPage(S.pageIndex);};$('#bOverviewSave').onclick=saveOverview;$('#bShare').onclick=sharePick;$('#bBack').onclick=()=>{show('s-grid');goPage(S.pageIndex);};$('#bSave').onclick=savePick;$('#bTaskStatus').onclick=()=>{closeOptions();show('s-warp');$('#taskDetails').open=true;renderTasks();};
 $('#split').oninput=updateSplit;$('#bCropView').onclick=()=>{S.view='crop';prepareComparison();};$('#bPasteView').onclick=()=>{S.view='paste';prepareComparison();};
 $('#bReset').onclick=()=>{closeOptions();if(S.face||S.original){$('#clearDialog').hidden=false;$('#bClearCancel').focus();}else{toWaiting();toast('本次数据已清除。');}};
 $('#bHome').onclick=()=>{if(S.face||S.original)$('#clearDialog').hidden=false;else show('s-mirror');};

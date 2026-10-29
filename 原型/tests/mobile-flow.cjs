@@ -13,7 +13,7 @@ const fs=require('node:fs');
  console.log('DETECTION',await page.evaluate(()=>({kind:DET.kind,faces:S.staticFaces.length,points:S.staticFaces[0].oval.length})));
  assert.equal(await page.evaluate(()=>DET.kind),'mesh');
  await page.screenshot({path:'tmp/mobile-selection.png',fullPage:true});
- await page.locator('#bSelectConfirm').click();
+ await page.waitForFunction(()=>S.state==='s-input');
  await page.locator('#currentAgeInput').fill('25');
  await page.locator('#bContinue').click();
  await page.waitForFunction(()=>S.state==='s-grid');
@@ -31,7 +31,7 @@ const fs=require('node:fs');
  await page.locator('#split').fill('70');
  await page.screenshot({path:'tmp/mobile-compare.png',fullPage:true});
  const dl=page.waitForEvent('download');await page.locator('#bSave').click();const d=await dl;await d.saveAs('tmp/export-compare.png');assert.ok(fs.statSync('tmp/export-compare.png').size>10000);
- await page.locator('#bBack').click();await page.locator('#bOverview').click();
+ await page.locator('#bBack').click();await page.locator('#bInfo').click();await page.locator('#bOverview').click();
  assert.equal(await page.locator('.overview-card').count(),6);
  await page.screenshot({path:'tmp/mobile-overview.png',fullPage:true});
  for(const viewport of [{width:320,height:568},{width:844,height:390},{width:1280,height:900}]){
