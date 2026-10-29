@@ -19,6 +19,25 @@ body[data-view="s-mirror"]{overflow:hidden}.app:has(#s-mirror:not([hidden])){hei
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@keyframes appear{from{opacity:.5;transform:translateY(3px)}to{opacity:1;transform:none}}
 
 
+/* Wide browsers present the same interface inside a centered portrait viewport. */
+@media(min-width:600px) and (min-height:600px){
+ :root{--preview-width:clamp(300px,calc((100dvh - 48px)*390/844),430px);--preview-height:calc(var(--preview-width)*844/390)}
+ html{background:#e9e9ed}body,body[data-view="s-mirror"]{overflow:auto}
+ .app,.app:has(#s-mirror:not([hidden])){position:relative;width:var(--preview-width);height:var(--preview-height);min-height:0;margin:24px auto;padding:0 24px;overflow-x:hidden;overflow-y:auto;border-radius:32px;background:var(--paper);box-shadow:0 15px 60px #22222216;scrollbar-width:none;isolation:isolate}
+ .app::-webkit-scrollbar{display:none}.app:has(#s-mirror:not([hidden])){padding:0;overflow:hidden}
+ .app:has(#s-mirror:not([hidden])) header{position:absolute;left:0;right:0;top:0;padding:0 18px;height:68px}
+ header{height:68px;padding-top:0}h2{font-size:30px}main{padding:24px 0 32px}
+ body[data-view="s-mirror"] main,#s-mirror{height:var(--preview-height)}
+ .mirror-outline{width:68%;height:53%;max-width:300px}#cameraIdle{padding-bottom:30px}
+ .capture-dock{left:0;right:0;top:auto;bottom:0;width:auto;min-height:146px;padding:14px 24px 22px;display:grid;grid-template-columns:52px 1fr 52px;gap:12px;align-items:center}
+ .capture-dock .capture-side{width:48px;height:48px;min-height:48px;padding:12px}.capture-dock .shutter-label{display:block}.shutter{width:72px;height:72px;min-height:72px}
+ .capture-feedback{left:18px;right:18px;bottom:150px}
+ .page-photo canvas{height:calc(var(--preview-height)*.57)}#s-select .well{height:calc(var(--preview-height)*.54)}
+ .dialog{width:var(--preview-width);height:var(--preview-height);left:50%;right:auto;top:24px;bottom:auto;transform:translateX(-50%);border-radius:32px;align-items:flex-end;padding:12px;overflow:hidden}
+ .dialog-card{max-height:calc(var(--preview-height) - 24px);border-radius:25px;padding:20px}.dialog-card h2{font-size:24px}
+ .toast{max-width:calc(var(--preview-width) - 32px);bottom:max(40px,calc(100dvh - var(--preview-height) - 8px))}
+}
+
 </style>
 </head>
 <body>
@@ -101,7 +120,7 @@ function show(id){
  document.body.dataset.view=id;
  document.querySelectorAll('main>section').forEach(el=>el.hidden=el.id!==id);
  $('#statusText').textContent=DET.ready?'本地检测':'本地演示';
- if(id!=='s-mirror')window.scrollTo({top:0,behavior:'instant'});
+ if(id!=='s-mirror'){window.scrollTo({top:0,behavior:'instant'});$('#screen').scrollTop=0;}
 }
 function addLog(message){S.log.push(message);$('#taskLog').textContent=S.log.join('\n');}
 function defaultTargets(age){return [...new Set([age-15,age+10,age+25,age+40].map(x=>clamp(x,5,90)))].sort((a,b)=>a-b);}
@@ -332,6 +351,10 @@ function ageFace(srcCanvas,cur,tgt){
   }
   return c;
 }
+
+
+
+
 
 
 
