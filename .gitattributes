@@ -1,2 +1,4 @@
 # Preserve upstream runtime/model bytes so SHA-256 manifests survive checkout.
 **/assets/vision/** -text
+**/assets/vision/*.json text eol=lf
+**/assets/vision/*.md text eol=lf
