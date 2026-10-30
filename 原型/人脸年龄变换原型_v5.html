@@ -188,11 +188,11 @@ function processGesture(hand,now){
  if(S.state!=='s-mirror'){G.hand=null;return 'none';}
  if(!hand){G.hand=null;G.samples=[];G.palmSince=null;G.palmLatched=false;return 'none';}
  G.hand=hand;const pose=hand.pose||((hand.open===undefined)?handPose(hand):(hand.open?'open':'neutral'));
- if(pose==='fist'){G.samples=[];G.palmSince=null;G.palmLatched=false;G.lastPose='fist';S.gestureMode=true;S.gestureIntent='stop';S.gestureArmed=false;F.countStart=0;toast('已暂停拍摄，张开手掌继续。');return 'cancel';}
+ if(pose==='fist'){G.samples=[];G.palmSince=null;G.palmLatched=false;G.lastPose='fist';S.gestureMode=true;S.gestureIntent='stop';S.gestureArmed=false;F.countStart=0;return 'cancel';}
  if(pose!=='open'){G.samples=[];G.palmSince=null;G.palmLatched=false;return 'none';}
  G.lastPose='open';S.gestureMode=true;
  if(G.palmSince===null)G.palmSince=now;
- if(!G.palmLatched&&now-G.palmSince>=700){G.palmLatched=true;G.samples=[];S.gestureArmed=true;S.gestureIntent='start';F.countStart=0;toast('已确认拍摄，保持姿态。');return 'arm';}
+ if(!G.palmLatched&&now-G.palmSince>=700){G.palmLatched=true;G.samples=[];S.gestureArmed=true;S.gestureIntent='start';F.countStart=0;return 'arm';}
  return 'none';
 }
 async function initHandDetector(){
@@ -463,6 +463,8 @@ function ageFace(srcCanvas,cur,tgt){
   }
   return c;
 }
+
+
 
 
 

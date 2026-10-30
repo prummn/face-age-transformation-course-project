@@ -8,6 +8,7 @@ const assert=require('node:assert/strict');
   assert.equal(await page.evaluate(()=>{S.state='s-mirror';resetGestures();return processGesture({x:.5,open:true},0)}),'none');
   assert.equal(await page.evaluate(()=>{processGesture({x:.5,open:true},400);return processGesture({x:.5,open:true},800)}),'arm');
   assert.deepEqual(await page.evaluate(()=>({mode:S.gestureMode,intent:S.gestureIntent})),{mode:true,intent:'start'});
+  assert.equal(await page.evaluate(()=>$('#toast').hidden),true,'gesture state is shown in the camera HUD only');
   assert.equal(await page.evaluate(()=>{const a=processGesture({x:.5,open:true},1600);const b=processGesture({x:.5,open:true},2200);return [a,b]}).then(x=>x[0]),'none','held palm is latched');
   assert.equal(await page.evaluate(()=>processGesture({x:.5,open:false},2400)),'none');
   assert.equal(await page.evaluate(()=>processGesture({x:.5,open:false,pose:'fist'},2500)),'cancel');
