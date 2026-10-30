@@ -197,7 +197,7 @@ async function initHandDetector(){
  HAND.promise=(async()=>{for(const src of [{...MP_SOURCES[0],model:'./assets/vision/hand_landmarker.task'}, {...MP_SOURCES[1],model:'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task'}]){try{const vision=await import(src.bundle),files=await vision.FilesetResolver.forVisionTasks(src.wasm);HAND.det=await vision.HandLandmarker.createFromOptions(files,{baseOptions:{modelAssetPath:src.model,delegate:'CPU'},runningMode:'VIDEO',numHands:1,minHandDetectionConfidence:.55,minHandPresenceConfidence:.55,minTrackingConfidence:.5});HAND.ready=true;break;}catch(error){console.warn('Hand gesture model unavailable:',error.message);}}HAND.loading=false;HAND.error=!HAND.ready;return HAND.ready;})();return HAND.promise;
 }
 function gestureLoop(now){
- requestAnimationFrame(gestureLoop);if(!S.stream||S.state!=='s-mirror'||document.hidden||!F.faces.length||HAND.busy||now-HAND.lastTick<400)return;
+ requestAnimationFrame(gestureLoop);if(!S.stream||S.state!=='s-mirror'||document.hidden||!matchMedia('(min-width:900px)').matches||!F.faces.length||HAND.busy||now-HAND.lastTick<400)return;
  const v=$('#video');if(v.readyState<2||v.currentTime===HAND.lastVideoTime)return;HAND.lastTick=now;HAND.lastVideoTime=v.currentTime;
  initHandDetector().then(ready=>{if(!ready||S.state!=='s-mirror'||!S.stream)return;HAND.busy=true;try{const result=HAND.det.detectForVideo(v,now),landmarks=result.landmarks?.[0];processGesture(landmarks?{landmarks,x:landmarks.reduce((sum,p)=>sum+p.x,0)/landmarks.length}:null,now);if(S.state==='s-mirror')drawFaceOverlay();}catch(error){processGesture(null,now);}finally{HAND.busy=false;}});
 }
@@ -458,6 +458,8 @@ function ageFace(srcCanvas,cur,tgt){
   }
   return c;
 }
+
+
 
 
 
