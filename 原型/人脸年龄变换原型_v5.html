@@ -41,6 +41,51 @@ body[data-view="s-mirror"]{overflow:hidden}.app:has(#s-mirror:not([hidden])){hei
 
 #s-input .review{margin:32px 0 20px}#s-input .review canvas{width:112px;height:140px}#s-input .age-edit{justify-content:center;margin:30px 0}#s-input .field-label{text-align:center}#s-input .actions{margin-top:30px}#s-input .age-options{margin-top:22px}#generationModeNote{text-align:center}#s-grid .result-tools{grid-template-columns:1fr 1fr}#s-grid .page-photo canvas{height:66dvh}.journal-tools{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}.journal-tools button{font-size:15px;padding:12px 8px;border:0}#taskDetails{margin:20px 0}.playback{white-space:nowrap;font-size:14px}
 @media(min-width:600px) and (min-height:600px){#s-grid .page-photo canvas{height:calc(var(--preview-height)*.66)}}
+/* A portrait installation uses the actual screen; landscape laptops keep the phone preview. */
+@media(min-width:600px) and (min-height:900px) and (max-aspect-ratio:3/4){
+ :root{--du:clamp(.55px,.0925926vw,1.5px)}
+ html{background:var(--paper)}body{font-size:calc(28 * var(--du))}
+ .app,.app:has(#s-mirror:not([hidden])){width:100%;height:100dvh;min-height:100dvh;margin:0;padding:0 calc(64 * var(--du));border-radius:0;box-shadow:none;overflow-x:hidden;overflow-y:auto}
+ .app:has(#s-mirror:not([hidden])){padding:0;overflow:hidden}
+ header{height:calc(136 * var(--du));max-width:none;grid-template-columns:calc(80 * var(--du)) 1fr calc(80 * var(--du))}
+ header h1{font-size:calc(36 * var(--du))}h2{font-size:calc(60 * var(--du))}h3{font-size:calc(32 * var(--du))}
+ .icon-button{width:calc(80 * var(--du));height:calc(80 * var(--du));min-height:calc(80 * var(--du));padding:calc(22 * var(--du))}.icon-button svg{width:calc(36 * var(--du));height:calc(36 * var(--du))}
+ .app:has(#s-mirror:not([hidden])) header{height:calc(136 * var(--du));padding:0 calc(48 * var(--du))}
+ main,body[data-view="s-grid"] main{width:100%;max-width:100%;padding:calc(32 * var(--du)) 0 calc(40 * var(--du))}
+ body[data-view="s-mirror"] main,#s-mirror{height:100dvh}
+ .mirror-outline{width:64%;height:58%;max-width:none}#cameraIdle{padding-bottom:calc(80 * var(--du))}
+ .capture-dock{min-height:calc(290 * var(--du));grid-template-columns:calc(88 * var(--du)) 1fr calc(88 * var(--du));padding:calc(32 * var(--du)) calc(100 * var(--du)) calc(48 * var(--du));gap:calc(48 * var(--du))}
+ .capture-dock .capture-side{width:calc(88 * var(--du));height:calc(88 * var(--du));min-height:calc(88 * var(--du));padding:calc(24 * var(--du))}
+ .capture-dock .shutter{width:calc(128 * var(--du));height:calc(128 * var(--du));min-height:calc(128 * var(--du));padding:calc(8 * var(--du))}.shutter svg{width:calc(48 * var(--du));height:calc(48 * var(--du))}
+ .shutter-label{font-size:calc(28 * var(--du))}.shutter-group{gap:calc(16 * var(--du))}
+ .capture-feedback{left:calc(48 * var(--du));right:calc(48 * var(--du));bottom:calc(300 * var(--du));gap:calc(16 * var(--du))}
+ #hudText{max-width:100%;font-size:calc(30 * var(--du));padding:calc(18 * var(--du)) calc(32 * var(--du));border-radius:calc(40 * var(--du))}
+ button,input,select{font-size:inherit;min-height:calc(80 * var(--du));padding:calc(18 * var(--du)) calc(28 * var(--du));border-radius:calc(24 * var(--du))}
+ small,.small,.notice,.lead,.help-line,.manual-help,#taskSummary,#generationModeNote,#resultDisclosure,#detailDisclosure{font-size:calc(26 * var(--du))}
+ .pills{gap:calc(16 * var(--du));margin:calc(24 * var(--du)) 0}.pills button{font-size:calc(26 * var(--du));min-height:calc(72 * var(--du));padding:calc(14 * var(--du)) calc(26 * var(--du))}
+ body[data-view="s-grid"] main{height:calc(100dvh - 136 * var(--du));display:flex}
+ #s-grid{display:flex;flex-direction:column;flex:1;min-width:0;min-height:0}.page-heading{flex-shrink:0;min-height:calc(80 * var(--du))}
+ .playback{font-size:calc(26 * var(--du))}.page-track{flex:1;min-height:0;margin:calc(32 * var(--du)) 0 calc(16 * var(--du));gap:calc(32 * var(--du));border-radius:calc(40 * var(--du))}
+ .age-page{height:100%;border-radius:calc(40 * var(--du))}.page-photo,#s-grid .page-photo canvas{height:100%;min-height:0}
+ .page-meta{padding:calc(120 * var(--du)) calc(40 * var(--du)) calc(40 * var(--du))}.page-age{font-size:calc(88 * var(--du))}.page-age span{font-size:calc(30 * var(--du))}.page-caption{font-size:calc(28 * var(--du));margin-top:calc(12 * var(--du))}
+ .page-age[style]{font-size:calc(60 * var(--du))!important}
+ .page-controls{flex-shrink:0;gap:calc(20 * var(--du))}.page-controls>button{width:calc(80 * var(--du));font-size:calc(40 * var(--du));padding:calc(16 * var(--du))}
+ .page-dots button{min-width:calc(38 * var(--du));min-height:calc(72 * var(--du));padding:0}.page-dots button:before{width:calc(9 * var(--du));height:calc(9 * var(--du))}.page-dots .active:before{width:calc(12 * var(--du));height:calc(12 * var(--du))}
+ .result-tools{flex-shrink:0;gap:calc(24 * var(--du));margin:calc(24 * var(--du)) 0}.result-tools button{min-height:calc(88 * var(--du))}#resultDisclosure{margin:calc(8 * var(--du)) 0 0;flex-shrink:0}
+ #s-select .well{height:56dvh;margin:calc(32 * var(--du)) 0}.well,.cmp{border-radius:calc(40 * var(--du))}
+ .actions{margin-top:calc(40 * var(--du));gap:calc(24 * var(--du))}#s-select .actions{margin-top:calc(32 * var(--du))}
+ #s-input .review{margin:calc(48 * var(--du)) 0 calc(32 * var(--du));gap:calc(32 * var(--du))}#s-input .review canvas{width:calc(200 * var(--du));height:calc(250 * var(--du))}.review .small{font-size:calc(26 * var(--du))}
+ .field-label{font-size:calc(30 * var(--du));margin:calc(40 * var(--du)) 0 calc(20 * var(--du))}.age-edit input{width:calc(200 * var(--du));font-size:calc(60 * var(--du))}.age-edit button{width:calc(80 * var(--du));height:calc(80 * var(--du));min-height:calc(80 * var(--du));font-size:calc(42 * var(--du))}
+ .secondary-detail summary,.age-options .field-label{font-size:calc(26 * var(--du))}.secondary-detail{padding:calc(26 * var(--du)) 0}
+ .cmp{width:min(100%,calc((100dvh - 820 * var(--du)) * var(--comparison-aspect,1)));max-width:100%;margin:calc(32 * var(--du)) auto calc(24 * var(--du))}.cmp-label{font-size:calc(24 * var(--du));padding:calc(10 * var(--du)) calc(20 * var(--du))}.view-select button{font-size:calc(26 * var(--du));min-height:calc(72 * var(--du))}
+ .overview-grid{height:calc(100dvh - 600 * var(--du));grid-auto-rows:minmax(0,1fr);gap:calc(28 * var(--du));margin:calc(32 * var(--du)) 0}.overview-card span{font-size:calc(26 * var(--du));height:calc(72 * var(--du));padding:calc(16 * var(--du)) calc(20 * var(--du))}.overview-card{padding:0;min-height:0}.overview-card canvas{height:calc(100% - 72 * var(--du));object-fit:contain;background:#e4e4e8}
+ .dialog{inset:0;width:100%;height:100dvh;transform:none;border-radius:0;padding:calc(48 * var(--du));align-items:center}
+ .dialog-card{max-width:calc(860 * var(--du));max-height:calc(100dvh - 96 * var(--du));padding:calc(40 * var(--du));border-radius:calc(40 * var(--du))}.dialog-card h2{font-size:calc(44 * var(--du))}.dialog-card p{font-size:calc(26 * var(--du));margin:calc(24 * var(--du)) 0}
+ .sheet-heading .icon-button{width:calc(64 * var(--du));height:calc(64 * var(--du));min-height:calc(64 * var(--du));padding:calc(16 * var(--du))}.sheet-heading svg{width:calc(30 * var(--du));height:calc(30 * var(--du))}
+ .setting-row{min-height:calc(104 * var(--du));gap:calc(30 * var(--du))}.setting-row select{max-width:calc(360 * var(--du))}.journal-tools{gap:calc(20 * var(--du))}.journal-tools button{font-size:calc(26 * var(--du));padding:calc(20 * var(--du)) calc(14 * var(--du))}
+ .setting-row input[type=checkbox]{width:calc(84 * var(--du));height:calc(48 * var(--du));min-height:calc(48 * var(--du));padding:0;border-radius:calc(32 * var(--du))}.setting-row input[type=checkbox]:before{width:calc(40 * var(--du));height:calc(40 * var(--du));top:calc(4 * var(--du));left:calc(4 * var(--du))}.setting-row input[type=checkbox]:checked:before{transform:translateX(calc(36 * var(--du)))}
+ .toast{max-width:calc(100% - 96 * var(--du));bottom:calc(48 * var(--du));font-size:calc(28 * var(--du));padding:calc(20 * var(--du)) calc(32 * var(--du))}
+}
 </style>
 </head>
 <body>
@@ -205,11 +250,12 @@ function renderFaceChoices(){
 function projection(well,sw,sh,fit='cover',mirror=false){const r=well.getBoundingClientRect(),scale=(fit==='cover'?Math.max:Math.min)(r.width/sw,r.height/sh),ox=(r.width-sw*scale)/2,oy=(r.height-sh*scale)/2;return{width:r.width,height:r.height,map:p=>({x:mirror?r.width-(ox+p.x*sw*scale):ox+p.x*sw*scale,y:oy+p.y*sh*scale}),unmap:p=>({x:((mirror?r.width-p.x:p.x)-ox)/(sw*scale),y:(p.y-oy)/(sh*scale)})};}
 function overlayContext(c,pr){const ratio=Math.min(devicePixelRatio||1,2),w=Math.round(pr.width*ratio),h=Math.round(pr.height*ratio);if(c.width!==w||c.height!==h){c.width=w;c.height=h;}const g=c.getContext('2d');g.setTransform(ratio,0,0,ratio,0,0);g.clearRect(0,0,pr.width,pr.height);return g;}
 function drawFaces(g,faces,pr,selected,showMask){
- faces.forEach((f,i)=>{const active=f.id===selected;g.strokeStyle=active?'#c3e2cd':'#f5f3ee';g.lineWidth=active?1.7:1;g.fillStyle='rgba(172,215,184,.12)';g.beginPath();
+ const labelScale=matchMedia("(min-width:600px) and (min-height:900px) and (max-aspect-ratio:3/4)").matches?clamp(innerWidth/540,1,3):1;
+ faces.forEach((f,i)=>{const active=f.id===selected;g.strokeStyle=active?'#c3e2cd':'#f5f3ee';g.lineWidth=(active?1.7:1)*labelScale;g.fillStyle='rgba(172,215,184,.12)';g.beginPath();
   if(f.oval){f.oval.forEach((p,k)=>{const v=pr.map(p);k?g.lineTo(v.x,v.y):g.moveTo(v.x,v.y);});g.closePath();}
   else{const a=pr.map({x:f.x,y:f.y}),b=pr.map({x:f.x+f.w,y:f.y+f.h});g.rect(Math.min(a.x,b.x),a.y,Math.abs(b.x-a.x),b.y-a.y);}
   if(active&&showMask&&f.oval)g.fill();g.stroke();
-  const tag=pr.map({x:f.x+f.w/2,y:f.y});g.fillStyle=active?'#355d46':'#26382dcc';g.fillRect(tag.x-18,tag.y-25,36,22);g.fillStyle='#fff';g.textAlign='center';g.font='12px sans-serif';g.fillText(String(f.id),tag.x,tag.y-9);
+  const tag=pr.map({x:f.x+f.w/2,y:f.y});g.fillStyle=active?'#355d46':'#26382dcc';g.fillRect(tag.x-18*labelScale,tag.y-25*labelScale,36*labelScale,22*labelScale);g.fillStyle='#fff';g.textAlign='center';g.font=`${12*labelScale}px sans-serif`;g.fillText(String(f.id),tag.x,tag.y-9*labelScale);
  });
 }
 function clearFaceOverlay(){const c=$('#faceOverlay');c.getContext('2d').clearRect(0,0,c.width,c.height);}
@@ -417,6 +463,16 @@ function ageFace(srcCanvas,cur,tgt){
 
 
 
+
+
+
+
+
+
+
+
+
+
 // Real generation can replace this adapter; status and retry are shared by both paths.
 function generateWithTimeout(args){
  return new Promise((resolve,reject)=>{let settled=false;const timer=setTimeout(()=>{settled=true;reject(new Error('处理超时，可重试'));},CONFIG.timeoutMs);
@@ -482,7 +538,7 @@ function prepareComparison(){
  if(comparisonImages?.temporary)release(comparisonImages.right);
  comparisonImages=S.view==='paste'?{left:S.original,right:pasteBack(S.results.get(S.pick)),temporary:true}:{left:S.face,right:S.results.get(S.pick),temporary:false};
  $('#bCropView').classList.toggle('active',S.view==='crop');$('#bPasteView').classList.toggle('active',S.view==='paste');$('#detailMeta').textContent=`此刻 → ${S.pick} 岁`;$('#lblB').textContent=`${S.pick} 岁`;$('#detailDisclosure').textContent=S.demonstration?'演示滤镜':'年龄外观模拟';
- const ratio=comparisonImages.left.width/comparisonImages.left.height;$('#cmp').style.aspectRatio=String(ratio);['#cmpA','#cmpB'].forEach(id=>{const c=$(id);c.width=comparisonImages.left.width;c.height=comparisonImages.left.height;});updateSplit();
+ const ratio=comparisonImages.left.width/comparisonImages.left.height;$('#cmp').style.aspectRatio=String(ratio);$('#cmp').style.setProperty('--comparison-aspect',String(ratio));['#cmpA','#cmpB'].forEach(id=>{const c=$(id);c.width=comparisonImages.left.width;c.height=comparisonImages.left.height;});updateSplit();
 }
 function updateSplit(){if(!comparisonImages||!S.face)return;const value=Number($('#split').value)/100,a=$('#cmpA'),b=$('#cmpB'),ga=a.getContext('2d'),gb=b.getContext('2d');ga.clearRect(0,0,a.width,a.height);gb.clearRect(0,0,b.width,b.height);ga.drawImage(comparisonImages.left,0,0,a.width,a.height);gb.save();gb.beginPath();gb.rect(value*b.width,0,b.width*(1-value),b.height);gb.clip();gb.drawImage(comparisonImages.right,0,0,b.width,b.height);gb.restore();$('#handle').style.left=`${value*100}%`;}
 $('#cmp').addEventListener('pointerdown',e=>{e.currentTarget.setPointerCapture(e.pointerId);moveSplit(e);});$('#cmp').addEventListener('pointermove',e=>{if(e.currentTarget.hasPointerCapture(e.pointerId))moveSplit(e);});
