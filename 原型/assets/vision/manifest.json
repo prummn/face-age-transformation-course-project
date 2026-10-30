@@ -26,5 +26,9 @@
   "wasm/vision_wasm_nosimd_internal.wasm": {
     "bytes": 9294247,
     "sha256": "38b61feab2fd7934e05cbe9f68baa308978a5e3b7f85c1913bb8ae89b8ef8b97"
+  },
+  "hand_landmarker.task": {
+    "bytes": 7819105,
+    "sha256": "fbc2a30080c3c557093b5ddfc334698132eb341044ccee322ccf8bcf3607cde1"
   }
 }
