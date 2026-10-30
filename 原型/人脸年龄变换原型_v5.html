@@ -155,7 +155,7 @@ const S={state:'s-mirror',mode:'phone',source:null,original:null,face:null,trans
 const F={faces:[],tracks:[],selectedId:null,nextId:1,lastSeen:0,lastBox:null,lastTick:0,lastVideoTime:-1,stableSince:0,countStart:0,quality:null,landmarks:null};
 const DET={ready:false,loading:false,error:false,kind:null,det:null,promise:null};
 const HAND={ready:false,loading:false,error:false,det:null,promise:null,lastVideoTime:-1,lastTick:0};
-const G={samples:[],palmSince:null,palmLatched:false,lastAction:0,cooldownMs:1100};
+const G={samples:[],palmSince:null,palmLatched:false,hand:null};
 const adapters=()=>window.AgeMirrorAdapters||{};
 const canvas=(w=FACE,h=FACE)=>{const c=document.createElement('canvas');c.width=w;c.height=h;return c;};
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -177,28 +177,19 @@ function show(id){
 }
 function addLog(message){S.log.push(message);$('#taskLog').textContent=S.log.join('\n');}
 function defaultTargets(age){return [...new Set([age-15,age+10,age+25,age+40].map(x=>clamp(x,5,90)))].sort((a,b)=>a-b);}
-function resetGestures(){G.samples=[];G.palmSince=null;G.palmLatched=false;G.lastAction=-Infinity;}
+function resetGestures(){G.samples=[];G.palmSince=null;G.palmLatched=false;G.hand=null;S.gestureArmed=false;}
 function handOpen(hand){
  if(!hand?.landmarks||hand.landmarks.length<21)return false;
  const lm=hand.landmarks;const fingers=[[8,6],[12,10],[16,14],[20,18]];
  return fingers.filter(([tip,pip])=>lm[tip].y<lm[pip].y-.025).length>=3;
 }
-function gestureAction(action){
- if(S.state!=='s-grid'||!S.pages.length)return false;
- if(action==='next'){stopPlay();goPage(S.pageIndex+1>=S.pages.length?0:S.pageIndex+1);toast('手势：下一页');}
- if(action==='prev'){stopPlay();goPage(S.pageIndex-1<0?S.pages.length-1:S.pageIndex-1);toast('手势：上一页');}
- if(action==='toggle'){S.autoTimer?stopPlay():startPlay();toast(S.autoTimer?'手势：开始翻阅':'手势：暂停翻阅');}
- return true;
-}
 function processGesture(hand,now){
- if(!hand){G.samples=[];G.palmSince=null;G.palmLatched=false;return 'none';}
- const open=hand.open===undefined?handOpen(hand):!!hand.open,x=hand.x;
+ if(S.state!=='s-mirror'){G.hand=null;return 'none';}
+ if(!hand){G.hand=null;G.samples=[];G.palmSince=null;G.palmLatched=false;return 'none';}
+ G.hand=hand;const open=hand.open===undefined?handOpen(hand):!!hand.open;
  if(!open){G.samples=[];G.palmSince=null;G.palmLatched=false;return 'none';}
- G.samples.push({x,now});G.samples=G.samples.filter(s=>now-s.now<=620);
- const first=G.samples[0],delta=x-first.x;
- if(now-G.lastAction>=G.cooldownMs&&Math.abs(delta)>=.32&&G.samples.length>=3){const action=delta>0?'next':'prev';G.lastAction=now;G.samples=[];G.palmSince=null;G.palmLatched=true;gestureAction(action);return action;}
  if(G.palmSince===null)G.palmSince=now;
- if(!G.palmLatched&&now-G.palmSince>=700&&now-G.lastAction>=G.cooldownMs){G.lastAction=now;G.palmLatched=true;G.samples=[];gestureAction('toggle');return 'toggle';}
+ if(!G.palmLatched&&now-G.palmSince>=700){G.palmLatched=true;G.samples=[];S.gestureArmed=true;toast('手势已确认，保持姿态，准备拍摄。');return 'arm';}
  return 'none';
 }
 async function initHandDetector(){
@@ -206,14 +197,14 @@ async function initHandDetector(){
  HAND.promise=(async()=>{for(const src of [{...MP_SOURCES[0],model:'./assets/vision/hand_landmarker.task'}, {...MP_SOURCES[1],model:'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task'}]){try{const vision=await import(src.bundle),files=await vision.FilesetResolver.forVisionTasks(src.wasm);HAND.det=await vision.HandLandmarker.createFromOptions(files,{baseOptions:{modelAssetPath:src.model,delegate:'CPU'},runningMode:'VIDEO',numHands:1,minHandDetectionConfidence:.55,minHandPresenceConfidence:.55,minTrackingConfidence:.5});HAND.ready=true;break;}catch(error){console.warn('Hand gesture model unavailable:',error.message);}}HAND.loading=false;HAND.error=!HAND.ready;return HAND.ready;})();return HAND.promise;
 }
 function gestureLoop(now){
- requestAnimationFrame(gestureLoop);if(!S.stream||S.state!=='s-grid'||document.hidden||now-HAND.lastTick<120)return;
+ requestAnimationFrame(gestureLoop);if(!S.stream||S.state!=='s-mirror'||document.hidden||now-HAND.lastTick<120)return;
  const v=$('#video');if(v.readyState<2||v.currentTime===HAND.lastVideoTime)return;HAND.lastTick=now;HAND.lastVideoTime=v.currentTime;
- initHandDetector().then(ready=>{if(!ready||S.state!=='s-grid'||!S.stream)return;try{const result=HAND.det.detectForVideo(v,now),landmarks=result.landmarks?.[0];processGesture(landmarks?{landmarks,x:landmarks.reduce((sum,p)=>sum+p.x,0)/landmarks.length}:null,now);}catch(error){processGesture(null,now);}});
+ initHandDetector().then(ready=>{if(!ready||S.state!=='s-mirror'||!S.stream)return;try{const result=HAND.det.detectForVideo(v,now),landmarks=result.landmarks?.[0];processGesture(landmarks?{landmarks,x:landmarks.reduce((sum,p)=>sum+p.x,0)/landmarks.length}:null,now);if(S.state==='s-mirror')drawFaceOverlay();}catch(error){processGesture(null,now);}});
 }
 
 // One adapter session owns one image. Changing or clearing it invalidates all pending work.
 function stopGeneration(){S.revision++;S.generating=false;}
-function stopCamera(){if(S.stream)S.stream.getTracks().forEach(t=>t.stop());S.stream=null;document.body.classList.remove('camera-live');$('#captureLabel').textContent='开启镜头';$('#video').srcObject=null;$('#cameraIdle').hidden=false;$('#bStartCamera').hidden=false;$('#bCapture').hidden=true;$('#bSwitchCamera').hidden=true;$('#cameraTag').hidden=true;$('#cameraMetrics').textContent='';clearFaceOverlay();}
+function stopCamera(){if(S.stream)S.stream.getTracks().forEach(t=>t.stop());S.stream=null;document.body.classList.remove('camera-live','gesture-live');$('#captureLabel').textContent='开启镜头';$('#video').srcObject=null;$('#cameraIdle').hidden=false;$('#bStartCamera').hidden=false;$('#bCapture').hidden=true;$('#bSwitchCamera').hidden=true;$('#cameraTag').hidden=true;$('#cameraMetrics').textContent='';clearFaceOverlay();}
 function resetAutoCapture(){F.stableSince=F.countStart=0;F.anchors=null;F.autoSignature='';F.lastAutoCheck=0;}
 function resetTracking(){F.faces=[];F.tracks=[];F.selectedId=null;F.nextId=1;F.lastBox=null;F.lastSeen=0;resetAutoCapture();F.lastVideoTime=-1;F.quality=null;renderFaceChoices();}
 function toWaiting(){
@@ -293,8 +284,14 @@ function drawFaces(g,faces,pr,selected,showMask){
   const tag=pr.map({x:f.x+f.w/2,y:f.y});g.fillStyle=active?'#355d46':'#26382dcc';g.fillRect(tag.x-18*labelScale,tag.y-25*labelScale,36*labelScale,22*labelScale);g.fillStyle='#fff';g.textAlign='center';g.font=`${12*labelScale}px sans-serif`;g.fillText(String(f.id),tag.x,tag.y-9*labelScale);
  });
 }
+const HAND_CONNECTIONS=[[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]];
+function drawHandOverlay(g,hand,pr){
+ if(!hand?.landmarks)return;const pts=hand.landmarks.map(p=>pr.map(p));g.save();g.strokeStyle='#8ee4d0';g.fillStyle='#8ee4d0';g.lineWidth=2.2;g.shadowColor='#163c37aa';g.shadowBlur=8;
+ HAND_CONNECTIONS.forEach(([a,b])=>{g.beginPath();g.moveTo(pts[a].x,pts[a].y);g.lineTo(pts[b].x,pts[b].y);g.stroke();});
+ pts.forEach(p=>{g.beginPath();g.arc(p.x,p.y,4,0,Math.PI*2);g.fill();});g.restore();
+}
 function clearFaceOverlay(){const c=$('#faceOverlay');c.getContext('2d').clearRect(0,0,c.width,c.height);}
-function drawFaceOverlay(){const v=$('#video');if(!v.videoWidth)return;const pr=projection($('#cameraWell'),v.videoWidth,v.videoHeight,'cover',S.facing==='user');const g=overlayContext($('#faceOverlay'),pr);drawFaces(g,F.faces,pr,F.selectedId,$('#showMask').checked);}
+function drawFaceOverlay(){const v=$('#video');if(!v.videoWidth)return;const pr=projection($('#cameraWell'),v.videoWidth,v.videoHeight,'cover',S.facing==='user');const g=overlayContext($('#faceOverlay'),pr);drawFaces(g,F.faces,pr,F.selectedId,$('#showMask').checked);if(S.state==='s-mirror')drawHandOverlay(g,G.hand,pr);}
 function faceAt(faces,p){return faces.filter(f=>p.x>=f.x-.03&&p.x<=f.x+f.w+.03&&p.y>=f.y-.04&&p.y<=f.y+f.h+.04).sort((a,b)=>a.w*a.h-b.w*b.h)[0];}
 function selectFaceAt(e){const c=$('#faceOverlay'),r=c.getBoundingClientRect(),v=$('#video');const pr=projection($('#cameraWell'),v.videoWidth,v.videoHeight,'cover',S.facing==='user');const f=faceAt(F.faces,pr.unmap({x:e.clientX-r.left,y:e.clientY-r.top}));if(f)chooseFace(f.id);}
 let cameraRequest=0;
@@ -367,9 +364,7 @@ async function capture(){
  S.capturing=true;resetAutoCapture();try{
  S.epoch++;stopGeneration();S.source='camera';release(S.original);S.original=canvas(v.videoWidth,v.videoHeight);S.original.getContext('2d').drawImage(v,0,0);
  const face=selectedFace();S.manual=false;S.manualBox=null;S.staticSource='camera';S.staticFaces=F.faces.map(f=>({...f}));S.staticSelected=face?.id??null;
- const keepGestureCamera=matchMedia('(min-width:900px)').matches;
- if(S.mode==='phone'&&!keepGestureCamera)stopCamera();
- if(keepGestureCamera){document.body.classList.add('gesture-live');toast('结果页可用左右挥手翻页，张开手掌暂停或继续。');}
+ if(S.mode==='phone')stopCamera();
  if(face)await confirmFace();else await prepareSelection();
  }finally{S.capturing=false;}
 }
@@ -518,6 +513,10 @@ function ageFace(srcCanvas,cur,tgt){
 
 
 
+
+
+
+
 // Real generation can replace this adapter; status and retry are shared by both paths.
 function generateWithTimeout(args){
  return new Promise((resolve,reject)=>{let settled=false;const timer=setTimeout(()=>{settled=true;reject(new Error('处理超时，可重试'));},CONFIG.timeoutMs);
@@ -560,6 +559,7 @@ function buildPages(){
  const track=$('#pageTrack'),dots=$('#pageDots');track.replaceChildren();dots.replaceChildren();
  S.pages.forEach((p,i)=>{const article=document.createElement('article');article.className='age-page';const button=document.createElement('button');button.className='page-photo';button.setAttribute('aria-label',p.t===null?'原始照片':`比较 ${p.t} 岁`);const image=canvas();image.getContext('2d').drawImage(p.image,0,0);button.append(image);button.onclick=()=>{if(p.t!==null)openDetail(p.t);else toast('这是原始照片，左右滑动查看其他年龄。');};const meta=document.createElement('div');meta.className='page-meta';const label=document.createElement('div');label.innerHTML=p.t===null?'<div class="page-age" style="font-size:30px">此刻</div>':`<div class="page-age">${p.t}<span>岁</span></div>`;const caption=document.createElement('div');caption.className='page-caption';caption.textContent=p.caption;label.append(caption);const number=document.createElement('span');number.className='page-number';number.textContent=String(i+1).padStart(2,'0');meta.append(label,number);article.append(button,meta);track.append(article);const dot=document.createElement('button');dot.setAttribute('aria-label',`第 ${i+1} 页`);dot.onclick=()=>{stopPlay();goPage(i);};dots.append(dot);});
  $('#resultDisclosure').textContent=[S.ageInfo?.source==='demo'?'演示占位 30 岁':'',S.demonstration?'演示滤镜':'年龄外观模拟'].filter(Boolean).join(' · ');
+ if(S.stream&&matchMedia('(min-width:900px)').matches)toast('可左右挥手翻页，张开手掌暂停或继续。');
  requestAnimationFrame(()=>{if(S.state==='s-grid'&&S.pages.length)goPage(S.pageIndex);});
 }
 function updatePageDots(){
