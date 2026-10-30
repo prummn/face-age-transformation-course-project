@@ -154,7 +154,7 @@ const OVAL=[10,338,297,332,284,251,389,356,454,323,361,288,397,365,379,378,400,3
 const S={state:'s-mirror',mode:'phone',source:null,original:null,face:null,transform:null,age:null,ageInfo:null,targets:[18,30,45,60,75],results:new Map(),tasks:new Map(),pages:[],pageIndex:0,pick:null,view:'crop',epoch:0,revision:0,generating:false,stream:null,facing:'user',autoTimer:0,log:[],staticFaces:[],staticSelected:null,manual:false,manualBox:null,staticSource:'upload',demonstration:true};
 const F={faces:[],tracks:[],selectedId:null,nextId:1,lastSeen:0,lastBox:null,lastTick:0,lastVideoTime:-1,stableSince:0,countStart:0,quality:null,landmarks:null};
 const DET={ready:false,loading:false,error:false,kind:null,det:null,promise:null};
-const HAND={ready:false,loading:false,error:false,det:null,promise:null,lastVideoTime:-1,lastTick:0};
+const HAND={ready:false,loading:false,error:false,det:null,promise:null,lastVideoTime:-1,lastTick:0,busy:false};
 const G={samples:[],palmSince:null,palmLatched:false,hand:null};
 const adapters=()=>window.AgeMirrorAdapters||{};
 const canvas=(w=FACE,h=FACE)=>{const c=document.createElement('canvas');c.width=w;c.height=h;return c;};
@@ -197,9 +197,9 @@ async function initHandDetector(){
  HAND.promise=(async()=>{for(const src of [{...MP_SOURCES[0],model:'./assets/vision/hand_landmarker.task'}, {...MP_SOURCES[1],model:'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task'}]){try{const vision=await import(src.bundle),files=await vision.FilesetResolver.forVisionTasks(src.wasm);HAND.det=await vision.HandLandmarker.createFromOptions(files,{baseOptions:{modelAssetPath:src.model,delegate:'CPU'},runningMode:'VIDEO',numHands:1,minHandDetectionConfidence:.55,minHandPresenceConfidence:.55,minTrackingConfidence:.5});HAND.ready=true;break;}catch(error){console.warn('Hand gesture model unavailable:',error.message);}}HAND.loading=false;HAND.error=!HAND.ready;return HAND.ready;})();return HAND.promise;
 }
 function gestureLoop(now){
- requestAnimationFrame(gestureLoop);if(!S.stream||S.state!=='s-mirror'||document.hidden||now-HAND.lastTick<120)return;
+ requestAnimationFrame(gestureLoop);if(!S.stream||S.state!=='s-mirror'||document.hidden||!F.faces.length||HAND.busy||now-HAND.lastTick<400)return;
  const v=$('#video');if(v.readyState<2||v.currentTime===HAND.lastVideoTime)return;HAND.lastTick=now;HAND.lastVideoTime=v.currentTime;
- initHandDetector().then(ready=>{if(!ready||S.state!=='s-mirror'||!S.stream)return;try{const result=HAND.det.detectForVideo(v,now),landmarks=result.landmarks?.[0];processGesture(landmarks?{landmarks,x:landmarks.reduce((sum,p)=>sum+p.x,0)/landmarks.length}:null,now);if(S.state==='s-mirror')drawFaceOverlay();}catch(error){processGesture(null,now);}});
+ initHandDetector().then(ready=>{if(!ready||S.state!=='s-mirror'||!S.stream)return;HAND.busy=true;try{const result=HAND.det.detectForVideo(v,now),landmarks=result.landmarks?.[0];processGesture(landmarks?{landmarks,x:landmarks.reduce((sum,p)=>sum+p.x,0)/landmarks.length}:null,now);if(S.state==='s-mirror')drawFaceOverlay();}catch(error){processGesture(null,now);}finally{HAND.busy=false;}});
 }
 
 // One adapter session owns one image. Changing or clearing it invalidates all pending work.
@@ -458,6 +458,8 @@ function ageFace(srcCanvas,cur,tgt){
   }
   return c;
 }
+
+
 
 
 
