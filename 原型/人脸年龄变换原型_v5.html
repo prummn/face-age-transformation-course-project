@@ -127,7 +127,7 @@ body[data-backend="live"] #s-grid .age-page{display:flex;flex-direction:column}b
  </section>
  <section id="s-warp" hidden><h2>正在制作</h2><p class="lead" id="taskSummary">正在制作预览，每个年龄独立处理。</p><div class="generation-progress"><div id="progressFill"></div></div><details class="secondary-detail" id="taskDetails"><summary>处理详情</summary><ul class="task-list" id="taskList"></ul></details><div class="row actions"><button id="bCancelGenerate">取消并返回设置</button><button class="primary" id="bShowResults" disabled>查看已完成</button></div><details class="help-line"><summary>处理记录</summary><pre id="taskLog" style="white-space:pre-wrap;overflow-wrap:anywhere"></pre></details></section>
  <section id="s-grid" hidden>
-  <div id="immersiveMirror" hidden><canvas id="mirrorBase"></canvas><canvas id="mirrorNext"></canvas><div class="mirror-caption"><span id="mirrorAge"></span><small>定格年龄镜 · 年龄外观模拟</small></div></div>
+  <div id="immersiveMirror" hidden><canvas id="mirrorBase"></canvas><canvas id="mirrorNext"></canvas><div class="mirror-caption"><span id="mirrorAge"></span><small id="mirrorAgeReference">年龄外观模拟</small></div></div>
   <div class="page-heading"><div><h2>年龄手记</h2></div><button class="text playback" id="bPlay" aria-pressed="false">自动翻阅</button></div>
   <div class="color-view" id="resultColorView" hidden role="group" aria-label="结果色彩版本"><button data-color-view="preserved">保留原肤色</button><button data-color-view="raw">原始模型</button></div>
   <div class="page-track" id="pageTrack" aria-label="左右滑动浏览年龄"></div>

@@ -10,7 +10,10 @@ function renderMirrorFrame(){
  if(!active)return;
  const page=S.pages[S.pageIndex];if(!page)return;
  host.classList.toggle('camera-reflection',S.source==='camera'&&S.facing==='user');
- $('#mirrorAge').textContent=page.t===null?'此刻':page.t+' 岁';
+ const age=Number.isFinite(S.age)?S.age:null,source=S.ageInfo?.source;
+ const reference=age===null?'当前年龄未设置':source==='model'?`参考估龄约 ${age} 岁`:source==='demo'?`演示占位 ${age} 岁`:`当前 ${age} 岁（手动）`;
+ $('#mirrorAge').textContent=page.t===null?'此刻':`目标 ${page.t} 岁`;
+ $('#mirrorAgeReference').textContent=reference+' · 年龄外观模拟';
  if(mirrorFrameIndex===S.pageIndex)return;
  cancelAnimationFrame(mirrorAnimation);
  const base=$('#mirrorBase'),next=$('#mirrorNext'),w=page.image.width,h=page.image.height;
