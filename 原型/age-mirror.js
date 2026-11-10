@@ -28,23 +28,6 @@ function renderMirrorFrame(){
  }
  mirrorFrameIndex=S.pageIndex;
 }
-const mirrorStyle=document.createElement('style');mirrorStyle.textContent=`
-body[data-experience="mirror"][data-view="s-grid"]{overflow:hidden;background:#111}
-body[data-experience="mirror"][data-view="s-grid"] .app{width:100%;height:100dvh;max-width:none;margin:0;padding:0;border-radius:0;background:#111}
-body[data-experience="mirror"][data-view="s-grid"] header{position:absolute;z-index:12;left:0;right:0;color:white;background:linear-gradient(#0006,transparent)}
-body[data-experience="mirror"][data-view="s-grid"] main{padding:0;max-width:none;height:100dvh!important}
-body[data-experience="mirror"] #s-grid .page-track,body[data-experience="mirror"] #s-grid .page-dots,body[data-experience="mirror"] #s-grid .page-heading h2,body[data-experience="mirror"] #resultColorView,body[data-experience="mirror"] #bNativeSave,body[data-experience="mirror"] #resultDisclosure{display:none}
-#immersiveMirror{position:absolute;inset:0;background:#111;overflow:hidden}
-#immersiveMirror canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-#immersiveMirror.camera-reflection canvas{transform:scaleX(-1)}
-.mirror-caption{position:absolute;left:0;right:0;bottom:145px;color:white;text-align:center;text-shadow:0 2px 12px #000}
-.mirror-caption span{display:block;font-size:clamp(36px,6vw,64px);font-weight:500}.mirror-caption small{font-size:14px}
-body[data-experience="mirror"] #s-grid .page-heading{position:absolute;right:24px;top:85px;z-index:11}
-body[data-experience="mirror"] #s-grid .page-heading button{color:white;background:#0005}
-body[data-experience="mirror"] #s-grid .page-controls{position:absolute;left:24px;right:24px;bottom:90px;z-index:11;justify-content:space-between}
-body[data-experience="mirror"] #s-grid .result-tools{position:absolute;left:24px;right:24px;bottom:24px;z-index:11;display:flex;justify-content:center}
-body[data-experience="mirror"] #s-grid .result-tools button{font-size:14px;padding:10px 18px;background:#ffffffd9}
-`;document.head.append(mirrorStyle);
 if(new URLSearchParams(location.search).get('experience')==='mirror'){
  S.mode='mirror';$('#experienceMode').value='mirror';document.body.dataset.experience='mirror';
  notice('#hudText','开启镜头后，站稳自动定格，轮播不同年龄；离开 5 秒自动清除。');
@@ -55,17 +38,5 @@ function renderMirrorProcessing(id){
  const c=$('#mirrorFrozen');if(!c)return;c.hidden=!(S.mode==='mirror'&&id==='s-warp'&&S.original);
  if(!c.hidden){c.width=S.original.width;c.height=S.original.height;c.getContext('2d').drawImage(S.original,0,0);c.style.transform=S.source==='camera'&&S.facing==='user'?'scaleX(-1)':'none';}
 }
-mirrorStyle.textContent+=`
-body[data-experience="mirror"][data-view="s-warp"] .app{width:100%;height:100dvh;max-width:none;margin:0;padding:0;border-radius:0;background:#111}
-body[data-experience="mirror"][data-view="s-warp"] main{padding:0;max-width:none;height:100dvh}
-body[data-experience="mirror"][data-view="s-warp"] header{position:absolute;z-index:12;left:0;right:0;color:white}
-body[data-experience="mirror"] #s-warp{position:absolute;inset:0;padding:calc(100dvh - 240px) 24px 24px;color:white;box-sizing:border-box}
-#mirrorFrozen{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
-body[data-experience="mirror"] #s-warp>:not(canvas){position:relative;z-index:1;text-shadow:0 1px 6px black}
-body[data-experience="mirror"] #s-warp h2,body[data-experience="mirror"] #taskDetails,body[data-experience="mirror"] #s-warp .help-line{display:none}
-body[data-experience="mirror"] #taskSummary{background:#0008;padding:10px;border-radius:12px}
-`;
-mirrorStyle.textContent+=`
-body[data-experience="mirror"] #s-grid .page-heading{top:150px}
-body[data-experience="mirror"] #s-grid .result-tools button{color:#222}
-`;
+// Keep all captions and controls outside the source image stage.
+$('#s-grid').append($('#immersiveMirror .mirror-caption'));

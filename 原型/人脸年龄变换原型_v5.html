@@ -95,6 +95,7 @@ body[data-backend="live"] #s-grid .age-page{display:flex;flex-direction:column}b
 @media(min-width:600px) and (min-height:900px) and (max-aspect-ratio:3/4){.color-view{gap:calc(8 * var(--du));padding:calc(6 * var(--du));border-radius:calc(20 * var(--du));margin-top:calc(20 * var(--du))}.color-view button{min-height:calc(58 * var(--du));font-size:calc(24 * var(--du));padding:calc(10 * var(--du)) calc(16 * var(--du));border-radius:calc(16 * var(--du))}.color-view+.page-track{margin-top:calc(24 * var(--du))}body[data-backend="live"] #s-detail .cmp{width:min(100%,calc((100dvh - 900 * var(--du)) * var(--comparison-aspect,1)))}}
 @media(min-width:600px) and (min-height:900px) and (max-aspect-ratio:3/4){body[data-backend="live"][data-view="s-grid"] main{height:calc(100dvh - 136 * var(--du))}.service-badge{top:calc(145 * var(--du));min-height:calc(52 * var(--du));font-size:calc(22 * var(--du));padding:calc(8 * var(--du)) calc(20 * var(--du));border-radius:calc(30 * var(--du))}.capture-privacy{top:calc(210 * var(--du));font-size:calc(20 * var(--du))}.service-panel button,.native-download{font-size:calc(24 * var(--du));min-height:calc(64 * var(--du));padding:calc(10 * var(--du)) calc(18 * var(--du))}body[data-backend="live"] #s-grid .page-meta{padding:calc(24 * var(--du)) calc(36 * var(--du));min-height:calc(150 * var(--du))}body[data-backend="live"] #s-grid .page-age,body[data-backend="live"] #s-grid .page-age[style]{font-size:calc(52 * var(--du))!important}body[data-backend="live"] #s-grid .page-age span{font-size:calc(26 * var(--du))}body[data-backend="live"] #s-grid .page-caption{font-size:calc(24 * var(--du));margin-top:calc(8 * var(--du))}body[data-backend="live"] #s-grid .result-tools{gap:calc(20 * var(--du))}body[data-backend="live"] #s-grid .result-tools button{font-size:calc(26 * var(--du));padding:calc(18 * var(--du)) calc(12 * var(--du))}}
 </style>
+<link rel="stylesheet" href="./age-mirror.css">
 </head>
 <body>
 <div class="app" id="screen">
@@ -308,9 +309,9 @@ function drawHandOverlay(g,hand,pr){
  pts.forEach(p=>{g.beginPath();g.arc(p.x,p.y,4,0,Math.PI*2);g.fill();});g.restore();
 }
 function clearFaceOverlay(){const c=$('#faceOverlay');c.getContext('2d').clearRect(0,0,c.width,c.height);}
-function drawFaceOverlay(){const v=$('#video');if(!v.videoWidth)return;const pr=projection($('#cameraWell'),v.videoWidth,v.videoHeight,'cover',S.facing==='user');const g=overlayContext($('#faceOverlay'),pr);drawFaces(g,F.faces,pr,F.selectedId,$('#showMask').checked);if(S.state==='s-mirror')drawHandOverlay(g,G.hand,pr);}
+function drawFaceOverlay(){const v=$('#video');if(!v.videoWidth)return;const pr=projection($('#cameraWell'),v.videoWidth,v.videoHeight,getComputedStyle(v).objectFit||'cover',S.facing==='user');const g=overlayContext($('#faceOverlay'),pr);drawFaces(g,F.faces,pr,F.selectedId,$('#showMask').checked);if(S.state==='s-mirror')drawHandOverlay(g,G.hand,pr);}
 function faceAt(faces,p){return faces.filter(f=>p.x>=f.x-.03&&p.x<=f.x+f.w+.03&&p.y>=f.y-.04&&p.y<=f.y+f.h+.04).sort((a,b)=>a.w*a.h-b.w*b.h)[0];}
-function selectFaceAt(e){const c=$('#faceOverlay'),r=c.getBoundingClientRect(),v=$('#video');const pr=projection($('#cameraWell'),v.videoWidth,v.videoHeight,'cover',S.facing==='user');const f=faceAt(F.faces,pr.unmap({x:e.clientX-r.left,y:e.clientY-r.top}));if(f)chooseFace(f.id);}
+function selectFaceAt(e){const c=$('#faceOverlay'),r=c.getBoundingClientRect(),v=$('#video');const pr=projection($('#cameraWell'),v.videoWidth,v.videoHeight,getComputedStyle(v).objectFit||'cover',S.facing==='user');const f=faceAt(F.faces,pr.unmap({x:e.clientX-r.left,y:e.clientY-r.top}));if(f)chooseFace(f.id);}
 let cameraRequest=0;
 async function startCamera(){
  const request=++cameraRequest,epoch=S.epoch;stopCamera();notice('#hudText','正在请求摄像头…');
