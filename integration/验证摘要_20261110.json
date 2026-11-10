@@ -1,0 +1,125 @@
+{
+  "version": "1.2.0",
+  "date": "2026-11-10",
+  "baseline_commit": "87cb88d65fe86747d58365c2b5eaca755c82cdda",
+  "branch": "integration/classroom-demo-20261110",
+  "summary": {
+    "passed": 7,
+    "failed": 0
+  },
+  "backend_unit_tests": {
+    "passed": 8,
+    "uses_fake_engine": true
+  },
+  "gateway_unit_tests": {
+    "passed": 5
+  },
+  "fixture": {
+    "source": "https://storage.googleapis.com/mediapipe-assets/portrait.jpg",
+    "sha256": "a6f11efaa834706db23f275b6115058fa87fc7f14362681e6abe14e82749de3e"
+  },
+  "cases": [
+    {
+      "name": "01-real-upload-four-targets-export-clear",
+      "mode": "REAL",
+      "status": "passed",
+      "durationMs": 6531,
+      "pageErrors": []
+    },
+    {
+      "name": "02-real-smaller-second-face-selection",
+      "mode": "REAL",
+      "status": "passed",
+      "durationMs": 5524,
+      "pageErrors": []
+    },
+    {
+      "name": "03-prepare-outage-never-falls-back-to-demo",
+      "mode": "SIMULATED_FAILURE",
+      "status": "passed",
+      "durationMs": 401,
+      "pageErrors": []
+    },
+    {
+      "name": "04-one-target-fails-preserve-successful-results",
+      "mode": "SIMULATED_FAILURE",
+      "status": "passed",
+      "durationMs": 693,
+      "pageErrors": []
+    },
+    {
+      "name": "05-cancel-before-prepare-reply-discards-late-session",
+      "mode": "SIMULATED_RACE",
+      "status": "passed",
+      "durationMs": 1615,
+      "pageErrors": []
+    },
+    {
+      "name": "06-clear-during-transform-discards-late-result",
+      "mode": "SIMULATED_RACE",
+      "status": "passed",
+      "durationMs": 1710,
+      "pageErrors": []
+    },
+    {
+      "name": "07-show-partial-results-then-include-late-targets",
+      "mode": "SIMULATED_PROGRESS",
+      "status": "passed",
+      "durationMs": 694,
+      "pageErrors": []
+    }
+  ],
+  "observed_limits": [
+    "远景/小脸可能漏检；最终双脸测试采用近裁切同源双实例，仅验证空间选脸，不代表多身份质量评测。",
+    "模拟错误与竞态测试不属于真实NPU耗时或效果证据。"
+  ],
+  "model": {
+    "ready": true,
+    "engine": "SAM / StyleGAN2",
+    "device": "Ascend NPU",
+    "model": "ft_l1",
+    "native_size": 1024,
+    "version": "1.2.0",
+    "status": "ready",
+    "detail": null,
+    "active_sessions": 0,
+    "session_ttl_seconds": 1800
+  },
+  "real_target_timings": [
+    {
+      "target_age": 38,
+      "model_seconds": 0.124,
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "target_age": 63,
+      "model_seconds": 0.114,
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "target_age": 78,
+      "model_seconds": 0.121,
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "target_age": 90,
+      "model_seconds": 0.109,
+      "width": 1024,
+      "height": 1024
+    }
+  ],
+  "download": {
+    "width": 1024,
+    "height": 1024,
+    "bytes": 1878998,
+    "sha256": "d8172a5e894375bee1c3299cc20d71473bcfbcff402d5a70bb723e7cdb2b12c9"
+  },
+  "exclusions": [
+    "Android/RK3288 hardware acceptance",
+    "Age accuracy or identity-quality validation",
+    "Production P95 and load validation"
+  ]
+}
