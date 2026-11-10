@@ -14,6 +14,7 @@ import subprocess
 from pathlib import Path
 import random
 import sys
+from augmentation_bank import ParentSampler, read_bank
 
 
 def sha256(path):
@@ -68,6 +69,8 @@ def validate(args):
     if not training or not evaluation:
         raise ValueError('Both manifests must be nonempty.')
     train_keys={r['key'] for r in training}; eval_keys={r['key'] for r in evaluation}
+    if len(train_keys)!=len(training) or len(eval_keys)!=len(evaluation):
+        raise ValueError('Original manifests must contain unique input keys; variants belong in the separate bank.')
     if train_keys & eval_keys:
         raise ValueError('Train/eval keys overlap.')
     train_groups={r['duplicate_candidate_group'] for r in training}
@@ -80,8 +83,15 @@ def validate(args):
     for row in evaluation:
         if sha256(row['image_path'])!=row['sha256']:
             raise ValueError('Frozen evaluation image changed: '+row['key'])
+    eval_hashes={row['sha256'] for row in evaluation}
+    for row in training:
+        if sha256(row['image_path']) in eval_hashes:
+            raise ValueError('Training image duplicates frozen evaluation content: '+row['key'])
     if not Path(args.initial_encoder).is_file():
         raise ValueError('Missing initial encoder: '+args.initial_encoder)
+    bank=read_bank(args.augmentation_manifest,training,evaluation)
+    if args.augmentation_probability and not bank:
+        raise ValueError('Augmentation probability requires an accepted training-only bank.')
     physical,visible=physical_device(args.device)
     arms={'control':(0.,0.),'colour_only':(args.colour_weight,0.),'same_age_only':(0.,args.same_age_weight),'colour_same_age':(args.colour_weight,args.same_age_weight)}
     colour_weight,same_weight=arms[args.arm]
@@ -94,6 +104,7 @@ def train(args,rows,evaluation,plan):
     import os,time,math
     import numpy as np
     import cv2
+    from PIL import Image
     import torch
     import torch_npu  # noqa: F401
     import torch.nn.functional as F
@@ -124,7 +135,9 @@ def train(args,rows,evaluation,plan):
     for p in perceptual.parameters(): p.requires_grad_(False)
     parameters=[p for p in net.encoder.parameters() if p.requires_grad]
     optimizer=torch.optim.Adam(parameters,lr=args.lr)
-    weights=[row['sampling_weight'] for row in rows]
+    bank=read_bank(args.augmentation_manifest,rows,evaluation)
+    sampler=ParentSampler(rows,bank,args.augmentation_probability,args.seed)
+    target_rng=torch.Generator(device='cpu').manual_seed(args.seed+2000003)
     # A geometric face mask excludes most hair/background. This is explicitly
     # NOT skin segmentation; always inspect cheeks, hair, eyes and background.
     yy,xx=torch.meshgrid(torch.linspace(-1,1,256,device=args.device),torch.linspace(-1,1,256,device=args.device),indexing='ij')
@@ -196,21 +209,37 @@ def train(args,rows,evaluation,plan):
     skipped=0
     try:
         for step in range(1,args.steps+1):
-            selected=random.choices(rows,weights=weights,k=args.bs)
-            rgb=[cv2.cvtColor(cv2.imread(row['image_path']),cv2.COLOR_BGR2RGB) for row in selected]
-            x=torch.from_numpy(np.stack(rgb)).permute(0,3,1,2).float().div(127.5).sub(1).to(args.device)
-            flips=torch.rand(args.bs,1,1,1,device=args.device)<.5
-            x=torch.where(flips,x,x.flip(3))
-            with torch.no_grad(): source,_=ages(x)
-            target=torch.empty(args.bs,device=args.device).uniform_(.20,.75)
-            target=torch.where(torch.rand(args.bs,device=args.device)<1/3,source,target)
+            selected,variants=sampler.sample(args.bs)
+            def read_rgb(path):
+                # Match the augmentation gate's decoder, including JPEG colour
+                # rounding; originals are already RGB PNGs in both arms.
+                with Image.open(path) as image:
+                    if image.mode!='RGB': raise ValueError('Training input must be RGB')
+                    rgb=np.asarray(image).copy()
+                if rgb.shape!=(256,256,3): raise ValueError('Training inputs must remain aligned RGB 256 images')
+                return rgb
+            clean_rgb=[read_rgb(row['image_path']) for row in selected]
+            input_rgb=[read_rgb(variant['image_path']) if variant else clean for clean,variant in zip(clean_rgb,variants)]
+            def as_tensor(images):
+                return torch.from_numpy(np.stack(images)).permute(0,3,1,2).float().div(127.5).sub(1).to(args.device)
+            clean=as_tensor(clean_rgb);x=as_tensor(input_rgb)
+            flips_cpu=torch.rand(args.bs,1,1,1,generator=target_rng)<.5
+            flips=flips_cpu.to(args.device)
+            clean=torch.where(flips,clean.flip(3),clean);x=torch.where(flips,x.flip(3),x)
+            # The age condition and loss references come from the unchanged
+            # source. An exposure/JPEG derivative never becomes a new age label
+            # or a degraded reconstruction target.
+            with torch.no_grad(): source,_=ages(clean)
+            target=(torch.rand(args.bs,generator=target_rng)*.55+.20).to(args.device)
+            same_age_choice=(torch.rand(args.bs,generator=target_rng)<1/3).to(args.device)
+            target=torch.where(same_age_choice,source,target)
             started=time.monotonic()
             aged=forward(x,target); reconstructed=forward(aged,source)
             estimated,_=ages(aged)
             same_age=forward(x,source) if plan['same_age_weight'] else None
-            terms={'aging':F.mse_loss(estimated,target),'id':.1*((1-(target-source).abs())*(1-identity.cos(aged,x))).mean(),'cycle_l2':.25*F.mse_loss(reconstructed,x),'cycle_lpips':.1*perceptual(reconstructed,x).mean(),'cycle_id':.1*(1-identity.cos(reconstructed,x)).mean()}
-            colour=colour_loss(aged,x)
-            direct=(.25*F.mse_loss(same_age,x)+.1*perceptual(same_age,x).mean()+.1*(1-identity.cos(same_age,x)).mean()) if same_age is not None else x.new_zeros(())
+            terms={'aging':F.mse_loss(estimated,target),'id':.1*((1-(target-source).abs())*(1-identity.cos(aged,clean))).mean(),'cycle_l2':.25*F.mse_loss(reconstructed,clean),'cycle_lpips':.1*perceptual(reconstructed,clean).mean(),'cycle_id':.1*(1-identity.cos(reconstructed,clean)).mean()}
+            colour=colour_loss(aged,clean)
+            direct=(.25*F.mse_loss(same_age,clean)+.1*perceptual(same_age,clean).mean()+.1*(1-identity.cos(same_age,clean)).mean()) if same_age is not None else x.new_zeros(())
             loss=sum(terms.values())+plan['colour_weight']*colour+plan['same_age_weight']*direct
             optimizer.zero_grad(set_to_none=True)
             if not bool(torch.isfinite(loss)):
@@ -227,6 +256,7 @@ def train(args,rows,evaluation,plan):
             else: optimizer.step()
             torch.npu.synchronize()
             record={'step':step,'loss':float(loss.detach()) if torch.isfinite(loss) else None,'chroma_raw':float(colour.detach()),'same_age_raw':float(direct.detach()),'gradient_norm':float(norm) if torch.isfinite(norm) else None,'skipped':skip,'seconds':round(time.monotonic()-started,3),**{key:float(value.detach()) for key,value in terms.items()}}
+            record.update({'parent_keys':[row['key'] for row in selected], 'variant_keys':[row['key'] if row else None for row in variants], 'flip_flags':flips_cpu.flatten().tolist(), 'source_age_conditions':source.detach().cpu().tolist(), 'target_age_conditions':target.detach().cpu().tolist(), 'augmented_inputs':sum(row is not None for row in variants)})
             log.write(json.dumps(record)+'\n');log.flush()
             if step==1 or step%10==0: print(json.dumps(record),flush=True)
             if step%args.save_every==0 or step==args.steps:
@@ -244,6 +274,8 @@ def main():
     parser.add_argument('--base',default='/data/home/1120231322/scow/face-age')
     parser.add_argument('--train-manifest',required=True)
     parser.add_argument('--eval-manifest',required=True)
+    parser.add_argument('--augmentation-manifest',help='Accepted train-only variant bank; original manifest remains the sampling population')
+    parser.add_argument('--augmentation-probability',type=float,default=0.,help='Per sampled parent probability; both arms keep the same original parent draws')
     parser.add_argument('--initial-encoder',default='/data/home/1120231322/scow/face-age/out/ft_l1/encoder_step1000.pt')
     parser.add_argument('--out',required=True)
     parser.add_argument('--device',required=True,help='Logical NPU id; resolves ASCEND_RT_VISIBLE_DEVICES. Physical NPU 0/2/3 are forbidden.')
@@ -258,9 +290,13 @@ def main():
     parser.add_argument('--val-count',type=int,default=24,help='Frozen regression subset, round-robin by existing pseudo-age bins')
     parser.add_argument('--execute',action='store_true',help='Actually train; omitted by default')
     args=parser.parse_args()
-    if args.steps<1 or args.bs<1 or args.save_every<1 or args.val_count<1 or args.lr<=0 or args.colour_weight<0 or args.same_age_weight<0:
+    if args.steps<1 or args.bs<1 or args.save_every<1 or args.val_count<1 or args.lr<=0 or args.colour_weight<0 or args.same_age_weight<0 or not 0<=args.augmentation_probability<=1:
         parser.error('steps, bs, save-every and lr must be positive')
     rows,evaluation,plan=validate(args)
+    plan.update({'augmentation_probability':args.augmentation_probability,'augmentation_manifest':args.augmentation_manifest,'augmentation_manifest_sha256':sha256(args.augmentation_manifest) if args.augmentation_manifest else None,'source_sampling':'original parent population only; independent source and augmentation RNGs','target_sampling':'dedicated seeded CPU torch.Generator, shared flips/targets between paired arms','source_age_reference':'AgeEst of unchanged original with shared flip; never re-estimated from augmented input','reconstruction_identity_colour_reference':'unchanged original with shared flip; paired input-degradation training, not new identities/age labels','training_script_sha256':sha256(__file__)})
+    plan.update({'unique_parent_count':len({row['key'] for row in rows}),'unique_train_candidate_groups':len({row['duplicate_candidate_group'] for row in rows}),'augmentation_helper_sha256':sha256(Path(__file__).with_name('augmentation_bank.py')),'initial_encoder_sha256':sha256(args.initial_encoder)})
+    if args.augmentation_manifest:
+        plan['control_definition']='For the augmentation comparison both runs use identical colour/same-age weights and this same bank. Only augmentation probability differs (0 versus the chosen value); compare the freshly rerun control, not a historical checkpoint run with different RNG logic.'
     print(json.dumps(plan,ensure_ascii=False,indent=2),flush=True)
     if args.execute:
         train(args,rows,evaluation,plan)
