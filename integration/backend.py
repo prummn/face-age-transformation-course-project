@@ -28,7 +28,7 @@ from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from pydantic import BaseModel, Field
 
-VERSION = "1.2.0"
+VERSION = "1.3.0"
 BASE = Path(os.environ.get("FACE_AGE_BASE", "/data/home/1120231322/scow/face-age"))
 WEB_BASE = Path(os.environ.get("FACE_AGE_WEB_BASE", "/data/home/1120231322/scow/face-age-web"))
 MAX_IMAGE_BYTES = 15 * 1024 * 1024
@@ -59,6 +59,7 @@ class TransformRequest(BaseModel):
     target_age: int = Field(ge=5, le=90, strict=True)
     request_id: Optional[str | int] = None
     enhance: bool = False
+    preserve_color: bool = True
 
 
 @dataclass
@@ -303,6 +304,16 @@ class SamePersonEngine:
             reference_age = int(round(float(estimated.item()) * 100))
         return aligned, transform, reference_age, chosen
 
+    def display_reference(self, rgb, transform):
+        """Sample the uploaded original directly for viewing; never upscale the
+        256 encoder input to masquerade as a high-detail source photograph.
+        Pixel-centre mapping matches 1024 -> 256 area pooling (4x + 1.5).
+        """
+        a,b,c,d,e,f = transform["matrix"]
+        matrix = np.array([[a,c,e],[b,d,f]],dtype=np.float64)*4
+        matrix[:,2] += 1.5
+        return self.cv2.warpAffine(rgb,matrix,(1024,1024),flags=self.cv2.INTER_CUBIC,borderMode=self.cv2.BORDER_REFLECT)
+
     def transform(self, item, age, enhanced, assert_active):
         self.ensure_ready()
         torch = self.torch
@@ -431,7 +442,7 @@ async def unexpected_error(request, exc):
 
 @app.get("/api/health")
 def health():
-    return {"ready": engine.ready, "engine": ENGINE_NAME, "device": "Ascend NPU", "model": "ft_l1", "native_size": 1024, "version": VERSION, "status": "ready" if engine.ready else ("failed" if engine.error else "loading"), "detail": engine.error, "active_sessions": store.count(), "session_ttl_seconds": SESSION_TTL}
+    return {"ready": engine.ready, "engine": ENGINE_NAME, "device": "Ascend NPU", "model": "ft_l1", "native_size": 1024, "version": VERSION, "status": "ready" if engine.ready else ("failed" if engine.error else "loading"), "detail": engine.error, "active_sessions": store.count(), "session_ttl_seconds": SESSION_TTL, "features": {"source_color_preservation": True, "raw_model_output": True}}
 
 
 @app.post("/api/prepare")
@@ -441,7 +452,16 @@ def prepare(payload: PrepareRequest):
         image = decode_image(payload.image)
         aligned, transform, age, chosen = engine.prepare(image, payload.face)
         session_id = store.create(aligned)
-        return {"session_id": session_id, "aligned_image": image_data_url(aligned), "age": {"age": age, "source": "model", "model": "FairFace", "regression": None, "probabilities": None}, "transform": transform, "alignment": "sam_ffhq", "meta": {"engine": ENGINE_NAME, "model": "ft_l1", "face_id": payload.face.id, "detected_bbox": [float(v) for v in chosen[:4]], "detector": "YuNet", "age_note": "FairFace 参考估龄，不代表真实年龄；高龄估计上限约 75 岁。", "retention": "内存保存，清除立即失效，闲置 30 分钟过期"}}
+        response = {"session_id": session_id, "aligned_image": image_data_url(aligned), "age": {"age": age, "source": "model", "model": "FairFace", "regression": None, "probabilities": None}, "transform": transform, "alignment": "sam_ffhq", "meta": {"engine": ENGINE_NAME, "model": "ft_l1", "face_id": payload.face.id, "detected_bbox": [float(v) for v in chosen[:4]], "detector": "YuNet", "age_note": "FairFace 参考估龄，不代表真实年龄；高龄估计上限约 75 岁。", "retention": "内存保存，清除立即失效，闲置 30 分钟过期"}}
+        if hasattr(engine,"display_reference"):
+            try:
+                reference = engine.display_reference(image,transform)
+                response["reference_image"] = image_data_url(reference)
+                response["meta"]["reference_kind"] = "resampled_uploaded_original_1024"
+            except Exception:
+                # A viewing enhancement must not invalidate the prepared input.
+                LOG.exception("High-resolution original preview unavailable")
+        return response
 
 
 @app.post("/api/transform")
@@ -450,9 +470,20 @@ def transform(payload: TransformRequest):
     with admitted():
         item = store.get(payload.session_id)
         native, output, elapsed, kind, warning = engine.transform(item, payload.target_age, payload.enhance, lambda: store.check(payload.session_id, item))
-        response = {"image": image_data_url(output), "width": output.shape[1], "height": output.shape[0], "request_id": payload.request_id, "meta": {"engine": ENGINE_NAME, "model": "ft_l1", "target_age": payload.target_age, "elapsed_seconds": round(elapsed, 3), "output_kind": kind, "alignment": "sam_ffhq"}}
+        store.check(payload.session_id, item)
+        # Keep the model output available. This bounded chroma correction is an
+        # optional presentation step, not a newly trained model or super-resolution.
+        from source_color import preserve_source_chroma
+        color_started = time.monotonic()
+        corrected_native, color_meta = preserve_source_chroma(item.aligned, native, .65 if payload.preserve_color else 0)
         if kind == "super_resolution":
-            response["native_image"] = image_data_url(native)
+            output, _ = preserve_source_chroma(item.aligned, output, .65 if payload.preserve_color else 0)
+        else:
+            output = corrected_native
+        color_elapsed = time.monotonic()-color_started
+        response = {"image": image_data_url(output), "raw_image": image_data_url(native), "width": output.shape[1], "height": output.shape[0], "request_id": payload.request_id, "meta": {"engine": ENGINE_NAME, "model": "ft_l1", "target_age": payload.target_age, "elapsed_seconds": round(elapsed, 3), "output_kind": kind, "alignment": "sam_ffhq", "color_preservation": color_meta, "postprocess_seconds": round(color_elapsed,3), "raw_model_size": 1024}}
+        if kind == "super_resolution":
+            response["native_image"] = image_data_url(corrected_native)
         if warning:
             response["warning"] = warning
         store.check(payload.session_id, item)

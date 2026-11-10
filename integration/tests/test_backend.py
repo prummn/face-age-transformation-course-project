@@ -18,6 +18,7 @@ from fastapi import HTTPException
 from fastapi.testclient import TestClient
 
 module_path = Path(__file__).resolve().parents[1] / "backend.py"
+sys.path.insert(0, str(module_path.parent))
 spec = importlib.util.spec_from_file_location("face_age_backend", module_path)
 backend = importlib.util.module_from_spec(spec)
 sys.modules[spec.name] = backend
@@ -25,6 +26,16 @@ spec.loader.exec_module(backend)
 
 
 class GeometryTests(unittest.TestCase):
+    def test_reference_samples_original_without_encoder_resolution_bottleneck(self):
+        import cv2
+        engine = backend.SamePersonEngine.__new__(backend.SamePersonEngine)
+        engine.cv2 = cv2
+        original = np.zeros((1024, 1024, 3), dtype=np.uint8)
+        original[:, ::2] = 255
+        # The corresponding encoder image would lose these one-pixel stripes.
+        reference = engine.display_reference(original, {"matrix": [.25, 0, 0, .25, -.375, -.375]})
+        np.testing.assert_array_equal(reference, original)
+
     def test_selection_never_falls_back_to_largest_person(self):
         selected = backend.SelectedFace(x=.05, y=.15, w=.2, h=.3)
         small = np.array([60, 170, 160, 250] + [0] * 10 + [.99], dtype=float)
@@ -129,6 +140,8 @@ class APIContractTests(unittest.TestCase):
         output = generated.json()
         self.assertEqual((output["width"], output["height"]), (1024, 1024))
         self.assertEqual(output["meta"]["output_kind"], "native")
+        self.assertIn("raw_image", output)
+        self.assertIn("color_preservation", output["meta"])
         self.assertEqual(backend.decode_image(output["image"]).shape, (1024, 1024, 3))
         self.assertEqual(self.client.delete("/api/sessions/" + token).status_code, 200)
         self.assertEqual(self.client.post("/api/transform", json={"session_id": token, "target_age": 60}).status_code, 410)

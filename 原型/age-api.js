@@ -17,7 +17,7 @@
     $('#serviceState').classList.toggle('error',!!state.error);
     $('#bReconnect').disabled = state.checking;
     $('#privacyStorage').textContent = '确认人脸后，照片会发送到自有推理服务器，仅在本次会话内存中处理。清除或返回主页会请求删除；断线时服务端到期自动清理。已导出的文件会保留。';
-    $('#privacyModel').textContent = '当前年龄由 FairFace 提供参考估计，可手动修正。变龄由 SAM 模型生成，原生结果为 1024×1024。结果仅模拟年龄外观，不是真实年龄判定或未来容貌预测。';
+    $('#privacyModel').textContent = '当前年龄由 FairFace 提供参考估计，可手动修正。变龄由 SAM 模型生成，原生结果为 1024×1024。'+(state.health?.features?.source_color_preservation?'“保留原肤色”会参考原照色度进行后处理，保留模型结果的明暗与纹理，可切换查看未校正的原始模型结果。':'')+'结果仅模拟年龄外观，不是真实年龄判定或未来容貌预测。';
     $('#privacyCamera').textContent = '电脑 localhost 可调用摄像头；手机摄像头需要可信 HTTPS。上传照片时请确认本人或被摄者同意。';
     $('#capturePrivacy').hidden = false;
     $('#generationModeNote').textContent = '真实模型生成 · 原生 1024×1024';
@@ -106,28 +106,34 @@
     if (serial !== state.serial) throw new Error('本次处理已取消。');
     if (!state.ready && !await health()) throw new Error(state.error || '模型服务未连接，请在选项中重新连接。');
     if (serial !== state.serial) throw new Error('本次处理已取消。');
-    const data=await request('/api/prepare',{method:'POST',body:JSON.stringify({image:image.toDataURL('image/jpeg',.96),face:{x:face.x,y:face.y,w:face.w,h:face.h,id:face.id,manual:!!face.manual}})},90000,'prepare');
+    // Preserve browser-decoded RGB pixels; another JPEG pass would alter colour comparisons.
+    const body=JSON.stringify({image:image.toDataURL('image/png'),face:{x:face.x,y:face.y,w:face.w,h:face.h,id:face.id,manual:!!face.manual}});
+    if (body.length > 21*1024*1024) throw new Error('照片无损编码后超过处理上限，请裁剪照片或使用尺寸较小的图片。');
+    const data=await request('/api/prepare',{method:'POST',body},90000,'prepare');
     if (serial !== state.serial) {await removeSession(data.session_id);throw new Error('本次处理已取消。');}
     if (!data.session_id || data.alignment !== 'sam_ffhq' || !Array.isArray(data.transform?.inverse) || data.transform.inverse.length !== 6 || !data.transform.inverse.every(Number.isFinite)) {
       await removeSession(data.session_id);
       throw new Error('人脸对齐信息无效，请重新选择人脸。');
     }
-    let aligned;
-    try {aligned=await decodeImage(data.aligned_image,256);} catch(error) {await removeSession(data.session_id);throw error;}
-    if (serial !== state.serial) {aligned.width=aligned.height=0;await removeSession(data.session_id);throw new Error('本次处理已取消。');}
+    let aligned,reference=null;
+    try {aligned=await decodeImage(data.aligned_image,256);if(data.reference_image)reference=await decodeImage(data.reference_image,1024);} catch(error) {if(aligned)aligned.width=aligned.height=0;if(reference)reference.width=reference.height=0;await removeSession(data.session_id);throw error;}
+    if (serial !== state.serial) {aligned.width=aligned.height=0;if(reference)reference.width=reference.height=0;await removeSession(data.session_id);throw new Error('本次处理已取消。');}
     state.session=data.session_id;
-    return {face:aligned,transform:data.transform,ageInfo:data.age,meta:data.meta,alignment:data.alignment};
+    return {face:aligned,referenceFace:reference,transform:data.transform,ageInfo:data.age,meta:data.meta,alignment:data.alignment};
   }
 
   async function generate({targetAge,requestId}) {
     if (!state.session) throw new Error('本次人脸尚未准备好，请重新选择照片。');
     const serial=state.serial,session=state.session;
-    const data=await request('/api/transform',{method:'POST',body:JSON.stringify({session_id:session,target_age:targetAge,request_id:requestId,enhance:false})},60000,'generate');
+    const data=await request('/api/transform',{method:'POST',body:JSON.stringify({session_id:session,target_age:targetAge,request_id:requestId,enhance:false,preserve_color:true})},60000,'generate');
     if (serial !== state.serial || session !== state.session) throw new Error('本次处理已取消。');
     if (data.meta?.output_kind !== 'native' || data.width !== 1024 || data.height !== 1024) throw new Error('返回结果不是原生 1024 图像，请重新处理。');
     const output=await decodeImage(data.image,1024);
-    if (serial !== state.serial || session !== state.session) {output.width=output.height=0;throw new Error('本次处理已取消。');}
+    let raw=null;
+    try {if(data.raw_image) raw=await decodeImage(data.raw_image,1024);}catch(error){output.width=output.height=0;throw error;}
+    if (serial !== state.serial || session !== state.session) {output.width=output.height=0;if(raw)raw.width=raw.height=0;throw new Error('本次处理已取消。');}
     output.ageMeta=data.meta;
+    output.ageRaw=raw;
     state.ready=true;state.error='';display();
     return output;
   }

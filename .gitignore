@@ -6,6 +6,9 @@
 __pycache__/
 *.py[cod]
 
+# Generated dataset manifests contain local paths and source metadata.
+/integration/quality/manifests/
+
 # Windows and editor noise
 Thumbs.db
 Desktop.ini

@@ -35,7 +35,7 @@ async function bounded(promise,ms,label){let timer;try{return await Promise.race
 const safeReply = value => {
   if (!value || typeof value !== 'object') return value;
   const result={...value};
-  for(const key of ['image','aligned_image','native_image']) if(result[key]) {
+  for(const key of ['image','raw_image','aligned_image','native_image','reference_image']) if(result[key]) {
     const bytes=dataBytes(result[key]);result[key]={bytes:bytes.length,sha256:hash(bytes),...pngSize(bytes)};
   }
   if(result.session_id) result.session_id=`sha256:${hash(result.session_id).slice(0,16)}`;

@@ -37,7 +37,7 @@ def main():
     server = None
     try:
         existing = health(f"http://127.0.0.1:{args.port}")
-        if existing and existing.get("ready") and existing.get("version") == "1.2.0" and existing.get("engine") == "SAM / StyleGAN2":
+        if existing and existing.get("ready") and str(existing.get("version", "")).startswith("1.") and existing.get("engine") == "SAM / StyleGAN2":
             url = f"http://localhost:{args.port}/"
             print(f"整合演示已在运行：{url}", flush=True)
             if not args.no_browser:
