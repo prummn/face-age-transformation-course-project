@@ -10,6 +10,7 @@ import time
 import webbrowser
 from urllib.error import URLError
 from urllib.request import urlopen
+from urllib.parse import quote
 
 from gateway import make_server
 
@@ -32,13 +33,15 @@ def main():
     parser.add_argument("--port", default=65512, type=int)
     parser.add_argument("--upstream", help="Use an existing local API; skip SSH and remote startup")
     parser.add_argument("--no-browser", action="store_true")
+    parser.add_argument("--experience", choices=["phone", "mirror"], default="phone")
     args = parser.parse_args()
+    entry = "/" if args.experience == "phone" else "/" + quote("人脸年龄变换原型_v5.html") + "?mode=live&experience=mirror"
     tunnel = None
     server = None
     try:
         existing = health(f"http://127.0.0.1:{args.port}")
         if existing and existing.get("ready") and str(existing.get("version", "")).startswith("1.") and existing.get("engine") == "SAM / StyleGAN2":
-            url = f"http://localhost:{args.port}/"
+            url = f"http://localhost:{args.port}{entry}"
             print(f"整合演示已在运行：{url}", flush=True)
             if not args.no_browser:
                 webbrowser.open(url)
@@ -81,7 +84,7 @@ def main():
             time.sleep(2)
         else:
             raise RuntimeError("模型仍未就绪，请检查服务器日志后重新启动。")
-        url = f"http://localhost:{args.port}/"
+        url = f"http://localhost:{args.port}{entry}"
         print(f"演示入口：{url}\n保持本窗口开启；按 Ctrl+C 结束本机页面与 SSH 隧道。", flush=True)
         if not args.no_browser:
             webbrowser.open(url)

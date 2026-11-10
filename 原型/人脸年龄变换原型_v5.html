@@ -126,6 +126,7 @@ body[data-backend="live"] #s-grid .age-page{display:flex;flex-direction:column}b
  </section>
  <section id="s-warp" hidden><h2>正在制作</h2><p class="lead" id="taskSummary">正在制作预览，每个年龄独立处理。</p><div class="generation-progress"><div id="progressFill"></div></div><details class="secondary-detail" id="taskDetails"><summary>处理详情</summary><ul class="task-list" id="taskList"></ul></details><div class="row actions"><button id="bCancelGenerate">取消并返回设置</button><button class="primary" id="bShowResults" disabled>查看已完成</button></div><details class="help-line"><summary>处理记录</summary><pre id="taskLog" style="white-space:pre-wrap;overflow-wrap:anywhere"></pre></details></section>
  <section id="s-grid" hidden>
+  <div id="immersiveMirror" hidden><canvas id="mirrorBase"></canvas><canvas id="mirrorNext"></canvas><div class="mirror-caption"><span id="mirrorAge"></span><small>定格年龄镜 · 年龄外观模拟</small></div></div>
   <div class="page-heading"><div><h2>年龄手记</h2></div><button class="text playback" id="bPlay" aria-pressed="false">自动翻阅</button></div>
   <div class="color-view" id="resultColorView" hidden role="group" aria-label="结果色彩版本"><button data-color-view="preserved">保留原肤色</button><button data-color-view="raw">原始模型</button></div>
   <div class="page-track" id="pageTrack" aria-label="左右滑动浏览年龄"></div>
@@ -180,7 +181,7 @@ function validInteger(raw,min,max){if(String(raw).trim()==='')return null;const 
 function release(c){if(c?.ageRaw&&c.ageRaw!==c){const raw=c.ageRaw;c.ageRaw=null;release(raw);}if(c instanceof HTMLCanvasElement){c.width=0;c.height=0;}else if(c instanceof ImageBitmap)c.close();}
 function show(id){
  if(id!=='s-grid')stopPlay();
- S.state=id;
+ S.state=id;document.body.dataset.experience=S.mode;if(typeof renderMirrorProcessing==='function')renderMirrorProcessing(id);
  $('#bHome').setAttribute('aria-label',id==='s-grid'?'返回主页':id==='s-detail'&&S.detailReturn==='s-overview'?'返回总览':S.results.size?'返回结果':'返回取景');
  $('#journalTools').hidden=!S.results.size;
  document.body.dataset.view=id;
@@ -224,7 +225,7 @@ function stopCamera(){if(S.stream)S.stream.getTracks().forEach(t=>t.stop());S.st
 function resetAutoCapture(){F.stableSince=F.countStart=0;F.anchors=null;F.autoSignature='';F.lastAutoCheck=0;}
 function resetTracking(){F.faces=[];F.tracks=[];F.selectedId=null;F.nextId=1;F.lastBox=null;F.lastSeen=0;resetAutoCapture();F.lastVideoTime=-1;F.quality=null;renderFaceChoices();}
 function toWaiting(){
- S.epoch++;stopGeneration();adapters().clear?.();S.preparing=false;stopPlay();stopCamera();resetGestures();
+ S.epoch++;stopGeneration();adapters().clear?.();S.preparing=false;stopPlay();clearMirrorFrames();stopCamera();resetGestures();
  S.editSnapshot=null;S.detailReturn='s-grid';S.colorView='preserved';$('#clearDialog').hidden=true;
  if(comparisonImages?.temporary)release(comparisonImages.right);comparisonImages=null;S.manual=false;
  const sensitive=[S.face,S.referenceFace,S.original,...S.results.values()];sensitive.forEach(release);
@@ -357,7 +358,7 @@ function detectLoop(now){
  try{
   probe.height=Math.max(1,Math.round(probe.width*v.videoHeight/v.videoWidth));probe.getContext('2d').drawImage(v,0,0,probe.width,probe.height);
   const face=updateTracks(detectFaces(probe),now);renderFaceChoices();if(S.state==='s-mirror')drawFaceOverlay();
-  if(S.mode==='mirror'&&S.state!=='s-mirror'){if(F.lastSeen&&now-F.lastSeen>=CONFIG.lostMs){toWaiting();toast('本次数据已清除。');}return;}
+  if(S.mode==='mirror'&&S.state!=='s-mirror'){if(F.lastSeen&&now-F.lastSeen>=CONFIG.lostMs){toWaiting();startCamera();}return;}
   if(S.state!=='s-mirror')return;
   if(!$('#infoSheet').hidden||!$('#clearDialog').hidden||!$('#autoCapture').checked){resetAutoCapture();notice('#hudText',face?'轮廓已就绪，可以拍摄。':'请正对镜头，露出完整面部。');return;}
   const gate=autoCaptureReadiness(probe,now);notice('#hudText',gate.message);if(gate.ready)capture();
@@ -617,13 +618,14 @@ function setColorView(view){
  updateColorControls();
 }
 function buildPages(){
- if(!S.face)return;show('s-grid');S.pageIndex=0;
+ if(!S.face)return;clearMirrorFrames();show('s-grid');S.pageIndex=0;
  S.pages=[{t:null,image:S.referenceFace||S.face,label:'此刻',caption:`${S.age} 岁 · ${ageSourceLabel()}`},...S.targets.filter(t=>S.results.has(t)).sort((a,b)=>a-b).map(t=>({t,image:resultImage(t),label:String(t),caption:t<S.age?`比此刻年轻 ${S.age-t} 年`:t>S.age?`比此刻年长 ${t-S.age} 年`:'与此刻同龄'}))];
+ if(S.mode==='mirror'){S.pages=S.pages.map(p=>({...p,image:p.t===null?S.original:pasteBack(p.image),composite:p.t!==null}));}
  const track=$('#pageTrack'),dots=$('#pageDots');track.replaceChildren();dots.replaceChildren();
  S.pages.forEach((p,i)=>{const article=document.createElement('article');article.className='age-page';const button=document.createElement('button');button.className='page-photo';button.setAttribute('aria-label',p.t===null?'原始照片':`比较 ${p.t} 岁`);const image=canvas(p.image.width,p.image.height);image.getContext('2d').drawImage(p.image,0,0,image.width,image.height);button.append(image);button.onclick=()=>{if(p.t!==null)openDetail(p.t);else toast(adapters().live?(S.referenceFace?'这是原图对应区域的重采样，完整原图可在“回贴原图”中查看。':'这是256像素模型输入。原始照片可在“回贴原图”中查看。'):'这是原始照片，左右滑动查看其他年龄。');};const meta=document.createElement('div');meta.className='page-meta';const label=document.createElement('div');label.innerHTML=p.t===null?`<div class="page-age" style="font-size:30px">${adapters().live?'对齐原照':'此刻'}</div>`:`<div class="page-age">${p.t}<span>岁</span></div>`;const caption=document.createElement('div');caption.className='page-caption';caption.textContent=p.caption;label.append(caption);const number=document.createElement('span');number.className='page-number';number.textContent=String(i+1).padStart(2,'0');meta.append(label,number);article.append(button,meta);track.append(article);const dot=document.createElement('button');dot.setAttribute('aria-label',`第 ${i+1} 页`);dot.onclick=()=>{stopPlay();goPage(i);};dots.append(dot);});
  $('#resultDisclosure').textContent=[S.ageInfo?.source==='demo'?'演示占位 30 岁':'',S.demonstration?'演示滤镜':adapters().live?'真实模型 · 年龄外观模拟':'年龄外观模拟'].filter(Boolean).join(' · ');
  updateColorControls();
- if(S.stream&&matchMedia('(min-width:900px)').matches)toast('可左右挥手翻页，张开手掌暂停或继续。');
+ if(S.mode!=='mirror'&&S.stream&&matchMedia('(min-width:900px)').matches)toast('可左右挥手翻页，张开手掌暂停或继续。');
  requestAnimationFrame(()=>{if(S.state==='s-grid'&&S.pages.length)goPage(S.pageIndex);});
 }
 function updatePageDots(){
@@ -634,16 +636,16 @@ function updatePageDots(){
  $('#bCompareNow').hidden=!adapters().live;$('#bCompareNow').disabled=!S.results.size;
  if(adapters().live)$('#resultDisclosure').textContent=version.note;
 }
-function goPage(index){const track=$('#pageTrack');S.pageIndex=clamp(index,0,Math.max(0,S.pages.length-1));const child=track.children[S.pageIndex];if(child)track.scrollTo({left:child.offsetLeft-track.children[0].offsetLeft,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});updatePageDots();}
+function goPage(index){const track=$('#pageTrack');S.pageIndex=clamp(index,0,Math.max(0,S.pages.length-1));const child=track.children[S.pageIndex];if(child)track.scrollTo({left:child.offsetLeft-track.children[0].offsetLeft,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});updatePageDots();renderMirrorFrame();}
 $('#pageTrack').addEventListener('scroll',()=>{const track=$('#pageTrack');if(!track.children.length)return;const first=track.children[0].offsetLeft;let nearest=0,distance=Infinity;[...track.children].forEach((child,i)=>{const d=Math.abs(child.offsetLeft-first-track.scrollLeft);if(d<distance){distance=d;nearest=i;}});if(nearest!==S.pageIndex){S.pageIndex=nearest;updatePageDots();}},{passive:true});
 function stopPlay(){clearInterval(S.autoTimer);S.autoTimer=0;$('#bPlay').textContent='自动翻阅';$('#bPlay').setAttribute('aria-pressed','false');}
-function startPlay(){if(S.pages.length<2)return;stopPlay();const order=S.pages.map((p,i)=>({i,age:p.t??S.age})).sort((a,b)=>a.age-b.age).map(p=>p.i);goPage(order[0]);$('#bPlay').textContent='暂停翻阅';$('#bPlay').setAttribute('aria-pressed','true');S.autoTimer=setInterval(()=>{if(S.state!=='s-grid'){stopPlay();return;}goPage(order[(order.indexOf(S.pageIndex)+1)%order.length]);},2600);}
+function startPlay(){if(S.pages.length<2)return;stopPlay();const order=S.pages.map((p,i)=>({i,age:p.t??S.age})).sort((a,b)=>a.age-b.age).map(p=>p.i);goPage(S.mode==='mirror'?0:order[0]);$('#bPlay').textContent='暂停翻阅';$('#bPlay').setAttribute('aria-pressed','true');S.autoTimer=setInterval(()=>{if(S.state!=='s-grid'){stopPlay();return;}goPage(order[(order.indexOf(S.pageIndex)+1)%order.length]);},S.mode==='mirror'?4500:2600);}
 function buildOverview(){show('s-overview');const grid=$('#overviewGrid');grid.replaceChildren();const sorted=[...S.pages].sort((a,b)=>(a.t??S.age)-(b.t??S.age));sorted.forEach(p=>{const b=document.createElement('button');b.className='overview-card';const c=canvas(p.image.width,p.image.height);c.getContext('2d').drawImage(p.image,0,0,c.width,c.height);const caption=document.createElement('span');caption.textContent=p.t===null?`此刻 · ${S.age} 岁（${ageSourceLabel()}）`:`${p.t} 岁${adapters().live?' · '+(resultVersion(p.t).corrected?'保色':'原始'):''}`;b.append(c,caption);b.onclick=()=>p.t!==null?openDetail(p.t):toast('这是原始照片。');grid.append(b);});}
 
 function pasteBack(result){
  const out=canvas(S.original.width,S.original.height),g=out.getContext('2d');g.drawImage(S.original,0,0);
  const width=result.width,height=result.height,masked=canvas(width,height),mg=masked.getContext('2d');mg.drawImage(result,0,0,width,height);mg.globalCompositeOperation='destination-in';
- const scale=Math.min(width,height)/FACE,mask=mg.createRadialGradient(width/2,height/2,62*scale,width/2,height/2,126*scale);mask.addColorStop(0,'#fff');mask.addColorStop(.65,'#fff');mask.addColorStop(1,'transparent');mg.fillStyle=mask;mg.fillRect(0,0,width,height);
+ mg.save();mg.translate(width*.5,height*.54);mg.scale(width*.29,height*.34);const mask=mg.createRadialGradient(0,0,.67,0,0,1);mask.addColorStop(0,'#fff');mask.addColorStop(1,'transparent');mg.fillStyle=mask;mg.fillRect(-2,-2,4,4);mg.restore();
  const [a,b,c,d,e,f]=S.transform.inverse;g.imageSmoothingQuality='high';g.setTransform(a*FACE/width,b*FACE/width,c*FACE/height,d*FACE/height,e,f);g.drawImage(masked,0,0);g.setTransform(1,0,0,1,0,0);release(masked);return out;
 }
 let comparisonImages=null;
@@ -673,7 +675,7 @@ function saveOverview(){
 }
 
 // Phone interaction never depends on staying in the camera view.
-function returnToResults(){if(!S.results.size){toWaiting();return;}const expected=S.targets.filter(t=>S.results.has(t)).sort((a,b)=>a-b),shown=S.pages.filter(p=>p.t!==null).map(p=>p.t),changed=!S.pages.length||expected.length!==shown.length||expected.some((t,i)=>shown[i]!==t)||S.pages.some(p=>p.t!==null&&resultImage(p.t)!==p.image);if(changed){const current=S.pages[S.pageIndex]?.t,playing=!!S.autoTimer;stopPlay();buildPages();goPage(Math.max(0,S.pages.findIndex(p=>p.t===current)));if(playing)startPlay();}else{show('s-grid');goPage(S.pageIndex);}}
+function returnToResults(){if(!S.results.size){toWaiting();return;}const expected=S.targets.filter(t=>S.results.has(t)).sort((a,b)=>a-b),shown=S.pages.filter(p=>p.t!==null).map(p=>p.t),changed=!S.pages.length||expected.length!==shown.length||expected.some((t,i)=>shown[i]!==t)||(S.mode!=='mirror'&&S.pages.some(p=>p.t!==null&&resultImage(p.t)!==p.image));if(changed){const current=S.pages[S.pageIndex]?.t,playing=!!S.autoTimer;stopPlay();buildPages();goPage(Math.max(0,S.pages.findIndex(p=>p.t===current)));if(playing)startPlay();}else{show('s-grid');goPage(S.pageIndex);}}
 function leaveComparison(){if(comparisonImages?.temporary)release(comparisonImages.right);comparisonImages=null;if(S.detailReturn==='s-overview'){returnToResults();buildOverview();}else returnToResults();}
 function navigateBack(){
  if(S.state==='s-detail'){leaveComparison();return;}
@@ -685,7 +687,7 @@ function navigateBack(){
 function retake(){const useCamera=S.source==='camera';toWaiting();if(useCamera)startCamera();}
 $('#bStartCamera').onclick=startCamera;$('#bCapture').onclick=capture;$('#bUpload').onclick=()=>$('#file').click();$('#file').onchange=e=>{const f=e.target.files[0];if(f)loadImage(f);e.target.value='';};
 $('#bSwitchCamera').onclick=()=>{S.facing=S.facing==='user'?'environment':'user';startCamera();};$('#faceOverlay').addEventListener('pointerdown',selectFaceAt);
-$('#experienceMode').onchange=e=>{S.mode=e.target.value;resetAutoCapture();notice('#hudText',S.mode==='mirror'?'离开镜头 5 秒后清空。':'拍摄后保留结果。');};
+$('#experienceMode').onchange=e=>{S.mode=e.target.value;document.body.dataset.experience=S.mode;resetAutoCapture();if(S.results.size){buildPages();if(S.mode==='mirror')startPlay();}notice('#hudText',S.mode==='mirror'?'离开镜头 5 秒后清空。':'拍摄后保留结果。');};
 $('#autoCapture').onchange=()=>{resetAutoCapture();};
 $('#bManual').onclick=enableManual;$('#bSelectConfirm').onclick=confirmFace;$('#ageMinus').onclick=()=>adjustAge(-1);$('#agePlus').onclick=()=>adjustAge(1);$('#addTarget').onclick=addTargetFromInput;$('#targetAgeInput').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();addTargetFromInput();}};
 $('#currentAgeInput').oninput=manualAgeEdited;
@@ -714,5 +716,6 @@ show('s-mirror');requestAnimationFrame(detectLoop);
 
 
 </script>
+<script src="./age-mirror.js"></script>
 </body>
 </html>
