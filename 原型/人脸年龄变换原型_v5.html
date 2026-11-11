@@ -327,14 +327,15 @@ async function startCamera(){
 }
 const probe=canvas(384,288);
 function autoCaptureReadiness(image,now){
- const signature=F.faces.map(f=>f.id).join(','),gap=F.lastAutoCheck&&now-F.lastAutoCheck>750;
+ const participants=S.mode==='mirror'?[selectedFace()].filter(Boolean):F.faces;
+ const signature=participants.map(f=>f.id).join(','),gap=F.lastAutoCheck&&now-F.lastAutoCheck>750;
  F.lastAutoCheck=now;
  const fail=message=>{resetAutoCapture();F.lastAutoCheck=now;return {ready:false,message};};
  if(S.gestureMode&&S.gestureIntent==='stop')return {ready:false,message:'已暂停拍摄，张开手掌继续。'};
  if(!F.faces.length||!selectedFace())return fail('请正对镜头，露出完整面部。');
  if(gap||signature!==F.autoSignature){resetAutoCapture();F.lastAutoCheck=now;}
  F.autoSignature=signature;
- for(const face of F.faces){
+ for(const face of participants){
   const q=qualityOf(image,face);if(face.id===F.selectedId)F.quality=q;
   const prefix=F.faces.length>1?`人脸 ${face.id}：`:'';
   if(q.warnings.length)return fail(prefix+q.warnings[0]);
@@ -344,21 +345,23 @@ function autoCaptureReadiness(image,now){
   const anchor=F.anchors?.get(face.id);
   if(anchor&&(faceDistance(anchor,face)/face.w>.07||Math.abs(Math.log(face.w/anchor.w))>.09||Math.abs(Math.log(face.h/anchor.h))>.09||Math.abs(q.angle-anchor.angle)>6||Math.abs(q.front-anchor.front)>.1))return fail('请保持静止，正在重新确认…');
  }
- if(!F.anchors){F.anchors=new Map(F.faces.map(f=>{const q=qualityOf(image,f);return [f.id,{...f,angle:q.angle,front:q.front}];}));F.stableSince=now;}
- if(now-F.stableSince<CONFIG.stableMs)return {ready:false,message:'正在确认所有人的姿态…'};
+ if(!F.anchors){F.anchors=new Map(participants.map(f=>{const q=qualityOf(image,f);return [f.id,{...f,angle:q.angle,front:q.front}];}));F.stableSince=now;}
+ if(now-F.stableSince<CONFIG.stableMs)return {ready:false,message:'请站稳，准备自动拍摄…'};
  if(!F.countStart)F.countStart=now;const left=Math.ceil((CONFIG.countdownMs-now+F.countStart)/1000);
  const prefix=S.gestureMode&&S.gestureIntent==='start'?'已确认拍摄 · ':'';
  return {ready:left<=0,message:left>0?`${prefix}${left} 秒后拍摄，请保持静止。`:''};
 }
 function detectLoop(now){
  requestAnimationFrame(detectLoop);
- if(!S.stream||document.hidden||now-F.lastTick<CONFIG.tickMs)return;
+ const liveMirror=S.mode==='mirror'&&S.source==='camera'&&S.state==='s-grid';
+ if(!S.stream||document.hidden||now-F.lastTick<(liveMirror?80:CONFIG.tickMs))return;
  const v=$('#video');if(v.readyState<2||v.currentTime===F.lastVideoTime)return;F.lastTick=now;F.lastVideoTime=v.currentTime;
  if(S.mode==='phone'&&S.state!=='s-mirror')return;
  if(!DET.ready)return;
  try{
   probe.height=Math.max(1,Math.round(probe.width*v.videoHeight/v.videoWidth));probe.getContext('2d').drawImage(v,0,0,probe.width,probe.height);
   const face=updateTracks(detectFaces(probe),now);renderFaceChoices();if(S.state==='s-mirror')drawFaceOverlay();
+  if(liveMirror)drawLiveMirror(v,face,now);
   if(S.mode==='mirror'&&S.state!=='s-mirror'){if(F.lastSeen&&now-F.lastSeen>=CONFIG.lostMs){toWaiting();startCamera();}return;}
   if(S.state!=='s-mirror')return;
   if(!$('#infoSheet').hidden||!$('#clearDialog').hidden||!$('#autoCapture').checked){resetAutoCapture();notice('#hudText',face?'轮廓已就绪，可以拍摄。':'请正对镜头，露出完整面部。');return;}
@@ -643,8 +646,8 @@ function stopPlay(){clearInterval(S.autoTimer);S.autoTimer=0;$('#bPlay').textCon
 function startPlay(){if(S.pages.length<2)return;stopPlay();const order=S.pages.map((p,i)=>({i,age:p.t??S.age})).sort((a,b)=>a.age-b.age).map(p=>p.i);goPage(S.mode==='mirror'?0:order[0]);$('#bPlay').textContent='暂停翻阅';$('#bPlay').setAttribute('aria-pressed','true');S.autoTimer=setInterval(()=>{if(S.state!=='s-grid'){stopPlay();return;}goPage(order[(order.indexOf(S.pageIndex)+1)%order.length]);},S.mode==='mirror'?4500:2600);}
 function buildOverview(){show('s-overview');const grid=$('#overviewGrid');grid.replaceChildren();const sorted=[...S.pages].sort((a,b)=>(a.t??S.age)-(b.t??S.age));sorted.forEach(p=>{const b=document.createElement('button');b.className='overview-card';const c=canvas(p.image.width,p.image.height);c.getContext('2d').drawImage(p.image,0,0,c.width,c.height);const caption=document.createElement('span');caption.textContent=p.t===null?`此刻 · ${S.age} 岁（${ageSourceLabel()}）`:`${p.t} 岁${adapters().live?' · '+(resultVersion(p.t).corrected?'保色':'原始'):''}`;b.append(c,caption);b.onclick=()=>p.t!==null?openDetail(p.t):toast('这是原始照片。');grid.append(b);});}
 
-function pasteBack(result){
- const out=canvas(S.original.width,S.original.height),g=out.getContext('2d');g.drawImage(S.original,0,0);
+function pasteBack(result, includeBackground=true){
+ const out=canvas(S.original.width,S.original.height),g=out.getContext('2d');if(includeBackground)g.drawImage(S.original,0,0);
  const width=result.width,height=result.height,masked=canvas(width,height),mg=masked.getContext('2d');mg.drawImage(result,0,0,width,height);mg.globalCompositeOperation='destination-in';
  mg.save();mg.translate(width*.5,height*.49);mg.scale(width*.35,height*.44);const mask=mg.createRadialGradient(0,0,.67,0,0,1);mask.addColorStop(0,'#fff');mask.addColorStop(1,'transparent');mg.fillStyle=mask;mg.fillRect(-2,-2,4,4);mg.restore();
  const [a,b,c,d,e,f]=S.transform.inverse;g.imageSmoothingQuality='high';g.setTransform(a*FACE/width,b*FACE/width,c*FACE/height,d*FACE/height,e,f);g.drawImage(masked,0,0);g.setTransform(1,0,0,1,0,0);release(masked);return out;

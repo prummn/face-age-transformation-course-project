@@ -1,6 +1,36 @@
-/* Frozen-frame age mirror: same source geometry for every age; no live face tracking claim. */
+/* Uploaded photos use a still scene. Camera results use the current video frame. */
+let liveTarget=null, previousTarget=null, changedAt=0;
+const liveLayers=new Map();
+
+function drawLiveMirror(video,face,now){
+ const base=$('#mirrorBase'),w=video.videoWidth,h=video.videoHeight;
+ if(!w||!h)return;
+ if(base.width!==w||base.height!==h){base.width=w;base.height=h;}
+ const g=base.getContext('2d');
+ g.drawImage(video,0,0,w,h);
+ const source=staticFace();
+ if(!face||face.id!==source?.id||!source.eyes||!face.eyes)return;
+ const eyes=(f,width,height)=>f.eyes.map(p=>({x:p.x*width,y:p.y*height})).sort((a,b)=>a.x-b.x);
+ const [a,b]=eyes(source,S.original.width,S.original.height),[c,d]=eyes(face,w,h);
+ const dx=b.x-a.x,dy=b.y-a.y,length=dx*dx+dy*dy;
+ if(length<4)return;
+ const scaleCos=((d.x-c.x)*dx+(d.y-c.y)*dy)/length;
+ const scaleSin=((d.y-c.y)*dx-(d.x-c.x)*dy)/length;
+ const t=matchMedia('(prefers-reduced-motion: reduce)').matches?1:clamp((now-changedAt)/650,0,1);
+ g.save();
+ g.setTransform(scaleCos,scaleSin,-scaleSin,scaleCos,c.x-scaleCos*a.x+scaleSin*a.y,c.y-scaleSin*a.x-scaleCos*a.y);
+ function layer(target,opacity){
+  if(target===null||opacity<=0)return;
+  if(!liveLayers.has(target))liveLayers.set(target,pasteBack(resultImage(target),false));
+  g.globalAlpha=opacity;g.drawImage(liveLayers.get(target),0,0);
+ }
+ layer(previousTarget,1-t);layer(liveTarget,t);
+ g.restore();
+}
 let mirrorAnimation=0,mirrorFrameIndex=-1;
 function clearMirrorFrames(){
+ for(const layer of liveLayers.values())release(layer);
+ liveLayers.clear();previousTarget=liveTarget=null;changedAt=0;
  cancelAnimationFrame(mirrorAnimation);mirrorAnimation=0;mirrorFrameIndex=-1;
  for(const page of S.pages||[])if(page.composite)release(page.image);
  for(const id of ['#mirrorBase','#mirrorNext','#mirrorFrozen']){const c=$(id);if(c){c.width=c.height=0;}}
@@ -14,6 +44,12 @@ function renderMirrorFrame(){
  const reference=age===null?'当前年龄未设置':source==='model'?`参考估龄约 ${age} 岁`:source==='demo'?`演示占位 ${age} 岁`:`当前 ${age} 岁（手动）`;
  $('#mirrorAge').textContent=page.t===null?'此刻':`目标 ${page.t} 岁`;
  $('#mirrorAgeReference').textContent=reference+' · 年龄外观模拟';
+ if(S.source==='camera'&&S.stream){
+  if(mirrorFrameIndex!==S.pageIndex){previousTarget=liveTarget;liveTarget=page.t;changedAt=performance.now();}
+  mirrorFrameIndex=S.pageIndex;$('#mirrorNext').style.opacity=0;
+  const video=$('#video');if(video.readyState>=2)drawLiveMirror(video,selectedFace(),performance.now());
+  return;
+ }
  if(mirrorFrameIndex===S.pageIndex)return;
  cancelAnimationFrame(mirrorAnimation);
  const base=$('#mirrorBase'),next=$('#mirrorNext'),w=page.image.width,h=page.image.height;
@@ -33,7 +69,10 @@ function renderMirrorFrame(){
 }
 if(new URLSearchParams(location.search).get('experience')==='mirror'){
  S.mode='mirror';$('#experienceMode').value='mirror';document.body.dataset.experience='mirror';
- notice('#hudText','开启镜头后，站稳自动定格，轮播不同年龄；离开 5 秒自动清除。');
+ notice('#hudText','开启镜头后站稳，倒计时结束会自动拍摄。');
+ navigator.permissions?.query({name:'camera'}).then(permission=>{
+  if(permission.state==='granted'&&!cameraRequest&&!S.stream&&S.state==='s-mirror')startCamera();
+ }).catch(()=>{});
 }
 
 const frozen=document.createElement('canvas');frozen.id='mirrorFrozen';frozen.hidden=true;$('#s-warp').prepend(frozen);
