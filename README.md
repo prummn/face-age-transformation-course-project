@@ -4,6 +4,8 @@
 
 ## 2026-11-11 动态年龄镜演示版
 
+[训练方法与权重复原说明](integration/models/训练与模型.md) · [模型 Release](https://github.com/prummn/face-age-transformation-course-project/releases/tag/models-2026-11-11)
+
 在已配置 `ssh bit-ascend` 的演示电脑上，双击 [启动年龄镜子.command](启动年龄镜子.command)。摄像头检测到人脸稳定后自动拍摄，仅上传裁切的人脸。生成结束后，年龄结果跟随实时画面中的头部位置轮播。首次开启摄像头需授权。参见[演示说明](integration/年龄镜子说明.md)。
 
 手机接入同一局域网后，可在电脑上运行 `python3 integration/campus.py --address <电脑局域网IP>`，用手机访问 HTTP 端口 8088 上传照片。要使用摄像头，请同时传入 `--cert <证书路径> --key <私钥路径>` 并访问 HTTPS 端口 8443。证书须覆盖访问地址并受手机信任。

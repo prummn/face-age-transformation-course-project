@@ -1,0 +1,1 @@
+{"steps": 1000, "bs": 6, "lr": 5e-05, "clip": 1.0, "aging_lambda": 1.0, "save_every": 250, "log_every": 25, "seed": 0, "gn_max": 50.0, "rec_max": 1.0, "out": "out/ft_l1"}
