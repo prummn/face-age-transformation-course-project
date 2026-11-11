@@ -103,7 +103,7 @@ body[data-backend="live"] #s-grid .age-page{display:flex;flex-direction:column}b
  <main>
  <section id="s-mirror">
   <div class="well" id="cameraWell"><video id="video" playsinline muted></video><div class="idle" id="cameraIdle"><div class="mirror-outline" aria-hidden="true"></div></div><canvas id="faceOverlay" aria-label="点击轮廓选择人脸"></canvas><span id="cameraTag" hidden></span></div>
-  <button class="service-badge" id="serviceBadge" hidden aria-label="查看模型服务连接状态">正在连接模型…</button><p class="capture-privacy" id="capturePrivacy" hidden>照片发送至自有服务器，仅用于本次处理</p>
+  <button class="service-badge" id="serviceBadge" hidden aria-label="查看模型服务连接状态">正在连接模型…</button><p class="capture-privacy" id="capturePrivacy" hidden>仅发送选中的人脸区域，用于本次处理</p>
   <div class="capture-feedback"><p class="notice" id="hudText" role="status" aria-live="polite"></p><div class="pills" id="faceChoices" hidden></div></div>
   <div class="capture-dock"><button class="icon-button capture-side" id="bUpload" aria-label="选择照片"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8" cy="8" r="1.5"/><path d="m3 17 5-5 4 4 4-6 5 7"/></svg></button><div class="shutter-group"><button class="shutter" id="bStartCamera" aria-label="开启镜头"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 6 1.5-2h5L16 6h3a2 2 0 0 1 2 2v11H3V8a2 2 0 0 1 2-2z"/><circle cx="12" cy="12" r="3.5"/></svg></button><button class="shutter" id="bCapture" aria-label="拍照" hidden><span></span></button><span class="shutter-label" id="captureLabel">开启镜头</span></div><button class="icon-button capture-side" id="bSwitchCamera" aria-label="翻转镜头" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h10l-2-2m2 16H7l2 2M5 8a8 8 0 0 0 0 8m14-8a8 8 0 0 1 0 8"/><path d="m3 9 2-2 2 2m10 6 2 2 2-2"/></svg></button></div>
  </section>
@@ -646,7 +646,7 @@ function buildOverview(){show('s-overview');const grid=$('#overviewGrid');grid.r
 function pasteBack(result){
  const out=canvas(S.original.width,S.original.height),g=out.getContext('2d');g.drawImage(S.original,0,0);
  const width=result.width,height=result.height,masked=canvas(width,height),mg=masked.getContext('2d');mg.drawImage(result,0,0,width,height);mg.globalCompositeOperation='destination-in';
- mg.save();mg.translate(width*.5,height*.54);mg.scale(width*.29,height*.34);const mask=mg.createRadialGradient(0,0,.67,0,0,1);mask.addColorStop(0,'#fff');mask.addColorStop(1,'transparent');mg.fillStyle=mask;mg.fillRect(-2,-2,4,4);mg.restore();
+ mg.save();mg.translate(width*.5,height*.49);mg.scale(width*.35,height*.44);const mask=mg.createRadialGradient(0,0,.67,0,0,1);mask.addColorStop(0,'#fff');mask.addColorStop(1,'transparent');mg.fillStyle=mask;mg.fillRect(-2,-2,4,4);mg.restore();
  const [a,b,c,d,e,f]=S.transform.inverse;g.imageSmoothingQuality='high';g.setTransform(a*FACE/width,b*FACE/width,c*FACE/height,d*FACE/height,e,f);g.drawImage(masked,0,0);g.setTransform(1,0,0,1,0,0);release(masked);return out;
 }
 let comparisonImages=null;

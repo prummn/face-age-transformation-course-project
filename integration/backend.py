@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import base64
 import binascii
+from copy import deepcopy
 import io
 import logging
 import math
@@ -28,7 +29,8 @@ from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from pydantic import BaseModel, Field
 
-VERSION = "1.3.0"
+VERSION = "1.4.0"
+MODEL_NAME = "ft_l1 + SAM age direction"
 BASE = Path(os.environ.get("FACE_AGE_BASE", "/data/home/1120231322/scow/face-age"))
 WEB_BASE = Path(os.environ.get("FACE_AGE_WEB_BASE", "/data/home/1120231322/scow/face-age-web"))
 MAX_IMAGE_BYTES = 15 * 1024 * 1024
@@ -68,6 +70,8 @@ class Session:
     created_at: float
     touched_at: float
     cancelled: bool = False
+    reference_age: int | None = None
+    latent_offset: object = None
 
 
 class SessionStore:
@@ -85,14 +89,14 @@ class SessionStore:
                 item.cancelled = True
                 self.items.pop(key, None)
 
-    def create(self, aligned):
+    def create(self, aligned, reference_age=None):
         with self.lock:
             self._expire()
             if len(self.items) >= self.capacity:
                 raise HTTPException(429, "当前照片会话已满，请清除之前的照片后重试。")
             token = secrets.token_urlsafe(24)
             now = self.clock()
-            self.items[token] = Session(aligned, now, now)
+            self.items[token] = Session(aligned, now, now, reference_age=reference_age)
             return token
 
     def get(self, token):
@@ -249,7 +253,8 @@ class SamePersonEngine:
             torch.npu.set_device(self.dev)
             self.net = load_sam(self.dev)
             state = torch.load(BASE / "out/ft_l1/encoder_step1000.pt", map_location="cpu")
-            self.net.encoder.load_state_dict(state)
+            self.identity_encoder = deepcopy(self.net.encoder)
+            self.identity_encoder.load_state_dict(state)
             del state
             self.age_net = AgeEst().to(self.dev).eval()
             self.yunet = str(BASE / "models/yunet/face_detection_yunet_2023mar.onnx")
@@ -323,7 +328,21 @@ class SamePersonEngine:
             started = time.monotonic()
             tensor = self.tensor(item.aligned)
             condition = torch.full((1, 1, 256, 256), age / 100, device=self.dev)
-            generated = self.net(torch.cat([tensor, condition], 1), randomize_noise=False, resize=False)
+            # Anchor the reconstruction at the estimated source age. Apply the
+            # original SAM encoder's age-dependent displacement to that anchor.
+            if item.latent_offset is None:
+                source_condition = torch.full_like(condition, item.reference_age / 100)
+                source = torch.cat([tensor, source_condition], 1)
+                offset = self.identity_encoder(source) - self.net.encoder(source)
+                if self.net.opts.start_from_latent_avg:
+                    offset = offset + self.net.latent_avg
+                elif self.net.opts.start_from_encoded_w_plus:
+                    offset = offset + self.net.pretrained_encoder(tensor) + self.net.latent_avg
+                item.latent_offset = offset
+            target = torch.cat([tensor, condition], 1)
+            codes = self.net.encoder(target) + item.latent_offset
+            generated = self.net(codes, input_code=True, input_is_full=True,
+                                 randomize_noise=False, resize=False)
             torch.npu.synchronize()
             native = ((generated[0].clamp(-1, 1) + 1) * 127.5).permute(1, 2, 0).byte().cpu().numpy()
             if native.shape != (1024, 1024, 3):
@@ -442,7 +461,7 @@ async def unexpected_error(request, exc):
 
 @app.get("/api/health")
 def health():
-    return {"ready": engine.ready, "engine": ENGINE_NAME, "device": "Ascend NPU", "model": "ft_l1", "native_size": 1024, "version": VERSION, "status": "ready" if engine.ready else ("failed" if engine.error else "loading"), "detail": engine.error, "active_sessions": store.count(), "session_ttl_seconds": SESSION_TTL, "features": {"source_color_preservation": True, "raw_model_output": True}}
+    return {"ready": engine.ready, "engine": ENGINE_NAME, "device": "Ascend NPU", "model": MODEL_NAME, "native_size": 1024, "version": VERSION, "status": "ready" if engine.ready else ("failed" if engine.error else "loading"), "detail": engine.error, "active_sessions": store.count(), "session_ttl_seconds": SESSION_TTL, "features": {"source_color_preservation": True, "raw_model_output": True}}
 
 
 @app.post("/api/prepare")
@@ -451,8 +470,8 @@ def prepare(payload: PrepareRequest):
     with admitted():
         image = decode_image(payload.image)
         aligned, transform, age, chosen = engine.prepare(image, payload.face)
-        session_id = store.create(aligned)
-        response = {"session_id": session_id, "aligned_image": image_data_url(aligned), "age": {"age": age, "source": "model", "model": "FairFace", "regression": None, "probabilities": None}, "transform": transform, "alignment": "sam_ffhq", "meta": {"engine": ENGINE_NAME, "model": "ft_l1", "face_id": payload.face.id, "detected_bbox": [float(v) for v in chosen[:4]], "detector": "YuNet", "age_note": "FairFace 参考估龄，不代表真实年龄；高龄估计上限约 75 岁。", "retention": "内存保存，清除立即失效，闲置 30 分钟过期"}}
+        session_id = store.create(aligned, age)
+        response = {"session_id": session_id, "aligned_image": image_data_url(aligned), "age": {"age": age, "source": "model", "model": "FairFace", "regression": None, "probabilities": None}, "transform": transform, "alignment": "sam_ffhq", "meta": {"engine": ENGINE_NAME, "model": MODEL_NAME, "face_id": payload.face.id, "detected_bbox": [float(v) for v in chosen[:4]], "detector": "YuNet", "age_note": "FairFace 参考估龄，不代表真实年龄；高龄估计上限约 75 岁。", "retention": "内存保存，清除立即失效，闲置 30 分钟过期"}}
         if hasattr(engine,"display_reference"):
             try:
                 reference = engine.display_reference(image,transform)
@@ -481,7 +500,7 @@ def transform(payload: TransformRequest):
         else:
             output = corrected_native
         color_elapsed = time.monotonic()-color_started
-        response = {"image": image_data_url(output), "raw_image": image_data_url(native), "width": output.shape[1], "height": output.shape[0], "request_id": payload.request_id, "meta": {"engine": ENGINE_NAME, "model": "ft_l1", "target_age": payload.target_age, "elapsed_seconds": round(elapsed, 3), "output_kind": kind, "alignment": "sam_ffhq", "color_preservation": color_meta, "postprocess_seconds": round(color_elapsed,3), "raw_model_size": 1024}}
+        response = {"image": image_data_url(output), "raw_image": image_data_url(native), "width": output.shape[1], "height": output.shape[0], "request_id": payload.request_id, "meta": {"engine": ENGINE_NAME, "model": MODEL_NAME, "target_age": payload.target_age, "elapsed_seconds": round(elapsed, 3), "output_kind": kind, "alignment": "sam_ffhq", "color_preservation": color_meta, "postprocess_seconds": round(color_elapsed,3), "raw_model_size": 1024}}
         if kind == "super_resolution":
             response["native_image"] = image_data_url(corrected_native)
         if warning:

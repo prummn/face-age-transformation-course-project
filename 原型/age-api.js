@@ -16,7 +16,7 @@
     $('#serviceState').textContent = state.ready ? '真实估龄与年龄生成已连接。' : state.error || '正在连接自有推理服务器…';
     $('#serviceState').classList.toggle('error',!!state.error);
     $('#bReconnect').disabled = state.checking;
-    $('#privacyStorage').textContent = '确认人脸后，照片会发送到自有推理服务器，仅在本次会话内存中处理。清除或返回主页会请求删除；断线时服务端到期自动清理。已导出的文件会保留。';
+    $('#privacyStorage').textContent = '确认人脸后，仅将裁切的人脸区域发送到自有推理服务器，仅在本次会话内存中处理。清除或返回主页会请求删除；断线时服务端到期自动清理。已导出的文件会保留。';
     $('#privacyModel').textContent = '当前年龄由 FairFace 提供参考估计，可手动修正。变龄由 SAM 模型生成，原生结果为 1024×1024。'+(state.health?.features?.source_color_preservation?'“保留原肤色”会参考原照色度进行后处理，保留模型结果的明暗与纹理，可切换查看未校正的原始模型结果。':'')+'结果仅模拟年龄外观，不是真实年龄判定或未来容貌预测。';
     $('#privacyCamera').textContent = '电脑 localhost 可调用摄像头；手机摄像头需要可信 HTTPS。上传照片时请确认本人或被摄者同意。';
     $('#capturePrivacy').hidden = false;
@@ -106,8 +106,21 @@
     if (serial !== state.serial) throw new Error('本次处理已取消。');
     if (!state.ready && !await health()) throw new Error(state.error || '模型服务未连接，请在选项中重新连接。');
     if (serial !== state.serial) throw new Error('本次处理已取消。');
-    // Preserve browser-decoded RGB pixels; another JPEG pass would alter colour comparisons.
-    const body=JSON.stringify({image:image.toDataURL('image/png'),face:{x:face.x,y:face.y,w:face.w,h:face.h,id:face.id,manual:!!face.manual}});
+    const x = face.x * image.width, y = face.y * image.height;
+    const w = face.w * image.width, h = face.h * image.height;
+    const left = Math.max(0, Math.floor(x - .22 * w));
+    const top = Math.max(0, Math.floor(y - .36 * h));
+    const right = Math.min(image.width, Math.ceil(x + 1.22 * w));
+    const bottom = Math.min(image.height, Math.ceil(y + 1.18 * h));
+    const crop = document.createElement('canvas');
+    crop.width = right - left;
+    crop.height = bottom - top;
+    crop.getContext('2d').drawImage(image, left, top, crop.width, crop.height,
+                                    0, 0, crop.width, crop.height);
+    const box = {x:(x-left)/crop.width, y:(y-top)/crop.height,
+                 w:w/crop.width, h:h/crop.height, id:face.id, manual:!!face.manual};
+    const body = JSON.stringify({image:crop.toDataURL('image/png'), face:box});
+    crop.width = crop.height = 0;
     if (body.length > 21*1024*1024) throw new Error('照片无损编码后超过处理上限，请裁剪照片或使用尺寸较小的图片。');
     const data=await request('/api/prepare',{method:'POST',body},90000,'prepare');
     if (serial !== state.serial) {await removeSession(data.session_id);throw new Error('本次处理已取消。');}
@@ -118,6 +131,18 @@
     let aligned,reference=null;
     try {aligned=await decodeImage(data.aligned_image,256);if(data.reference_image)reference=await decodeImage(data.reference_image,1024);} catch(error) {if(aligned)aligned.width=aligned.height=0;if(reference)reference.width=reference.height=0;await removeSession(data.session_id);throw error;}
     if (serial !== state.serial) {aligned.width=aligned.height=0;if(reference)reference.width=reference.height=0;await removeSession(data.session_id);throw new Error('本次处理已取消。');}
+    // The API transform is relative to the uploaded crop. Compose its
+    // translation with the original scene before rendering either view.
+    const transform = data.transform;
+    transform.inverse[4] += left;
+    transform.inverse[5] += top;
+    if (transform.matrix) {
+      const [a,b,c,d] = transform.matrix;
+      transform.matrix[4] -= a * left + c * top;
+      transform.matrix[5] -= b * left + d * top;
+    }
+    transform.sourceWidth = image.width;
+    transform.sourceHeight = image.height;
     state.session=data.session_id;
     return {face:aligned,referenceFace:reference,transform:data.transform,ageInfo:data.age,meta:data.meta,alignment:data.alignment};
   }
