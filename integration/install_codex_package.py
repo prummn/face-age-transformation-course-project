@@ -18,10 +18,15 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+import time
 from urllib.parse import urlsplit
 
 
 VERSION = '0.167.1'
+
+
+class DownloadError(RuntimeError):
+    pass
 
 
 def file_hash(path, algorithm='sha256'):
@@ -75,12 +80,16 @@ def existing_package(executable, target):
     return None
 
 
-def extract_verified(archive, metadata, destination):
+def verify_integrity(archive, metadata):
     integrity = metadata['dist']['integrity']
     if not integrity.startswith('sha512-'):
         raise ValueError('Official package SHA512 integrity is required')
     if base64.b64encode(file_hash(archive, 'sha512').digest()).decode() != integrity[7:]:
         raise ValueError('Codex package SHA512 mismatch')
+
+
+def extract_verified(archive, metadata, destination):
+    verify_integrity(archive, metadata)
     with tarfile.open(archive, 'r:gz') as package:
         members = package.getmembers()
         if len(members) > 512 or sum(m.size for m in members) > 1536 * 1024**2:
@@ -101,10 +110,67 @@ def extract_verified(archive, metadata, destination):
                 raise ValueError('Unexpected link/device in platform package')
 
 
-def download(url, path):
-    subprocess.run(['curl', '--fail', '--location', '--silent', '--show-error',
-                    '--retry', '2', '--connect-timeout', '15', '--max-time', '600',
-                    '--output', str(path), url], check=True, stdout=sys.stderr)
+def download(url, path, *, resume=False):
+    """Retry interrupted transfers, recalculating the offset on every attempt."""
+    path = Path(path)
+    for attempt in range(6):
+        offset = path.stat().st_size if resume and path.exists() else 0
+        if offset:
+            print(f'Resuming download at {offset / 1024**2:.2f} MiB.', file=sys.stderr)
+        command = ['curl', '--fail', '--location', '--silent', '--show-error',
+                   '--connect-timeout', '15', '--max-time', '600',
+                   '--speed-limit', '1024', '--speed-time', '45',
+                   '--output', str(path), '--write-out', '%{http_code}']
+        if offset:
+            command += ['--continue-at', '-']
+        result = subprocess.run(command + [url], stdout=subprocess.PIPE, text=True)
+        if result.returncode == 0:
+            return
+        # Some proxies ignore Range or reject a stale offset. Restart this
+        # archive in that case; its contents are still verified before use.
+        if offset and (result.returncode in (33, 36) or result.stdout == '416'):
+            print('Server did not accept the resume offset; restarting download.', file=sys.stderr)
+            path.unlink(missing_ok=True)
+        elif (result.returncode not in (5, 6, 7, 16, 18, 22, 28, 35, 52, 55, 56, 92)
+              or (result.returncode == 22 and result.stdout not in
+                  ('408', '425', '429', '500', '502', '503', '504'))):
+            break
+        if attempt < 5:
+            print(f'Download interrupted (curl {result.returncode}); retry {attempt + 1}/5.', file=sys.stderr)
+            time.sleep(min(2**attempt, 8))
+    detail = f' Partial file kept at {path}; rerun the same setup command to resume.' if resume else ''
+    raise DownloadError(f'Download failed (curl {result.returncode}).{detail}')
+
+
+def cached_archive(url, metadata, path):
+    """Keep partial bytes outside temporary extraction directories."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    partial = path.with_name(path.name + '.part')
+    for candidate in (path, partial):
+        if candidate.exists():
+            try:
+                verify_integrity(candidate, metadata)
+            except ValueError:
+                if candidate == path:
+                    candidate.unlink()  # An invalid completed cache is unusable.
+            else:
+                if candidate == partial:
+                    partial.replace(path)
+                print('Reusing SHA512-verified archive: ' + str(path), file=sys.stderr)
+                return path
+    for attempt in range(2):
+        download(url, partial, resume=True)
+        try:
+            verify_integrity(partial, metadata)
+        except ValueError:
+            # A damaged prefix cannot be fixed by appending more bytes.
+            partial.unlink(missing_ok=True)
+            if attempt:
+                raise
+            print('Archive SHA512 mismatch; retrying once from the beginning.', file=sys.stderr)
+        else:
+            partial.replace(path)
+            return path
 
 
 def ensure_package(archive=None, metadata_file=None):
@@ -128,7 +194,7 @@ def ensure_package(archive=None, metadata_file=None):
     try:
         entry, _ = layout(root, target)
     except (OSError, ValueError, KeyError):
-        print('Installing complete Codex platform package ' + version + ' (about166MiB download).', file=sys.stderr)
+        print('Installing complete Codex platform package ' + version + ' (about 166 MiB download).', file=sys.stderr)
         with tempfile.TemporaryDirectory(prefix='.install-', dir=packages) as temporary:
             stage = Path(temporary)
             if archive is None:
@@ -144,8 +210,7 @@ def ensure_package(archive=None, metadata_file=None):
             if parsed.scheme != 'https' or parsed.netloc != 'registry.npmjs.org':
                 raise ValueError('Unexpected registry archive URL')
             if archive is None:
-                archive = stage / 'platform.tgz'
-                download(url, archive)
+                archive = cached_archive(url, metadata, packages / '.downloads' / (version + '.tgz'))
             payload = stage / 'payload'
             extract_verified(archive, metadata, payload)
             staged_root = payload / 'package/vendor' / target
@@ -182,7 +247,10 @@ def main():
     p.add_argument('--archive', type=Path, help='Reuse an official cached platform archive')
     p.add_argument('--metadata', type=Path, help='Its official npm registry metadata, including SHA512')
     a = p.parse_args()
-    print(ensure_package(a.archive, a.metadata))
+    try:
+        print(ensure_package(a.archive, a.metadata))
+    except (DownloadError, OSError, ValueError, KeyError, subprocess.SubprocessError) as error:
+        raise SystemExit('Codex installation stopped: ' + str(error)) from None
 
 
 if __name__ == '__main__':
