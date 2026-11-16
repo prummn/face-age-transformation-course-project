@@ -10,6 +10,8 @@
 
 [新机快速开始](integration/新机器快速开始.md) · [配对实验设置与结果](integration/quality/20261113_高清数据与生成器配对实验.md) · [数据来源核查](integration/quality/20261113_训练数据来源核查与选型.md)。权重／数据／用户照片不进入Git，由Release或原机另行恢复。以下历史昇腾演示入口仍保留；新机请先按本节接手。
 
+后续[单卡500步身份约束实验](integration/quality/20261116_单卡身份约束实验.md)已完成，GPU任务结束释放。加强跨龄身份约束相对同长度对照有益，但上传人像未解决，候选未替换默认；高龄图源伪年龄低估明显，下一轮优先校准年龄监督。静态结果入口`/identity-review/`。
+
 ## 2026-11-11 动态年龄镜演示版
 
 [训练方法与权重复原说明](integration/models/训练与模型.md) · [模型 Release](https://github.com/prummn/face-age-transformation-course-project/releases/tag/models-2026-11-11)

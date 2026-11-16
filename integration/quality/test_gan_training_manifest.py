@@ -48,6 +48,10 @@ class ManifestGuards(unittest.TestCase):
     def test_reject_existing_output(self):
         self.args.output.mkdir()
         with self.assertRaisesRegex(ValueError,'new experiment'):self.check()
+    def test_identity_coefficient_is_finite_and_nonnegative(self):
+        for value in [-.1,float('nan'),float('inf')]:
+            self.args.target_id_weight=value
+            with self.assertRaisesRegex(ValueError,'identity weight'):self.check()
 
 
 if __name__=='__main__':unittest.main()

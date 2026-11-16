@@ -7,6 +7,7 @@ Use an independently allocated CUDA task, not the running demo's device.
 from __future__ import annotations
 import argparse
 import json
+import math
 import os
 from pathlib import Path
 import random
@@ -45,6 +46,8 @@ def validate(args):
     if args.output.exists():raise ValueError('Choose a new experiment output directory')
     if not 1<=args.steps<=1000:raise ValueError('Pilot steps must be1..1000')
     if not 1<=args.batch_size<=8:raise ValueError('Pilot batch size must be1..8')
+    if not math.isfinite(getattr(args,'target_id_weight',.1)) or getattr(args,'target_id_weight',.1)<0:
+        raise ValueError('Target identity weight must be finite and nonnegative')
     return train,evaluation
 
 
@@ -57,6 +60,8 @@ def main():
     p.add_argument('--steps',type=int,default=100)
     p.add_argument('--batch-size',type=int,default=2)
     p.add_argument('--lr',type=float,default=1e-5)
+    p.add_argument('--target-id-weight',type=float,default=.1,
+                   help='Cross-age identity loss coefficient; original configuration is0.1')
     p.add_argument('--seed',type=int,default=20261112)
     p.add_argument('--execute',action='store_true')
     args=p.parse_args();training,evaluation=validate(args)
@@ -67,7 +72,7 @@ def main():
               group_kinds=sorted({r['group_kind'] for r in training+evaluation}),
               grouping_limit='Conservative account/similarity groups do not prove subject-disjoint splits',
               common_changes='same-age L2/LPIPS/ID256 + true-reference face-weighted L1_512; paired stratified sampling; frozen BN; teacher-latent trust; direct fine route',
-              loss_weights=dict(mse256=1,lpips256=.5,same_id=.1,l1_512=.2,target_age=1,target_id=.1,latent_trust=.01,generator_trust=.1),
+              loss_weights=dict(mse256=1,lpips256=.5,same_id=.1,l1_512=.2,target_age=1,target_id=args.target_id_weight,latent_trust=.01,generator_trust=.1),
               generator_arm='only StyleGAN2 conv modulation affine layers at resolution128..1024, with init parameter trust',
               caveats='Pilot configuration; no training until --execute. Validation sample manifests required separately.')
     print(json.dumps(plan,ensure_ascii=False,indent=2))
@@ -149,7 +154,7 @@ def main():
         highres=((F.interpolate(same_native,(512,512),mode='area')-reference).abs()*weight).sum()/(weight.sum()*3*args.batch_size)
         loss_same=.2*highres+F.mse_loss(same,x)+.5*perception(same,x).mean()+.1*(1-identity.cos(same,x)).mean()
         loss_age=F.mse_loss(age_net(edited)[0],target)
-        loss_id=.1*(1-identity.cos(edited,x)).mean()
+        loss_id=args.target_id_weight*(1-identity.cos(edited,x)).mean()
         loss_latent=.01*(code_target-teacher_target).square().mean()
         trust=sum((q-initial_generator[n]).square().mean() for n,q in net.decoder.named_parameters() if q.requires_grad)
         loss=loss_same+loss_age+loss_id+loss_latent+.1*trust

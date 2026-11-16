@@ -11,7 +11,11 @@ import lpips
 from probe_inversion import sha256,write_json
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('run',type=Path);a=p.parse_args();run=a.run
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('run',type=Path)
+    p.add_argument('--routes',nargs='+',default=['mixed','fine_direct','encoder','encoder_generator'])
+    a=p.parse_args();run=a.run
+    if len(set(a.routes))!=len(a.routes) or any(not name.replace('_','').isalnum() or name.startswith('.') for name in a.routes):
+        raise ValueError('Routes must be unique simple directory names')
     out=run/'evaluation';out.mkdir(exist_ok=False)
     root=Path(os.environ['FACE_AGE_REPO']);base=Path(os.environ['FACE_AGE_BASE']);sys.path.insert(0,str(base/'src'))
     from sam_npu import load_sam
@@ -42,7 +46,7 @@ def main():
         return v/(np.linalg.norm(v)+1e-12)
     report=dict(records=records,outputs=[],native_samples=sorted(chosen),
         external_alignment_failures=json.loads((run/'data-audit.json').read_text())['external_alignment_failures'],
-        color_metric='Norm of mean central-face OpenCV8bit Lab ab difference; not DeltaE00',routes=['mixed','fine_direct','encoder','encoder_generator'],
+        color_metric='Norm of mean central-face OpenCV8bit Lab ab difference; not DeltaE00',routes=a.routes,
         caveats=['FFHQ is a base-generator training source: regression only, not independent pretraining generalization.',
                  'APPA Asian annotation is broad, not verified East Asian; cases and ages are publisher labels.',
                  'SFace only evaluated here; conservative dedup used it, but it never enters training loss.',
