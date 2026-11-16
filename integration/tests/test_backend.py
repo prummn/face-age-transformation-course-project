@@ -99,6 +99,7 @@ class StoreTests(unittest.TestCase):
 class FakeEngine:
     ready = True
     error = None
+    device_label = "test double"
     def ensure_ready(self):
         pass
     def prepare(self, rgb, face):

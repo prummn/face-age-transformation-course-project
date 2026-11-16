@@ -3,7 +3,7 @@ No device side effects at import."""
 import io, os, glob, time, sys, numpy as np, torch, timm, pyarrow.parquet as pq
 from PIL import Image
 import torchvision.transforms as T
-B = "/data/home/1120231322/scow/face-age"
+B = os.environ.get("FACE_AGE_BASE", "/data/home/1120231322/scow/face-age")
 RACE = ["East Asian", "Indian", "Black", "White", "Middle Eastern", "Latino_Hispanic", "Southeast Asian"]
 MEAN, STD = (0.485, 0.456, 0.406), (0.229, 0.224, 0.225)
 te = T.Compose([T.Resize(256), T.CenterCrop(224), T.ToTensor(), T.Normalize(MEAN, STD)])

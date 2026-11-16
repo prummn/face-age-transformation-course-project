@@ -21,7 +21,7 @@ const FIXTURE = path.join(ROOT, 'tmp/qa_portrait.jpg');
 const RUN = new Date().toISOString().replace(/[:.]/g, '-');
 const OUTPUT = path.join(ROOT, 'tmp/integration-qa', RUN);
 const report = {startedAt:new Date().toISOString(), baseUrl:BASE, output:OUTPUT,
-  scope:'Real browser→same-origin gateway→Ascend API; route-simulated error/race cases separately labelled.',
+  scope:'Real browser→same-origin gateway→SAM API; route-simulated error/race cases separately labelled.',
   exclusions:['Android/RK3288 hardware acceptance','Age accuracy or identity-quality validation','Production P95 and load validation'], cases:[]};
 const replay = {prepare:null, transform:null};
 let browser;
@@ -136,6 +136,14 @@ async function buildTwoFaceFixture(context) {
     for(const result of state.results)assert.deepEqual({width:result.width,height:result.height},{width:1024,height:1024});
     replay.transform=transforms[0].body;const resultScreenshot=await capture(page,'01-real-four-targets');
     await page.locator('#pageDots button').nth(1).click();const native=await download(page,'#bNativeSave','native1024.png');assert.deepEqual({width:native.width,height:native.height},{width:1024,height:1024});
+    await page.locator('#resultColorView [data-color-view="raw"]').click();
+    assert.equal(await page.locator('#resultColorView [data-color-view="raw"]').getAttribute('aria-pressed'),'true');
+    const rawNative=await download(page,'#bNativeSave','raw-model1024.png');
+    assert.deepEqual({width:rawNative.width,height:rawNative.height},{width:1024,height:1024});
+    assert.ok(rawNative.suggestedFilename.includes('原始模型'));
+    await page.locator('#resultColorView [data-color-view="preserved"]').click();
+    assert.equal(await page.locator('#resultColorView [data-color-view="preserved"]').getAttribute('aria-pressed'),'true');
+    assert.equal(transforms.length,4,'Color display switches must not run additional inference');
     await page.getByRole('button',{name:`比较 ${state.targets[0]} 岁`,exact:true}).click();await page.locator('#s-detail').waitFor({state:'visible'});
     const crop=await page.locator('#cmpA').evaluate(c=>({width:c.width,height:c.height}));assert.deepEqual(crop,{width:1024,height:1024});
     await page.locator('#bPasteView').click();const full=await page.locator('#cmpA').evaluate(c=>({width:c.width,height:c.height}));assert.deepEqual(full,state.original);
@@ -148,7 +156,7 @@ async function buildTwoFaceFixture(context) {
     await clearUI(page);assert.equal((await deletion).status(),200);
     const cleared=await snapshot(page);assert.equal(cleared.results.length,0);assert.equal(cleared.sessionPresent,false);assert.equal(cleared.original,null);
     const expired=await context.request.post(BASE+'/api/transform',{data:{session_id:prepared.session_id,target_age:40,request_id:'qa-after-clear'}});assert.equal(expired.status(),410);
-    return {health:healthInfo,preparation:safeReply(prepared),state,transforms:transforms.map(r=>({status:r.status,body:safeReply(r.body)})),downloads:[native,comparison,overview],screenshots:[resultScreenshot,compareScreenshot,overviewScreenshot],clear:{state:cleared,postClearStatus:expired.status()}};
+    return {health:healthInfo,preparation:safeReply(prepared),state,transforms:transforms.map(r=>({status:r.status,body:safeReply(r.body)})),downloads:[native,rawNative,comparison,overview],screenshots:[resultScreenshot,compareScreenshot,overviewScreenshot],clear:{state:cleared,postClearStatus:expired.status()}};
   });
 
   await runCase('02-real-smaller-second-face-selection','REAL',async(page,context)=>{

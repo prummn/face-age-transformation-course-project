@@ -14,3 +14,11 @@ Thumbs.db
 Desktop.ini
 .vscode/
 .idea/
+deployment/
+
+# Local comparison viewer may link private, ignored experiment images.
+/原型/quality-review
+/原型/gan-review
+/原型/data-review
+
+/原型/training-review

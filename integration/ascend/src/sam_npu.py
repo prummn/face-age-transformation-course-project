@@ -1,7 +1,7 @@
 """SAM (pSp encoder + StyleGAN2 generator) on Ascend: FFHQ alignment from YuNet 5 landmarks; same-source age batches."""
 import os, sys, numpy as np, cv2, torch
 from argparse import Namespace
-B = "/data/home/1120231322/scow/face-age"; sys.path.insert(0, f"{B}/src/SAM")
+B = os.environ.get("FACE_AGE_BASE", "/data/home/1120231322/scow/face-age"); sys.path.insert(0, f"{B}/src/SAM")
 YUNET = f"{B}/models/yunet/face_detection_yunet_2023mar.onnx"
 def detect5(img):
     h, w = img.shape[:2]; det = cv2.FaceDetectorYN.create(YUNET, "", (w, h), 0.6, 0.3, 50); _, f = det.detect(img)

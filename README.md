@@ -2,6 +2,14 @@
 
 这是《卓越工程实践》课程项目的组内共享工作目录，题目为“基于对抗生成网络的人脸年龄变换系统”。仓库保留课程原始资料、往年文档模板、课堂讨论报告、公开资料检索记录和后续项目文档，方便组员共同查看、讨论和迭代。
 
+## 莫贝研究与新机接手（2026-11-16）
+
+独立开发分支 `dev/mobei-gan-portable-20261116` 已整理 CUDA 部署适配、高清数据处理、两组100步GAN训练和固定评估。原始 Release 与线上默认模型保持原样；同龄重建略改善、跨龄身份仍有退步，有限生成器参数更新尚未显示额外收益。
+
+新服务器直接克隆此分支，运行 `bash integration/setup_codex_cli.sh --start`：脚本在需要时安装 Codex CLI，沿用莫贝的 SpacetimeAI 中转站配置，首次仅隐藏询问 API Key，然后让 Codex 自动读取 [迁移与研究接手提示词](integration/迁移与研究接手提示词_20261116.md)。无须另传源码补丁或复制长提示词。
+
+[新机快速开始](integration/新机器快速开始.md) · [配对实验设置与结果](integration/quality/20261113_高清数据与生成器配对实验.md) · [数据来源核查](integration/quality/20261113_训练数据来源核查与选型.md)。权重／数据／用户照片不进入Git，由Release或原机另行恢复。以下历史昇腾演示入口仍保留；新机请先按本节接手。
+
 ## 2026-11-11 动态年龄镜演示版
 
 [训练方法与权重复原说明](integration/models/训练与模型.md) · [模型 Release](https://github.com/prummn/face-age-transformation-course-project/releases/tag/models-2026-11-11)

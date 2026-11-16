@@ -1,6 +1,6 @@
 """Frozen loss nets (gradients flow to inputs only): IR-SE50 ArcFace ID (official SAM crop), interim age/ethnicity from FairFace classifier."""
-import sys, torch, torch.nn as nn, torch.nn.functional as F
-B = "/data/home/1120231322/scow/face-age"; sys.path.insert(0, f"{B}/src/SAM"); sys.path.insert(0, f"{B}/src")
+import os, sys, torch, torch.nn as nn, torch.nn.functional as F
+B = os.environ.get("FACE_AGE_BASE", "/data/home/1120231322/scow/face-age"); sys.path.insert(0, f"{B}/src/SAM"); sys.path.insert(0, f"{B}/src")
 from models.encoders.model_irse import Backbone
 from faceattr import Net
 class IDLoss(nn.Module):

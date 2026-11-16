@@ -236,7 +236,16 @@ class SamePersonEngine:
         self.error = None
         self.lock = threading.RLock()
         self.sr = None
-        self.dev = "npu:0"
+        self.dev = os.environ.get("FACE_AGE_DEVICE", "npu:0")
+        self.device_label = self.dev
+
+    def set_device(self):
+        if self.accelerator is not None:
+            self.accelerator.set_device(self.dev)
+
+    def synchronize(self):
+        if self.accelerator is not None:
+            self.accelerator.synchronize()
 
     def initialize(self):
         try:
@@ -245,12 +254,25 @@ class SamePersonEngine:
             # a cold shared-filesystem / NPU startup.
             import cv2
             import torch
-            import torch_npu  # noqa: F401
+            if self.dev.startswith("npu:"):
+                import torch_npu  # noqa: F401
+                self.accelerator = torch.npu
+                self.device_label = "Ascend NPU"
+            elif self.dev.startswith("cuda:"):
+                if not torch.cuda.is_available():
+                    raise RuntimeError("CUDA device requested but unavailable")
+                self.accelerator = torch.cuda
+                self.device_label = torch.cuda.get_device_name(self.dev)
+            elif self.dev == "cpu":
+                self.accelerator = None
+                self.device_label = "CPU"
+            else:
+                raise ValueError("Unsupported FACE_AGE_DEVICE")
             sys.path.insert(0, str(BASE / "src"))
             from sam_npu import load_sam
             from sam_losses import AgeEst
             self.cv2, self.torch = cv2, torch
-            torch.npu.set_device(self.dev)
+            self.set_device()
             self.net = load_sam(self.dev)
             state = torch.load(BASE / "out/ft_l1/encoder_step1000.pt", map_location="cpu")
             self.identity_encoder = deepcopy(self.net.encoder)
@@ -262,11 +284,11 @@ class SamePersonEngine:
                 warmup = torch.zeros(1, 4, 256, 256, device=self.dev)
                 self.net(warmup, randomize_noise=False, resize=False)
                 self.age_net(warmup[:, :3])
-                torch.npu.synchronize()
+                self.synchronize()
             self.ready = True
             LOG.info("SAM model ready after %.1f seconds", time.monotonic() - started)
         except Exception:
-            self.error = "模型启动失败，请检查服务日志和昇腾环境后重启。"
+            self.error = "模型启动失败，请检查服务日志和设备环境后重启。"
             LOG.exception("Model initialization failed")
 
     def ensure_ready(self):
@@ -302,10 +324,10 @@ class SamePersonEngine:
     def prepare(self, rgb, selected):
         self.ensure_ready()
         with self.lock, self.torch.inference_mode():
-            self.torch.npu.set_device(self.dev)
+            self.set_device()
             aligned, transform, chosen = self.align(rgb, selected)
             estimated, _ = self.age_net(self.tensor(aligned))
-            self.torch.npu.synchronize()
+            self.synchronize()
             reference_age = int(round(float(estimated.item()) * 100))
         return aligned, transform, reference_age, chosen
 
@@ -324,7 +346,7 @@ class SamePersonEngine:
         torch = self.torch
         with self.lock, torch.inference_mode():
             assert_active()
-            torch.npu.set_device(self.dev)
+            self.set_device()
             started = time.monotonic()
             tensor = self.tensor(item.aligned)
             condition = torch.full((1, 1, 256, 256), age / 100, device=self.dev)
@@ -343,7 +365,7 @@ class SamePersonEngine:
             codes = self.net.encoder(target) + item.latent_offset
             generated = self.net(codes, input_code=True, input_is_full=True,
                                  randomize_noise=False, resize=False)
-            torch.npu.synchronize()
+            self.synchronize()
             native = ((generated[0].clamp(-1, 1) + 1) * 127.5).permute(1, 2, 0).byte().cpu().numpy()
             if native.shape != (1024, 1024, 3):
                 raise RuntimeError("Model output must be native 1024 x 1024")
@@ -359,7 +381,7 @@ class SamePersonEngine:
                         from superres_native import NativeSuperResolution
                         self.sr = NativeSuperResolution(str(WEB_BASE / "models/RealESRGAN_x2plus.pth"), self.dev)
                     output = self.sr.enhance(native)
-                    torch.npu.synchronize()
+                    self.synchronize()
                     output_kind = "super_resolution"
                 except HTTPException:
                     raise
@@ -461,7 +483,7 @@ async def unexpected_error(request, exc):
 
 @app.get("/api/health")
 def health():
-    return {"ready": engine.ready, "engine": ENGINE_NAME, "device": "Ascend NPU", "model": MODEL_NAME, "native_size": 1024, "version": VERSION, "status": "ready" if engine.ready else ("failed" if engine.error else "loading"), "detail": engine.error, "active_sessions": store.count(), "session_ttl_seconds": SESSION_TTL, "features": {"source_color_preservation": True, "raw_model_output": True}}
+    return {"ready": engine.ready, "engine": ENGINE_NAME, "device": engine.device_label, "model": MODEL_NAME, "native_size": 1024, "version": VERSION, "status": "ready" if engine.ready else ("failed" if engine.error else "loading"), "detail": engine.error, "active_sessions": store.count(), "session_ttl_seconds": SESSION_TTL, "features": {"source_color_preservation": True, "raw_model_output": True}}
 
 
 @app.post("/api/prepare")
