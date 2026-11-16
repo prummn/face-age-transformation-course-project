@@ -30,7 +30,8 @@ from fastapi.exceptions import RequestValidationError
 from pydantic import BaseModel, Field
 
 VERSION = "1.4.0"
-MODEL_NAME = "ft_l1 + SAM age direction"
+QUALITY_PROFILE = os.environ.get("FACE_AGE_QUALITY", "original")
+MODEL_NAME = "ft_l1 + SAM age direction" if QUALITY_PROFILE == "original" else "ft_l1 direct + identity/perceptual W+ " + QUALITY_PROFILE
 BASE = Path(os.environ.get("FACE_AGE_BASE", "/data/home/1120231322/scow/face-age"))
 WEB_BASE = Path(os.environ.get("FACE_AGE_WEB_BASE", "/data/home/1120231322/scow/face-age-web"))
 MAX_IMAGE_BYTES = 15 * 1024 * 1024
@@ -72,6 +73,8 @@ class Session:
     cancelled: bool = False
     reference_age: int | None = None
     latent_offset: object = None
+    reference_rgb: object = None
+    quality_state: object = None
 
 
 class SessionStore:
@@ -279,6 +282,14 @@ class SamePersonEngine:
             self.identity_encoder.load_state_dict(state)
             del state
             self.age_net = AgeEst().to(self.dev).eval()
+            self.quality_refiner = None
+            if QUALITY_PROFILE != "original":
+                if QUALITY_PROFILE not in ("anchor", "constrained"):
+                    raise ValueError("Unknown FACE_AGE_QUALITY")
+                if not self.dev.startswith("cuda:"):
+                    raise ValueError("High-quality W+ mode currently requires CUDA")
+                from latent_quality import LatentQuality
+                self.quality_refiner = LatentQuality(self, QUALITY_PROFILE)
             self.yunet = str(BASE / "models/yunet/face_detection_yunet_2023mar.onnx")
             with torch.inference_mode():
                 warmup = torch.zeros(1, 4, 256, 256, device=self.dev)
@@ -352,7 +363,7 @@ class SamePersonEngine:
             condition = torch.full((1, 1, 256, 256), age / 100, device=self.dev)
             # Anchor the reconstruction at the estimated source age. Apply the
             # original SAM encoder's age-dependent displacement to that anchor.
-            if item.latent_offset is None:
+            if self.quality_refiner is None and item.latent_offset is None:
                 source_condition = torch.full_like(condition, item.reference_age / 100)
                 source = torch.cat([tensor, source_condition], 1)
                 offset = self.identity_encoder(source) - self.net.encoder(source)
@@ -361,10 +372,13 @@ class SamePersonEngine:
                 elif self.net.opts.start_from_encoded_w_plus:
                     offset = offset + self.net.pretrained_encoder(tensor) + self.net.latent_avg
                 item.latent_offset = offset
-            target = torch.cat([tensor, condition], 1)
-            codes = self.net.encoder(target) + item.latent_offset
-            generated = self.net(codes, input_code=True, input_is_full=True,
-                                 randomize_noise=False, resize=False)
+            if self.quality_refiner is not None:
+                generated = self.quality_refiner.run(item, age, assert_active)
+            else:
+                target = torch.cat([tensor, condition], 1)
+                codes = self.net.encoder(target) + item.latent_offset
+                generated = self.net(codes, input_code=True, input_is_full=True,
+                                     randomize_noise=False, resize=False)
             self.synchronize()
             native = ((generated[0].clamp(-1, 1) + 1) * 127.5).permute(1, 2, 0).byte().cpu().numpy()
             if native.shape != (1024, 1024, 3):
@@ -497,6 +511,7 @@ def prepare(payload: PrepareRequest):
         if hasattr(engine,"display_reference"):
             try:
                 reference = engine.display_reference(image,transform)
+                store.get(session_id).reference_rgb = reference
                 response["reference_image"] = image_data_url(reference)
                 response["meta"]["reference_kind"] = "resampled_uploaded_original_1024"
             except Exception:

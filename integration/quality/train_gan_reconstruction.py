@@ -62,6 +62,9 @@ def main():
     p.add_argument('--lr',type=float,default=1e-5)
     p.add_argument('--target-id-weight',type=float,default=.1,
                    help='Cross-age identity loss coefficient; original configuration is0.1')
+    p.add_argument('--same-id-weight',type=float,default=.1)
+    p.add_argument('--generator-scope',choices=['affines','mid_convs'],default='affines')
+    p.add_argument('--generator-lr',type=float,help='Explicit generator LR; default is encoder LR times0.1')
     p.add_argument('--seed',type=int,default=20261112)
     p.add_argument('--execute',action='store_true')
     args=p.parse_args();training,evaluation=validate(args)
@@ -72,8 +75,8 @@ def main():
               group_kinds=sorted({r['group_kind'] for r in training+evaluation}),
               grouping_limit='Conservative account/similarity groups do not prove subject-disjoint splits',
               common_changes='same-age L2/LPIPS/ID256 + true-reference face-weighted L1_512; paired stratified sampling; frozen BN; teacher-latent trust; direct fine route',
-              loss_weights=dict(mse256=1,lpips256=.5,same_id=.1,l1_512=.2,target_age=1,target_id=args.target_id_weight,latent_trust=.01,generator_trust=.1),
-              generator_arm='only StyleGAN2 conv modulation affine layers at resolution128..1024, with init parameter trust',
+              loss_weights=dict(mse256=1,lpips256=.5,same_id=args.same_id_weight,l1_512=.2,target_age=1,target_id=args.target_id_weight,latent_trust=.01,generator_trust=.1),
+              generator_arm=args.generator_scope,
               caveats='Pilot configuration; no training until --execute. Validation sample manifests required separately.')
     print(json.dumps(plan,ensure_ascii=False,indent=2))
     if not args.execute:return
@@ -94,7 +97,7 @@ def main():
     torch.set_num_threads(4);torch.backends.cudnn.benchmark=False;torch.backends.cuda.matmul.allow_tf32=False
     net=load_sam('cuda:0').eval().requires_grad_(False)
     assert net.opts.start_from_encoded_w_plus and not net.opts.start_from_latent_avg,'Unexpected SAM latent formulation'
-    plan.update(gpu=torch.cuda.get_device_name(),torch=torch.__version__,precision='float32',generator_base='original SAM frozen except explicitly listed affines')
+    plan.update(gpu=torch.cuda.get_device_name(),torch=torch.__version__,precision='float32',generator_base='original SAM frozen except explicitly listed parameters')
     net.encoder.load_state_dict(torch.load(base/'out/ft_l1/encoder_step1000.pt',map_location='cpu',weights_only=True))
     teacher=deepcopy(net.encoder).eval().requires_grad_(False)
     net.encoder.requires_grad_(True).train()
@@ -103,7 +106,11 @@ def main():
     generator_names=[];initial_generator={}
     if args.arm=='encoder_generator':
         for index,module in enumerate(net.decoder.convs):
-            if 2**(3+index//2)>=128:
+            resolution=2**(3+index//2)
+            if args.generator_scope=='mid_convs' and resolution>=64:
+                module.conv.requires_grad_(True)
+                module.activate.requires_grad_(True)
+            elif args.generator_scope=='affines' and resolution>=128:
                 module.conv.modulation.requires_grad_(True)
         for name,param in net.decoder.named_parameters():
             if param.requires_grad:
@@ -113,7 +120,7 @@ def main():
     perception=lpips.LPIPS(net='alex',verbose=False).cuda().eval().requires_grad_(False)
     generator_params=[q for q in net.decoder.parameters() if q.requires_grad]
     groups=[dict(params=list(net.encoder.parameters()),lr=args.lr)]
-    if generator_params:groups.append(dict(params=generator_params,lr=args.lr*.1))
+    if generator_params:groups.append(dict(params=generator_params,lr=args.generator_lr if args.generator_lr is not None else args.lr*.1))
     opt=torch.optim.Adam(groups)
     args.output.mkdir(parents=True,exist_ok=False)
     plan['generator_parameters']=generator_names;plan['generator_parameter_count']=sum(q.numel() for q in generator_params)
@@ -152,7 +159,7 @@ def main():
         same_native=decode(code_same);edited_native=decode(code_target)
         same=F.interpolate(same_native,(256,256),mode='area');edited=F.interpolate(edited_native,(256,256),mode='area')
         highres=((F.interpolate(same_native,(512,512),mode='area')-reference).abs()*weight).sum()/(weight.sum()*3*args.batch_size)
-        loss_same=.2*highres+F.mse_loss(same,x)+.5*perception(same,x).mean()+.1*(1-identity.cos(same,x)).mean()
+        loss_same=.2*highres+F.mse_loss(same,x)+.5*perception(same,x).mean()+args.same_id_weight*(1-identity.cos(same,x)).mean()
         loss_age=F.mse_loss(age_net(edited)[0],target)
         loss_id=args.target_id_weight*(1-identity.cos(edited,x)).mean()
         loss_latent=.01*(code_target-teacher_target).square().mean()
@@ -172,13 +179,14 @@ def main():
     encoder_delta=max(float((p.detach()-dict(teacher.named_parameters())[n]).abs().max()) for n,p in net.encoder.named_parameters())
     if encoder_delta==0:raise RuntimeError('Encoder did not update')
     generator_delta=max([float((q.detach()-initial_generator[n]).abs().max()) for n,q in net.decoder.named_parameters() if q.requires_grad] or [0.])
-    if generator_params and generator_delta==0:raise RuntimeError('Generator affine parameters did not update')
+    if generator_params and generator_delta==0:raise RuntimeError('Generator parameters did not update')
     for n,buf in net.encoder.named_buffers():
         if 'running_' in n or 'num_batches_tracked' in n:
             assert torch.equal(buf,dict(teacher.named_buffers())[n]),'BN state changed'
     torch.save({k:v.cpu() for k,v in net.encoder.state_dict().items()},args.output/'encoder.pt')
     if generator_params:
-        torch.save({n:q.detach().cpu() for n,q in net.decoder.named_parameters() if q.requires_grad},args.output/'generator_affines.pt')
+        patch_name='generator_affines.pt' if args.generator_scope=='affines' else 'generator_patch.pt'
+        torch.save({n:q.detach().cpu() for n,q in net.decoder.named_parameters() if q.requires_grad},args.output/patch_name)
     write_json(args.output/'completed.json',dict(steps=args.steps,seconds=time.monotonic()-started,unique_training_images=len(used),total_training_candidates=len(training),
                encoder_max_abs_update=encoder_delta,generator_max_abs_update=generator_delta,
                batchnorm_frozen_verified=True,cuda_peak_bytes=torch.cuda.max_memory_allocated(),encoder_sha256=sha256(args.output/'encoder.pt'),

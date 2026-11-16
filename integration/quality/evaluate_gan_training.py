@@ -24,7 +24,7 @@ def main():
     net=load_sam('cuda:0').eval().requires_grad_(False)
     fine=deepcopy(net.encoder).eval().requires_grad_(False)
     fine_initial=torch.load(base/'out/ft_l1/encoder_step1000.pt',map_location='cpu',weights_only=True)
-    decoder_initial={n:p.detach().clone() for n,p in net.decoder.named_parameters() if '.modulation.' in n}
+    decoder_initial={n:p.detach().clone() for n,p in net.decoder.named_parameters()}
     age_net=AgeEst().cuda().eval().requires_grad_(False)
     perceptual=lpips.LPIPS(net='alex',verbose=False).cuda().eval().requires_grad_(False)
     detector=cv2.FaceDetectorYN.create(str(base/'models/yunet/face_detection_yunet_2023mar.onnx'),'',(256,256),.6,.3,100)
@@ -60,9 +60,11 @@ def main():
         with torch.no_grad():
             for name,param in net.decoder.named_parameters():
                 if name in decoder_initial:param.copy_(decoder_initial[name])
-            if route=='encoder_generator':
-                state=torch.load(run/route/'generator_affines.pt',map_location='cpu',weights_only=True)
+            patch=next((run/route/name for name in ['generator_patch.pt','generator_affines.pt'] if (run/route/name).exists()),None)
+            if patch:
+                state=torch.load(patch,map_location='cpu',weights_only=True)
                 named=dict(net.decoder.named_parameters())
+                if not set(state)<=set(named):raise ValueError('Unknown generator patch parameters')
                 for name,value in state.items():named[name].copy_(value)
         for index,r in enumerate(records):
             reference=r.get('reference_path',r['image_path'])

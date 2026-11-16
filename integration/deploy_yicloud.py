@@ -67,6 +67,10 @@ def health():
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('action', choices=['start', 'status', 'stop', 'gateway'])
+    parser.add_argument('--quality', choices=['original', 'anchor', 'constrained'], default='original',
+                        help='Explicit opt-in to slower per-photo W+ optimization; original weights stay unchanged')
+    parser.add_argument('--max-running-duration', default='24h',
+                        help='Platform GPU runtime cap, e.g. 30m for a bounded quality preview')
     args = parser.parse_args()
     state = json.loads(STATE.read_text()) if STATE.exists() else None
     if args.action in ['start', 'status', 'stop']:
@@ -111,10 +115,18 @@ def main():
                     time.sleep(2)
                     result = job.get_job(ctx, job.models.GetJobReq(Project='fdj-infra', JobId=state['job_id']))
             if result.Phase in ['Running', 'Pending', 'Inqueue', 'Starting']:
+                if state.get('quality', 'original') != args.quality:
+                    raise RuntimeError('Active demo uses a different quality profile; stop it before changing profiles')
                 print('Reusing dedicated job', state['job_id'])
             else:
                 state = None
         if not state:
+            active = job.list_jobs(ctx, job.models.ListJobsReq(
+                Project='fdj-infra', ZoneId='cn-shanghai-a', JobNames='face-age', Self=True,
+                Limit=100, Phases='Pending,Running,Inqueue,Starting,Stopping'))
+            if active.Items:
+                names = ', '.join(f'{x.Name} ({x.JobId}, {x.Phase})' for x in active.Items)
+                raise RuntimeError('One-card limit: wait for these face-age tasks to finish: ' + names)
             stamp = datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S')
             run_dir = DEPLOY / 'runs' / stamp
             run_dir.mkdir(parents=True)
@@ -122,9 +134,9 @@ def main():
             command = shlex.join(['bash', str(ROOT / 'integration/run_yicloud_worker.sh'), str(ROOT), str(run_dir)])
             payload = dict(Name=name, Project='fdj-infra', ZoneId='cn-shanghai-a',
                 QuotaGroup='fdj_gpu_taskpool', Priority='3', UsePrivateMachine=False, AutoDeleteDuration='168h',
-                TaskSpecs={'inference':dict(Command=['bash','-c',command], Env={}, Image=IMAGE,
-                    Replicas=1, CPU='8', Memory='32Gi', GPU='1', Internet=False,
-                    MaxRunningDuration='24h', MaxWaitDuration='30m', RestartPolicy='Never',
+                TaskSpecs={'inference':dict(Command=['bash','-c',command], Env={'FACE_AGE_QUALITY':args.quality}, Image=IMAGE,
+                    Replicas=1, CPU='4', Memory='32Gi', GPU='1', Internet=False,
+                    MaxRunningDuration=args.max_running_duration, MaxWaitDuration='10m', RestartPolicy='Never',
                     MountGPFS='gpfs://gpfs2/haobinzhang:/root')})
             save(run_dir / 'request.json', payload)
             request = dict(payload)
@@ -139,7 +151,8 @@ def main():
                 result = exact[0]
             state = dict(job_id=result.JobId, name=name, run_dir=str(run_dir), image=IMAGE,
                          code_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
-                         submitted_at=datetime.now(timezone.utc).isoformat(), max_running_duration='24h')
+                         submitted_at=datetime.now(timezone.utc).isoformat(), max_running_duration=args.max_running_duration,
+                         quality=args.quality)
             save(run_dir / 'receipt.json', state)
             save(STATE, state)
             print('Submitted dedicated GPU job', result.JobId)

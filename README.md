@@ -12,6 +12,8 @@
 
 后续[单卡500步身份约束实验](integration/quality/20261116_单卡身份约束实验.md)已完成，GPU任务结束释放。加强跨龄身份约束相对同长度对照有益，但上传人像未解决，候选未替换默认；高龄图源伪年龄低估明显，下一轮优先校准年龄监督。静态结果入口`/identity-review/`。
 
+最新[重建与潜变量质量改进](integration/quality/20261116_重建与潜变量质量改进.md)已取得更明显的单图身份重建收益，上传人像同龄SFace约.55→.85；高龄纹理和自然度仍待改善。另两组800步通用训练收益有限，未替换默认。真实原生结果入口`/quality-sprint/`，新增可选慢速W+质量模式，不改原始模型文件。
+
 ## 2026-11-11 动态年龄镜演示版
 
 [训练方法与权重复原说明](integration/models/训练与模型.md) · [模型 Release](https://github.com/prummn/face-age-transformation-course-project/releases/tag/models-2026-11-11)
