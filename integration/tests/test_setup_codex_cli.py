@@ -2,6 +2,7 @@
 import os
 from pathlib import Path
 import stat
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -25,8 +26,8 @@ class RelaySetupTests(unittest.TestCase):
         self.config = self.root / '.codex/config.toml'
         self.config.parent.mkdir()
 
-    def run_setup(self):
-        return subprocess.run(['bash', str(SCRIPT)], env=self.env, capture_output=True,
+    def run_setup(self, *args):
+        return subprocess.run(['bash', str(SCRIPT), *args], env=self.env, capture_output=True,
                               text=True, timeout=30)
 
     def test_preserves_other_settings_backs_up_and_keeps_secret_private(self):
@@ -78,6 +79,56 @@ wire_api = "chat"
         result = self.run_setup()
         self.assertNotEqual(result.returncode, 0)
         self.assertEqual(self.config.read_text(), original)
+
+    def test_start_uses_supported_daemon_free_flag_and_passes_handoff_prompt(self):
+        binary = self.root / '.local/bin/codex'
+        binary.write_text('''#!/bin/sh
+case "$1" in
+  --version) echo codex-test;;
+  features) exit 0;;
+  --no-daemon)
+    case "$2" in *integration/迁移与研究接手提示词_20261116.md*) echo HANDOFF_OK;; *) exit 3;; esac;;
+  *) echo 'no complete local package' >&2; exit 2;;
+esac
+''')
+        result = self.run_setup('--start')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('HANDOFF_OK', result.stdout)
+
+    @unittest.skipUnless(shutil.which('cc'), 'ELF repair fixture requires a C compiler')
+    def test_repairs_previous_single_binary_install_and_reuses_key(self):
+        self.assertEqual(self.run_setup().returncode, 0)
+        self.env.pop('SPACETIMEAI_API_KEY')
+        source = self.root / 'codex-fixture.c'
+        source.write_text(r'''
+#include <stdio.h>
+#include <string.h>
+int main(int argc, char **argv) {
+    int daemon_free = 0;
+    for (int i = 1; i < argc; ++i) {
+        if (!strcmp(argv[i], "--version")) { puts("codex-test"); return 0; }
+        if (!strcmp(argv[i], "features")) return 0;
+        if (!strcmp(argv[i], "--no-daemon")) daemon_free++;
+    }
+    if (daemon_free == 1) { puts("DAEMON_FREE_OK"); return 0; }
+    fputs("no complete local package\n", stderr);
+    return 2;
+}
+''')
+        binary = self.root / '.local/bin/codex'
+        subprocess.run(['cc', str(source), '-o', str(binary)], check=True, capture_output=True)
+        before = subprocess.run([str(binary), 'test prompt'], capture_output=True, text=True)
+        self.assertNotEqual(before.returncode, 0)
+        result = self.run_setup('--start')
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn('DAEMON_FREE_OK', result.stdout)
+        self.assertTrue(binary.read_text().startswith('#!/bin/sh'))
+        later = subprocess.run([str(binary), 'later session'], capture_output=True, text=True)
+        self.assertEqual(later.returncode, 0)
+        self.assertIn('DAEMON_FREE_OK', later.stdout)
+        # A rerun retains the launcher and does not move another native binary.
+        self.assertEqual(self.run_setup().returncode, 0)
+        self.assertEqual(len(list((self.root / '.local/lib/face-age-codex').glob('codex-standalone-*'))), 1)
 
 
 if __name__ == '__main__':
