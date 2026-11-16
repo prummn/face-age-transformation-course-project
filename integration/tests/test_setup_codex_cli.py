@@ -2,6 +2,8 @@
 import os
 from pathlib import Path
 import stat
+import json
+import platform
 import shutil
 import subprocess
 import tempfile
@@ -16,10 +18,27 @@ class RelaySetupTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
+        fixtures = self.root / 'repository/integration'
+        fixtures.mkdir(parents=True)
+        for name in ['setup_codex_cli.sh', 'install_codex_package.py']:
+            shutil.copy2(SCRIPT.parent / name, fixtures / name)
+        # Runtime execution is checked separately with the real packaged CLI;
+        # these tests isolate config/key persistence and launch orchestration.
+        (fixtures / 'verify_codex_cli.py').write_text('print("fixture runtime check")\n')
+        self.script = fixtures / 'setup_codex_cli.sh'
+        package = self.root / 'complete-package'
+        (package / 'bin').mkdir(parents=True)
+        (package / 'codex-resources').mkdir()
+        (package / 'codex-path').mkdir()
+        arch = 'x86_64' if platform.machine()=='x86_64' else 'aarch64'
+        (package / 'codex-package.json').write_text(json.dumps(dict(version='0.167.1',target=arch+'-unknown-linux-musl',entrypoint='bin/codex',resourcesDir='codex-resources',pathDir='codex-path')))
+        for name in ['bin/codex','bin/codex-code-mode-host','codex-path/rg']:
+            f = package / name
+            f.write_text('#!/bin/sh\ncase "$1" in --version) echo codex-test;; features) exit 0;; *) exit 2;; esac\n')
+            f.chmod(0o755)
         binary = self.root / '.local/bin/codex'
         binary.parent.mkdir(parents=True)
-        binary.write_text('#!/bin/sh\ncase "$1" in --version) echo codex-test;; features) exit 0;; *) exit 2;; esac\n')
-        binary.chmod(0o755)
+        binary.symlink_to(package/'bin/codex')
         self.env = dict(os.environ, HOME=str(self.root), CODEX_HOME=str(self.root / '.codex'),
                         PATH=str(binary.parent) + ':' + os.environ['PATH'],
                         SPACETIMEAI_API_KEY="test-only key with 'quotes' and $literal")
@@ -27,7 +46,7 @@ class RelaySetupTests(unittest.TestCase):
         self.config.parent.mkdir()
 
     def run_setup(self, *args):
-        return subprocess.run(['bash', str(SCRIPT), *args], env=self.env, capture_output=True,
+        return subprocess.run(['bash', str(self.script), *args], env=self.env, capture_output=True,
                               text=True, timeout=30)
 
     def test_preserves_other_settings_backs_up_and_keeps_secret_private(self):
@@ -95,40 +114,22 @@ esac
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn('HANDOFF_OK', result.stdout)
 
-    @unittest.skipUnless(shutil.which('cc'), 'ELF repair fixture requires a C compiler')
-    def test_repairs_previous_single_binary_install_and_reuses_key(self):
+    def test_resume_reuses_saved_key_and_passes_session_id(self):
         self.assertEqual(self.run_setup().returncode, 0)
         self.env.pop('SPACETIMEAI_API_KEY')
-        source = self.root / 'codex-fixture.c'
-        source.write_text(r'''
-#include <stdio.h>
-#include <string.h>
-int main(int argc, char **argv) {
-    int daemon_free = 0;
-    for (int i = 1; i < argc; ++i) {
-        if (!strcmp(argv[i], "--version")) { puts("codex-test"); return 0; }
-        if (!strcmp(argv[i], "features")) return 0;
-        if (!strcmp(argv[i], "--no-daemon")) daemon_free++;
-    }
-    if (daemon_free == 1) { puts("DAEMON_FREE_OK"); return 0; }
-    fputs("no complete local package\n", stderr);
-    return 2;
-}
-''')
         binary = self.root / '.local/bin/codex'
-        subprocess.run(['cc', str(source), '-o', str(binary)], check=True, capture_output=True)
-        before = subprocess.run([str(binary), 'test prompt'], capture_output=True, text=True)
-        self.assertNotEqual(before.returncode, 0)
-        result = self.run_setup('--start')
+        binary.write_text('''#!/bin/sh
+case "$1" in
+  --version) echo codex-test;;
+  features) exit 0;;
+  --no-daemon)
+    [ "$2" = resume ] && [ "$3" = test-session-id ] && echo RESUME_OK;;
+  *) exit 2;;
+esac
+''')
+        result = self.run_setup('--resume', 'test-session-id')
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn('DAEMON_FREE_OK', result.stdout)
-        self.assertTrue(binary.read_text().startswith('#!/bin/sh'))
-        later = subprocess.run([str(binary), 'later session'], capture_output=True, text=True)
-        self.assertEqual(later.returncode, 0)
-        self.assertIn('DAEMON_FREE_OK', later.stdout)
-        # A rerun retains the launcher and does not move another native binary.
-        self.assertEqual(self.run_setup().returncode, 0)
-        self.assertEqual(len(list((self.root / '.local/lib/face-age-codex').glob('codex-standalone-*'))), 1)
+        self.assertIn('RESUME_OK', result.stdout)
 
 
 if __name__ == '__main__':

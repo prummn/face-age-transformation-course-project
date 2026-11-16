@@ -3,10 +3,12 @@
 set -euo pipefail
 
 start_session=0
+resume_session=""
 case "${1:-}" in
   '') ;;
   --start) start_session=1 ;;
-  *) echo 'Usage: bash integration/setup_codex_cli.sh [--start]' >&2; exit 2 ;;
+  --resume) resume_session="${2:?Usage: --resume SESSION_ID}" ;;
+  *) echo 'Usage: bash integration/setup_codex_cli.sh [--start | --resume SESSION_ID]' >&2; exit 2 ;;
 esac
 
 repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -21,73 +23,12 @@ for dependency in python3 curl tar; do
   fi
 done
 
-codex_bin="$(command -v codex || true)"
-if [[ -z "$codex_bin" && -x "$HOME/.local/bin/codex" ]]; then
-  codex_bin="$HOME/.local/bin/codex"
-fi
-if [[ -z "$codex_bin" ]]; then
-  case "$(uname -m)" in
-    x86_64) codex_arch=x86_64 ;;
-    aarch64|arm64) codex_arch=aarch64 ;;
-    *) echo 'Supported architectures: x86_64 and aarch64.' >&2; exit 1 ;;
-  esac
-  # Match the working CLI on the original server. No Node.js or sudo needed.
-  codex_version=0.167.1
-  codex_asset="codex-${codex_arch}-unknown-linux-musl"
-  download_dir="$(mktemp -d)"
-  trap 'rm -rf -- "$download_dir"' EXIT
-  echo "Installing Codex CLI $codex_version to ~/.local/bin ..."
-  curl --fail --location --silent --show-error --retry 2 --connect-timeout 15 \
-    --output "$download_dir/codex.tar.gz" \
-    "https://github.com/openai/codex/releases/download/rust-v${codex_version}/${codex_asset}.tar.gz"
-  tar -xzf "$download_dir/codex.tar.gz" -C "$download_dir" -- "$codex_asset"
-  mkdir -p "$HOME/.local/bin"
-  install -m 755 "$download_dir/$codex_asset" "$HOME/.local/bin/codex"
-  codex_bin="$HOME/.local/bin/codex"
-fi
-
-# The release asset above is one executable, not a full standalone package.
-# In0.167 the default TUI starts a background server requiring package
-# resources. Keep the executable and use its supported daemon-free mode.
-# This also repairs installations made by the first version of this script.
-if [[ "$codex_bin" == "$HOME/.local/bin/codex" && ! -L "$codex_bin" ]]; then
-  python3 - "$codex_bin" <<'PY'
-from pathlib import Path
-import shlex
-import sys
-import tempfile
-import uuid
-
-launcher = Path(sys.argv[1])
-with launcher.open('rb') as stream:
-    native_binary = stream.read(4) == b'\x7fELF'
-if native_binary:
-    storage = Path.home() / '.local/lib/face-age-codex'
-    storage.mkdir(parents=True, exist_ok=True)
-    binary = storage / ('codex-standalone-' + uuid.uuid4().hex[:12])
-    executable = shlex.quote(str(binary))
-    wrapper = ('#!/bin/sh\n# Face-age standalone Codex: no package daemon required.\n'
-               'for argument do\n'
-               '  if [ "$argument" = --no-daemon ]; then\n'
-               '    exec ' + executable + ' "$@"\n'
-               '  fi\n'
-               'done\n'
-               'exec ' + executable + ' --no-daemon "$@"\n')
-    with tempfile.NamedTemporaryFile('w', dir=launcher.parent, delete=False) as stream:
-        stream.write(wrapper)
-        temp = Path(stream.name)
-    temp.chmod(0o755)
-    launcher.rename(binary)
-    try:
-        temp.replace(launcher)
-    except BaseException:
-        binary.rename(launcher)
-        temp.unlink(missing_ok=True)
-        raise
-    print('Installed a daemon-free launcher for the single-file Codex executable.')
-PY
-fi
+# The complete platform archive includes every helper binary and resource.
+# A single executable plus --no-daemon cannot run the command/code tools.
+codex_bin="$(python3 "$repo_dir/integration/install_codex_package.py")"
 "$codex_bin" --version
+# Exercise the actual code/command host, using only a loopback mock API.
+python3 "$repo_dir/integration/verify_codex_cli.py" --binary "$codex_bin"
 
 relay_dir="$HOME/.config/face-age-codex"
 if [[ -z "${SPACETIMEAI_API_KEY:-}" && -f "$relay_dir/env.sh" ]]; then
@@ -208,8 +149,14 @@ PY
 
 # Parses the actual installed CLI config without sending a model request.
 "$codex_bin" features list >/dev/null
-echo 'Codex CLI is ready. New terminal sessions can run: codex'
+echo 'Codex CLI and command-tool package are ready.'
+echo 'For this existing terminal, run: export PATH="$HOME/.local/bin:$PATH"'
+echo 'New terminal sessions can run: codex'
 echo 'No ChatGPT login is required for this provider. Existing approval settings were preserved.'
+if [[ -n "$resume_session" ]]; then
+  cd "$repo_dir"
+  exec "$codex_bin" --no-daemon resume "$resume_session"
+fi
 if [[ "$start_session" == 1 ]]; then
   cd "$repo_dir"
   exec "$codex_bin" --no-daemon '先阅读 integration/迁移与研究接手提示词_20261116.md，并按其中的迁移和研究交接继续执行。先核查新机环境和已提供文件，恢复真实模型与基线；不要把已有失败实验当成效果提升。'
