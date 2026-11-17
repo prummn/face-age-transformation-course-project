@@ -26,7 +26,7 @@ def main():
     paired=[]
     for r in records:
         for condition in ['20','40','60','75']:
-            control='texture_half' if a.candidate=='texture_chroma' else 'baseline_v1'
+            control='texture_pair' if a.candidate=='texture_chroma' else 'baseline_v1'
             b=index[r['name'],control,condition];c=index[r['name'],a.candidate,condition]
             paired.append(dict(name=r['name'],condition=condition,review_split=r['review_split'],
                 identity_delta=None if b['sface_cosine'] is None or c['sface_cosine'] is None else c['sface_cosine']-b['sface_cosine'],
@@ -63,7 +63,7 @@ def main():
         near_monochrome=[r for r in records if r['source_quality']['chroma_rgb_std']<3],
         dark_source=[r for r in records if r['source_quality']['brightness']<50],
         no_prior_similarity_match=[r for r in records if not r['old_similarity_matches']])
-    summary=dict(split=a.split,candidate=a.candidate,control='texture_half' if a.candidate=='texture_chroma' else 'baseline_v1',completed=len(records),counts=dict(Counter(r['cohort'] for r in records)),
+    summary=dict(split=a.split,candidate=a.candidate,control='texture_pair' if a.candidate=='texture_chroma' else 'baseline_v1',completed=len(records),counts=dict(Counter(r['cohort'] for r in records)),
         strata={key:aggregate(rows) for key,rows in strata.items() if rows},
         pairs=paired,source_reference=dict(
             shared_vs_publisher_real_mae=mean(abs(r['shared_reference_age']-r['publisher_age']) for r in records),

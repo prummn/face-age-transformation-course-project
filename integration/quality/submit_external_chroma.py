@@ -18,6 +18,7 @@ def main():
     a=p.parse_args();previous=a.previous_run.resolve()
     assert (previous/'DONE').exists(),'Previous one-GPU experiment must finish first'
     decision=json.loads((previous/'repair-decision.json').read_text())
+    amendment=json.loads((previous/'repair-numerics-amendment.json').read_text())
     assert decision['confirmation_results_inspected'] is False and decision['chroma_weight']==1.0
     reportpath=previous/'external-results/report.json';report=json.loads(reportpath.read_text())
     assert len(report['records'])==32 and len(report['outputs'])==320
@@ -27,7 +28,7 @@ def main():
     for r in baseline['weights']:assert sha256(ROOT/r['path'])==r['sha256']
     stamp=datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S');run=ROOT/'deployment/training-runs'/stamp;source=run/'source';source.mkdir(parents=True)
     hashes={}
-    for name in ['refine_external_chroma.py','submit_external_chroma.py','probe_inversion.py']:
+    for name in ['refine_external_chroma.py','submit_external_chroma.py','probe_inversion.py','deterministic_quality_ops.py']:
         path=ROOT/'integration/quality'/name;shutil.copy2(path,source/name);hashes[name]=sha256(path)
     for name in ['latent_quality.py']:
         path=ROOT/'integration'/name;shutil.copy2(path,source/name);hashes[name]=sha256(path)
@@ -41,6 +42,7 @@ export PYTHONUNBUFFERED=1 PYTHONNOUSERSITE=1 OMP_NUM_THREADS=4 MKL_NUM_THREADS=4
 export FACE_AGE_REPO="$repo_dir" FACE_AGE_BASE="$repo_dir/deployment/model-files/face-age"
 export FACE_AGE_DEVICE=cuda:0 FACE_AGE_EXPERIMENT_ALLOCATION=1
 export HF_HUB_OFFLINE=1 TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD=1 TORCH_HOME="$FACE_AGE_BASE/torch_cache"
+export CUBLAS_WORKSPACE_CONFIG=:4096:8
 date -Is
 nvidia-smi
 python3 -m venv --system-site-packages /tmp/face-age-chroma-venv
@@ -48,18 +50,20 @@ task_python=/tmp/face-age-chroma-venv/bin/python
 "$task_python" -m pip install --no-index --no-deps "$repo_dir"/deployment/wheels/*.whl
 "$task_python" -u "$run_dir/source/refine_external_chroma.py" "$run_dir"
 ''');hashes['run.sh']=sha256(runner)
-    shutil.copy2(previous/'repair-decision.json',run/'repair-decision.json');shutil.copy2(previous/'annotated-inputs.json',run/'inputs.pre-age.json')
+    shutil.copy2(previous/'repair-decision.json',run/'repair-decision.json');shutil.copy2(previous/'repair-numerics-amendment.json',run/'repair-numerics-amendment.json')
+    shutil.copy2(previous/'annotated-inputs.json',run/'inputs.pre-age.json')
     cache={r['name']:sha256(previous/'external-results'/r['name']/'texture_half_codes.pt') for r in report['records']}
     save(run/'experiment.json',dict(profile='external_chroma',code_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
         previous_run=str(previous),control_report_sha256=sha256(reportpath),decision_sha256=sha256(previous/'repair-decision.json'),
-        chroma_weight=1.0,cache_sha256=cache,steps=180,train_network_weights=False,
-        controls='Immutable existing32 baseline and texture controls, same anchors. Correction restarts zero first8 W+ delta, no extra steps on finished edits.',
+        chroma_weight=1.0,cache_sha256=cache,steps=180,train_network_weights=False,selected_names=amendment['selected_names'],
+        numerics_amendment_sha256=sha256(previous/'repair-numerics-amendment.json'),
+        controls='Keep old controls labeled. Recompute paired zero-chroma control and weight1 correction with deterministic input gradients; reuse same anchors, zero first8 delta,180 steps each.',
         change='Only add 1.0*L1 of RGB minus channel mean, pooled to16x16. Preserve luminance freedoms, no source pixels pasted.',
-        guardrails=decision['guardrails'],resources=dict(gpus=1,max_running_duration='20m')))
+        guardrails=decision['guardrails'],resources=dict(gpus=1,max_running_duration='25m')))
     name='face-age-external-chroma-'+stamp
     payload=dict(Name=name,Project='fdj-infra',ZoneId='cn-shanghai-a',QuotaGroup='fdj_gpu_taskpool',Priority='3',UsePrivateMachine=False,AutoDeleteDuration='168h',
         TaskSpecs={'evaluation':dict(Command=['bash',str(runner),str(ROOT),str(run)],Env={},Image=IMAGE,Replicas=1,CPU='4',Memory='48Gi',GPU='1',Internet=False,
-        MaxRunningDuration='20m',MaxWaitDuration='10m',RestartPolicy='Never',MountGPFS='gpfs://gpfs2/haobinzhang:/root')})
+        MaxRunningDuration='25m',MaxWaitDuration='10m',RestartPolicy='Never',MountGPFS='gpfs://gpfs2/haobinzhang:/root')})
     save(run/'request.json',payload);request=dict(payload);request['TaskSpecs']={k:job.models.CreateJobReqTaskSpec(**v) for k,v in payload['TaskSpecs'].items()}
     try:result=job.create_job(ctx,job.models.CreateJobReq(**request))
     except Exception:

@@ -9,7 +9,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('run',type=Path)
     run=p.parse_args().run;summary=json.loads((run/'chroma-summary.json').read_text())
     guard=json.loads((run/'experiment.json').read_text())['guardrails']
-    s=summary['strata']['review_split:confirmation'];b=s['texture_half'];c=s['texture_chroma']
+    s=summary['strata']['review_split:confirmation'];b=s['texture_pair'];c=s['texture_chroma']
     pairs=[r for r in summary['pairs'] if r['review_split']=='confirmation']
     deltas=[r['identity_delta'] for r in pairs if r['identity_delta'] is not None]
     measures=dict(cases=b['cases'],mean_identity_delta=c['cross_identity']-b['cross_identity'],

@@ -25,7 +25,7 @@ TITLES=dict(fine_direct='原始直接路线',previous_identity='前轮身份候�
             recon_generator='加强重建：编码器＋生成器',latent_anchor='单图重建修正',latent_refined='重建＋跨龄修正',
             latent_constrained60='细节约束：60步',latent_constrained180='细节约束：180步',
             baseline_v1='已确认基线v1',texture_half='减弱细节层年龄改动',robust_age='多视图年龄约束',
-            texture_robust='细节控制＋多视图约束',texture_chroma='增加低频色度约束（试验）')
+            texture_robust='细节控制＋多视图约束',texture_pair='确定性成对对照',texture_chroma='增加低频色度约束（试验）')
 
 PAGE='''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>质量改进对照</title>
 <style>body{margin:22px;background:#f4f6f2;color:#233b34;font:16px/1.6 system-ui}main{max-width:1500px;margin:auto}h1{font-size:26px}select{padding:8px;font:inherit;max-width:95%;margin:5px}.controls{display:flex;flex-wrap:wrap;gap:12px}.grid{display:grid;gap:12px;grid-template-columns:repeat(var(--columns,4),minmax(0,1fr))}figure{margin:0;background:white;padding:8px;border-radius:8px}img{width:100%;display:block}figcaption{font-weight:600}.info{min-height:4em;font-size:14px}a{color:#17634f}table{border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid #ccd6ce;text-align:left}.scroll{overflow-x:auto}@media(max-width:800px){body{margin:12px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}</style>
