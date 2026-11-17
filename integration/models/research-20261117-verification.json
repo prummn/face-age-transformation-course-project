@@ -1,0 +1,77 @@
+{
+  "validated_at_utc": "2026-11-17T13:57:17.884888+00:00",
+  "release_tag": "research-mobei-2026-11-17",
+  "manifest_sha256": "c705fd27e611b1fd4085cf5c0215e1adadc03134c3c122a40e027efa492e38d4",
+  "github_upload": {
+    "assets": 73,
+    "bytes": 8957501754,
+    "all_server_sha256_match": true
+  },
+  "original_release": {
+    "tag": "models-2026-11-11",
+    "files_reused_without_reupload": 6,
+    "original_default_weights_unchanged": true
+  },
+  "isolated_restore": {
+    "groups": [
+      "demo",
+      "evidence",
+      "data",
+      "weights100",
+      "weights500",
+      "weights800"
+    ],
+    "all_parts_complete_files_archive_entries_sha256_verified": true,
+    "train": 1054,
+    "regression": 80,
+    "portable_path_relocation": true,
+    "originals_preserved": true
+  },
+  "checkpoint_provenance": {
+    "all_original_candidate_manifests_match": true,
+    "files": [
+      "deployment/training-runs/20261113-040634/encoder/encoder.pt",
+      "deployment/training-runs/20261113-040634/encoder_generator/encoder.pt",
+      "deployment/training-runs/20261113-040634/encoder_generator/generator_affines.pt",
+      "deployment/training-runs/20261116-131721/id_control/encoder.pt",
+      "deployment/training-runs/20261116-131721/id_strong/encoder.pt",
+      "deployment/training-runs/20261116-134401/recon_encoder/encoder.pt",
+      "deployment/training-runs/20261116-134401/recon_generator/encoder.pt",
+      "deployment/training-runs/20261116-134401/recon_generator/generator_patch.pt"
+    ]
+  },
+  "browser": {
+    "portraits": 24,
+    "conditions": 5,
+    "color_variants": 2,
+    "native_png_download": [
+      1024,
+      1024
+    ],
+    "filters": true,
+    "autoplay": true,
+    "zoom_native": true,
+    "mobile_no_overflow": true,
+    "page_errors": []
+  },
+  "restore_failure_tests": [
+    "preserve_different_existing_file",
+    "reject_modified_content_before_extract",
+    "reject_traversal_and_symlink_escape",
+    "idempotent_restore",
+    "manifest_relocation_preserves_pixel_hashes"
+  ],
+  "exclusions": [
+    "user portrait images and per-user W+ / identity embeddings",
+    "APPA or author-example images without clear redistribution terms",
+    "SSH material, API tokens and platform credentials",
+    "shared virtual environments and task PID files"
+  ],
+  "gpu_allocated_for_publication": false,
+  "limits": [
+    "Research checkpoints are not promoted or exact optimizer-resume archives.",
+    "Public data contains FFHQ1054+80, not all104 original evaluation images.",
+    "FFHQ overlaps GAN pretraining; no independent population or ethnicity-generalization claim.",
+    "Local restore used verified staged asset bytes; public HTTP download is checked after publishing."
+  ]
+}
