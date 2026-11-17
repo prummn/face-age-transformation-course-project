@@ -3,6 +3,22 @@ import argparse
 import json
 from pathlib import Path
 import statistics
+import html
+
+
+def sources_only(run):
+    """An explicit input preview when external GPU inference is blocked."""
+    from PIL import Image
+    records=json.loads((run/'inputs.pre-age.json').read_text())
+    dest=run/'source-inputs';dest.mkdir(exist_ok=True)
+    cards=[]
+    for r in records:
+        image=dest/(r['name']+'.jpg')
+        with Image.open(r['image_path']) as im:im.convert('RGB').resize((256,256)).save(image,quality=90)
+        cards.append('<figure><img loading="lazy" width="256" height="256" src="source-inputs/'+image.name+'"><figcaption>'+html.escape(
+            f"{r['name']}｜{r['annotation']['race']}｜发布方年龄 {r['publisher_age']:.0f}，表观 {r['apparent_age']:.1f}｜原始人脸短边 {r['native_face_short_edge']:.0f}px｜{r['review_split']}")+'</figcaption></figure>')
+    (run/'index.html').write_text('''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>新增测试照片：仅输入预览</title><style>body{font:16px/1.6 system-ui;background:#f4f6f2;color:#233b34;margin:20px}main{max-width:1300px;margin:auto}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(256px,1fr));gap:16px}figure{margin:0;padding:8px;background:white}img{width:100%;height:auto}figcaption{font-size:14px}</style><main><h1>新增32张外部测试照片：仅输入预览</h1><p>这些是APPA-REAL官方测试照片的对齐参考，不是GAN生成结果。GPU调度尚未完成，因此此页不提供本轮模型对照结论。来源记录、真实／表观年龄和低分辨率样例全部保留。</p><p>24张发布方标注Asian、其他8张。26张原始人脸不足256px，1024参考可能经过上采样；新照片不等于已核实的独立身份。仅用于本地评价，不训练通用模型。</p><div class="grid">'''+''.join(cards)+'</div></main></html>')
+    print('SOURCE_PREVIEW_ONLY',len(records),'no model output claimed')
 
 
 TITLES=dict(fine_direct='原始直接路线',previous_identity='前轮身份候选',recon_encoder='加强重建：编码器',
@@ -22,7 +38,8 @@ const $=x=>document.getElementById(x);let data;
 function family(){return data.families[$('family').value]}
 function samples(){const f=family();$('sample').replaceChildren(...f.records.map(r=>new Option(r.name==='uploaded'?'你上传的人像':r.name,r.name)));render()}
 function render(){const f=family(),s=f.records.find(r=>r.name===$('sample').value);if(!s)return;const rows=f.outputs.filter(r=>r.name===s.name&&r.condition===$('age').value);$('images').replaceChildren();
-const items=[{title:'输入参考',src:f.prefix+'/'+s.name+'/reference.png',download:f.prefix+'/'+s.name+'/reference.png',info:'源条件 '+s.source_age}];for(const route of f.routes){const r=rows.find(r=>r.route===route);if(r)items.push({title:data.titles[route]||route,src:f.prefix+'/'+r.preview,download:f.prefix+'/'+(r.native||r.preview),info:`身份 ${r.sface_cosine?.toFixed(3)}；共享参考估龄 ${r.shared_output_age.toFixed(1)}`})}
+let sourceInfo='模型源条件 '+s.source_age;if(s.publisher_age!=null)sourceInfo+=`；发布方年龄 ${s.publisher_age}，表观年龄 ${s.apparent_age.toFixed(1)}；原始人脸短边 ${s.native_face_short_edge.toFixed(0)}px`;
+const items=[{title:'输入参考',src:f.prefix+'/'+s.name+'/reference.png',download:f.prefix+'/'+s.name+'/reference.png',info:sourceInfo}];for(const route of f.routes){const r=rows.find(r=>r.route===route);if(r)items.push({title:data.titles[route]||route,src:f.prefix+'/'+r.preview,download:f.prefix+'/'+(r.native||r.preview),info:`身份 ${r.sface_cosine?.toFixed(3)??'无检测'}；共享参考估龄 ${r.shared_output_age.toFixed(1)}`})}
 for(const item of items){const fig=document.createElement('figure'),cap=document.createElement('figcaption'),img=document.createElement('img'),info=document.createElement('p'),link=document.createElement('a');cap.textContent=item.title;img.src=item.src;img.alt=item.title;info.textContent=item.info;info.className='info';link.href=item.download;link.download='';link.textContent='下载PNG';fig.append(cap,img,info,link);$('images').append(fig)}$('images').style.setProperty('--columns',items.length);$('note').textContent=f.note+' · '+s.cohort;
 $('metrics').replaceChildren();for(const [cohort,methods] of Object.entries(data.summary[$('family').value].cohorts))for(const [route,m] of Object.entries(methods)){const tr=document.createElement('tr');for(const value of [cohort+' / '+data.titles[route],m.same_identity,m.cross_identity,m.same_lpips,m.age_span]){const td=document.createElement('td');td.textContent=typeof value==='number'?value.toFixed(4):value??'待完成';tr.append(td)}$('metrics').append(tr)}}
 fetch('review-data.json').then(r=>r.json()).then(d=>{data=d;for(const [key,f] of Object.entries(d.families))$('family').append(new Option(f.title,key));if(d.families.constrained)$('family').value='constrained';samples()}).catch(e=>$('error').textContent=e.message);$('family').onchange=samples;$('sample').onchange=render;$('age').onchange=render;
@@ -49,13 +66,16 @@ def summarize(report):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('run',type=Path)
-    run=parser.parse_args().run;families={};summary={}
+    parser.add_argument('--inputs-only',action='store_true',help='Explicit input-only page if external inference is unavailable')
+    args=parser.parse_args();run=args.run;families={};summary={}
+    if args.inputs_only:sources_only(run);return
     for key,subfolder,title,note in [
         ('latent','latent-refinement','单图潜变量修正','网络权重冻结；同龄重建200步，四个目标联合修正120步。'),
         ('trained','evaluation','通用训练候选','两组800步配对；生成器组解冻64–1024分辨率卷积。'),
         ('constrained','latent-constrained','限制细节变化的单图修正','复用重建锚点；只优化前8层潜变量，并约束感知差异及颜色。'),
         ('age_texture','age-texture','基线v1之后：纹理与年龄约束','冻结已确认基线；两因素对照：细节层年龄改动减半、多视图年龄约束。没有对输出做模糊。'),
-        ('texture_validation','texture-validation','追加样例复核','实际后端代码在追加11张输入上的配对结果。')]:
+        ('texture_validation','texture-validation','追加样例复核','实际后端代码在追加11张输入上的配对结果。'),
+        ('external','external-results','新增32张外部测试','官方APPA测试照，保留低清晰度及旧照片；基线与细节控制候选分别保留。')]:
         path=run/subfolder/'report.json'
         if not path.exists():continue
         report=json.loads(path.read_text());names={r['name'] for r in report['outputs']}
