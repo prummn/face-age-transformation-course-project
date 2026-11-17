@@ -15,13 +15,18 @@ from probe_inversion import sha256
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--data',type=Path,required=True)
     p.add_argument('--reuse-manifests',type=Path,help='Reuse exact completed numeric-age annotation after failed pre-step smoke run')
-    p.add_argument('--profile',choices=['generator_affines','identity_weight','quality_sprint','latent_constraint'],default='generator_affines')
+    p.add_argument('--profile',choices=['generator_affines','identity_weight','quality_sprint','latent_constraint','age_texture','texture_validation'],default='generator_affines')
     p.add_argument('--previous-run',type=Path)
+    p.add_argument('--candidate-mode',choices=['texture','texture_robust'],default='texture')
     a=p.parse_args()
-    if a.profile in ['identity_weight','quality_sprint','latent_constraint'] and not a.reuse_manifests:
+    if a.profile in ['identity_weight','quality_sprint','latent_constraint','age_texture','texture_validation'] and not a.reuse_manifests:
         raise ValueError('Identity pilot requires the unchanged previously annotated manifests')
     if a.profile=='latent_constraint' and (not a.previous_run or not (a.previous_run/'latent-refinement/DONE').exists()):
         raise ValueError('Constrained refinement requires a completed previous latent run')
+    if a.profile=='age_texture' and (not a.previous_run or not (a.previous_run/'latent-constrained/DONE').exists()):
+        raise ValueError('Age/texture ablation requires the completed accepted baseline')
+    if a.profile=='texture_validation' and (not a.previous_run or not (a.previous_run/'age-texture/DONE').exists()):
+        raise ValueError('Texture validation requires a completed selection experiment')
     data=a.data.resolve();audit=json.loads((data/'audit.json').read_text())
     if not (data/'DONE').exists() or audit['training']<1000:raise RuntimeError('CPU dataset preparation incomplete')
     if a.reuse_manifests:
@@ -44,7 +49,8 @@ def main():
                  'probe_inversion.py','run_gan_training.sh','submit_gan_training.py',
                  'prepare_gan_training.py','collect_ffhq_training.py','http_zip.py','build_training_review.py',
                  'run_identity_pilot.sh','build_identity_review.py','verify_identity_artifacts.py','verify_identity_review.py',
-                 'run_quality_sprint.sh','refine_identity_latents.py','run_latent_constraint.sh','verify_quality_backend.py']:
+                 'run_quality_sprint.sh','refine_identity_latents.py','run_latent_constraint.sh','verify_quality_backend.py',
+                 'refine_age_texture.py','run_age_texture.sh','validate_texture_quality.py','run_texture_validation.sh']:
         path=Path(__file__).parent/name;shutil.copy2(path,source/name);hashes[name]=sha256(path)
     shutil.copy2(data/'audit.json',run/'data-audit.json')
     if a.reuse_manifests:shutil.copytree(a.reuse_manifests,run/'manifests')
@@ -57,6 +63,8 @@ def main():
     identity=a.profile=='identity_weight'
     sprint=a.profile=='quality_sprint'
     constraint=a.profile=='latent_constraint'
+    texture=a.profile=='age_texture'
+    validation=a.profile=='texture_validation'
     if identity:
         save(run/'experiment.json',dict(profile=a.profile,code_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
             hypothesis='Increasing cross-age identity coefficient alone reduces identity drift without suppressing age edits.',
@@ -107,14 +115,64 @@ def main():
             training='No network parameters trained; source image used solely for its own inference optimization.'))
         for name in ['backend.py','latent_quality.py','source_color.py']:
             path=ROOT/'integration'/name;shutil.copy2(path,source/name);hashes[name]=sha256(path)
-    name=('face-age-latent-constraint-' if constraint else 'face-age-quality-sprint-' if sprint else 'face-age-identity-pilot-' if identity else 'face-age-paired-gan-')+stamp
-    runner='run_latent_constraint.sh' if constraint else 'run_quality_sprint.sh' if sprint else 'run_identity_pilot.sh' if identity else 'run_gan_training.sh'
-    duration='15m' if constraint else '45m' if sprint else '30m' if identity else '1h'
+    if texture:
+        previous=a.previous_run.resolve()
+        baseline=Path(__file__).parent/'baselines/sam-wplus-v1.json'
+        frozen=json.loads(baseline.read_text())
+        expected=frozen['evidence'].get(str((previous/'latent-constrained/report.json').relative_to(ROOT)))
+        if not expected or sha256(previous/'latent-constrained/report.json')!=expected:
+            raise ValueError('Accepted baseline report changed')
+        shutil.copy2(baseline,run/'accepted-baseline.json')
+        shutil.copy2(previous/'latent-inputs.json',run/'latent-inputs.json')
+        records=json.loads((run/'latent-inputs.json').read_text())
+        save(run/'experiment.json',dict(profile=a.profile,previous_run=str(previous),baseline='sam-wplus-v1',
+            code_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
+            baseline_report_sha256=expected,inputs_sha256=sha256(run/'latent-inputs.json'),
+            cached_codes_sha256={r['name']:sha256(previous/'latent-constrained'/r['name']/'codes.pt') for r in records},
+            hypotheses=['Halving age displacement in styles8..17 may reduce coarse high-age texture.',
+                        'Matching teacher age distributions under raw/blur/crop views may reduce fragile age-classifier shortcuts.'],
+            routes=['baseline_v1','texture_half','robust_age','texture_robust'],
+            fixed='Same12 exploratory inputs, source ages, cached200-step anchors, Release G/encoders, fixed noise, first8 W+ corrections,180 steps,lr.012 and baseline loss weights.',
+            factors=dict(texture_half='Multiply age displacement in styles8..17 by0.5; no output filtering.',
+                         robust_age='Average teacher-KL across raw,3x3 average blur,8px border crop; teacher uses identical transforms.'),
+            selection=dict(visual_review_required=True,cross_sface_max_mean_drop=.01,age_span_min_fraction=.9,
+                age75_max_mean_estimate_drop=3,not_age_accuracy=True,no_automatic_promotion=True),
+            caveats=['Previously viewed12 cases; exploratory, not a blind validation set.',
+                     'Teacher is original direct GAN age distribution and inherits its bias.',
+                     'High-frequency energy and view spread are diagnostics, not realism or age accuracy.'],
+            resource=dict(gpus=1,sequential=True,max_running_duration='30m'),
+            training='All network weights frozen. User and APPA images only optimize their own W+; no pixel compositing.'))
+    if validation:
+        previous=a.previous_run.resolve()
+        seen={r['name'] for r in json.loads((previous/'latent-inputs.json').read_text())}
+        records=[json.loads(x) for split in ['eval','external'] for x in (run/'manifests'/(split+'.jsonl')).read_text().splitlines()]
+        selected=[r for r in records if r['cohort']=='appa_asian_test' and r['name'] not in seen]
+        bins=set()
+        for r in records:
+            if r['cohort']=='ffhq_regression' and r['name'] not in seen and tuple(r['age_interval']) not in bins:
+                bins.add(tuple(r['age_interval']));selected.append(r)
+        assert len(selected)==11 and not ({r['name'] for r in selected}&seen)
+        save(run/'validation-inputs.json',selected)
+        # The real API check also uses the original authorized uploaded input.
+        save(run/'latent-inputs.json',selected+[r for r in records if r['name']=='uploaded'])
+        save(run/'experiment.json',dict(profile=a.profile,previous_run=str(previous),candidate_mode=a.candidate_mode,
+            candidate_route='texture_half' if a.candidate_mode=='texture' else 'texture_robust',
+            selection_report_sha256=sha256(previous/'age-texture/report.json'),
+            code_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
+            validation_inputs_sha256=sha256(run/'validation-inputs.json'),
+            protocol='11 additional cases, not used to select texture settings this turn; same fixed evaluation pool used in older universal experiments, not a blind external validation claim.',
+            controls='Actual serving LatentQuality helper; each case200-step anchor once, baseline/candidate reuse it;180 steps per target, all network weights frozen.',
+            limits=dict(gpus=1,max_running_duration='20m'),no_automatic_promotion=True))
+        for name in ['backend.py','latent_quality.py','source_color.py']:
+            path=ROOT/'integration'/name;shutil.copy2(path,source/name);hashes[name]=sha256(path)
+    name=('face-age-texture-validation-' if validation else 'face-age-age-texture-' if texture else 'face-age-latent-constraint-' if constraint else 'face-age-quality-sprint-' if sprint else 'face-age-identity-pilot-' if identity else 'face-age-paired-gan-')+stamp
+    runner='run_texture_validation.sh' if validation else 'run_age_texture.sh' if texture else 'run_latent_constraint.sh' if constraint else 'run_quality_sprint.sh' if sprint else 'run_identity_pilot.sh' if identity else 'run_gan_training.sh'
+    duration='20m' if validation else '30m' if texture else '15m' if constraint else '45m' if sprint else '30m' if identity else '1h'
     payload=dict(Name=name,Project='fdj-infra',ZoneId='cn-shanghai-a',QuotaGroup='fdj_gpu_taskpool',Priority='3',
         UsePrivateMachine=False,AutoDeleteDuration='168h',TaskSpecs={'experiment':dict(
         Command=['bash',str(source/runner),str(ROOT),str(run),str(data)],Env={},Image=IMAGE,
-        Replicas=1,CPU='4' if identity or sprint or constraint else '8',Memory='48Gi' if sprint or constraint else '32Gi' if identity else '64Gi',GPU='1',Internet=False,MaxRunningDuration=duration,
-        MaxWaitDuration='10m' if identity or sprint or constraint else '30m',RestartPolicy='Never',MountGPFS='gpfs://gpfs2/haobinzhang:/root')})
+        Replicas=1,CPU='4' if identity or sprint or constraint or texture or validation else '8',Memory='48Gi' if sprint or constraint or texture or validation else '32Gi' if identity else '64Gi',GPU='1',Internet=False,MaxRunningDuration=duration,
+        MaxWaitDuration='10m' if identity or sprint or constraint or texture or validation else '30m',RestartPolicy='Never',MountGPFS='gpfs://gpfs2/haobinzhang:/root')})
     save(run/'request.json',payload);request=dict(payload)
     request['TaskSpecs']={k:job.models.CreateJobReqTaskSpec(**v) for k,v in payload['TaskSpecs'].items()}
     try:result=job.create_job(ctx,job.models.CreateJobReq(**request))

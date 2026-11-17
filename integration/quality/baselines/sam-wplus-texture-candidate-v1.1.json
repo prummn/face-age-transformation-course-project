@@ -1,0 +1,83 @@
+{
+  "name": "sam-wplus-texture-candidate-v1.1",
+  "status": "Optional candidate; accepted baseline v1 retained; single-target failures remain.",
+  "parent_baseline": "baseline/sam-wplus-v1-20261116",
+  "parent_commit": "6bad884304d4c8d70f809e04a2c95ad8a22b8d02",
+  "profile": "texture",
+  "change": "Multiply Release fine age displacement in styles8..17 by0.5 before180-step first8-style correction; all other losses and source fitting unchanged.",
+  "age_direction_scale": [
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5,
+    0.5
+  ],
+  "weights": [
+    {
+      "path": "deployment/model-files/face-age/out/ft_l1/encoder_step1000.pt",
+      "sha256": "7c34f52aefd06a13828c24254584dfa01321d669e58ca13780ceb60b3250f3f0",
+      "bytes": 1068843465
+    },
+    {
+      "path": "deployment/model-files/face-age/models/sam/sam_ffhq_aging.pt",
+      "sha256": "6fbd6085e2e6001f51f6dee896ae5ba7bd6c3fab5c06fadba75f2a12188ba143",
+      "bytes": 2270547237
+    },
+    {
+      "path": "deployment/model-files/face-age/models/faceattr/convnext_t_fairface.pt",
+      "sha256": "fa5045966c9033df842096c8143885ad43ac8af23e4cdc2cc529743940e48fd3",
+      "bytes": 111438283
+    },
+    {
+      "path": "deployment/model-files/face-age/models/irse50/model_ir_se50.pth",
+      "sha256": "a035c768259b98ab1ce0e646312f48b9e1e218197a0f80ac6765e88f8b6ddf28",
+      "bytes": 175367323
+    },
+    {
+      "path": "deployment/model-files/face-age/models/yunet/face_detection_yunet_2023mar.onnx",
+      "sha256": "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4",
+      "bytes": 232589
+    },
+    {
+      "path": "deployment/model-files/face-age/torch_cache/hub/checkpoints/alexnet-owt-7be5be79.pth",
+      "sha256": "7be5be791159472b1fbf3c69796f7cb30dca7ad8466c2df70058c37116cdee02",
+      "bytes": 244408911
+    },
+    {
+      "path": "deployment/gan-research/face_recognition_sface_2021dec.onnx",
+      "sha256": "0ba9fbfa01b5270c96627c4ef784da859931e02f04419c829e83484087c34e79",
+      "bytes": 38696353
+    }
+  ],
+  "lpips": {
+    "wheel": "lpips-0.1.4-py3-none-any.whl",
+    "weight_member": "lpips/weights/v0.1/alex.pth",
+    "weight_sha256": "df73285e35b22355a2df87cdb6b70b343713b667eddbda73e1977e0c860835c0"
+  },
+  "sam_commit": "c1895aef275e702fba7560284dc16df60d65210e",
+  "serving_source_sha256": {
+    "backend.py": "be6b33b54628a0508be0df2756795d10b027460affde27a4290be4dc71121649",
+    "latent_quality.py": "18cd1ce2ca5cfcafab4106553b181ff2933a90fd09f29279982e6c5afc0c2196",
+    "source_color.py": "1759c7a0a5fa842fa84af46e35ed0d72457b224c661f74de62495f0f026e3c54"
+  },
+  "evidence_sha256": {
+    "deployment/training-runs/20261117-014357/age-texture/report.json": "2516870594c905ea5bc7ad228eee7ce1457598ba035c7cc83f4c6dea3937eed9",
+    "deployment/training-runs/20261117-014357/paired-summary.json": "e9a744b6c1c3be98811a851a0b2c033a6b8ce3a2065304481a6aeb2542e662e7",
+    "deployment/training-runs/20261117-015703/age-texture/report.json": "2fe289ac6640016250a2a8f41a8d6ea1c5c906c4496af86e524638144a7b039f",
+    "deployment/training-runs/20261117-015703/paired-summary.json": "6818c61a6827de666b8131cdd16b01ddc81fe3c4a07442e8aab5dcd78d00623b",
+    "deployment/training-runs/20261117-015703/api-validation/report.json": "4e2eee712d1a48a50eb4baba816e5d9e8f7b9ca6ebbfe91e4e2308f8f455ba81"
+  }
+}

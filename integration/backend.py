@@ -284,7 +284,7 @@ class SamePersonEngine:
             self.age_net = AgeEst().to(self.dev).eval()
             self.quality_refiner = None
             if QUALITY_PROFILE != "original":
-                if QUALITY_PROFILE not in ("anchor", "constrained"):
+                if QUALITY_PROFILE not in ("anchor", "constrained", "texture", "texture_robust"):
                     raise ValueError("Unknown FACE_AGE_QUALITY")
                 if not self.dev.startswith("cuda:"):
                     raise ValueError("High-quality W+ mode currently requires CUDA")

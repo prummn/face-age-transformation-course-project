@@ -14,6 +14,8 @@
 
 最新[重建与潜变量质量改进](integration/quality/20261116_重建与潜变量质量改进.md)已取得更明显的单图身份重建收益，上传人像同龄SFace约.55→.85；高龄纹理和自然度仍待改善。另两组800步通用训练收益有限，未替换默认。真实原生结果入口`/quality-sprint/`，新增可选慢速W+质量模式，不改原始模型文件。
 
+莫贝已确认该版本为[基线v1](integration/quality/baselines/sam-wplus-v1.json)，源码标签`baseline/sam-wplus-v1-20261116`。后续[纹理与年龄约束对照](integration/quality/20261117_基线与纹理年龄对照.md)已完成12图探索、11图追加复核及真实API验收，单独保留在`/quality-next/`。显式`texture`候选平均改善身份与粗糙纹理，有个别高龄退步；基线页面不覆盖，不以共享估龄分数证明真实年龄效果，GPU任务已退出。
+
 ## 2026-11-11 动态年龄镜演示版
 
 [训练方法与权重复原说明](integration/models/训练与模型.md) · [模型 Release](https://github.com/prummn/face-age-transformation-course-project/releases/tag/models-2026-11-11)

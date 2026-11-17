@@ -7,7 +7,9 @@ import statistics
 
 TITLES=dict(fine_direct='原始直接路线',previous_identity='前轮身份候选',recon_encoder='加强重建：编码器',
             recon_generator='加强重建：编码器＋生成器',latent_anchor='单图重建修正',latent_refined='重建＋跨龄修正',
-            latent_constrained60='细节约束：60步',latent_constrained180='细节约束：180步')
+            latent_constrained60='细节约束：60步',latent_constrained180='细节约束：180步',
+            baseline_v1='已确认基线v1',texture_half='减弱细节层年龄改动',robust_age='多视图年龄约束',
+            texture_robust='细节控制＋多视图约束')
 
 PAGE='''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>质量改进对照</title>
 <style>body{margin:22px;background:#f4f6f2;color:#233b34;font:16px/1.6 system-ui}main{max-width:1500px;margin:auto}h1{font-size:26px}select{padding:8px;font:inherit;max-width:95%;margin:5px}.controls{display:flex;flex-wrap:wrap;gap:12px}.grid{display:grid;gap:12px;grid-template-columns:repeat(var(--columns,4),minmax(0,1fr))}figure{margin:0;background:white;padding:8px;border-radius:8px}img{width:100%;display:block}figcaption{font-weight:600}.info{min-height:4em;font-size:14px}a{color:#17634f}table{border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid #ccd6ce;text-align:left}.scroll{overflow-x:auto}@media(max-width:800px){body{margin:12px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}</style>
@@ -51,11 +53,13 @@ def main():
     for key,subfolder,title,note in [
         ('latent','latent-refinement','单图潜变量修正','网络权重冻结；同龄重建200步，四个目标联合修正120步。'),
         ('trained','evaluation','通用训练候选','两组800步配对；生成器组解冻64–1024分辨率卷积。'),
-        ('constrained','latent-constrained','限制细节变化的单图修正','复用重建锚点；只优化前8层潜变量，并约束感知差异及颜色。')]:
+        ('constrained','latent-constrained','限制细节变化的单图修正','复用重建锚点；只优化前8层潜变量，并约束感知差异及颜色。'),
+        ('age_texture','age-texture','基线v1之后：纹理与年龄约束','冻结已确认基线；两因素对照：细节层年龄改动减半、多视图年龄约束。没有对输出做模糊。'),
+        ('texture_validation','texture-validation','追加样例复核','实际后端代码在追加11张输入上的配对结果。')]:
         path=run/subfolder/'report.json'
         if not path.exists():continue
         report=json.loads(path.read_text());names={r['name'] for r in report['outputs']}
-        families[key]=dict(title=title,note=note,prefix=subfolder,routes=report['routes'],outputs=report['outputs'],
+        families[key]=dict(title=report.get('title',title),note=report.get('note',note),prefix=subfolder,routes=report['routes'],outputs=report['outputs'],
             records=sorted([r for r in report['records'] if r['name'] in names],key=lambda r:(r['name']!='uploaded',r['cohort'],r['name'])))
         summary[key]=summarize(report)
     if not families:raise RuntimeError('No completed real results yet')

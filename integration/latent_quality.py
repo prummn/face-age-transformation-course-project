@@ -52,16 +52,23 @@ class LatentQuality:
             with torch.no_grad():
                 original=state['base']+engine.identity_encoder(condition(target_age))
                 target=state['anchor']+original-state['source']
+                if self.mode in ('texture','texture_robust'):
+                    direction=original-state['source']
+                    target=state['anchor']+torch.cat([direction[:,:8],.5*direction[:,8:]],1)
             if self.mode=='anchor' or target_age==item.reference_age:
                 with torch.no_grad():return decode(target).detach()
-            if self.mode!='constrained':raise RuntimeError('Unknown quality profile')
+            if self.mode not in ('constrained','texture','texture_robust'):raise RuntimeError('Unknown quality profile')
             def age_logits(image):
                 value=F.interpolate((image+1)/2,(224,224),mode='bilinear',align_corners=False)
                 return engine.age_net.net((value-engine.age_net.m)/engine.age_net.sd)[2].float()
+            def age_views(image):
+                return [image,F.avg_pool2d(image,3,1,1),image[:,:,8:-8,8:-8]]
             with torch.no_grad():
                 prior=F.interpolate(decode(target),(256,256),mode='area')
                 teacher=F.interpolate(decode(original),(256,256),mode='area')
                 target_prob=age_logits(teacher).softmax(1)
+                if self.mode=='texture_robust':
+                    target_probs=[age_logits(v).softmax(1) for v in age_views(teacher)]
             delta=torch.zeros_like(target[:,:8]).requires_grad_(True)
             optimizer=torch.optim.Adam([delta],lr=.012)
             for step in range(180):
@@ -70,7 +77,11 @@ class LatentQuality:
                 code=target+torch.cat([delta,torch.zeros_like(target[:,8:])],1)
                 y=F.interpolate(decode(code),(256,256),mode='area')
                 ident=(1-(self.identity.feats(y)*state['identity']).sum(1)).mean()
-                age_loss=F.kl_div(age_logits(y).log_softmax(1),target_prob,reduction='batchmean')
+                if self.mode=='texture_robust':
+                    age_loss=sum(F.kl_div(age_logits(v).log_softmax(1),q,reduction='batchmean')
+                                 for v,q in zip(age_views(y),target_probs))/3
+                else:
+                    age_loss=F.kl_div(age_logits(y).log_softmax(1),target_prob,reduction='batchmean')
                 color=F.l1_loss(F.avg_pool2d(y,32),F.avg_pool2d(x,32))
                 loss=.8*ident+.5*age_loss+.6*self.perceptual(y,prior).mean()+.05*delta.square().mean()+.1*color
                 optimizer.zero_grad(set_to_none=True);loss.backward()
