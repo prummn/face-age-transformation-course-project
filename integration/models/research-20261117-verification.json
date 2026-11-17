@@ -72,6 +72,20 @@
     "Research checkpoints are not promoted or exact optimizer-resume archives.",
     "Public data contains FFHQ1054+80, not all104 original evaluation images.",
     "FFHQ overlaps GAN pretraining; no independent population or ethnicity-generalization claim.",
-    "Local restore used verified staged asset bytes; public HTTP download is checked after publishing."
-  ]
+    "Checkpoint/data full restore used SHA256-verified staged asset bytes; demo/evidence and manifest were also downloaded fresh from the public Release without GitHub login and verified."
+  ],
+  "publication": {
+    "url": "https://github.com/prummn/face-age-transformation-course-project/releases/tag/research-mobei-2026-11-17",
+    "tag_commit": "2899a40db746734ad4989bcfebca7282fd44cc37",
+    "published_at": "2026-11-17T13:58:19Z",
+    "draft": false,
+    "prerelease": true,
+    "assets": 73,
+    "anonymous_manifest_sha256": "c705fd27e611b1fd4085cf5c0215e1adadc03134c3c122a40e027efa492e38d4",
+    "anonymous_fresh_download_and_restore_groups": [
+      "demo",
+      "evidence"
+    ],
+    "anonymous_download_requires_github_login": false
+  }
 }
