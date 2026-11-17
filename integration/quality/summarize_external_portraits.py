@@ -16,16 +16,18 @@ def mean(values):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('run',type=Path);p.add_argument('--split',choices=['diagnostic','all'],default='diagnostic')
-    a=p.parse_args();folder=a.run/'external-results'
+    p.add_argument('--folder',default='external-results');p.add_argument('--candidate',default='texture_half')
+    a=p.parse_args();folder=a.run/a.folder
     report=json.loads((folder/('report.json' if (folder/'report.json').exists() else 'report.partial.json')).read_text())
     outputs=[r for r in report['outputs'] if a.split=='all' or r['review_split']=='diagnostic']
-    completed={r['name'] for r in outputs if r['condition']=='75' and r['route']=='texture_half'}
+    completed={r['name'] for r in outputs if r['condition']=='75' and r['route']==a.candidate}
     records=[r for r in report['records'] if r['name'] in completed]
     outputs=[r for r in outputs if r['name'] in completed];index={(r['name'],r['route'],r['condition']):r for r in outputs}
     paired=[]
     for r in records:
         for condition in ['20','40','60','75']:
-            b=index[r['name'],'baseline_v1',condition];c=index[r['name'],'texture_half',condition]
+            control='texture_half' if a.candidate=='texture_chroma' else 'baseline_v1'
+            b=index[r['name'],control,condition];c=index[r['name'],a.candidate,condition]
             paired.append(dict(name=r['name'],condition=condition,review_split=r['review_split'],
                 identity_delta=None if b['sface_cosine'] is None or c['sface_cosine'] is None else c['sface_cosine']-b['sface_cosine'],
                 chroma_delta=c['chroma_mae']-b['chroma_mae'],shared_age_delta=c['shared_output_age']-b['shared_output_age']))
@@ -61,15 +63,16 @@ def main():
         near_monochrome=[r for r in records if r['source_quality']['chroma_rgb_std']<3],
         dark_source=[r for r in records if r['source_quality']['brightness']<50],
         no_prior_similarity_match=[r for r in records if not r['old_similarity_matches']])
-    summary=dict(split=a.split,completed=len(records),counts=dict(Counter(r['cohort'] for r in records)),
+    summary=dict(split=a.split,candidate=a.candidate,control='texture_half' if a.candidate=='texture_chroma' else 'baseline_v1',completed=len(records),counts=dict(Counter(r['cohort'] for r in records)),
         strata={key:aggregate(rows) for key,rows in strata.items() if rows},
         pairs=paired,source_reference=dict(
             shared_vs_publisher_real_mae=mean(abs(r['shared_reference_age']-r['publisher_age']) for r in records),
             shared_vs_apparent_mae=mean(abs(r['shared_reference_age']-r['apparent_age']) for r in records)),
         warning='New photographs, not verified new identities. Small stress sample, not population accuracy. Shared age network is not independent. No confirmation tuning.')
     summary['worst_identity_conditions']=sorted([x for x in paired if x['identity_delta'] is not None],key=lambda x:x['identity_delta'])[:8]
-    summary['largest_color_drift']=sorted([o for o in outputs if o['route']=='texture_half' and o['condition']!='same'],key=lambda x:-x['chroma_mae'])[:8]
-    dest=a.run/('external-summary.json' if a.split=='all' else 'external-summary.diagnostic.json')
+    summary['largest_color_drift']=sorted([o for o in outputs if o['route']==a.candidate and o['condition']!='same'],key=lambda x:-x['chroma_mae'])[:8]
+    prefix='chroma' if a.candidate=='texture_chroma' else 'external'
+    dest=a.run/(prefix+'-summary.json' if a.split=='all' else prefix+'-summary.diagnostic.json')
     dest.write_text(json.dumps(summary,ensure_ascii=False,indent=2)+'\n')
     # A few failure/edge cases, never selecting the confirmation set in diagnostic mode.
     names=[]
@@ -79,9 +82,10 @@ def main():
         if row['name'] not in names:names.append(row['name'])
     sheets=a.run/'representatives'/a.split;sheets.mkdir(parents=True,exist_ok=True)
     for name in names:
-        canvas=Image.new('RGB',(6*220,3*250),'#eef0ec');draw=ImageDraw.Draw(canvas)
+        routes=['reference']+report['routes']
+        canvas=Image.new('RGB',(6*220,len(routes)*250),'#eef0ec');draw=ImageDraw.Draw(canvas)
         columns=['source','same','20','40','60','75']
-        for y,route in enumerate(['reference','baseline_v1','texture_half']):
+        for y,route in enumerate(routes):
             for x,condition in enumerate(columns):
                 path=folder/name/('reference.png' if route=='reference' or condition=='source' else route+'_'+condition+'.png')
                 with Image.open(path) as image:canvas.paste(image.convert('RGB').resize((212,212)),(x*220+4,y*250+4))

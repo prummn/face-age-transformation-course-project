@@ -25,7 +25,7 @@ TITLES=dict(fine_direct='原始直接路线',previous_identity='前轮身份候�
             recon_generator='加强重建：编码器＋生成器',latent_anchor='单图重建修正',latent_refined='重建＋跨龄修正',
             latent_constrained60='细节约束：60步',latent_constrained180='细节约束：180步',
             baseline_v1='已确认基线v1',texture_half='减弱细节层年龄改动',robust_age='多视图年龄约束',
-            texture_robust='细节控制＋多视图约束')
+            texture_robust='细节控制＋多视图约束',texture_chroma='增加低频色度约束（试验）')
 
 PAGE='''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>质量改进对照</title>
 <style>body{margin:22px;background:#f4f6f2;color:#233b34;font:16px/1.6 system-ui}main{max-width:1500px;margin:auto}h1{font-size:26px}select{padding:8px;font:inherit;max-width:95%;margin:5px}.controls{display:flex;flex-wrap:wrap;gap:12px}.grid{display:grid;gap:12px;grid-template-columns:repeat(var(--columns,4),minmax(0,1fr))}figure{margin:0;background:white;padding:8px;border-radius:8px}img{width:100%;display:block}figcaption{font-weight:600}.info{min-height:4em;font-size:14px}a{color:#17634f}table{border-collapse:collapse}td,th{padding:8px;border-bottom:1px solid #ccd6ce;text-align:left}.scroll{overflow-x:auto}@media(max-width:800px){body{margin:12px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}</style>
@@ -40,7 +40,7 @@ function samples(){const f=family();$('sample').replaceChildren(...f.records.map
 function render(){const f=family(),s=f.records.find(r=>r.name===$('sample').value);if(!s)return;const rows=f.outputs.filter(r=>r.name===s.name&&r.condition===$('age').value);$('images').replaceChildren();
 let sourceInfo='模型源条件 '+s.source_age;if(s.publisher_age!=null)sourceInfo+=`；发布方年龄 ${s.publisher_age}，表观年龄 ${s.apparent_age.toFixed(1)}；原始人脸短边 ${s.native_face_short_edge.toFixed(0)}px`;
 const items=[{title:'输入参考',src:f.prefix+'/'+s.name+'/reference.png',download:f.prefix+'/'+s.name+'/reference.png',info:sourceInfo}];for(const route of f.routes){const r=rows.find(r=>r.route===route);if(r)items.push({title:data.titles[route]||route,src:f.prefix+'/'+r.preview,download:f.prefix+'/'+(r.native||r.preview),info:`身份 ${r.sface_cosine?.toFixed(3)??'无检测'}；共享参考估龄 ${r.shared_output_age.toFixed(1)}`})}
-for(const item of items){const fig=document.createElement('figure'),cap=document.createElement('figcaption'),img=document.createElement('img'),info=document.createElement('p'),link=document.createElement('a');cap.textContent=item.title;img.src=item.src;img.alt=item.title;info.textContent=item.info;info.className='info';link.href=item.download;link.download='';link.textContent='下载PNG';fig.append(cap,img,info,link);$('images').append(fig)}$('images').style.setProperty('--columns',items.length);$('note').textContent=f.note+' · '+s.cohort;
+for(const item of items){const fig=document.createElement('figure'),cap=document.createElement('figcaption'),img=document.createElement('img'),info=document.createElement('p'),link=document.createElement('a');cap.textContent=item.title;img.src=item.src;img.alt=item.title;info.textContent=item.info;info.className='info';link.href=item.download;link.download='';link.textContent='下载PNG';fig.append(cap,img,info,link);$('images').append(fig)}$('images').style.setProperty('--columns',items.length);$('note').textContent=f.note+' · '+s.cohort+(s.review_split==='diagnostic'?' · 诊断组':s.review_split==='confirmation'?' · 复核组':'');
 $('metrics').replaceChildren();for(const [cohort,methods] of Object.entries(data.summary[$('family').value].cohorts))for(const [route,m] of Object.entries(methods)){const tr=document.createElement('tr');for(const value of [cohort+' / '+data.titles[route],m.same_identity,m.cross_identity,m.same_lpips,m.age_span]){const td=document.createElement('td');td.textContent=typeof value==='number'?value.toFixed(4):value??'待完成';tr.append(td)}$('metrics').append(tr)}}
 fetch('review-data.json').then(r=>r.json()).then(d=>{data=d;for(const [key,f] of Object.entries(d.families))$('family').append(new Option(f.title,key));if(d.families.constrained)$('family').value='constrained';samples()}).catch(e=>$('error').textContent=e.message);$('family').onchange=samples;$('sample').onchange=render;$('age').onchange=render;
 </script></html>'''
@@ -75,7 +75,8 @@ def main():
         ('constrained','latent-constrained','限制细节变化的单图修正','复用重建锚点；只优化前8层潜变量，并约束感知差异及颜色。'),
         ('age_texture','age-texture','基线v1之后：纹理与年龄约束','冻结已确认基线；两因素对照：细节层年龄改动减半、多视图年龄约束。没有对输出做模糊。'),
         ('texture_validation','texture-validation','追加样例复核','实际后端代码在追加11张输入上的配对结果。'),
-        ('external','external-results','新增32张外部测试','官方APPA测试照，保留低清晰度及旧照片；基线与细节控制候选分别保留。')]:
+        ('external','external-results','新增32张外部测试','官方APPA测试照，保留低清晰度及旧照片；基线与细节控制候选分别保留。'),
+        ('chroma','chroma-repair','新增测试：针对颜色漂移修正','同一锚点、相同步数，仅增加低频色度损失；原始GAN输出，没有粘贴或后处理。')]:
         path=run/subfolder/'report.json'
         if not path.exists():continue
         report=json.loads(path.read_text());names={r['name'] for r in report['outputs']}
