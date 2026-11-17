@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>高清人像 · 年龄手记</title>
+<link rel="stylesheet" href="hd-demo.css">
+</head>
+<body>
+<header><a class="brand" href="./">年龄手记</a><nav><a href="./">拍摄 / 上传</a><a href="./人脸年龄变换原型_v5.html?mode=live&amp;experience=mirror">镜子模式</a></nav></header>
+<main>
+<div class="heading"><div><p class="eyebrow">高清人像样例</p><h1>看看不同人生阶段</h1></div><p id="intro">正在读取样例…</p></div>
+<p class="muted">同一基线的真实生成留档。选择人像和年龄即可对比；处理自己的照片请返回“拍摄 / 上传”。</p>
+<p class="notice" id="status" role="status" aria-live="polite">加载中</p>
+<section id="viewer" hidden aria-label="年龄变化对比">
+ <div class="viewer-bar"><div><h2 id="personTitle"></h2><p id="personMeta" class="muted"></p></div><div class="color-options" role="group" aria-label="结果色彩"><button data-color="raw" aria-pressed="true">原始模型</button><button data-color="preserved" aria-pressed="false">原照保色</button></div></div>
+ <div class="portraits"><figure><button class="photo" id="zoomSource" aria-label="放大原照"><img id="sourceImage" alt="选中样例的高清原照" width="1024" height="1024"></button><figcaption><span>原照</span><a id="downloadSource" download>下载原照 PNG</a></figcaption></figure><figure><button class="photo" id="zoomResult" aria-label="放大生成结果"><img id="resultImage" alt="真实模型生成的年龄外观" width="1024" height="1024"></button><figcaption><span id="resultLabel"></span><a id="downloadResult" download>下载 1024 PNG</a></figcaption></figure></div>
+ <div class="age-bar"><button id="previousAge" aria-label="上一个年龄">←</button><div id="ageOptions" role="group" aria-label="目标年龄"></div><button id="nextAge" aria-label="下一个年龄">→</button><button id="play" aria-pressed="false">自动轮播</button></div>
+ <p class="muted" id="timing"></p><p class="credit" id="credit"></p>
+</section>
+<section aria-label="选择高清样例">
+ <div class="filters"><h2>选择人像 <small id="count"></small></h2><label>年龄段<select id="ageFilter"><option value="">全部年龄</option></select></label><label>来源性别标注<select id="genderFilter"><option value="">全部</option><option value="female">女</option><option value="male">男</option></select></label></div>
+ <div id="people" class="people"></div>
+</section>
+<details class="about"><summary>关于样例与来源</summary>
+ <p>本页展示同一基线的真实模型已生成结果；可切换原始输出与可选保色，并下载原生 1024×1024 PNG。浏览这些留档无需等待推理；处理自己的照片请返回“拍摄 / 上传”。原照经过正脸、清晰度、光照和原始人脸像素筛选，没有按生成效果挑选。</p>
+ <p>年龄区间与男女标注来自 FFHQ-Aging 人工标注；模型参考估龄是另一个数值，不是真实年龄。照片呈现多种肤色和外观，数据没有可靠的族裔标签，不按长相推断人种。儿童、青少年样例用于展示适用范围，其效果不代表已经充分验证。</p>
+ <p>原照来自 <a href="https://github.com/NVlabs/ffhq-dataset" target="_blank" rel="noopener">FFHQ（Karras 等，2019）</a>，外观年龄标注来自 FFHQ-Aging。每张照片保留作者、原链接与许可证。数据集及本页衍生样例按 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 供非商业课程演示，原照另受各自许可证约束。变更包括 FFHQ 裁剪对齐、模型年龄外观模拟和可选色度后处理。</p>
+ <p>FFHQ 与基础生成器预训练数据有重叠，本页是演示集，不是独立泛化评测。年龄变化是外观模拟，不是未来容貌预测。<a href="hd-demo-assets/demo.json" download>下载样例来源与生成记录</a></p>
+</details>
+</main>
+<dialog id="zoom"><div class="zoom-bar"><strong id="zoomTitle">原生 1024 预览</strong><button id="closeZoom" autofocus>关闭 ✕</button></div><div class="zoom-scroll"><img id="zoomImage" alt="原生分辨率人像"></div><p>图片按原生 1024 像素显示，可滚动查看。</p></dialog>
+<script src="hd-demo.js"></script>
+</body>
+</html>

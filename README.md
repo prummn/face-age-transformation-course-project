@@ -20,6 +20,8 @@
 
 ## 2026-11-11 动态年龄镜演示版
 
+[高清演示样例](integration/quality/20261117_高清演示样例.md)：另选24张1024正脸，男女各12张，儿童到老人六组年龄；原照来源、清晰度和原始人脸像素均核验。入口 `/hd-demo.html`，与原低清难例评测分开，保留原始模型与保色切换、大图和下载；演示集不作独立泛化或全族裔覆盖声明。
+
 [训练方法与权重复原说明](integration/models/训练与模型.md) · [模型 Release](https://github.com/prummn/face-age-transformation-course-project/releases/tag/models-2026-11-11)
 
 在已配置 `ssh bit-ascend` 的演示电脑上，双击 [启动年龄镜子.command](启动年龄镜子.command)。摄像头检测到人脸稳定后自动拍摄，仅上传裁切的人脸。生成结束后，年龄结果跟随实时画面中的头部位置轮播。首次开启摄像头需授权。参见[演示说明](integration/年龄镜子说明.md)。
