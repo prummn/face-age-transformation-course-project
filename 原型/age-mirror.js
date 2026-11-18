@@ -1,4 +1,4 @@
-/* Uploaded photos use a still scene. Camera results use the current video frame. */
+﻿/* Uploaded photos use a still scene. Camera results use the current video frame. */
 let liveTarget=null, previousTarget=null, changedAt=0;
 const liveLayers=new Map();
 
@@ -21,6 +21,7 @@ function drawLiveMirror(video,face,now){
  g.setTransform(scaleCos,scaleSin,-scaleSin,scaleCos,c.x-scaleCos*a.x+scaleSin*a.y,c.y-scaleSin*a.x-scaleCos*a.y);
  function layer(target,opacity){
   if(target===null||opacity<=0)return;
+  if(!resultImage(target))return; // 原照/别名页没有生成结果，只显示实时画面
   if(!liveLayers.has(target))liveLayers.set(target,pasteBack(resultImage(target),false));
   g.globalAlpha=opacity;g.drawImage(liveLayers.get(target),0,0);
  }
