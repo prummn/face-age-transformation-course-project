@@ -4,6 +4,8 @@
 
 **同学先看：[莫贝研究进展与接手指南](integration/研究进展与同学接手.md)**：做了什么、哪些改善有效／未通过、当前基线、高清效果与一键下载。新增[研究资源Release](https://github.com/prummn/face-age-transformation-course-project/releases/tag/research-mobei-2026-11-17)按需提供高清演示、固定数据、研究检查点和数值记录；默认看效果无需GPU。
 
+11 月 23 日的亚洲人脸质量专项核验了新增高清训练图，并用单卡逐项比较数据扩充、StyleGAN2 局部更新和高龄源年龄校准。见[数据审计与训练对照](integration/quality/20261123_亚洲人脸质量专项.md)和[源年龄校准与高清同人验证](integration/quality/20261123_源年龄校准与跨龄同人验证.md)。
+
 ## 莫贝研究与新机接手（2026-11-16）
 
 独立开发分支 `dev/mobei-gan-portable-20261116` 已整理 CUDA 部署适配、高清数据处理、两组100步GAN训练和固定评估。原始 Release 与线上默认模型保持原样；同龄重建略改善、跨龄身份仍有退步，有限生成器参数更新尚未显示额外收益。

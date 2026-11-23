@@ -13,6 +13,8 @@ from probe_inversion import sha256,write_json
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('run',type=Path)
     p.add_argument('--routes',nargs='+',default=['mixed','fine_direct','encoder','encoder_generator'])
+    p.add_argument('--native-cohort',action='append',default=[],help='Keep native outputs for every member of this cohort')
+    p.add_argument('--redetect-output',action='store_true',help='Measure output detection and score identity with its own 5-point alignment')
     a=p.parse_args();run=a.run
     if len(set(a.routes))!=len(a.routes) or any(not name.replace('_','').isalnum() or name.startswith('.') for name in a.routes):
         raise ValueError('Routes must be unique simple directory names')
@@ -35,9 +37,9 @@ def main():
     # Native outputs for all12 APPA, user,3 author examples, and10 stratified FFHQ; all other outputs have256 previews and metrics.
     chosen=set();counts={}
     for r in records:
-        if r['cohort']=='appa_asian_test' or r['name'] in ['uploaded','cusp_00000','cusp_00001','cusp_00002']:chosen.add(r['name'])
-        if r['cohort']=='ffhq_regression':
-            key=tuple(r['age_interval']);counts[key]=counts.get(key,0)+1
+        if r['cohort'] in ['appa_asian_test',*a.native_cohort] or r['name'] in ['uploaded','cusp_00000','cusp_00001','cusp_00002']:chosen.add(r['name'])
+        if r['cohort'] in ['ffhq_regression','regional-ffhq','annotated-ffhq']:
+            key=(r['cohort'],*r['age_interval']);counts[key]=counts.get(key,0)+1
             if counts[key]<=2:chosen.add(r['name'])
     def tensor(rgb):return torch.from_numpy(np.ascontiguousarray(rgb)).permute(2,0,1)[None].contiguous().cuda().float()/127.5-1
     def feature(rgb,face):
@@ -93,8 +95,12 @@ def main():
                     y256=F.interpolate(y,(256,256),mode='area')
                     estimate=float(age_net(y256)[0])*100
                     lp=float(perceptual(y256,x).mean())
-                    pred_feature=feature(reduced,face)
-                    cosine=float(source_feature@pred_feature) if source_feature is not None else None
+                    output_face=face
+                    if a.redetect_output:
+                        _,found=detector.detect(cv2.cvtColor(reduced,cv2.COLOR_RGB2BGR))
+                        output_face=max(found,key=lambda f:f[2]*f[3]) if found is not None else None
+                    pred_feature=feature(reduced,output_face)
+                    cosine=float(source_feature@pred_feature) if source_feature is not None and pred_feature is not None else None
                     lab=cv2.cvtColor(reduced,cv2.COLOR_RGB2LAB).astype(float)
                     roi=(slice(70,205),slice(60,196))
                     chroma=float(np.linalg.norm((lab-lab_source)[roi][:,:,1:3].mean((0,1))))
@@ -111,6 +117,7 @@ def main():
                         rgb_mae=float(np.abs(reduced.astype(float)-small).mean()),
                         model_seconds=seconds,native_size=[1024,1024],native=native_path,
                         preview=str((folder/(file+'_preview.png')).relative_to(out)))
+                    if a.redetect_output:row['output_face_detected']=output_face is not None
                     report['outputs'].append(row)
             if (index+1)%10==0:print('EVAL',route,index+1,len(records),flush=True)
             write_json(out/'report.partial.json',report)

@@ -66,6 +66,8 @@ def main():
     p.add_argument('--generator-scope',choices=['affines','mid_convs'],default='affines')
     p.add_argument('--generator-lr',type=float,help='Explicit generator LR; default is encoder LR times0.1')
     p.add_argument('--seed',type=int,default=20261112)
+    p.add_argument('--pair-conditions-by-stratum',action='store_true',
+                   help='Hold sampling strata, flips and target draws fixed across unequal dataset sizes')
     p.add_argument('--execute',action='store_true')
     args=p.parse_args();training,evaluation=validate(args)
     plan=dict(arm=args.arm,steps=args.steps,batch_size=args.batch_size,lr=args.lr,seed=args.seed,
@@ -129,13 +131,21 @@ def main():
     bins={}
     for i,r in enumerate(training):bins.setdefault(tuple(r['age_interval']),[]).append(i)
     bin_keys=sorted(bins)
+    plan['pair_conditions_by_stratum']=args.pair_conditions_by_stratum
+    write_json(args.output/'plan.json',plan)
     yy,xx=torch.meshgrid(torch.linspace(0,1,512,device='cuda'),torch.linspace(0,1,512,device='cuda'),indexing='ij')
     weight=(.2+.8*((1-((xx-.5)/.31)**2-((yy-.53)/.36)**2)/.25).clamp(0,1))[None,None]
     used=set()
     def conditioned(x,a):return torch.cat([x,a[:,None,None,None].expand(-1,1,256,256)],1)
     def decode(code):return net(code,input_code=True,input_is_full=True,randomize_noise=False,resize=False)
     for step in range(args.steps):
-        indices=[rng.choice(bins[bin_keys[rng.randrange(len(bin_keys))]]) for _ in range(args.batch_size)]
+        if args.pair_conditions_by_stratum:
+            def sample():
+                pool=bins[bin_keys[int(rng.random()*len(bin_keys))]]
+                return pool[int(rng.random()*len(pool))]
+            indices=[sample() for _ in range(args.batch_size)]
+        else:
+            indices=[rng.choice(bins[bin_keys[rng.randrange(len(bin_keys))]]) for _ in range(args.batch_size)]
         used.update(indices)
         flips=[rng.random()<.5 for _ in indices]
         ages=[rng.uniform(.2,.75) for _ in indices]
@@ -173,6 +183,9 @@ def main():
         opt.step()
         point=dict(step=step+1,indices=indices,flips=flips,source=source.tolist(),target=target.tolist(),
                    loss=float(loss.detach()),same=float(loss_same.detach()),age=float(loss_age.detach()),highres_l1=float(highres.detach()),target_identity=float(loss_id.detach()),latent_trust=float(loss_latent.detach()),grad_norm=float(norm))
+        if args.pair_conditions_by_stratum:
+            point.update(strata=[training[i]['age_interval'] for i in indices],
+                         collections=[training[i].get('collection','original-ffhq') for i in indices])
         logs.append(point)
         with (args.output/'train.jsonl').open('a') as stream:stream.write(json.dumps(point)+'\n')
         if step==0 or (step+1)%20==0:print(json.dumps(point),flush=True)
