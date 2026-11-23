@@ -3,10 +3,11 @@ import time
 
 
 class LatentQuality:
-    def __init__(self,engine,mode):
+    def __init__(self,engine,mode,resize=None):
         import lpips
         from sam_losses import IDLoss
         self.engine=engine;self.mode=mode;self.torch=engine.torch
+        self.resize=resize
         self.identity=IDLoss().to(engine.dev).eval().requires_grad_(False)
         self.perceptual=lpips.LPIPS(net='alex',verbose=False).to(engine.dev).eval().requires_grad_(False)
         for model in [engine.net,engine.identity_encoder,engine.age_net]:model.eval().requires_grad_(False)
@@ -17,6 +18,7 @@ class LatentQuality:
         import numpy as np
         import cv2
         with torch.inference_mode(False),torch.enable_grad():
+            resize=self.resize or (lambda image,size: F.interpolate(image,size,mode='area'))
             # Tensors created inside the caller's inference_mode cannot be used
             # for autograd. Create normal tensors inside this explicit scope.
             x=engine.tensor(item.aligned).contiguous()
@@ -38,7 +40,7 @@ class LatentQuality:
                 for step in range(200):
                     if step%10==0:assert_active()
                     optimizer.param_groups[0]['lr']=.02*(.2+.8*(1-step/200))
-                    y=decode(pivot);y256=F.interpolate(y,(256,256),mode='area');y512=F.interpolate(y,(512,512),mode='area')
+                    y=decode(pivot);y256=resize(y,(256,256));y512=resize(y,(512,512))
                     pixel=((y512-ref).abs()*mask).sum()/(mask.sum()*3)
                     ident=(1-(self.identity.feats(y256)*identity_reference).sum(1)).mean()
                     loss=.5*pixel+.8*self.perceptual(y256,x).mean()+.8*ident+.002*(pivot-source_code).square().mean()
@@ -64,8 +66,8 @@ class LatentQuality:
             def age_views(image):
                 return [image,F.avg_pool2d(image,3,1,1),image[:,:,8:-8,8:-8]]
             with torch.no_grad():
-                prior=F.interpolate(decode(target),(256,256),mode='area')
-                teacher=F.interpolate(decode(original),(256,256),mode='area')
+                prior=resize(decode(target),(256,256))
+                teacher=resize(decode(original),(256,256))
                 target_prob=age_logits(teacher).softmax(1)
                 if self.mode=='texture_robust':
                     target_probs=[age_logits(v).softmax(1) for v in age_views(teacher)]
@@ -75,7 +77,7 @@ class LatentQuality:
                 if step%10==0:assert_active()
                 optimizer.param_groups[0]['lr']=.012*(.2+.8*(1-step/180))
                 code=target+torch.cat([delta,torch.zeros_like(target[:,8:])],1)
-                y=F.interpolate(decode(code),(256,256),mode='area')
+                y=resize(decode(code),(256,256))
                 ident=(1-(self.identity.feats(y)*state['identity']).sum(1)).mean()
                 if self.mode=='texture_robust':
                     age_loss=sum(F.kl_div(age_logits(v).log_softmax(1),q,reduction='batchmean')

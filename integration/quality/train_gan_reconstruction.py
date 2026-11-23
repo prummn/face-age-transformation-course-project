@@ -44,7 +44,8 @@ def validate(args):
         raise ValueError('Train/eval identity overlap')
     if {r['sha256'] for r in train}&{r['sha256'] for r in evaluation}:raise ValueError('Train/eval image overlap')
     if args.output.exists():raise ValueError('Choose a new experiment output directory')
-    if not 1<=args.steps<=1000:raise ValueError('Pilot steps must be1..1000')
+    maximum_steps = 5000 if getattr(args,'real_age_head',None) else 1000
+    if not 1<=args.steps<=maximum_steps:raise ValueError(f'Steps must be 1..{maximum_steps}')
     if not 1<=args.batch_size<=8:raise ValueError('Pilot batch size must be1..8')
     if not math.isfinite(getattr(args,'target_id_weight',.1)) or getattr(args,'target_id_weight',.1)<0:
         raise ValueError('Target identity weight must be finite and nonnegative')
@@ -68,8 +69,11 @@ def main():
     p.add_argument('--seed',type=int,default=20261112)
     p.add_argument('--pair-conditions-by-stratum',action='store_true',
                    help='Hold sampling strata, flips and target draws fixed across unequal dataset sizes')
+    p.add_argument('--real-age-head',type=Path,help='Add supervision learned from human FFHQ age intervals')
+    p.add_argument('--save-steps',type=int,nargs='*',default=[])
     p.add_argument('--execute',action='store_true')
     args=p.parse_args();training,evaluation=validate(args)
+    if any(not 0<step<args.steps for step in args.save_steps):raise ValueError('Save steps must precede the final step')
     plan=dict(arm=args.arm,steps=args.steps,batch_size=args.batch_size,lr=args.lr,seed=args.seed,
               train_manifest_sha256=sha256(args.train_manifest),eval_manifest_sha256=sha256(args.eval_manifest),
               train_count=len(training),eval_count=len(evaluation),targets=[20,75],
@@ -80,6 +84,9 @@ def main():
               loss_weights=dict(mse256=1,lpips256=.5,same_id=args.same_id_weight,l1_512=.2,target_age=1,target_id=args.target_id_weight,latent_trust=.01,generator_trust=.1),
               generator_arm=args.generator_scope,
               caveats='Pilot configuration; no training until --execute. Validation sample manifests required separately.')
+    if args.real_age_head:
+        plan.update(real_age_head=dict(sha256=sha256(args.real_age_head),weight=.12),
+                    save_steps=args.save_steps)
     print(json.dumps(plan,ensure_ascii=False,indent=2))
     if not args.execute:return
     if os.environ.get('FACE_AGE_EXPERIMENT_ALLOCATION')!='1':
@@ -118,6 +125,9 @@ def main():
             if param.requires_grad:
                 generator_names.append(name);initial_generator[name]=param.detach().clone()
     age_net=AgeEst().cuda().eval().requires_grad_(False)
+    if args.real_age_head:
+        from real_age_guide import image_features, load_age_guide, ordinal_loss
+        age_guide=load_age_guide(age_net,args.real_age_head)
     identity=IDLoss().cuda().eval().requires_grad_(False)
     perception=lpips.LPIPS(net='alex',verbose=False).cuda().eval().requires_grad_(False)
     generator_params=[q for q in net.decoder.parameters() if q.requires_grad]
@@ -170,11 +180,19 @@ def main():
         same=F.interpolate(same_native,(256,256),mode='area');edited=F.interpolate(edited_native,(256,256),mode='area')
         highres=((F.interpolate(same_native,(512,512),mode='area')-reference).abs()*weight).sum()/(weight.sum()*3*args.batch_size)
         loss_same=.2*highres+F.mse_loss(same,x)+.5*perception(same,x).mean()+args.same_id_weight*(1-identity.cos(same,x)).mean()
-        loss_age=F.mse_loss(age_net(edited)[0],target)
+        if args.real_age_head:
+            feature_age=image_features(age_net,edited)
+            predicted_age=age_net.net.age(feature_age).float().softmax(1)@age_net.mid
+        else:
+            predicted_age=age_net(edited)[0]
+        loss_age=F.mse_loss(predicted_age,target)
         loss_id=args.target_id_weight*(1-identity.cos(edited,x)).mean()
         loss_latent=.01*(code_target-teacher_target).square().mean()
         trust=sum((q-initial_generator[n]).square().mean() for n,q in net.decoder.named_parameters() if q.requires_grad)
         loss=loss_same+loss_age+loss_id+loss_latent+.1*trust
+        if args.real_age_head:
+            loss_real_age=ordinal_loss(age_guide(feature_age),target)
+            loss=loss+.12*loss_real_age
         if not torch.isfinite(loss):raise RuntimeError('Nonfinite training loss')
         opt.zero_grad(set_to_none=True);loss.backward()
         parameters=[q for group in groups for q in group['params']]
@@ -186,8 +204,12 @@ def main():
         if args.pair_conditions_by_stratum:
             point.update(strata=[training[i]['age_interval'] for i in indices],
                          collections=[training[i].get('collection','original-ffhq') for i in indices])
+        if args.real_age_head:
+            point['real_age_ordinal']=float(loss_real_age.detach())
         logs.append(point)
         with (args.output/'train.jsonl').open('a') as stream:stream.write(json.dumps(point)+'\n')
+        if step+1 in args.save_steps:
+            torch.save({k:v.cpu() for k,v in net.encoder.state_dict().items()},args.output/f'encoder_step{step+1}.pt')
         if step==0 or (step+1)%20==0:print(json.dumps(point),flush=True)
     encoder_delta=max(float((p.detach()-dict(teacher.named_parameters())[n]).abs().max()) for n,p in net.encoder.named_parameters())
     if encoder_delta==0:raise RuntimeError('Encoder did not update')

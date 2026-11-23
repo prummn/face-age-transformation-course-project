@@ -30,8 +30,19 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('output', type=Path)
     parser.add_argument('--demographics', type=Path, help='Author-published FFHQ_Demographics.csv')
-    parser.add_argument('--exclude-plan', type=Path)
+    parser.add_argument('--exclude-plan', type=Path, action='append', default=[])
+    parser.add_argument('--train-per-stratum', type=int)
+    parser.add_argument('--eval-per-stratum', type=int)
+    parser.add_argument('--workers',type=int,default=6,choices=range(1,13))
+    parser.add_argument('--min-age',type=int,default=20)
+    parser.add_argument('--all-locations',action='store_true',help='Select by apparent age without a demographic or location filter')
     args = parser.parse_args()
+    if args.all_locations and args.demographics:
+        parser.error('Choose either all locations or author visual annotations')
+    if any(cap is not None and cap < 0 for cap in (args.train_per_stratum,args.eval_per_stratum)):
+        parser.error('Stratum caps must be nonnegative')
+    if args.min_age < 20:
+        parser.error('This collector uses adult apparent-age intervals')
     out = args.output.resolve()
     source = ROOT / 'deployment/data-research/20261113'
     original = ROOT / 'deployment/training-data/ffhq-adult-v2'
@@ -45,8 +56,8 @@ def main():
     exclude = {r['image_id'] for r in json.loads((original / 'collection-plan.json').read_text())['samples']}
     demo = ROOT / 'deployment/demo-hd/20261117-reviewed/inputs.json'
     exclude.update(r['image_id'] for r in json.loads(demo.read_text()))
-    if args.exclude_plan:
-        exclude.update(r['image_id'] for r in json.loads(args.exclude_plan.read_text())['samples'])
+    for exclude_plan in args.exclude_plan:
+        exclude.update(r['image_id'] for r in json.loads(exclude_plan.read_text())['samples'])
     demographic_asian = set()
     if args.demographics:
         with args.demographics.open(encoding='utf-8-sig') as f:
@@ -65,9 +76,9 @@ def main():
             info = item['metadata']
             rect = item['in_the_wild']['face_rect']
             edge = min(rect[2] - rect[0], rect[3] - rect[1])
-            source_match = (number in demographic_asian if args.demographics
-                            else info['country'].strip().casefold() in COUNTRIES)
-            if (number in exclude or low < 20 or edge < 512
+            source_match = (args.all_locations or (number in demographic_asian if args.demographics
+                            else info['country'].strip().casefold() in COUNTRIES))
+            if (number in exclude or low < args.min_age or edge < 512
                 or not source_match
                 or float(row['age_group_confidence']) < .6
                 or abs(float(row['head_yaw'])) > 20 or abs(float(row['head_pitch'])) > 15
@@ -84,7 +95,10 @@ def main():
     for (split, age, gender), rows in sorted(groups.items()):
         rows.sort(key=lambda r: r['image_id'])
         rng.shuffle(rows)
-        cap = (36 if split == 'training' else 8) if args.demographics else (68 if split == 'training' else 16)
+        if split == 'training':
+            cap = args.train_per_stratum if args.train_per_stratum is not None else (36 if args.demographics else 68)
+        else:
+            cap = args.eval_per_stratum if args.eval_per_stratum is not None else (8 if args.demographics else 16)
         selected.extend(rows[:cap])
     out.mkdir(parents=True, exist_ok=True)
     (out / 'native1024').mkdir(exist_ok=True)
@@ -93,6 +107,8 @@ def main():
     if args.demographics:
         plan.update(scope='Published broad Asian visual annotation; no self-identified ethnicity',
                     demographics_sha256=sha256(args.demographics))
+    elif args.all_locations:
+        plan['scope'] = 'Published apparent-age intervals across all capture locations'
     plan_path = out / 'plan.json'
     if plan_path.exists() and json.loads(plan_path.read_text()) != plan:
         raise ValueError('Frozen selection changed')
@@ -129,7 +145,7 @@ def main():
                 time.sleep(1)
 
     results = []
-    with ThreadPoolExecutor(max_workers=6) as executor:
+    with ThreadPoolExecutor(max_workers=args.workers) as executor:
         for result in executor.map(fetch, selected):
             results.append(result)
             if len(results) % 25 == 0:

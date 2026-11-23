@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "repository": "prummn/face-age-transformation-course-project",
+  "release_tag": "research-mobei-age-supervision-2026-11-23",
+  "source_branch": "dev/mobei-gan-portable-20261116",
+  "source_base_commit": "e0979c5a13ef87a6e083a182e3d1c909b5482ecd",
+  "groups": {
+    "weights": "Trained adult apparent-age head and 3,000-step SAM encoder research checkpoint.",
+    "evidence": "Aggregate evaluation, training settings, licensing and FFHQ sources."
+  },
+  "items": [
+    {
+      "id": "age-guide.pt",
+      "group": "weights",
+      "format": "file",
+      "filename": "age-guide.pt",
+      "bytes": 405010,
+      "sha256": "6b8f392b00a0475ed27179aa3b7f9415e62ee7f326339048d1d84d386aac4967",
+      "files": [
+        {
+          "path": "deployment/shared-research/age-supervision/age-guide.pt",
+          "bytes": 405010,
+          "sha256": "6b8f392b00a0475ed27179aa3b7f9415e62ee7f326339048d1d84d386aac4967"
+        }
+      ],
+      "assets": [
+        {
+          "name": "age-guide.pt",
+          "bytes": 405010,
+          "sha256": "6b8f392b00a0475ed27179aa3b7f9415e62ee7f326339048d1d84d386aac4967",
+          "tag": "research-mobei-age-supervision-2026-11-23"
+        }
+      ],
+      "status": "Course research candidate. Check the comparison report for selection and supported usage."
+    },
+    {
+      "id": "encoder-step3000.pt",
+      "group": "weights",
+      "format": "file",
+      "filename": "encoder-step3000.pt",
+      "bytes": 1068834968,
+      "sha256": "e04b7e91e6b6da9a1b2918fccd395765a4cc976ca395107218863cc67c43b788",
+      "files": [
+        {
+          "path": "deployment/shared-research/age-supervision/encoder-step3000.pt",
+          "bytes": 1068834968,
+          "sha256": "e04b7e91e6b6da9a1b2918fccd395765a4cc976ca395107218863cc67c43b788"
+        }
+      ],
+      "assets": [
+        {
+          "name": "encoder-step3000.pt.part000",
+          "bytes": 134217728,
+          "sha256": "24f2e8420d4690a6d4f41538c9642855ce7568b7e3998c5cf3a5d2d150362d7e",
+          "tag": "research-mobei-age-supervision-2026-11-23"
+        },
+        {
+          "name": "encoder-step3000.pt.part001",
+          "bytes": 134217728,
+          "sha256": "e56484fd90a4850c5521bf488d23d72af75ed3222e94827634e62b940b990695",
+          "tag": "research-mobei-age-supervision-2026-11-23"
+        },
+        {
+          "name": "encoder-step3000.pt.part002",
+          "bytes": 134217728,
+          "sha256": "8c9233f0b4152a1893077471b1a4ee3d9e15d50bcbc4c180b23bbc239fdc5f17",
+          "tag": "research-mobei-age-supervision-2026-11-23"
+        },
+        {
+          "name": "encoder-step3000.pt.part003",
+          "bytes": 134217728,
+          "sha256": "625d9bd9cc2989da4580cdc8580937a4f6ff96cf5c81a0e3873cfe0b7f1936ea",
+          "tag": "research-mobei-age-supervision-2026-11-23"
+        },
+        {
+          "name": "encoder-step3000.pt.part004",
+          "bytes": 134217728,
+          "sha256": "7e2e761dc41b33fc92f64e3a0c8e6060e20e1ffc75f467e9f6ed37138ed69b16",
+          "tag": "research-mobei-age-supervision-2026-11-23"
+        },
+        {
+          "name": "encoder-step3000.pt.part005",
+          "bytes": 134217728,
+          "sha256": "6720a16a388e892551031def9006c57b00ace88273b4d9bcb0ec360778d0e9aa",
+          "tag": "research-mobei-age-supervision-2026-11-23"
+        },
+        {
+          "name": "encoder-step3000.pt.part006",
+          "bytes": 134217728,
+          "sha256": "73c394e297944b2b3dc12faa5987221119586e42b33e680c253200ec8199bdad",
+          "tag": "research-mobei-age-supervision-2026-11-23"
+        },
+        {
+          "name": "encoder-step3000.pt.part007",
+          "bytes": 129310872,
+          "sha256": "1d0e00fd575720ff3f289575196354d39b9423e90a70c5f464a0788d9923e18c",
+          "tag": "research-mobei-age-supervision-2026-11-23"
+        }
+      ],
+      "status": "Course research candidate. Check the comparison report for selection and supported usage."
+    },
+    {
+      "id": "results.json",
+      "group": "evidence",
+      "format": "file",
+      "filename": "results.json",
+      "bytes": 18578,
+      "sha256": "7b13f29a08bf49f20822a185bbe75fea038542f55ea31873190c8bfc4169c11a",
+      "files": [
+        {
+          "path": "deployment/shared-research/age-supervision/results.json",
+          "bytes": 18578,
+          "sha256": "7b13f29a08bf49f20822a185bbe75fea038542f55ea31873190c8bfc4169c11a"
+        }
+      ],
+      "assets": [
+        {
+          "name": "results.json",
+          "bytes": 18578,
+          "sha256": "7b13f29a08bf49f20822a185bbe75fea038542f55ea31873190c8bfc4169c11a",
+          "tag": "research-mobei-age-supervision-2026-11-23"
+        }
+      ],
+      "status": "Aggregate results with no source portraits or individual test records."
+    },
+    {
+      "id": "ffhq-sources.json",
+      "group": "evidence",
+      "format": "file",
+      "filename": "ffhq-sources.json",
+      "bytes": 1303957,
+      "sha256": "f15b1a8445642e540421eaa23c2d3fb5bf32598b82c34eafdd0126bbf4de0379",
+      "files": [
+        {
+          "path": "deployment/shared-research/age-supervision/ffhq-sources.json",
+          "bytes": 1303957,
+          "sha256": "f15b1a8445642e540421eaa23c2d3fb5bf32598b82c34eafdd0126bbf4de0379"
+        }
+      ],
+      "assets": [
+        {
+          "name": "ffhq-sources.json",
+          "bytes": 1303957,
+          "sha256": "f15b1a8445642e540421eaa23c2d3fb5bf32598b82c34eafdd0126bbf4de0379",
+          "tag": "research-mobei-age-supervision-2026-11-23"
+        }
+      ],
+      "status": "Dataset source and age-interval manifest. No image bytes included."
+    },
+    {
+      "id": "ffhq-comparison.jpg",
+      "group": "evidence",
+      "format": "file",
+      "filename": "ffhq-comparison.jpg",
+      "bytes": 426708,
+      "sha256": "86f13de5ce19225961ae6b0bda523954bb1345f9fdc2709eb76386e864a7ca51",
+      "files": [
+        {
+          "path": "deployment/shared-research/age-supervision/ffhq-comparison.jpg",
+          "bytes": 426708,
+          "sha256": "86f13de5ce19225961ae6b0bda523954bb1345f9fdc2709eb76386e864a7ca51"
+        }
+      ],
+      "assets": [
+        {
+          "name": "ffhq-comparison.jpg",
+          "bytes": 426708,
+          "sha256": "86f13de5ce19225961ae6b0bda523954bb1345f9fdc2709eb76386e864a7ca51",
+          "tag": "research-mobei-age-supervision-2026-11-23"
+        }
+      ],
+      "status": "Source-attributed, resized comparison of two FFHQ study examples."
+    },
+    {
+      "id": "ffhq-comparison-credits.json",
+      "group": "evidence",
+      "format": "file",
+      "filename": "ffhq-comparison-credits.json",
+      "bytes": 887,
+      "sha256": "ff1eaf6753ee5ac680823017518b2d81d094f0c70b5fa18ce74d783b5ef0d35c",
+      "files": [
+        {
+          "path": "deployment/shared-research/age-supervision/ffhq-comparison-credits.json",
+          "bytes": 887,
+          "sha256": "ff1eaf6753ee5ac680823017518b2d81d094f0c70b5fa18ce74d783b5ef0d35c"
+        }
+      ],
+      "assets": [
+        {
+          "name": "ffhq-comparison-credits.json",
+          "bytes": 887,
+          "sha256": "ff1eaf6753ee5ac680823017518b2d81d094f0c70b5fa18ce74d783b5ef0d35c",
+          "tag": "research-mobei-age-supervision-2026-11-23"
+        }
+      ],
+      "status": "Source-attributed, resized comparison of two FFHQ study examples."
+    },
+    {
+      "id": "SAM-LICENSE.txt",
+      "group": "evidence",
+      "format": "file",
+      "filename": "SAM-LICENSE.txt",
+      "bytes": 1068,
+      "sha256": "966ec903a9efd640e248743d877cc538c2a8e384ff533d3cfacc3a3bf152f3d5",
+      "files": [
+        {
+          "path": "deployment/shared-research/age-supervision/SAM-LICENSE.txt",
+          "bytes": 1068,
+          "sha256": "966ec903a9efd640e248743d877cc538c2a8e384ff533d3cfacc3a3bf152f3d5"
+        }
+      ],
+      "assets": [
+        {
+          "name": "SAM-LICENSE.txt",
+          "bytes": 1068,
+          "sha256": "966ec903a9efd640e248743d877cc538c2a8e384ff533d3cfacc3a3bf152f3d5",
+          "tag": "research-mobei-age-supervision-2026-11-23"
+        }
+      ],
+      "status": "SAM upstream MIT notice."
+    }
+  ]
+}

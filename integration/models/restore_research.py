@@ -162,7 +162,10 @@ def main():
             size=sum(x['bytes'] for x in manifest['items'] if x['group']==key)
             print(f'{key}: {size/1024**3:.3f} GiB — {spec}')
         return
-    root=a.root.resolve();cache=root/'deployment/release-cache'/TAG;cache.mkdir(parents=True,exist_ok=True)
+    tag=manifest.get('release_tag',TAG)
+    if not isinstance(tag,str) or not tag or tag in ('.','..') or '/' in tag or '\\' in tag:
+        raise ValueError('Invalid research release cache name')
+    root=a.root.resolve();cache=root/'deployment/release-cache'/tag;cache.mkdir(parents=True,exist_ok=True)
     for item in items:
         if installed(root,item):print('VERIFIED existing',item['id'],flush=True);continue
         if a.verify_only:raise SystemExit('Missing files: '+item['id'])
