@@ -48,7 +48,7 @@ def main():
         cases.append(item)
     labels=dict(wplus_base='W+ 基线',highres_control='高清重建适配',highres_patch_gan='高清重建＋局部 GAN',direct_latent='直接编码潜变量训练',matched_wplus='匹配 W+ 潜变量训练')
     labels.update(conditional_control='年龄条件适配＋年龄保护',conditional_gan='年龄条件适配＋年龄保护＋局部 GAN')
-    labels.update(native_control='全量高清重建与年龄保护',native_gan='全量高清重建＋RGB局部GAN',prior_control='细层潜变量再拟合对照',pretrained_D='细层潜变量＋预训练判别器')
+    labels.update(native_control='全量高清重建与年龄保护',native_gan='全量高清重建＋RGB局部GAN',prior_control='细层潜变量再拟合对照',pretrained_D='细层潜变量＋预训练判别器',original_delta='同锚点＋原SAM年龄差值',original_delta_constrained='原SAM差值＋跨龄约束')
     data=dict(cases=cases,note=decision['gallery_note'],labels=labels)
     (out/'index.html').write_text(PAGE.replace('__DATA__',json.dumps(data,ensure_ascii=False).replace('<','\\u003c')))
     print('TEXTURE_GALLERY_READY',len(cases),out)
