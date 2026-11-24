@@ -52,14 +52,21 @@ class LatentQuality:
                     anchor_seconds=time.monotonic()-started)
             state=item.quality_state
             with torch.no_grad():
-                original=state['base']+engine.identity_encoder(condition(target_age))
-                target=state['anchor']+original-state['source']
+                if self.mode=='original_delta':
+                    # Preserve the fitted reconstruction. Use the original SAM
+                    # displacement and historical hybrid teacher for aging.
+                    direction=engine.net.encoder(condition(target_age))-engine.net.encoder(condition(item.reference_age))
+                    original=state['source']+direction
+                    target=state['anchor']+direction
+                else:
+                    original=state['base']+engine.identity_encoder(condition(target_age))
+                    target=state['anchor']+original-state['source']
                 if self.mode in ('texture','texture_robust'):
                     direction=original-state['source']
                     target=state['anchor']+torch.cat([direction[:,:8],.5*direction[:,8:]],1)
             if self.mode=='anchor' or target_age==item.reference_age:
                 with torch.no_grad():return decode(target).detach()
-            if self.mode not in ('constrained','texture','texture_robust'):raise RuntimeError('Unknown quality profile')
+            if self.mode not in ('constrained','texture','texture_robust','original_delta'):raise RuntimeError('Unknown quality profile')
             def age_logits(image):
                 value=F.interpolate((image+1)/2,(224,224),mode='bilinear',align_corners=False)
                 return engine.age_net.net((value-engine.age_net.m)/engine.age_net.sd)[2].float()

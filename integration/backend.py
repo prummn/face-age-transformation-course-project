@@ -32,6 +32,8 @@ from pydantic import BaseModel, Field
 VERSION = "1.4.0"
 QUALITY_PROFILE = os.environ.get("FACE_AGE_QUALITY", "original")
 MODEL_NAME = "ft_l1 + SAM age direction" if QUALITY_PROFILE == "original" else "ft_l1 direct + identity/perceptual W+ " + QUALITY_PROFILE
+if QUALITY_PROFILE == "original_delta":
+    MODEL_NAME = "ft_l1 W+ anchor + original SAM age direction + constrained refinement (experimental)"
 BASE = Path(os.environ.get("FACE_AGE_BASE", "/data/home/1120231322/scow/face-age"))
 WEB_BASE = Path(os.environ.get("FACE_AGE_WEB_BASE", "/data/home/1120231322/scow/face-age-web"))
 MAX_IMAGE_BYTES = 15 * 1024 * 1024
@@ -284,7 +286,7 @@ class SamePersonEngine:
             self.age_net = AgeEst().to(self.dev).eval()
             self.quality_refiner = None
             if QUALITY_PROFILE != "original":
-                if QUALITY_PROFILE not in ("anchor", "constrained", "texture", "texture_robust"):
+                if QUALITY_PROFILE not in ("anchor", "constrained", "texture", "texture_robust", "original_delta"):
                     raise ValueError("Unknown FACE_AGE_QUALITY")
                 if not self.dev.startswith("cuda:"):
                     raise ValueError("High-quality W+ mode currently requires CUDA")

@@ -67,7 +67,7 @@ def health():
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('action', choices=['start', 'status', 'stop', 'gateway'])
-    parser.add_argument('--quality', choices=['original', 'anchor', 'constrained', 'texture', 'texture_robust'], default='original',
+    parser.add_argument('--quality', choices=['original', 'anchor', 'constrained', 'texture', 'texture_robust', 'original_delta'], default='original',
                         help='Explicit opt-in to slower per-photo W+ optimization; original weights stay unchanged')
     parser.add_argument('--max-running-duration', default='24h',
                         help='Platform GPU runtime cap, e.g. 30m for a bounded quality preview')

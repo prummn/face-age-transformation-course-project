@@ -11,7 +11,7 @@ from urllib.request import Request,urlopen
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('run',type=Path);a=p.parse_args();run=a.run
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('run',type=Path);p.add_argument('--subject',default='uploaded');a=p.parse_args();run=a.run
     import cv2
     import numpy as np
     from PIL import Image
@@ -31,7 +31,7 @@ def main():
         if time.monotonic()>deadline:raise RuntimeError('Quality backend did not become ready')
         time.sleep(.5)
     assert 'W+' in health['model']
-    row=next(x for x in json.loads((run/'latent-inputs.json').read_text()) if x['name']=='uploaded')
+    row=next(x for x in json.loads((run/'latent-inputs.json').read_text()) if x['name']==a.subject)
     filename=row.get('reference_path',row['image_path']);raw=Path(filename).read_bytes()
     rgb=np.asarray(Image.open(io.BytesIO(raw)).convert('RGB'));h,w=rgb.shape[:2]
     import os
