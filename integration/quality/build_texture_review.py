@@ -9,7 +9,7 @@ PAGE='''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="view
 <main><h1>高清纹理训练对照</h1><p id="note"></p><p><a href="/age-quality-review/">上一版年龄监督对照</a> · <a href="/">演示首页</a></p>
 <div class="controls"><label>照片<select id="subject"></select></label><label>目标<select id="age"><option value="same">同龄</option><option>20</option><option>40</option><option>60</option><option selected>75</option></select></label><label>查看区域<select id="region"><option value="full">全脸</option><option value="eye">眼周</option><option value="cheek">脸颊</option><option value="mouth">口周</option></select></label><label>颜色<select id="color"><option value="raw">原始模型输出</option><option value="color">保留原照颜色</option></select></label></div>
 <p id="detail"></p><div id="grid"></div><p id="credit"></p><small>生成图均为原生 1024 PNG，局部图直接裁剪。外观估龄不是照片真实年龄；本页是开发回归，未做盲评。</small></main><script id="data" type="application/json">__DATA__</script>
-<script>const data=JSON.parse(document.querySelector('#data').textContent),$=id=>document.getElementById(id);$('note').textContent=data.note;for(const r of data.cases)$('subject').add(new Option(r.name+' · '+(r.cohort==='new-hd-holdout'?'高清回归':'低清压力回归'),r.name));
+<script>const data=JSON.parse(document.querySelector('#data').textContent),$=id=>document.getElementById(id);$('note').textContent=data.note;for(const r of data.cases)$('subject').add(new Option(r.name+' · '+(r.native_edge>=512&&Math.min(...r.size)>=1024?'高清回归':'压力回归'),r.name));
 function render(){const r=data.cases.find(x=>x.name==$('subject').value),region=$('region').value,color=$('color').value,age=$('age').value;const images=[{title:'原照',...r.reference},...r.outputs.filter(x=>x.condition==age).map(x=>({title:data.labels[x.route],metric:[x.identity!=null?'身份相似度 '+x.identity.toFixed(3):'',x.age!=null?'独立外观估龄 '+x.age.toFixed(1):''].filter(Boolean).join(' · '),...x[color]}))];$('detail').textContent='对齐原照 '+r.size.join('×')+(r.native_edge!=null?'；原始脸区短边约 '+Math.round(r.native_edge)+' 像素':'')+'；所有路线使用相同 W+ 潜变量；生成器适配可单独卸载。';$('grid').replaceChildren();for(const x of images){const f=document.createElement('figure'),img=document.createElement('img'),cap=document.createElement('figcaption'),m=document.createElement('p'),a=document.createElement('a');img.src=x[region];img.alt=x.title;cap.textContent=x.title;m.className='metric';m.textContent=x.metric||'';a.href=x.native;a.download='';a.textContent='下载完整 PNG';f.append(img,cap,m,a);$('grid').append(f)}$('credit').replaceChildren();if(r.credit){const a=document.createElement('a');a.href=r.credit;a.textContent='照片来源与署名';a.target='_blank';a.rel='noopener';$('credit').append(a)}}for(const id of ['subject','age','region','color'])$(id).onchange=render;render();</script></html>'''
 
 
@@ -48,7 +48,7 @@ def main():
         cases.append(item)
     labels=dict(wplus_base='W+ 基线',highres_control='高清重建适配',highres_patch_gan='高清重建＋局部 GAN',direct_latent='直接编码潜变量训练',matched_wplus='匹配 W+ 潜变量训练')
     labels.update(conditional_control='年龄条件适配＋年龄保护',conditional_gan='年龄条件适配＋年龄保护＋局部 GAN')
-    labels.update(native_control='全量高清重建与年龄保护',native_gan='全量高清重建＋RGB局部GAN')
+    labels.update(native_control='全量高清重建与年龄保护',native_gan='全量高清重建＋RGB局部GAN',prior_control='细层潜变量再拟合对照',pretrained_D='细层潜变量＋预训练判别器')
     data=dict(cases=cases,note=decision['gallery_note'],labels=labels)
     (out/'index.html').write_text(PAGE.replace('__DATA__',json.dumps(data,ensure_ascii=False).replace('<','\\u003c')))
     print('TEXTURE_GALLERY_READY',len(cases),out)

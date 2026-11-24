@@ -18,7 +18,8 @@ with sync_playwright() as pw:
     with page.expect_download() as pending:page.locator('#grid figure').nth(1).locator('a').click()
     download=pending.value;path=a.run/'browser-download.png';download.save_as(path)
     subprocess.run(['/usr/bin/python3','-c',"from PIL import Image;import sys;im=Image.open(sys.argv[1]);im.load();assert im.format=='PNG' and im.size==(1024,1024)",str(path)],check=True)
-    if a.texture:
+    anchor_case=a.texture and page.locator('#subject option[value="appa_new_006975"]').count()>0
+    if anchor_case:
         page.locator('#subject').select_option('appa_new_006975');page.locator('#age').select_option('60')
         canonical=page.locator('#grid figure').nth(1).locator('a').get_attribute('href')
         assert canonical.endswith('_same_color.png')
@@ -30,6 +31,6 @@ with sync_playwright() as pw:
     page.wait_for_function("[...document.querySelectorAll('#grid img')].every(i=>i.complete && i.naturalWidth>0)")
     assert not errors,errors
     result=dict(url=a.url,status=200,desktop=True,photo_switch=True,age_switch=True,color_switch=True,
-        native_crops=a.texture,source_equals_target_anchor=a.texture,download_size=[1024,1024],mobile_width=390,overflow=False,errors=errors)
+        native_crops=a.texture,source_equals_target_anchor=True if anchor_case else (None if a.texture else False),download_size=[1024,1024],mobile_width=390,overflow=False,errors=errors)
     (a.run/'browser-validation.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
     browser.close()
