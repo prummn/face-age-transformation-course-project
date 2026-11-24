@@ -70,10 +70,13 @@ def main():
         if row['name'] not in ('ffhq_64376','ffhq_64919') or Path(row['file']).name!=row['file']:raise ValueError('Unexpected public example')
         source=a.public_panels/row['file'];digest=h.sha(source);size=source.stat().st_size;items.append(dict(id=row['file'],group='examples',format='file',filename=row['file'],bytes=size,sha256=digest,files=[dict(path=PREFIX+row['file'],bytes=size,sha256=digest)],assets=h.parts(source,row['file'])))
     evidence[PREFIX+'public-panel-credits.json']=generated('public-panel-credits.json',credits);items.append(h.archive('evidence',evidence))
+    original=json.loads((ROOT/'integration/models/research-20261117.json').read_text())
+    items.extend(item for item in original['items'] if item['group']=='baseline')
     manifest=dict(schema_version=1,repository='prummn/face-age-transformation-course-project',release_tag=TAG,source_branch='dev/mobei-gan-portable-20261116',source_base_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
         training_source_commit=json.loads((run/'experiment.json').read_text())['code_commit'],
+        default_groups=['evidence','examples'],
         portable_training_manifest=dict(source=PREFIX+'data/train.portable.json',destination=PREFIX+'data/train.jsonl',format='json-list'),
-        groups=dict(data='All712native training images and derived inputs/references with portable paths, hashes and source attribution; no protected evaluation images.',weights='Two partial StyleGAN2 generator parameter patches; original SAM model required; not automatically activated.',evidence='Frozen training code, paired sampling logs, full-data audit, native review decision, independent metrics and browser validation.',examples='Two source-attributed original/raw75/native-crop comparisons.'),items=items)
+        groups=dict(data='All712native training images and derived inputs/references with portable paths, hashes and source attribution; no protected evaluation images.',weights='Two partial StyleGAN2 generator parameter patches; original SAM model required; not automatically activated.',baseline='Original SAM, ft_l1, FairFace, YuNet, identity/LPIPS and SFace dependencies; reuse existing releases without duplicate uploads.',evidence='Frozen training code, paired sampling logs, full-data audit, native review decision, independent metrics and browser validation.',examples='Two source-attributed original/raw75/native-crop comparisons.'),items=items)
     h.save(ROOT/'integration/models/native-full-20261124.json',manifest);h.save(h.ASSETS/'manifest.json',manifest);(h.ASSETS/'SHA256SUMS').write_text(''.join(h.sha(path)+'  '+path.name+'\n' for path in sorted(h.ASSETS.iterdir()) if path.name!='SHA256SUMS'));print('NATIVE_RELEASE_READY',TAG,len(items),flush=True)
 
 

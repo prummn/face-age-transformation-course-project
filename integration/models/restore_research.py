@@ -162,11 +162,11 @@ def configure(root,groups,manifest=None):
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--group',action='append',help='demo (default), baseline, data, evidence, weights100, weights500, weights800')
+    p.add_argument('--group',action='append',help='Download group; use --list for this manifest. Default: manifest default_groups, otherwise demo.')
     p.add_argument('--root',type=Path,default=Path(__file__).resolve().parents[2])
     p.add_argument('--manifest',type=Path,default=Path(__file__).with_name('research-20261117.json'))
     p.add_argument('--list',action='store_true');p.add_argument('--verify-only',action='store_true')
-    a=p.parse_args();manifest=json.loads(a.manifest.read_text());groups=a.group or ['demo']
+    a=p.parse_args();manifest=json.loads(a.manifest.read_text());groups=a.group or manifest.get('default_groups',['demo'])
     if a.list:
         for key,spec in manifest['groups'].items():
             size=sum(x['bytes'] for x in manifest['items'] if x['group']==key)
