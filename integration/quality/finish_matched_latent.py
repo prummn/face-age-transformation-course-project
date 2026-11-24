@@ -84,6 +84,7 @@ def main():
             import numpy as np
             from PIL import Image
             report=json.loads((run/'evaluation/report.json').read_text())
+            if report.get('conditional_decode_batch_size')!=5 or report.get('zero_gate_parameters_exact') is not True:raise ValueError('Conditional evaluation must use baseline batch shape and exact zero-gate parameters')
             baselines={(x['name'],x['condition']):x for x in report['outputs'] if x['route']=='wplus_base'}
             checks=[]
             for row in report['outputs']:
@@ -92,10 +93,10 @@ def main():
                 with Image.open(run/'evaluation'/base['native']) as im:reference=np.asarray(im.convert('RGB')).astype(np.int16)
                 with Image.open(run/'evaluation'/row['native']) as im:output=np.asarray(im.convert('RGB')).astype(np.int16)
                 maximum=int(np.abs(reference-output).max())
-                if maximum>1:raise ValueError('Zero-gate output changed beyond single-vs-batch rounding: '+row['name'])
+                if maximum!=0:raise ValueError('Same-shape zero-gate PNG changed: '+row['name'])
                 checks.append(dict(name=row['name'],route=row['route'],condition=row['condition'],max_rgb8_difference=maximum))
             if len(checks)!=60:raise ValueError('Missing young-age invariance checks')
-            atomic(run/'young-age-invariance.json',dict(checked=len(checks),maximum_difference=max(x['max_rgb8_difference'] for x in checks),checks=checks))
+            atomic(run/'young-age-invariance.json',dict(checked=len(checks),same_batch_shape=True,parameter_identity_exact=True,maximum_difference=max(x['max_rgb8_difference'] for x in checks),checks=checks))
         command(sys.executable,ROOT/'integration/quality/summarize_highres_texture.py',run)
         command(args.age_python,ROOT/'integration/quality/check_independent_age.py','--model',ROOT/'deployment/asia-adaptation/20261123/mivolo_v2_age.onnx',
             '--sources',run/'independent-age-inputs.json','--out',run/'independent-age.json')

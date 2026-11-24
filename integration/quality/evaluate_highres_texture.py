@@ -11,7 +11,10 @@ from probe_inversion import sha256,write_json
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('run',type=Path);a=p.parse_args();run=a.run.resolve()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('run',type=Path)
+    p.add_argument('--output-name',default='evaluation')
+    a=p.parse_args();run=a.run.resolve()
+    if Path(a.output_name).name!=a.output_name or a.output_name in ('','.','..'):raise ValueError('Output must be a child directory')
     experiment=json.loads((run/'experiment.json').read_text())
     reuse=Path(experiment['fixed_code_run']) if experiment.get('fixed_code_run') else None
     old_report=json.loads((reuse/'evaluation/report.json').read_text()) if reuse else None
@@ -57,9 +60,9 @@ def main():
         bgr=cv2.cvtColor(small(rgb),cv2.COLOR_RGB2BGR);_,faces=detector.detect(bgr)
         if faces is None:return None
         face=max(faces,key=lambda f:f[2]*f[3]);v=sf.feature(sf.alignCrop(bgr,face)).ravel();return v/(np.linalg.norm(v)+1e-12)
-    out=run/'evaluation';out.mkdir(exist_ok=False)
+    out=run/a.output_name;out.mkdir(exist_ok=False)
     records=json.loads((run/'selection.json').read_text());routes=['wplus_base',*patches]
-    report=dict(records=records,routes=routes,outputs=[],timings=[],comparison='Identical frozen W+ source/target codes for all generator routes; no candidate-specific fitting',
+    report=dict(records=records,routes=routes,outputs=[],timings=[],conditional_decode_batch_size=5,zero_gate_parameters_exact=True,comparison='Identical frozen W+ source/target codes and batch shape for all generator routes; no candidate-specific fitting',
         caveats=['Exploratory FFHQ regression and broad publisher Asian APPA annotation; no new ethnicity inference.','MiVOLO age is an appearance estimate. Local statistics do not establish realistic texture.'])
     started=time.monotonic()
     for row in records:
@@ -102,12 +105,20 @@ def main():
             apply(original if route=='wplus_base' else patches[route]);t=time.monotonic()
             with torch.no_grad():
                 if experiment.get('age_conditioned') and route!='wplus_base':
-                    generated=[]
-                    for code,target in zip(codes,[source,*targets]):
+                    generated=[];by_gate={}
+                    for index,target in enumerate([source,*targets]):
                         gate=max(0,min(1,(target-40)/35))
-                        state={n:original[n]+gate*(value-original[n]) for n,value in patches[route].items()}
-                        apply(state);generated.append(decode(code[None]))
+                        if gate not in by_gate:
+                            state=original if gate==0 else {n:original[n]+gate*(value-original[n]) for n,value in patches[route].items()}
+                            apply(state)
+                            if gate==0 and not all(torch.equal(named[n],value) for n,value in original.items()):raise ValueError('Zero gate altered generator parameters')
+                            # Fused modulated convolution depends numerically on its
+                            # group/batch shape. Decode the same five codes as the
+                            # baseline so zero-gate PNG equality is a strict check.
+                            by_gate[gate]=decode(codes)
+                        generated.append(by_gate[gate][index:index+1])
                     images=torch.cat(generated)
+                    del by_gate,generated
                 else:images=decode(codes)
             torch.cuda.synchronize();seconds=time.monotonic()-t
             for image,label,target in zip(images,['same','20','40','60','75'],[source,*targets]):
