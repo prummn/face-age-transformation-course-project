@@ -10,6 +10,15 @@ from probe_inversion import sha256,write_json
 ROOT=Path(__file__).resolve().parents[2]
 
 
+def read_state(job,ctx,job_id):
+    from yicloud.base.errs import ClientException
+    for attempt in range(3):
+        try:return job.get_job(ctx,job.models.GetJobReq(Project='fdj-infra',JobId=job_id))
+        except ClientException:
+            if attempt==2:raise
+            print('PLATFORM_READ_RETRY',attempt+1,flush=True);time.sleep(2)
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('run',type=Path);p.add_argument('--page',required=True);a=p.parse_args();run=a.run.resolve()
     if not a.page or any(c not in 'abcdefghijklmnopqrstuvwxyz0123456789-' for c in a.page):raise ValueError('Simple local page name required')
@@ -18,7 +27,7 @@ def main():
     while not (run/'DONE').exists():
         if time.monotonic()>deadline:raise TimeoutError('Diagnostic worker did not finish')
         if time.monotonic()-last>30:
-            state=job.get_job(ctx,job.models.GetJobReq(Project='fdj-infra',JobId=receipt['job_id']));last=time.monotonic()
+            state=read_state(job,ctx,receipt['job_id']);last=time.monotonic()
             if state.Phase in ('Failed','Stopped'):raise ValueError('Diagnostic job '+state.Phase+'; preserve worker.log')
         time.sleep(5)
     from PIL import Image
@@ -42,7 +51,7 @@ def main():
     from finish_native_age import link
     link(a.page,run/'gallery')
     cmd(ROOT/'deployment/control-venv/bin/python',ROOT/'integration/quality/verify_texture_review_browser.py','http://127.0.0.1:65512/'+a.page+'/',run,'--texture',timeout=180)
-    state=job.get_job(ctx,job.models.GetJobReq(Project='fdj-infra',JobId=receipt['job_id']));write_json(run/'platform-final.json',dict(job_id=receipt['job_id'],phase=state.Phase,allocated_gpus=1))
+    state=read_state(job,ctx,receipt['job_id']);write_json(run/'platform-final.json',dict(job_id=receipt['job_id'],phase=state.Phase,allocated_gpus=1))
     write_json(run/'automatic-completion.json',dict(status='ready',native_review_pending=True,numeric_guard_pass=summary['numeric_guard_pass'],default_model_changed=False,gallery='/'+a.page+'/'));print('SMALL_DIAGNOSTIC_READY',run,flush=True)
 
 
