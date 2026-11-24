@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 import struct
 import threading
-from urllib.parse import parse_qsl,urlencode,urlsplit,urlunsplit
+from urllib.parse import parse_qsl,urlencode,urlsplit,urlunsplit,urljoin
 import zipfile
 import zlib
 
@@ -94,15 +94,18 @@ class HTTPZip:
         attempts=[self.url,self.url.replace('https://huggingface.co/','https://hf.co/',1)]
         for index,url in enumerate(attempts):
             try:
-                response=requests.get(url,headers={'Range':'bytes=0-0'},allow_redirects=False,timeout=(8,15))
-                response.raise_for_status()
-                location=response.headers.get('Location')
-                if location:
-                    host=urlsplit(location).hostname or ''
-                    if not (host.endswith('.hf.co') or host.endswith('.huggingface.co')):
+                for _ in range(5):
+                    response=requests.get(url,headers={'Range':'bytes=0-0'},stream=True,allow_redirects=False,timeout=(8,15))
+                    response.raise_for_status();location=response.headers.get('Location');response.close()
+                    if not location:
+                        self.resolved_url=url;return
+                    location=urljoin(url,location);parts=urlsplit(location);host=parts.hostname or ''
+                    if parts.scheme!='https' or not (host in ('hf.co','huggingface.co') or host.endswith('.hf.co') or host.endswith('.huggingface.co')):
                         raise ValueError('Unexpected HF download host')
-                    self.resolved_url=location
-                response.close();return
+                    if host not in ('hf.co','huggingface.co'):
+                        self.resolved_url=location;return
+                    url=location
+                raise ValueError('Too many HF same-origin redirects')
             except requests.RequestException:
                 if index==len(attempts)-1:raise
 

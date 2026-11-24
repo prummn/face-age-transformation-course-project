@@ -13,10 +13,13 @@ from probe_inversion import sha256,write_json
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('run',type=Path)
     p.add_argument('--output-name',default='evaluation')
+    p.add_argument('--selection-name',default='selection.json')
+    p.add_argument('--fit-fresh-codes',action='store_true',help='Fit baseline-only codes for a separately frozen regression selection')
     a=p.parse_args();run=a.run.resolve()
     if Path(a.output_name).name!=a.output_name or a.output_name in ('','.','..'):raise ValueError('Output must be a child directory')
+    if Path(a.selection_name).name!=a.selection_name:raise ValueError('Selection must be a child file')
     experiment=json.loads((run/'experiment.json').read_text())
-    reuse=Path(experiment['fixed_code_run']) if experiment.get('fixed_code_run') else None
+    reuse=Path(experiment['fixed_code_run']) if experiment.get('fixed_code_run') and not a.fit_fresh_codes else None
     old_report=json.loads((reuse/'evaluation/report.json').read_text()) if reuse else None
     old_hashes={(o['name'],o['condition']):o['sha256'] for o in old_report['outputs'] if o['route']=='wplus_base'} if old_report else {}
     import cv2
@@ -61,7 +64,7 @@ def main():
         if faces is None:return None
         face=max(faces,key=lambda f:f[2]*f[3]);v=sf.feature(sf.alignCrop(bgr,face)).ravel();return v/(np.linalg.norm(v)+1e-12)
     out=run/a.output_name;out.mkdir(exist_ok=False)
-    records=json.loads((run/'selection.json').read_text());routes=['wplus_base',*patches]
+    records=json.loads((run/a.selection_name).read_text());routes=['wplus_base',*patches]
     report=dict(records=records,routes=routes,outputs=[],timings=[],conditional_decode_batch_size=5,zero_gate_parameters_exact=True,comparison='Identical frozen W+ source/target codes and batch shape for all generator routes; no candidate-specific fitting',
         caveats=['Exploratory FFHQ regression and broad publisher Asian APPA annotation; no new ethnicity inference.','MiVOLO age is an appearance estimate. Local statistics do not establish realistic texture.'])
     started=time.monotonic()
