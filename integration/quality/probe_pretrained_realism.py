@@ -13,7 +13,7 @@ import sys
 import time
 from probe_inversion import sha256,write_json
 
-ROOT=Path(__file__).resolve().parents[2]
+ROOT=Path(os.environ.get('FACE_AGE_REPO',Path(__file__).resolve().parents[2])).resolve()
 PRIOR_SHA='a205a346e86a9ddaae702e118097d014b7b8bd719491396a162cca438f2f524c'
 
 
