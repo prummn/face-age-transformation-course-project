@@ -64,6 +64,19 @@ def health():
         return None
 
 
+def recorded_job(job, ctx, job_id):
+    from types import SimpleNamespace
+    from yicloud.base.errs import ServerException
+    try:
+        return job.get_job(ctx, job.models.GetJobReq(Project='fdj-infra', JobId=job_id))
+    except ServerException as error:
+        # Platform AutoDeleteDuration can remove a completed job while its local
+        # receipt remains. Network/auth/other errors must still stop deployment.
+        if error.action != 'GetJob' or error.code != 105 or 'Job 不存在' not in error.message:
+            raise
+        return SimpleNamespace(Phase='Deleted', Message='Recorded job was deleted by the platform')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('action', choices=['start', 'status', 'stop', 'gateway'])
@@ -79,14 +92,14 @@ def main():
         if not state:
             print('No deployment job recorded')
             return
-        result = job.get_job(ctx, job.models.GetJobReq(Project='fdj-infra', JobId=state['job_id']))
+        result = recorded_job(job, ctx, state['job_id'])
         print(json.dumps(dict(**state, phase=result.Phase, message=result.Message, health=health()), ensure_ascii=False, indent=2))
         return
     if args.action == 'stop':
         if state:
             # A dedicated receipt is the only source of the job ID to stop.
-            result = job.get_job(ctx, job.models.GetJobReq(Project='fdj-infra', JobId=state['job_id']))
-            if result.Phase not in ['Stopped', 'Succeeded', 'Failed']:
+            result = recorded_job(job, ctx, state['job_id'])
+            if result.Phase not in ['Stopped', 'Succeeded', 'Failed', 'Deleted']:
                 job.stop_job(ctx, job.models.StopJobReq(Project='fdj-infra', JobId=state['job_id']))
             state['stop_requested'] = True
             save(STATE, state)
@@ -106,14 +119,14 @@ def main():
         # A separate SSH listener avoids this workspace's GatewayPorts=yes.
         spawn('sshd', ['/usr/sbin/sshd', '-D', '-e', '-f', str(DEPLOY / 'ssh/sshd_config')], DEPLOY / 'logs/sshd.log')
         if state:
-            result = job.get_job(ctx, job.models.GetJobReq(Project='fdj-infra', JobId=state['job_id']))
+            result = recorded_job(job, ctx, state['job_id'])
             if state.get('stop_requested'):
                 deadline = time.monotonic() + 90
-                while result.Phase not in ['Stopped', 'Succeeded', 'Failed']:
+                while result.Phase not in ['Stopped', 'Succeeded', 'Failed', 'Deleted']:
                     if time.monotonic() >= deadline:
                         raise RuntimeError('Platform stop is still pending; retry start after this job stops')
                     time.sleep(2)
-                    result = job.get_job(ctx, job.models.GetJobReq(Project='fdj-infra', JobId=state['job_id']))
+                    result = recorded_job(job, ctx, state['job_id'])
             if result.Phase in ['Running', 'Pending', 'Inqueue', 'Starting']:
                 if state.get('quality', 'original') != args.quality:
                     raise RuntimeError('Active demo uses a different quality profile; stop it before changing profiles')
