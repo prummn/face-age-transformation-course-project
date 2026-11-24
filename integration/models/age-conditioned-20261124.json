@@ -1,0 +1,613 @@
+{
+  "schema_version": 1,
+  "repository": "prummn/face-age-transformation-course-project",
+  "release_tag": "research-mobei-age-conditioned-2026-11-24",
+  "source_branch": "dev/mobei-gan-portable-20261116",
+  "source_base_commit": "781a78430a24a4f03902385c795de39fe6e6cea7",
+  "training_source_commits": {
+    "matched": "4ca8bd4ccdd9f5e9edbadde488300301b7052509",
+    "conditional": "a9a21dad51f5461be7143825c3fd48bc6f2384c9"
+  },
+  "groups": {
+    "weights": "Four unpromoted partial generator checkpoints. Conditional patches must be interpolated by target age; original SAM weights also required.",
+    "evidence": "Frozen source, training logs, independent metrics, decisions and source/quality audit. No private/APPA portrait bytes or W+ codes.",
+    "examples": "Two attributed public1024-output comparisons and unscaled native crops, research only."
+  },
+  "items": [
+    {
+      "id": "matched-direct_latent.pt",
+      "group": "weights",
+      "format": "file",
+      "filename": "matched-direct_latent.pt",
+      "bytes": 33351422,
+      "sha256": "903bc319ac96705291e125545a18dd80f3931e8486e9b1acfd3f9def2fd1e1ab",
+      "files": [
+        {
+          "path": "deployment/shared-research/age-conditioned/matched-direct_latent.pt",
+          "bytes": 33351422,
+          "sha256": "903bc319ac96705291e125545a18dd80f3931e8486e9b1acfd3f9def2fd1e1ab"
+        }
+      ],
+      "assets": [
+        {
+          "name": "matched-direct_latent.pt",
+          "bytes": 33351422,
+          "sha256": "903bc319ac96705291e125545a18dd80f3931e8486e9b1acfd3f9def2fd1e1ab",
+          "tag": "research-mobei-age-conditioned-2026-11-24"
+        }
+      ],
+      "status": "Unpromoted partial StyleGAN2 generator parameters, not a complete SAM model; conditional patches require age-dependent parameter interpolation."
+    },
+    {
+      "id": "matched-matched_wplus.pt",
+      "group": "weights",
+      "format": "file",
+      "filename": "matched-matched_wplus.pt",
+      "bytes": 33351422,
+      "sha256": "2b471de4013d140fc42484c60ee92e5729046bc433e257be1fa02ef1385c2a6b",
+      "files": [
+        {
+          "path": "deployment/shared-research/age-conditioned/matched-matched_wplus.pt",
+          "bytes": 33351422,
+          "sha256": "2b471de4013d140fc42484c60ee92e5729046bc433e257be1fa02ef1385c2a6b"
+        }
+      ],
+      "assets": [
+        {
+          "name": "matched-matched_wplus.pt",
+          "bytes": 33351422,
+          "sha256": "2b471de4013d140fc42484c60ee92e5729046bc433e257be1fa02ef1385c2a6b",
+          "tag": "research-mobei-age-conditioned-2026-11-24"
+        }
+      ],
+      "status": "Unpromoted partial StyleGAN2 generator parameters, not a complete SAM model; conditional patches require age-dependent parameter interpolation."
+    },
+    {
+      "id": "conditional-control.pt",
+      "group": "weights",
+      "format": "file",
+      "filename": "conditional-control.pt",
+      "bytes": 33351422,
+      "sha256": "5421bd932c227ad882b96c881ab5fe01937ee789496f7cdd050a269c7322f6b8",
+      "files": [
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional-control.pt",
+          "bytes": 33351422,
+          "sha256": "5421bd932c227ad882b96c881ab5fe01937ee789496f7cdd050a269c7322f6b8"
+        }
+      ],
+      "assets": [
+        {
+          "name": "conditional-control.pt",
+          "bytes": 33351422,
+          "sha256": "5421bd932c227ad882b96c881ab5fe01937ee789496f7cdd050a269c7322f6b8",
+          "tag": "research-mobei-age-conditioned-2026-11-24"
+        }
+      ],
+      "status": "Unpromoted partial StyleGAN2 generator parameters, not a complete SAM model; conditional patches require age-dependent parameter interpolation."
+    },
+    {
+      "id": "conditional-patch_gan.pt",
+      "group": "weights",
+      "format": "file",
+      "filename": "conditional-patch_gan.pt",
+      "bytes": 33351422,
+      "sha256": "3ea0134d27304367844e91b36508cde12d99c72c5d90b86edb8c725faa48f100",
+      "files": [
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional-patch_gan.pt",
+          "bytes": 33351422,
+          "sha256": "3ea0134d27304367844e91b36508cde12d99c72c5d90b86edb8c725faa48f100"
+        }
+      ],
+      "assets": [
+        {
+          "name": "conditional-patch_gan.pt",
+          "bytes": 33351422,
+          "sha256": "3ea0134d27304367844e91b36508cde12d99c72c5d90b86edb8c725faa48f100",
+          "tag": "research-mobei-age-conditioned-2026-11-24"
+        }
+      ],
+      "status": "Unpromoted partial StyleGAN2 generator parameters, not a complete SAM model; conditional patches require age-dependent parameter interpolation."
+    },
+    {
+      "id": "ffhq_64376-native75.png",
+      "group": "examples",
+      "format": "file",
+      "filename": "ffhq_64376-native75.png",
+      "bytes": 1224460,
+      "sha256": "6985db0bcdd4de344aeb7ab391efafd00c3af17b2731e23e7205b86a53b57a50",
+      "files": [
+        {
+          "path": "deployment/shared-research/age-conditioned/ffhq_64376-native75.png",
+          "bytes": 1224460,
+          "sha256": "6985db0bcdd4de344aeb7ab391efafd00c3af17b2731e23e7205b86a53b57a50"
+        }
+      ],
+      "assets": [
+        {
+          "name": "ffhq_64376-native75.png",
+          "bytes": 1224460,
+          "sha256": "6985db0bcdd4de344aeb7ab391efafd00c3af17b2731e23e7205b86a53b57a50",
+          "tag": "research-mobei-age-conditioned-2026-11-24"
+        }
+      ]
+    },
+    {
+      "id": "ffhq_64919-native75.png",
+      "group": "examples",
+      "format": "file",
+      "filename": "ffhq_64919-native75.png",
+      "bytes": 1130682,
+      "sha256": "53f040eafcfb5e0a0c890d3731c6d9ecc1c686a8c7ac74d9c905bf7c17ca5b91",
+      "files": [
+        {
+          "path": "deployment/shared-research/age-conditioned/ffhq_64919-native75.png",
+          "bytes": 1130682,
+          "sha256": "53f040eafcfb5e0a0c890d3731c6d9ecc1c686a8c7ac74d9c905bf7c17ca5b91"
+        }
+      ],
+      "assets": [
+        {
+          "name": "ffhq_64919-native75.png",
+          "bytes": 1130682,
+          "sha256": "53f040eafcfb5e0a0c890d3731c6d9ecc1c686a8c7ac74d9c905bf7c17ca5b91",
+          "tag": "research-mobei-age-conditioned-2026-11-24"
+        }
+      ]
+    },
+    {
+      "id": "evidence",
+      "group": "evidence",
+      "format": "tar.gz",
+      "filename": "evidence.tar.gz",
+      "bytes": 3243385,
+      "sha256": "6d7b4caa31e54c91c09f49fd1bd15f5b7fa45a45f159499db59bb417add9da8f",
+      "files": [
+        {
+          "path": "deployment/shared-research/age-conditioned/20261124_Wplus匹配训练对照.md",
+          "bytes": 7015,
+          "sha256": "304c022d908d0d0a4bbfa878aced6425fdfa809c662d27da8913d55ac40c64aa"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/20261124_年龄条件纹理与年龄保护.md",
+          "bytes": 8454,
+          "sha256": "78df7b7398609f2898b492e04f6eb25fbabf061971b894dce24956a3b6305651"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/SAM-LICENSE.txt",
+          "bytes": 1068,
+          "sha256": "966ec903a9efd640e248743d877cc538c2a8e384ff533d3cfacc3a3bf152f3d5"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/artifact-validation.json",
+          "bytes": 142,
+          "sha256": "fadf37d74a12993e0d1a94516ab1972486a23747e3cad4a7aba3b978d9cf2a45"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/automatic-completion.json",
+          "bytes": 385,
+          "sha256": "e59834200bcb7f11a54850dcfd3520d6a0599d3454f8e95d0897049df32d021e"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/batch-shape-diagnostic.json",
+          "bytes": 10007,
+          "sha256": "b55a21eb4a740a2f26b5c9c29c4eaa39d0eeb45b2d2e6409fcd1ca73722039f0"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/browser-validation.json",
+          "bytes": 344,
+          "sha256": "771981a831e004f59647d0472505186d964c9aff48355b6d7380132bff96f9fe"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/control-completed.json",
+          "bytes": 397,
+          "sha256": "0b5f4575f59baf2ec7ffa9b7c53d5ce959a1df4889d88c7cac39c46e693d5b5b"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/control-plan.json",
+          "bytes": 2723,
+          "sha256": "c6da5d990c5e9942fc94e4ea7fad25bc835325b6e0ef5c8b0e2150822ab22780"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/control-train.json",
+          "bytes": 786348,
+          "sha256": "dafa6436414879b1c7ad0f7013a461b9d8fea3eb22c25d1b616da3c6b7dcc100"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/decision.json",
+          "bytes": 866,
+          "sha256": "dbaa060bbb41a5cc8263a13793e8353d945e3c374bfd6c26ab7df5d9f6057ef4"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/evaluation-correction.json",
+          "bytes": 567,
+          "sha256": "ba0300aa73b6213b22b4c9b56e96503d62df0e1659fb1f69aab0f54c70f2dfea"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/evaluation-recovery/platform-final.json",
+          "bytes": 116,
+          "sha256": "c70de62e8aca70c8fbf9faaa60032c93df8994648370ec67c35081bc03801d65"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/evaluation-recovery/provenance.json",
+          "bytes": 820,
+          "sha256": "bcd89dcaee335696a987e4b2e37a6ac31f64d3244054e1118e32323d98356fc2"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/evaluation-recovery/receipt.json",
+          "bytes": 215,
+          "sha256": "bd0e946a7c23100e32da21c5ec578caa9c33dd618138c297ff0a1f15652773c1"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/evaluation-recovery/source/deterministic_quality_ops.py",
+          "bytes": 2842,
+          "sha256": "dcf5cedcbe05eff331e4e996561330330feb56780c68980652a866c0afa86e7e"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/evaluation-recovery/source/evaluate_highres_texture.py",
+          "bytes": 10969,
+          "sha256": "993d8467d9a1901efd283b539e038d864cb5a75f3cee60e3e7d9938837329e0e"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/evaluation-recovery/source/latent_quality.py",
+          "bytes": 6159,
+          "sha256": "a0f95a3bc89a0077d5d18879e31bc08608ce502b281b3f8773621e6e56c07b50"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/evaluation-recovery/source/probe_inversion.py",
+          "bytes": 15890,
+          "sha256": "febc5153b69994b5ba50ac7b7dc5ec721aeaddf5d430da8fdb6324c925d69d47"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/evaluation-recovery/source/source_color.py",
+          "bytes": 6066,
+          "sha256": "1759c7a0a5fa842fa84af46e35ed0d72457b224c661f74de62495f0f026e3c54"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/experiment.json",
+          "bytes": 45260,
+          "sha256": "ed588531e20af0ab82263241c5411545078074d72e907a693e0e816910dee7bc"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/independent-age.json",
+          "bytes": 56320,
+          "sha256": "41e6b123128eaf806fc42e726c4b4e001fc57d08f256b5d61beeb912b0135048"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/native-change-summary.json",
+          "bytes": 39542,
+          "sha256": "940ffcd9e83524539a87eb82bfcaada8c306d5874b693b010a15af712ced44b6"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/paired-verification.json",
+          "bytes": 115,
+          "sha256": "4d8956487110e78c1481b925ecfa871121973a551db4d89364d072f4203d8857"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/patch_gan-completed.json",
+          "bytes": 397,
+          "sha256": "f464d393fae151c892d5cc25e23b3282a7cbab75b11012bb291bcf361c25574c"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/patch_gan-plan.json",
+          "bytes": 2725,
+          "sha256": "5b38b89bb0d93e19d098fb29a74a7e341b525f074509786d5db657eee9f876f1"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/patch_gan-train.json",
+          "bytes": 816912,
+          "sha256": "c251060b3383725211d7d1d365e409489599ae80abcfe74a40992471c6a5599e"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/platform-final.json",
+          "bytes": 116,
+          "sha256": "6a167f1e18e411302171e7635b272aa93a9f45354acd28e6a1223216624e34c2"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/source/deterministic_quality_ops.py",
+          "bytes": 2842,
+          "sha256": "dcf5cedcbe05eff331e4e996561330330feb56780c68980652a866c0afa86e7e"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/source/evaluate_highres_texture.py",
+          "bytes": 10045,
+          "sha256": "fdaf9533803c0a97619f01dbcdbe976d21e8ad14b47f0d9ea2871d6c8fe7b1f4"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/source/latent_quality.py",
+          "bytes": 6159,
+          "sha256": "a0f95a3bc89a0077d5d18879e31bc08608ce502b281b3f8773621e6e56c07b50"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/source/probe_inversion.py",
+          "bytes": 15890,
+          "sha256": "febc5153b69994b5ba50ac7b7dc5ec721aeaddf5d430da8fdb6324c925d69d47"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/source/run_conditional_texture.sh",
+          "bytes": 2057,
+          "sha256": "c3996ac2c99dd027f9d2b63917561fd41119601348943fba18a036eacc82a1dd"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/source/source_color.py",
+          "bytes": 6066,
+          "sha256": "1759c7a0a5fa842fa84af46e35ed0d72457b224c661f74de62495f0f026e3c54"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/source/submit_conditional_texture.py",
+          "bytes": 6423,
+          "sha256": "1e2d8365c8dbe10ceb8a7a72c07b68322429e58d0da2595147816bacea262ce7"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/source/train_highres_texture.py",
+          "bytes": 16278,
+          "sha256": "ac7533ba96b343be2be572ad936bc2672235441a4810c546d4e50e91837dcfeb"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/summary.json",
+          "bytes": 19290,
+          "sha256": "a401142bf1db39cc63706f86066e07e211dffa07348957deb37f046be4e7e341"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/conditional/young-age-invariance.json",
+          "bytes": 8229,
+          "sha256": "94f4d1e56562366b6476606efc9d72b74fa68003add1ea0e0435259e1f4b5744"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/ffhq_64376-native75.png",
+          "bytes": 1224460,
+          "sha256": "6985db0bcdd4de344aeb7ab391efafd00c3af17b2731e23e7205b86a53b57a50"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/ffhq_64919-native75.png",
+          "bytes": 1130682,
+          "sha256": "53f040eafcfb5e0a0c890d3731c6d9ecc1c686a8c7ac74d9c905bf7c17ca5b91"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/frozen-source-index.json",
+          "bytes": 3382,
+          "sha256": "23cd63818c12bd2e52a81363a30c01f170d4d25078c5bd31bc178ac82ace8a94"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/licenses/LICENSE_InterDigitalInc",
+          "bytes": 14328,
+          "sha256": "d03fc2a3421fff8865b04536332945fc6904d3f83cc7679088f1cf1c9a0c1b0a"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/licenses/LICENSE_S-aiueo32",
+          "bytes": 1319,
+          "sha256": "eb1f0bfe2b74df5858a01a34e2eb2b01286a6301d5e35d8460db305fa2262370"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/licenses/LICENSE_TreB1eN",
+          "bytes": 1063,
+          "sha256": "d32944f257baa4fd84e239e7fa0d0e68e9d3fc80f2a6b17c5655495790626410"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/licenses/LICENSE_eladrich",
+          "bytes": 1085,
+          "sha256": "38e139da8fdfedea3e4d458baa0cd096a8637a3e48503c8e842ae0cefd16c52c"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/licenses/LICENSE_lessw2020",
+          "bytes": 11356,
+          "sha256": "43070e2d4e532684de521b885f385d0841030efa2b1a20bafb76133a5e1379c1"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/licenses/LICENSE_rosinality",
+          "bytes": 1070,
+          "sha256": "93a85fe21c420c9f0dac24f578447094399656fed5555103236f89084452991d"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/licenses/ffhq_aging_readme.txt",
+          "bytes": 9632,
+          "sha256": "064317e9626c53ba9eb751c117f8a68892b2b89d63b068047a8ec7b7cdcdeaa5"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/licenses/ffhq_readme.txt",
+          "bytes": 13959,
+          "sha256": "c12efdc2759654840c9b2f8fe1cd9a6716be218b831c27056e13e3ec5cd3d663"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/automatic-completion.json",
+          "bytes": 344,
+          "sha256": "d80d427a451c6a08a8f32a03ee2c5cefb7ac58400face574d90ab9dda89bd805"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/browser-validation.json",
+          "bytes": 337,
+          "sha256": "ba4bbfbe50ccca4d7fab4255d351a2edfe3eb989c69ccc23c49cf426fefc65df"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/decision.json",
+          "bytes": 613,
+          "sha256": "1577fc6df9a8cabd83c2c217721a2e1c3df17a22097a6deffd4441536aa53182"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/direct_latent-completed.json",
+          "bytes": 395,
+          "sha256": "704c94faa29be36fe718f5d440b67a93c904c6f3845fd098970d23ed9681eadf"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/direct_latent-plan.json",
+          "bytes": 2650,
+          "sha256": "74c8918b20873b019029802a31f5d98013eefb2dbce4f723bcafbecfcf75800f"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/direct_latent-train.json",
+          "bytes": 735334,
+          "sha256": "e401d2e214cde7e6208a9e378ade6959774b5687a34c5a87610556104f7631dc"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/experiment.json",
+          "bytes": 31818,
+          "sha256": "a0908d1cde32f09d97495ae5bd2977c0de528f5458bb84b47143e1da6bf4bf00"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/independent-age.json",
+          "bytes": 55740,
+          "sha256": "a379f75b47f0d23a16f8289f5c5f5ba868873106c304c2c2074ee0aeb830247b"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/matched_wplus-completed.json",
+          "bytes": 397,
+          "sha256": "8ed0d2e8d7a0792c70ffb4a82b0dd0e472c4062a591fae9be74d851f8beef479"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/matched_wplus-plan.json",
+          "bytes": 2648,
+          "sha256": "9127327c3a9b870e7a538d50647a5545e8d181071ad73df04fcbfe878db6fbd2"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/matched_wplus-train.json",
+          "bytes": 739412,
+          "sha256": "cd7d0bd0a057c71ac2bac0dc203abf3204c0b42850eeec92090f647e67d7cc75"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/native-change-summary.json",
+          "bytes": 39416,
+          "sha256": "0da34cd738ffc05d7a8763e5397ef02cdd3dd7db7dfc60d76abc84a7fc4f167d"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/paired-verification.json",
+          "bytes": 115,
+          "sha256": "4d8956487110e78c1481b925ecfa871121973a551db4d89364d072f4203d8857"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/platform-final.json",
+          "bytes": 116,
+          "sha256": "971fb4b3b2f13e0ad4f5fd3a84c192ce4d6105dc7676beb37b5d8aa65591b346"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/source/deterministic_quality_ops.py",
+          "bytes": 2842,
+          "sha256": "dcf5cedcbe05eff331e4e996561330330feb56780c68980652a866c0afa86e7e"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/source/evaluate_highres_texture.py",
+          "bytes": 9554,
+          "sha256": "1cfd0d73314089429b1c30e6c9216ac442bca8e8cb555d29434466d47f4e4730"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/source/latent_quality.py",
+          "bytes": 6159,
+          "sha256": "a0f95a3bc89a0077d5d18879e31bc08608ce502b281b3f8773621e6e56c07b50"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/source/matched_latent_study.py",
+          "bytes": 12443,
+          "sha256": "b13a08c79d8488fc712e6cefbb6a187ab3e1830fdd7fbdc834346f410fbcb9d2"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/source/probe_inversion.py",
+          "bytes": 15890,
+          "sha256": "febc5153b69994b5ba50ac7b7dc5ec721aeaddf5d430da8fdb6324c925d69d47"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/source/run_matched_latent.sh",
+          "bytes": 1861,
+          "sha256": "7cccad02add559dd5ba997f8a5463e71469f3b3f4136fc9eb7145c41804c814c"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/source/source_color.py",
+          "bytes": 6066,
+          "sha256": "1759c7a0a5fa842fa84af46e35ed0d72457b224c661f74de62495f0f026e3c54"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/source/train_highres_texture.py",
+          "bytes": 14517,
+          "sha256": "4e022c996627214d06b7db7a98b5cb1f39a9f196e4ba5b85675453402e1438c9"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/matched/summary.json",
+          "bytes": 18642,
+          "sha256": "6b124f0249d5746f335dac4c07fa83042a0fe1a960b7c305ad837bdc2e78002f"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/new-source-audit/archive-provenance.json",
+          "bytes": 853,
+          "sha256": "acc8b5aed14ae433c5614dcf77ca08db65b010a7b3e1b62a306baac61a0c3c45"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/new-source-audit/intake-outcome.json",
+          "bytes": 1232,
+          "sha256": "29dc28f4d7342574be076b48175c94c1c2940f36f50d4059aaddc107c9674687"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/new-source-audit/original-image-inventory.json",
+          "bytes": 1107,
+          "sha256": "75428770eaaf5a9e7aa2906c015406712c3bb656d50e62c812a54310ff829d94"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/new-source-audit/original-quality-screen.json",
+          "bytes": 2268,
+          "sha256": "04ea2ea1aae884cec6b65ff60047fe3afd507366e639cab88a2583270291f12a"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/postprocess/build_public_texture_panels.py",
+          "bytes": 3543,
+          "sha256": "9a7bc459f443e26b7b158eb68751cfd29f92f0c72bde2302f7d7e9512d775af9"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/postprocess/build_texture_review.py",
+          "bytes": 7180,
+          "sha256": "878f07887d43b2da8ebbd9ed1f1d028fa591f8be475463ffa1e0aa56d3a62e84"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/postprocess/check_independent_age.py",
+          "bytes": 7241,
+          "sha256": "3dff3eadb31542b571f6ef9eea98969d2daff15c522575457a4bf5875b4c1f9a"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/postprocess/collect_mcst_originals.py",
+          "bytes": 3645,
+          "sha256": "f388e7d8f9b441849f80ce304410edd061865cc3bb0d9e9398ecd330132b5504"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/postprocess/finish_matched_latent.py",
+          "bytes": 10164,
+          "sha256": "221b0f9e8b31129d94154e73d89155dc958f4fcff43e204dbb5bf2a266006d24"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/postprocess/measure_texture_changes.py",
+          "bytes": 3665,
+          "sha256": "f3c875392a1c88d5b1687d50fbf79ce129fdc73e8b210b962d56efe2f1934607"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/postprocess/reevaluate_conditional_texture.py",
+          "bytes": 4448,
+          "sha256": "62d81e84c96b5475282a3dd16e5b0575286bbe7fb1ec5fd2d2019a30068629d1"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/postprocess/summarize_highres_texture.py",
+          "bytes": 3997,
+          "sha256": "7eb05956c797564b7481692db46f2c9393195fe8aa68183cf6f583c403686842"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/postprocess/verify_texture_review_browser.py",
+          "bytes": 2730,
+          "sha256": "1963916ee7ab82baa3badc7a329638a6990ce241bba1f531f17b6608cec8355b"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/public-panel-credits.json",
+          "bytes": 1400,
+          "sha256": "007487e1560bd16fd85b705ce0096a873f77a89a53ff46103e7c19190dbe1319"
+        },
+        {
+          "path": "deployment/shared-research/age-conditioned/training-sources.json",
+          "bytes": 49981,
+          "sha256": "39964ce6481d1e933fbc8cbad363e9600971cbcdc568ab670a37f05fb80e51e3"
+        }
+      ],
+      "assets": [
+        {
+          "name": "evidence.tar.gz",
+          "bytes": 3243385,
+          "sha256": "6d7b4caa31e54c91c09f49fd1bd15f5b7fa45a45f159499db59bb417add9da8f",
+          "tag": "research-mobei-age-conditioned-2026-11-24"
+        }
+      ]
+    }
+  ]
+}
