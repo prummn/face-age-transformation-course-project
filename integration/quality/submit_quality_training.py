@@ -61,6 +61,8 @@ def main():
     packed.mkdir()
     for name in audit['files']:
         shutil.copy2(data/name,packed/name)
+    if (data/'longitudinal.json').exists():
+        shutil.copy2(data/'longitudinal.json',packed/'longitudinal.json')
     fast_control = run/'calibrated_encoder'
     fast_control.mkdir()
     (fast_control/'encoder.pt').symlink_to(checkpoint)

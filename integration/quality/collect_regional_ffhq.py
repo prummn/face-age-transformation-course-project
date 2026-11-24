@@ -34,6 +34,7 @@ def main():
     parser.add_argument('--train-per-stratum', type=int)
     parser.add_argument('--eval-per-stratum', type=int)
     parser.add_argument('--workers',type=int,default=6,choices=range(1,13))
+    parser.add_argument('--max-transfer-gib',type=float,default=2.0)
     parser.add_argument('--min-age',type=int,default=20)
     parser.add_argument('--all-locations',action='store_true',help='Select by apparent age without a demographic or location filter')
     args = parser.parse_args()
@@ -43,6 +44,8 @@ def main():
         parser.error('Stratum caps must be nonnegative')
     if args.min_age < 20:
         parser.error('This collector uses adult apparent-age intervals')
+    if not 0.25 <= args.max_transfer_gib <= 10:
+        parser.error('max-transfer-gib must be between .25 and 10')
     out = args.output.resolve()
     source = ROOT / 'deployment/data-research/20261113'
     original = ROOT / 'deployment/training-data/ffhq-adult-v2'
@@ -114,7 +117,7 @@ def main():
         raise ValueError('Frozen selection changed')
     write_json(plan_path, plan)
     print('SELECTED', len(selected), dict(Counter(r['category'] for r in selected)), flush=True)
-    archives = [HTTPZip.from_index(source / f'ffhq_zip{i}-index.json', max_transfer=2 * 1024**3) for i in [1, 2]]
+    archives = [HTTPZip.from_index(source / f'ffhq_zip{i}-index.json', max_transfer=round(args.max_transfer_gib * 1024**3)) for i in [1, 2]]
     for archive in archives:
         archive.resolve_download()
     lookup = {Path(name).name: (archive, name) for archive in archives for name in archive.entries if name.endswith('.png')}

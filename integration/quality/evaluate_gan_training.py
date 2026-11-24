@@ -47,7 +47,7 @@ def main():
         v=recognizer.feature(recognizer.alignCrop(cv2.cvtColor(rgb,cv2.COLOR_RGB2BGR),face)).ravel()
         return v/(np.linalg.norm(v)+1e-12)
     report=dict(records=records,outputs=[],native_samples=sorted(chosen),
-        external_alignment_failures=json.loads((run/'data-audit.json').read_text())['external_alignment_failures'],
+        external_alignment_failures=json.loads((run/'data-audit.json').read_text()).get('external_alignment_failures',[]),
         color_metric='Norm of mean central-face OpenCV8bit Lab ab difference; not DeltaE00',routes=a.routes,
         caveats=['FFHQ is a base-generator training source: regression only, not independent pretraining generalization.',
                  'APPA Asian annotation is broad, not verified East Asian; cases and ages are publisher labels.',
