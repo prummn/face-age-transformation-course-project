@@ -12,7 +12,7 @@ PREFIX='deployment/shared-research/native-full/'
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('action',choices=['data','results']);p.add_argument('run',type=Path);p.add_argument('stage',type=Path);p.add_argument('--public-panels',type=Path);a=p.parse_args();run=a.run.resolve();stage=a.stage.resolve()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('action',choices=['data','results']);p.add_argument('run',type=Path);p.add_argument('stage',type=Path);p.add_argument('--public-panels',type=Path);p.add_argument('--diagnostic-run',type=Path,action='append',default=[]);p.add_argument('--diagnostic-panels',type=Path);a=p.parse_args();run=a.run.resolve();stage=a.stage.resolve()
     spec=importlib.util.spec_from_file_location('bundler',Path(__file__).with_name('build_research_release.py'));h=importlib.util.module_from_spec(spec);spec.loader.exec_module(h)
     h.TAG=TAG;h.STAGE=stage;h.ASSETS=stage/'assets';h.PAYLOAD=stage/'payload';h.ASSETS.mkdir(parents=True,exist_ok=True);h.PAYLOAD.mkdir(exist_ok=True)
     def generated(relative,obj):return h.generated(PREFIX+relative,h.scrub(obj))
@@ -67,6 +67,22 @@ def main():
     for name in ['finish_native_age.py','summarize_highres_texture.py','check_independent_age.py','measure_texture_changes.py','build_texture_review.py','verify_texture_review_browser.py','expand_native_age_data.py','build_public_texture_panels.py']:
         evidence[PREFIX+'postprocess/'+name]=ROOT/'integration/quality'/name
     evidence[PREFIX+'report.md']=ROOT/'integration/quality/20261124_全量高清数据与RGB纹理训练.md'
+    diagnostic_index=[]
+    for diagnostic in a.diagnostic_run:
+        diagnostic=diagnostic.resolve()
+        if not diagnostic.is_relative_to(ROOT/'deployment/training-runs'):raise ValueError('Diagnostic outside research runs')
+        d=json.loads((diagnostic/'decision.json').read_text());completion=json.loads((diagnostic/'automatic-completion.json').read_text())
+        if not (diagnostic/'DONE').is_file() or not d.get('visually_reviewed') or completion['native_review_pending']:raise ValueError('Finish diagnostic review before archiving')
+        for name in ['experiment.json','selection.json','summary.json','decision.json','browser-validation.json','artifact-validation.json','independent-age.json','native-change-summary.json','platform-final.json','automatic-completion.json','evaluation/report.json']:
+            addjson('diagnostics/'+diagnostic.name+'/'+name,diagnostic/name)
+        for path in (diagnostic/'source').iterdir():
+            if path.is_file():evidence[PREFIX+'diagnostics/'+diagnostic.name+'/source/'+path.name]=path
+        diagnostic_index.append(dict(run=diagnostic.name,cases=json.loads((diagnostic/'experiment.json').read_text())['cases'],promotion=d['promotion'],no_image_or_latent_payload=True))
+    evidence[PREFIX+'diagnostics/index.json']=generated('diagnostics/index.json',diagnostic_index)
+    if diagnostic_index:
+        evidence[PREFIX+'diagnostics/report.md']=ROOT/'integration/quality/20261125_年龄差值与预训练判别器诊断.md'
+        evidence[PREFIX+'diagnostics/discriminator-provenance.json']=generated('diagnostics/discriminator-provenance.json',json.loads((ROOT/'deployment/gan-research/stylegan2ada-ffhq-checkpoint.json').read_text()))
+        evidence[PREFIX+'postprocess/finish_small_quality.py']=ROOT/'integration/quality/finish_small_quality.py'
     for name in ['SAM-LICENSE.txt']:
         evidence[PREFIX+'licenses/'+name]=ROOT/'deployment/model-files/face-age/src/SAM/LICENSE'
     for path in (ROOT/'deployment/model-files/face-age/src/SAM/licenses').iterdir():
@@ -76,14 +92,22 @@ def main():
     for row in credits:
         if row['name'] not in ('ffhq_64376','ffhq_64919') or Path(row['file']).name!=row['file']:raise ValueError('Unexpected public example')
         source=a.public_panels/row['file'];digest=h.sha(source);size=source.stat().st_size;items.append(dict(id=row['file'],group='examples',format='file',filename=row['file'],bytes=size,sha256=digest,files=[dict(path=PREFIX+row['file'],bytes=size,sha256=digest)],assets=h.parts(source,row['file'])))
-    evidence[PREFIX+'public-panel-credits.json']=generated('public-panel-credits.json',credits);items.append(h.archive('evidence',evidence))
+    evidence[PREFIX+'public-panel-credits.json']=generated('public-panel-credits.json',credits)
+    if a.diagnostic_panels:
+        diagnostic_credits=json.loads((a.diagnostic_panels/'public-panel-credits.json').read_text())
+        for row in diagnostic_credits:
+            if row['name'] not in ('ffhq_64376','ffhq_64919') or Path(row['file']).name!=row['file']:raise ValueError('Unexpected diagnostic example')
+            source=a.diagnostic_panels/row['file'];name='original-delta-'+row['file'];row['file']=name;digest=h.sha(source);size=source.stat().st_size
+            items.append(dict(id=name,group='examples',format='file',filename=name,bytes=size,sha256=digest,files=[dict(path=PREFIX+name,bytes=size,sha256=digest)],assets=h.parts(source,name)))
+        evidence[PREFIX+'diagnostics/public-panel-credits.json']=generated('diagnostics/public-panel-credits.json',diagnostic_credits)
+    items.append(h.archive('evidence',evidence))
     original=json.loads((ROOT/'integration/models/research-20261117.json').read_text())
     items.extend(item for item in original['items'] if item['group']=='baseline')
     manifest=dict(schema_version=1,repository='prummn/face-age-transformation-course-project',release_tag=TAG,source_branch='dev/mobei-gan-portable-20261116',source_base_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
         training_source_commit=json.loads((run/'experiment.json').read_text())['code_commit'],
         default_groups=['evidence','examples'],
         portable_training_manifest=dict(source=PREFIX+'data/train.portable.json',destination=PREFIX+'data/train.jsonl',format='json-list'),
-        groups=dict(data='All712native training images and derived inputs/references with portable paths, hashes and source attribution; no protected evaluation images.',weights='Two final4000step partial StyleGAN2 generator patches; original SAM model required; not automatically activated.',checkpoints='Both arms1000/2000/3000step generator snapshots and trained local discriminator; no optimizer state, not exact restart packages.',baseline='Original SAM, ft_l1, FairFace, YuNet, identity/LPIPS and SFace dependencies; reuse existing releases without duplicate uploads.',evidence='Frozen training code, paired sampling logs, full-data audit, native review decision, independent metrics and browser validation.',examples='Two source-attributed original/raw75/native-crop comparisons.'),items=items)
+        groups=dict(data='All712native training images and derived inputs/references with portable paths, hashes and source attribution; no protected evaluation images.',weights='Two final4000step partial StyleGAN2 generator patches; original SAM model required; not automatically activated.',checkpoints='Both arms1000/2000/3000step generator snapshots and trained local discriminator; no optimizer state, not exact restart packages.',baseline='Original SAM, ft_l1, FairFace, YuNet, identity/LPIPS and SFace dependencies; reuse existing releases without duplicate uploads.',evidence='Frozen training/diagnostic code, paired sampling logs, full-data audit, native review decisions, independent metrics and browser validation; no portrait or latent payload.',examples='Source-attributed original/raw75/native-crop comparisons of full native training and optional original SAM displacement diagnostic.'),items=items)
     h.save(ROOT/'integration/models/native-full-20261124.json',manifest);h.save(h.ASSETS/'manifest.json',manifest);(h.ASSETS/'SHA256SUMS').write_text(''.join(h.sha(path)+'  '+path.name+'\n' for path in sorted(h.ASSETS.iterdir()) if path.name!='SHA256SUMS'));print('NATIVE_RELEASE_READY',TAG,len(items),flush=True)
 
 

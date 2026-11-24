@@ -11,12 +11,15 @@ from urllib.request import Request,urlopen
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('run',type=Path);p.add_argument('--subject',default='uploaded');a=p.parse_args();run=a.run
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('run',type=Path);p.add_argument('--subject',default='uploaded');p.add_argument('--url',default='http://127.0.0.1:8765');a=p.parse_args();run=a.run
+    from urllib.parse import urlsplit
+    endpoint=urlsplit(a.url)
+    if endpoint.scheme!='http' or endpoint.hostname not in ('127.0.0.1','localhost') or endpoint.path not in ('','/') or endpoint.query or endpoint.fragment or endpoint.username or endpoint.password:raise ValueError('Loopback HTTP backend URL required')
     import cv2
     import numpy as np
     from PIL import Image
     def call(path,body=None,method=None):
-        req=Request('http://127.0.0.1:8765'+path,data=json.dumps(body).encode() if body is not None else None,
+        req=Request(a.url.rstrip('/')+path,data=json.dumps(body).encode() if body is not None else None,
             headers={'Content-Type':'application/json'},method=method)
         try:
             with urlopen(req,timeout=150) as response:return response.status,json.load(response)
