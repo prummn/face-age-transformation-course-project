@@ -46,6 +46,11 @@ def main():
         'published-asian-hd':{n for n,m in metadata.items() if m.get('published_demographic_label')=='Asian' and m.get('source_face_short_edge',m.get('native_face_short_edge',0))>=512},
         'published-asian-appa':{n for n,m in metadata.items() if m['cohort']=='new_appa_asian'},
     }
+    joined=run/'supplemental-publisher-labels.json'
+    if joined.is_file():
+        names=set(json.loads(joined.read_text())['positive_ffhq_names'])
+        if not names<=set(metadata):raise ValueError('Publisher rejoin names outside evaluation')
+        labelled['publisher-rejoined-asian-hd']={n for n in names if metadata[n].get('source_face_short_edge',metadata[n].get('native_face_short_edge',0))>=512}
     supplemental={name:{route:describe([o for o in groups['pooled',route] if o['name'] in names]) for route in r['routes']} for name,names in labelled.items() if names}
     checks={}
     for route in r['routes'][1:]:

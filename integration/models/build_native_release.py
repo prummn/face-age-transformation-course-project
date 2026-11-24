@@ -41,16 +41,23 @@ def main():
     if not decision.get('visually_reviewed'):raise ValueError('Native review required')
     items=[json.loads((stage/'data-item.json').read_text())];evidence={}
     def addjson(relative,path):evidence[PREFIX+relative]=generated(relative,json.loads(path.read_text()))
+    def addweight(source,name,relative,group):
+        digest=h.sha(source);dest=h.ASSETS/name
+        if dest.exists() and h.sha(dest)!=digest:raise ValueError('Preserving different staged file')
+        if not dest.exists():shutil.copy2(source,dest)
+        size=dest.stat().st_size
+        items.append(dict(id=name,group=group,format='file',filename=name,bytes=size,sha256=digest,
+            files=[dict(path=PREFIX+relative,bytes=size,sha256=digest)],assets=[dict(name=name,tag=TAG,bytes=size,sha256=digest)]))
     for arm in ['native_control','native_gan']:
         source=run/arm/'generator_patch.pt';done=json.loads((run/arm/'completed.json').read_text());digest=h.sha(source)
         if digest!=done['patch_sha256']:raise ValueError('Completed checkpoint changed')
-        name=arm+'.pt';dest=h.ASSETS/name
-        if dest.exists() and h.sha(dest)!=digest:raise ValueError('Preserving different staged file')
-        if not dest.exists():shutil.copy2(source,dest)
-        size=dest.stat().st_size;items.append(dict(id=name,group='weights',format='file',filename=name,bytes=size,sha256=digest,files=[dict(path=PREFIX+name,bytes=size,sha256=digest)],assets=[dict(name=name,tag=TAG,bytes=size,sha256=digest)]))
+        addweight(source,arm+'.pt',arm+'.pt','weights')
+        for step in (1000,2000,3000):
+            addweight(run/arm/f'generator_step{step}.pt',f'{arm}_step{step}.pt',f'{arm}/generator_step{step}.pt','checkpoints')
+        if arm=='native_gan':addweight(run/arm/'discriminator.pt','native_gan_discriminator.pt','native_gan/discriminator.pt','checkpoints')
         for name in ['plan.json','completed.json']:addjson(arm+'/'+name,run/arm/name)
         evidence[PREFIX+arm+'/train.json']=generated(arm+'/train.json',[json.loads(s) for s in (run/arm/'train.jsonl').read_text().splitlines()])
-    for name in ['experiment.json','common-audit.json','summary.json','decision.json','browser-validation.json','paired-verification.json','artifact-validation.json','independent-age.json','native-change-summary.json','platform-final.json','automatic-completion.json','evaluation-merge.json']:
+    for name in ['experiment.json','common-audit.json','supplemental-data-balance.json','supplemental-publisher-labels.json','summary.json','decision.json','browser-validation.json','paired-verification.json','artifact-validation.json','independent-age.json','native-change-summary.json','platform-final.json','automatic-completion.json','evaluation-merge.json']:
         if (run/name).is_file():addjson(name,run/name)
     addjson('train-codes/index.json',run/'train-codes/index.json')
     if (stage/'data-local-restore-validation.json').is_file():
@@ -76,7 +83,7 @@ def main():
         training_source_commit=json.loads((run/'experiment.json').read_text())['code_commit'],
         default_groups=['evidence','examples'],
         portable_training_manifest=dict(source=PREFIX+'data/train.portable.json',destination=PREFIX+'data/train.jsonl',format='json-list'),
-        groups=dict(data='All712native training images and derived inputs/references with portable paths, hashes and source attribution; no protected evaluation images.',weights='Two partial StyleGAN2 generator parameter patches; original SAM model required; not automatically activated.',baseline='Original SAM, ft_l1, FairFace, YuNet, identity/LPIPS and SFace dependencies; reuse existing releases without duplicate uploads.',evidence='Frozen training code, paired sampling logs, full-data audit, native review decision, independent metrics and browser validation.',examples='Two source-attributed original/raw75/native-crop comparisons.'),items=items)
+        groups=dict(data='All712native training images and derived inputs/references with portable paths, hashes and source attribution; no protected evaluation images.',weights='Two final4000step partial StyleGAN2 generator patches; original SAM model required; not automatically activated.',checkpoints='Both arms1000/2000/3000step generator snapshots and trained local discriminator; no optimizer state, not exact restart packages.',baseline='Original SAM, ft_l1, FairFace, YuNet, identity/LPIPS and SFace dependencies; reuse existing releases without duplicate uploads.',evidence='Frozen training code, paired sampling logs, full-data audit, native review decision, independent metrics and browser validation.',examples='Two source-attributed original/raw75/native-crop comparisons.'),items=items)
     h.save(ROOT/'integration/models/native-full-20261124.json',manifest);h.save(h.ASSETS/'manifest.json',manifest);(h.ASSETS/'SHA256SUMS').write_text(''.join(h.sha(path)+'  '+path.name+'\n' for path in sorted(h.ASSETS.iterdir()) if path.name!='SHA256SUMS'));print('NATIVE_RELEASE_READY',TAG,len(items),flush=True)
 
 
