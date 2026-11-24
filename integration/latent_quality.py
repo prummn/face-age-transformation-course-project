@@ -2,14 +2,54 @@
 import time
 
 
+def resolve_wplus_precision(torch, device, mode, requested):
+    if requested not in ("auto", "fp32", "bf16"):
+        raise ValueError("FACE_AGE_WPLUS_PRECISION must be auto, fp32, or bf16")
+    if requested == "fp32" or (requested == "auto" and mode != "constrained"):
+        return "fp32"
+    with torch.cuda.device(device):
+        supported = torch.cuda.is_bf16_supported(including_emulation=False)
+    if supported:
+        return "bf16"
+    if requested == "bf16":
+        raise ValueError(f"Native BF16 is unavailable on {device}")
+    return "fp32"
+
+
+def _fp32_modulation(torch, forward):
+    def project(style):
+        with torch.autocast(device_type="cuda", enabled=False):
+            return forward(style.float())
+    return project
+
+
 class LatentQuality:
-    def __init__(self,engine,mode):
+    def __init__(self, engine, mode, *, precision="fp32"):
         import lpips
         from sam_losses import IDLoss
         self.engine=engine;self.mode=mode;self.torch=engine.torch
+        self.precision = resolve_wplus_precision(self.torch, engine.dev, mode, precision)
+        if self.precision == "bf16":
+            from models.stylegan2.model import ModulatedConv2d
+
+            # Leave the SAM checkpoint in FP32. With FP32 style projection and
+            # weights, demodulation stays in FP32 before autocast runs the convolution.
+            for layer in engine.net.decoder.modules():
+                if isinstance(layer, ModulatedConv2d):
+                    projection = layer.modulation
+                    projection.forward = _fp32_modulation(self.torch, projection.forward)
         self.identity=IDLoss().to(engine.dev).eval().requires_grad_(False)
         self.perceptual=lpips.LPIPS(net='alex',verbose=False).to(engine.dev).eval().requires_grad_(False)
         for model in [engine.net,engine.identity_encoder,engine.age_net]:model.eval().requires_grad_(False)
+
+    def _decode(self, code):
+        options = dict(input_code=True, input_is_full=True, randomize_noise=False, resize=False)
+        if self.precision == "bf16":
+            with self.torch.autocast(device_type="cuda", dtype=self.torch.bfloat16):
+                image = self.engine.net(code, **options)
+            # Keep all downstream loss and optimizer math in FP32.
+            return image.float()
+        return self.engine.net(code, **options)
 
     def run(self,item,target_age,assert_active):
         torch=self.torch;engine=self.engine
@@ -21,7 +61,7 @@ class LatentQuality:
             # for autograd. Create normal tensors inside this explicit scope.
             x=engine.tensor(item.aligned).contiguous()
             def condition(age):return torch.cat([x,torch.full_like(x[:,:1],age/100)],1)
-            def decode(code):return engine.net(code,input_code=True,input_is_full=True,randomize_noise=False,resize=False)
+            decode = self._decode
             if item.quality_state is None:
                 assert_active();started=time.monotonic()
                 reference=item.reference_rgb

@@ -48,6 +48,12 @@ python3 integration/launch.py
 
 模型路径沿用服务器现有环境：`face-age/models/sam/sam_ffhq_aging.pt`、`face-age/out/ft_l1/encoder_step1000.pt`、`face-age/models/faceattr/convnext_t_fairface.pt`。通过 `face-age-web/env.sh` 配置 CANN 和既有虚拟环境，未修改已有依赖。
 
+## CUDA W+ 解码精度
+
+`FACE_AGE_QUALITY=constrained` 选择 W+ 精细化。`FACE_AGE_WPLUS_PRECISION=auto` 是后端默认设置，有原生 BF16 的 CUDA 设备使用 BF16 解码，其余情况使用 FP32。`FACE_AGE_WPLUS_PRECISION=fp32` 可固定 FP32。显式设为 `bf16` 时设备须支持原生 BF16。`auto` 下其他 W+ 模式仍使用 FP32。纯 `original` 模式沿用原推理路径。
+
+BF16 只用于 StyleGAN2 解码器中支持自动混合精度的算子。模型权重、调制与归一化计算、W+ 潜变量、Adam 状态及损失计算使用 FP32。人脸拟合和跨龄优化仍分别为 200 步和 180 步。`GET /api/health` 的 `features.wplus_precision` 显示实际启用的精度。
+
 ## 接口与几何约定
 
 | 接口 | 用途 |

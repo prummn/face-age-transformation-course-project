@@ -31,6 +31,7 @@ from pydantic import BaseModel, Field
 
 VERSION = "1.4.0"
 QUALITY_PROFILE = os.environ.get("FACE_AGE_QUALITY", "original")
+WPLUS_PRECISION = os.environ.get("FACE_AGE_WPLUS_PRECISION", "auto")
 MODEL_NAME = "ft_l1 + SAM age direction" if QUALITY_PROFILE == "original" else "ft_l1 direct + identity/perceptual W+ " + QUALITY_PROFILE
 BASE = Path(os.environ.get("FACE_AGE_BASE", "/data/home/1120231322/scow/face-age"))
 WEB_BASE = Path(os.environ.get("FACE_AGE_WEB_BASE", "/data/home/1120231322/scow/face-age-web"))
@@ -289,7 +290,7 @@ class SamePersonEngine:
                 if not self.dev.startswith("cuda:"):
                     raise ValueError("High-quality W+ mode currently requires CUDA")
                 from latent_quality import LatentQuality
-                self.quality_refiner = LatentQuality(self, QUALITY_PROFILE)
+                self.quality_refiner = LatentQuality(self, QUALITY_PROFILE, precision=WPLUS_PRECISION)
             self.yunet = str(BASE / "models/yunet/face_detection_yunet_2023mar.onnx")
             with torch.inference_mode():
                 warmup = torch.zeros(1, 4, 256, 256, device=self.dev)
@@ -497,7 +498,24 @@ async def unexpected_error(request, exc):
 
 @app.get("/api/health")
 def health():
-    return {"ready": engine.ready, "engine": ENGINE_NAME, "device": engine.device_label, "model": MODEL_NAME, "native_size": 1024, "version": VERSION, "status": "ready" if engine.ready else ("failed" if engine.error else "loading"), "detail": engine.error, "active_sessions": store.count(), "session_ttl_seconds": SESSION_TTL, "features": {"source_color_preservation": True, "raw_model_output": True}}
+    refiner = getattr(engine, "quality_refiner", None)
+    return {
+        "ready": engine.ready,
+        "engine": ENGINE_NAME,
+        "device": engine.device_label,
+        "model": MODEL_NAME,
+        "native_size": 1024,
+        "version": VERSION,
+        "status": "ready" if engine.ready else ("failed" if engine.error else "loading"),
+        "detail": engine.error,
+        "active_sessions": store.count(),
+        "session_ttl_seconds": SESSION_TTL,
+        "features": {
+            "source_color_preservation": True,
+            "raw_model_output": True,
+            "wplus_precision": refiner.precision if refiner is not None else None,
+        },
+    }
 
 
 @app.post("/api/prepare")
