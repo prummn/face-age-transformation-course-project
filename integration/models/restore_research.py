@@ -123,7 +123,7 @@ def install(root,item,blob):
             os.chmod(name,0o644);name.replace(dest)
 
 
-def configure(root,groups):
+def configure(root,groups,manifest=None):
     if 'demo' in groups:
         source=root/'deployment/demo-hd/20261117-110722/results';link=root/'原型/hd-demo-assets'
         if not source.is_dir():raise ValueError('Missing restored gallery')
@@ -131,6 +131,19 @@ def configure(root,groups):
         elif link.exists() or link.is_symlink():raise ValueError('Preserving existing gallery link: '+str(link))
         else:link.parent.mkdir(parents=True,exist_ok=True);link.symlink_to(os.path.relpath(source,link.parent),target_is_directory=True)
     if 'data' in groups:
+        spec=(manifest or {}).get('portable_training_manifest')
+        if spec:
+            source=target(root,spec['source']);dest=target(root,spec['destination'])
+            if spec.get('format')!='json-list':raise ValueError('Unsupported portable training manifest')
+            records=json.loads(source.read_text())
+            for row in records:
+                for field,key in [('image_path','sha256'),('reference_path','reference_sha256'),('reference512_path','reference512_sha256')]:
+                    row[field]=str(target(root,row[field]))
+                    if digest(row[field])!=row[key]:raise ValueError('Restored native training input hash mismatch')
+            text=''.join(json.dumps(r,ensure_ascii=False)+'\n' for r in records)
+            if dest.exists() and dest.read_text()!=text:raise ValueError('Preserving different derived native manifest')
+            dest.write_text(text)
+            return
         folder=root/'deployment/shared-research/manifests'
         for split in ['train','eval']:
             source=folder/(split+'.portable.jsonl');dest=folder/(split+'.jsonl')
@@ -171,7 +184,7 @@ def main():
         if a.verify_only:raise SystemExit('Missing files: '+item['id'])
         print('RESTORE',item['id'],flush=True);blob=assemble(item,cache);install(root,item,blob)
         if not installed(root,item):raise ValueError('Post-install verification failed')
-    if not a.verify_only:configure(root,groups)
+    if not a.verify_only:configure(root,groups,manifest)
     print('READY '+','.join(groups)+'; all files SHA256 verified; different existing files preserved')
     if 'demo' in groups:print('python3 integration/serve_hd_demo.py   # /hd-demo.html, no GPU needed')
 

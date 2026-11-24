@@ -14,7 +14,8 @@ def main():
     if len(routes)!=3 or routes[0]!='wplus_base':raise ValueError('Expected baseline and two paired candidates')
     labels=dict(highres_control='Reconstruction adapter',highres_patch_gan='Reconstruction + local GAN',
         direct_latent='Direct latent training',matched_wplus='Matched W+ training',
-        conditional_control='Age-conditioned + age guard',conditional_gan='Age-conditioned + age guard + GAN')
+        conditional_control='Age-conditioned + age guard',conditional_gan='Age-conditioned + age guard + GAN',
+        native_control='Full native reconstruction',native_gan='Full native + RGB local GAN')
     fonts=Path('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf')
     font=ImageFont.truetype(str(fonts),16) if fonts.exists() else ImageFont.load_default()
     credits=[]
