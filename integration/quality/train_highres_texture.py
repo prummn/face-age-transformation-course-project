@@ -32,8 +32,12 @@ def main():
     p.add_argument('--output-name',choices=('direct_latent','matched_wplus'))
     p.add_argument('--no-input-flip',action='store_true')
     p.add_argument('--native-reference-input',action='store_true',help='Use the same OpenCV native-reference downsample as fixed-code inference')
+    p.add_argument('--age-conditioned',action='store_true',help='Interpolate generator parameter updates by target age, leaving20/40 unchanged')
+    p.add_argument('--age-preservation',type=float,default=0,help='Frozen baseline age-distribution KL over three matching views')
+    p.add_argument('--patch-edge',type=int,choices=(128,256),default=128)
     a=p.parse_args();run=a.run.resolve();out=run/(a.output_name or a.arm)
     if a.latent_source=='wplus' and not a.no_input_flip:raise ValueError('Cached W+ requires unflipped input')
+    if not 0<=a.age_preservation<=2:raise ValueError('Age preservation weight must be0..2')
     if not 1<=a.steps<=3000:raise ValueError('Bounded study requires 1..3000 steps')
     if not 0<a.generator_lr<=1e-4 or not 0<=a.adversarial_weight<=.2:raise ValueError('Learning rate or adversarial weight exceeds bounded study')
     records=read(run/'data/train.jsonl');evaluation=read(run/'data/eval.jsonl')+read(run/'data/external.jsonl')
@@ -52,6 +56,7 @@ def main():
         target_ages=[60,75],weights=dict(pixel512=.5,lpips=.8,identity=.8,local_reconstruction=.15,
             teacher128=.5,target_identity=.5,generator_trust=.1,adversarial=a.adversarial_weight),
         latent_source=a.latent_source,input_flip=not a.no_input_flip,native_reference_input=a.native_reference_input,
+        age_conditioned=a.age_conditioned,age_preservation=a.age_preservation,patch_edge=a.patch_edge,
         caution='Exploratory generator pilot. FFHQ pretraining source; coarse apparent-age bins are not exact chronological labels. Direct encoder training must also be checked on fixed W+ latents.')
     print(json.dumps(plan,ensure_ascii=False),flush=True)
     if not a.execute:return
@@ -68,7 +73,7 @@ def main():
     torch.backends.cudnn.benchmark=False;torch.backends.cuda.matmul.allow_tf32=False
     base=Path(os.environ['FACE_AGE_BASE']);sys.path.insert(0,str(base/'src'))
     from sam_npu import load_sam
-    from sam_losses import IDLoss
+    from sam_losses import IDLoss,AgeEst
     net=load_sam('cuda:0').eval().requires_grad_(False)
     net.encoder.load_state_dict(torch.load(base/'out/ft_l1/encoder_step1000.pt',map_location='cpu',weights_only=True))
     def digest_tensors(items):
@@ -95,6 +100,11 @@ def main():
     frozen_before=digest_tensors((n,t) for n,t in net.state_dict().items() if n not in {'decoder.'+k for k in named})
     identity=IDLoss().cuda().eval().requires_grad_(False)
     perceptual=lpips.LPIPS(net='alex',verbose=False).cuda().eval().requires_grad_(False)
+    age_net=AgeEst().cuda().eval().requires_grad_(False) if a.age_preservation else None
+    def age_logits(image):
+        value=F.interpolate((image+1)/2,(224,224),mode='bilinear',align_corners=False)
+        return age_net.net.age(age_net.net.b((value-age_net.m)/age_net.sd)).float()
+    def views(image):return [image,F.avg_pool2d(image,3,1,1),image[:,:,8:-8,8:-8]]
     class Discriminator(nn.Module):
         def __init__(self):
             super().__init__();layers=[];cin=2
@@ -121,12 +131,16 @@ def main():
         if key=='reference_path' and rgb.shape[:2]!=(1024,1024):raise ValueError('Native1024 reference required')
         return torch.from_numpy(np.array(rgb,copy=True,order='C')).permute(2,0,1)[None].cuda().float()/127.5-1
     def cond(x,age):return torch.cat([x,torch.full_like(x[:,:1],age/100)],1)
-    def decode(code):return net(code,input_code=True,input_is_full=True,randomize_noise=False,resize=False)
+    def decode(code,age):
+        if not a.age_conditioned:return net(code,input_code=True,input_is_full=True,randomize_noise=False,resize=False)
+        gate=max(0,min(1,(age-40)/35))
+        state={n:initial[n]+gate*(q-initial[n]) for n,q in named.items()}
+        return torch.func.functional_call(net.decoder,state,([code],),dict(input_is_latent=True,randomize_noise=False))[0]
     def patches(x,jitter,flip,contrast):
         result=[]
         for (cx,cy),(dx,dy) in zip(REGIONS,jitter):
-            left=round(cx*1024)-64+dx;top=round(cy*1024)-64+dy
-            result.append(x[:,:,top:top+128,left:left+128])
+            left=round(cx*1024)-a.patch_edge//2+dx;top=round(cy*1024)-a.patch_edge//2+dy
+            result.append(x[:,:,top:top+a.patch_edge,left:left+a.patch_edge])
         rgb=torch.cat(result);gray=(rgb*rgb.new_tensor([.299,.587,.114])[None,:,None,None]).sum(1,keepdim=True)
         gray=(gray-gray.mean((2,3),keepdim=True))*contrast
         local=gray-F.avg_pool2d(gray,7,1,3)
@@ -151,9 +165,13 @@ def main():
             # explicitly trainable tensors, then put this arm's tensors back.
             saved={n:q.detach().clone() for n,q in named.items()}
             for n,q in named.items():q.copy_(initial[n])
-            teacher=F.interpolate(decode(target_code),(128,128),mode='area')
+            teacher_native=decode(target_code,target)
+            teacher=F.interpolate(teacher_native,(128,128),mode='area')
+            if age_net is not None:
+                teacher256=F.interpolate(teacher_native,(256,256),mode='area')
+                teacher_probs=[age_logits(v).softmax(1) for v in views(teacher256)]
             for n,q in named.items():q.copy_(saved[n])
-        same_native=decode(same_code);edited_native=decode(target_code)
+        same_native=decode(same_code,r['source_age']);edited_native=decode(target_code,target)
         same=F.interpolate(same_native,(256,256),mode='area');edited=F.interpolate(edited_native,(256,256),mode='area')
         fake=patches(edited_native,jitter,patch_flip,contrast)
         real_patch=patches(real_native,jitter,patch_flip,contrast)
@@ -177,7 +195,8 @@ def main():
         trust=sum((q-initial[n]).square().mean() for n,q in named.items())
         adversarial=F.softplus(-d(fake,age,regions)).mean() if a.arm=='patch_gan' else edited.new_zeros(())
         ramp=min(1,(step+1)/100)
-        loss=.5*pixel+.8*lp+.8*ids+.15*local+.5*teacher_loss+.5*target_id+.1*trust+a.adversarial_weight*ramp*adversarial
+        age_loss=sum(F.kl_div(age_logits(v).log_softmax(1),q,reduction='batchmean') for v,q in zip(views(edited),teacher_probs))/3 if age_net is not None else edited.new_zeros(())
+        loss=.5*pixel+.8*lp+.8*ids+.15*local+.5*teacher_loss+.5*target_id+.1*trust+a.adversarial_weight*ramp*adversarial+a.age_preservation*age_loss
         if not torch.isfinite(loss):raise RuntimeError('Nonfinite generator loss')
         gopt.zero_grad(set_to_none=True);loss.backward()
         if not all(q.grad is not None and torch.isfinite(q.grad).all() for q in named.values()):raise RuntimeError('Missing or nonfinite generator gradient')
@@ -185,7 +204,7 @@ def main():
         point=dict(step=step+1,name=r['name'],real=real['name'],target=target,flip=flip,jitter=jitter,patch_flip=patch_flip,contrast=contrast,
             loss=float(loss.detach()),pixel=float(pixel.detach()),lpips=float(lp.detach()),same_id=float(ids.detach()),
             target_id=float(target_id.detach()),local=float(local.detach()),teacher=float(teacher_loss.detach()),
-            adversarial=float(adversarial.detach()),discriminator=float(loss_d.detach()),r1=float(r1.detach()),norm=float(norm))
+            adversarial=float(adversarial.detach()),discriminator=float(loss_d.detach()),r1=float(r1.detach()),norm=float(norm),age_preservation=float(age_loss.detach()))
         with (out/'train.jsonl').open('a') as f:f.write(json.dumps(point)+'\n')
         if step==0 or (step+1)%25==0:print(json.dumps(point),flush=True)
         if (step+1)%250==0:

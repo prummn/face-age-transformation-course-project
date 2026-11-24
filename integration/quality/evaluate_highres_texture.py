@@ -100,7 +100,15 @@ def main():
         torch.save(dict(codes=codes.cpu(),conditions=['same','20','40','60','75']),folder/'fixed_codes.pt')
         for route in routes:
             apply(original if route=='wplus_base' else patches[route]);t=time.monotonic()
-            with torch.no_grad():images=decode(codes)
+            with torch.no_grad():
+                if experiment.get('age_conditioned') and route!='wplus_base':
+                    generated=[]
+                    for code,target in zip(codes,[source,*targets]):
+                        gate=max(0,min(1,(target-40)/35))
+                        state={n:original[n]+gate*(value-original[n]) for n,value in patches[route].items()}
+                        apply(state);generated.append(decode(code[None]))
+                    images=torch.cat(generated)
+                else:images=decode(codes)
             torch.cuda.synchronize();seconds=time.monotonic()-t
             for image,label,target in zip(images,['same','20','40','60','75'],[source,*targets]):
                 if tuple(image.shape)!=(3,1024,1024) or not torch.isfinite(image).all():raise RuntimeError('Invalid1024 output')

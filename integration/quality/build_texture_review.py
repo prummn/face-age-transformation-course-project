@@ -47,6 +47,7 @@ def main():
                 item['outputs'].append(dict(route=o['route'],condition=o['condition'],age=summary['independent_ages'][o['native']],identity=o['source_cosine'],raw=asset(run/'evaluation'/o['native']),color=asset(run/'evaluation'/o['preserved'])))
         cases.append(item)
     labels=dict(wplus_base='W+ 基线',highres_control='高清重建适配',highres_patch_gan='高清重建＋局部 GAN',direct_latent='直接编码潜变量训练',matched_wplus='匹配 W+ 潜变量训练')
+    labels.update(conditional_control='年龄条件适配＋年龄保护',conditional_gan='年龄条件适配＋年龄保护＋局部 GAN')
     data=dict(cases=cases,note=decision['gallery_note'],labels=labels)
     (out/'index.html').write_text(PAGE.replace('__DATA__',json.dumps(data,ensure_ascii=False).replace('<','\\u003c')))
     print('TEXTURE_GALLERY_READY',len(cases),out)

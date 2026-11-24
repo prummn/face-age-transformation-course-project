@@ -43,10 +43,16 @@ def main():
     parser.add_argument('--browser-python',type=Path,default=ROOT/'deployment/control-venv/bin/python')
     args=parser.parse_args();run=args.run.resolve()
     experiment=json.loads((run/'experiment.json').read_text())
-    if experiment['profile']!='matched_training_latent_distribution':raise ValueError('Unexpected study')
+    if experiment['profile'] not in ('matched_training_latent_distribution','conditional_age_preserved_texture'):raise ValueError('Unexpected study')
+    conditional=experiment['profile']=='conditional_age_preserved_texture'
+    arms=['control','patch_gan'] if conditional else ['direct_latent','matched_wplus']
+    slug='age-conditional-texture' if conditional else 'age-latent-match'
     receipt=json.loads((run/'receipt.json').read_text())
-    folder=run/'public-status';folder.mkdir(exist_ok=True);(folder/'index.html').write_text(PAGE)
-    safe_link('age-latent-match',folder)
+    page=PAGE.replace('age-latent-match',slug)
+    if conditional:
+        page=page.replace('W+匹配训练对照','年龄条件纹理对照').replace('直接编码潜变量训练与W+匹配训练','年龄条件重建对照与额外局部GAN监督').replace('直接编码训练','条件重建训练').replace('W+匹配训练','局部GAN训练')
+    folder=run/'public-status';folder.mkdir(exist_ok=True);(folder/'index.html').write_text(page)
+    safe_link(slug,folder)
     status=dict(state='running',message='正在准备训练侧W+代码',cached=0,direct_steps=0,matched_steps=0)
     def update(**changes):
         status.update(changes);status['updated']=datetime.now(timezone.utc).isoformat();atomic(folder/'status.json',status)
@@ -59,34 +65,50 @@ def main():
         while not (run/'DONE').exists():
             if time.monotonic()>deadline:raise TimeoutError('Observer deadline; GPU task has its own48m cap')
             count=len(list((run/'train-codes').glob('*.pt'))) if (run/'train-codes').exists() else 0
-            direct=latest_step(run/'direct_latent/train.jsonl');matched=latest_step(run/'matched_wplus/train.jsonl')
-            phase='拟合训练侧W+代码' if count<60 else ('训练直接编码对照' if direct<1000 else ('训练W+匹配组' if matched<1000 else '生成固定代码对照结果'))
+            direct=latest_step(run/arms[0]/'train.jsonl');matched=latest_step(run/arms[1]/'train.jsonl')
+            phase='拟合训练侧W+代码' if count<60 else ('训练共同对照组' if direct<1000 else ('训练实验组' if matched<1000 else '生成固定代码对照结果'))
             update(cached=count,direct_steps=direct,matched_steps=matched,message=phase)
             if time.monotonic()-last_platform_check>60:
                 result=job.get_job(ctx,job.models.GetJobReq(Project='fdj-infra',JobId=receipt['job_id']));last_platform_check=time.monotonic()
                 if result.Phase in ('Failed','Stopped'):raise RuntimeError('GPU task '+result.Phase+'; inspect worker.log')
             time.sleep(20)
         update(state='scoring',message='GPU生成完成，正在CPU独立评估',cached=60,direct_steps=1000,matched_steps=1000)
-        logs=[[json.loads(x) for x in (run/name/'train.jsonl').read_text().splitlines()] for name in ['direct_latent','matched_wplus']]
+        logs=[[json.loads(x) for x in (run/name/'train.jsonl').read_text().splitlines()] for name in arms]
         if any(len(x)!=1000 for x in logs):raise ValueError('Incomplete paired training')
         fields=['step','name','real','target','flip','jitter','patch_flip','contrast']
         if any(any(a[k]!=b[k] for k in fields) for a,b in zip(*logs)):raise ValueError('Paired sampling differs')
-        completions=[json.loads((run/name/'completed.json').read_text()) for name in ['direct_latent','matched_wplus']]
+        completions=[json.loads((run/name/'completed.json').read_text()) for name in arms]
         if completions[0]['frozen_tensors_sha256']!=completions[1]['frozen_tensors_sha256']:raise ValueError('Frozen models differ')
         atomic(run/'paired-verification.json',dict(steps=1000,sampling_equal=True,frozen_parameters_equal=True,no_automatic_promotion=True))
+        if conditional:
+            import numpy as np
+            from PIL import Image
+            report=json.loads((run/'evaluation/report.json').read_text())
+            baselines={(x['name'],x['condition']):x for x in report['outputs'] if x['route']=='wplus_base'}
+            checks=[]
+            for row in report['outputs']:
+                if row['route']=='wplus_base' or row['condition'] not in ('20','40'):continue
+                base=baselines[row['name'],row['condition']]
+                with Image.open(run/'evaluation'/base['native']) as im:reference=np.asarray(im.convert('RGB')).astype(np.int16)
+                with Image.open(run/'evaluation'/row['native']) as im:output=np.asarray(im.convert('RGB')).astype(np.int16)
+                maximum=int(np.abs(reference-output).max())
+                if maximum>1:raise ValueError('Zero-gate output changed beyond single-vs-batch rounding: '+row['name'])
+                checks.append(dict(name=row['name'],route=row['route'],condition=row['condition'],max_rgb8_difference=maximum))
+            if len(checks)!=60:raise ValueError('Missing young-age invariance checks')
+            atomic(run/'young-age-invariance.json',dict(checked=len(checks),maximum_difference=max(x['max_rgb8_difference'] for x in checks),checks=checks))
         command(sys.executable,ROOT/'integration/quality/summarize_highres_texture.py',run)
         command(args.age_python,ROOT/'integration/quality/check_independent_age.py','--model',ROOT/'deployment/asia-adaptation/20261123/mivolo_v2_age.onnx',
             '--sources',run/'independent-age-inputs.json','--out',run/'independent-age.json')
         command(sys.executable,ROOT/'integration/quality/summarize_highres_texture.py',run,'--age-report',run/'independent-age.json')
         command(sys.executable,ROOT/'integration/quality/measure_texture_changes.py',run)
         summary=json.loads((run/'summary.json').read_text())
-        atomic(run/'decision.json',dict(selected='wplus_base',promotion=False,visually_reviewed=[],numeric_guard_pass=summary['numeric_guard_pass'],
-            gallery_note='潜变量匹配机制对照：原W+基线、直接编码训练、W+匹配训练。固定同一组验证代码与原生1024输出；数值结果已完成，纹理自然度尚待人工复核，未替换演示模型。'))
+        note='年龄条件纹理对照：共同年龄条件参数适配与年龄响应保护，仅实验组增加256像素局部GAN。原始1024真实输出；数值评估完成，纹理自然度尚待人工复核，未替换演示模型。' if conditional else '潜变量匹配机制对照：原W+基线、直接编码训练、W+匹配训练。固定同一组验证代码与原生1024输出；数值结果已完成，纹理自然度尚待人工复核，未替换演示模型。'
+        atomic(run/'decision.json',dict(selected='wplus_base',promotion=False,visually_reviewed=[],numeric_guard_pass=summary['numeric_guard_pass'],gallery_note=note))
         gallery=run/'gallery';command(sys.executable,ROOT/'integration/quality/build_texture_review.py',run,gallery)
-        safe_link('age-latent-match-review',gallery)
-        command(args.browser_python,ROOT/'integration/quality/verify_texture_review_browser.py','http://127.0.0.1:65512/age-latent-match-review/',run,'--texture',timeout=180)
+        safe_link(slug+'-review',gallery)
+        command(args.browser_python,ROOT/'integration/quality/verify_texture_review_browser.py','http://127.0.0.1:65512/'+slug+'-review/',run,'--texture',timeout=180)
         atomic(run/'automatic-completion.json',dict(status='ready',completed=datetime.now(timezone.utc).isoformat(),numeric_guard_pass=summary['numeric_guard_pass'],
-            native_review_pending=True,default_model_changed=False,gallery='/age-latent-match-review/'))
+            native_review_pending=True,default_model_changed=False,gallery='/'+slug+'-review/'))
         update(state='ready',message='训练、独立评估和网页检查完成；原生纹理尚待人工复核')
         print('MATCHED_STUDY_READY',run,flush=True)
     except Exception as error:
