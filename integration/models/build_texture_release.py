@@ -25,6 +25,7 @@ def main():
     items=[]
     for arm,name in [('control','generator-highres-control.pt'),('patch_gan','generator-highres-patch-gan.pt')]:
         source=run/arm/'generator_patch.pt';dest=helper.ASSETS/name
+        if helper.sha(source)!=json.loads((run/arm/'completed.json').read_text())['patch_sha256']:raise ValueError('Completed checkpoint digest differs')
         if dest.exists() and helper.sha(dest)!=helper.sha(source):raise ValueError('Preserving different staged weight')
         if not dest.exists():shutil.copy2(source,dest)
         digest=helper.sha(dest);size=dest.stat().st_size
@@ -36,7 +37,7 @@ def main():
     def jsonfile(relative,value):
         path=helper.generated(relative,helper.scrub(value));files[relative]=path
     evidence={}
-    for name in ('experiment.json','summary.json','decision.json','common-audit.json','browser-validation.json','platform-final.json','native-change-summary.json'):
+    for name in ('experiment.json','summary.json','decision.json','common-audit.json','browser-validation.json','platform-final.json','native-change-summary.json','dependency-wheels.json','independent-age-report.json'):
         path=run/name
         if path.exists():
             value=json.loads(path.read_text())
@@ -57,6 +58,9 @@ def main():
         for row in credits:
             if row['name'] not in ('ffhq_64376','ffhq_64919') or Path(row['file']).name!=row['file']:raise ValueError('Unexpected public panel')
             files['deployment/shared-research/texture-pilot/'+row['file']]=panels/row['file']
+            panel=panels/row['file'];digest=helper.sha(panel);size=panel.stat().st_size
+            items.append(dict(id=row['file'],group='examples',format='file',filename=row['file'],bytes=size,sha256=digest,
+                files=[dict(path='deployment/shared-research/texture-pilot/'+row['file'],bytes=size,sha256=digest)],assets=helper.parts(panel,row['file'])))
         jsonfile('deployment/shared-research/texture-pilot/public-panel-credits.json',credits)
     jsonfile('deployment/shared-research/texture-pilot/results.json',evidence)
     comparison=ROOT/'deployment/age-quality-final/research-20261124/encoder-and-audit.json'
@@ -69,13 +73,18 @@ def main():
     jsonfile('deployment/shared-research/texture-pilot/training-sources.json',source_manifest)
     for path in (run/'source').iterdir():
         if path.is_file():files['deployment/shared-research/texture-pilot/source/'+path.name]=path
+    for name in ('summarize_highres_texture.py','measure_texture_changes.py','build_texture_review.py','build_public_texture_panels.py','check_independent_age.py'):
+        files['deployment/shared-research/texture-pilot/postprocess/'+name]=ROOT/'integration/quality'/name
     files['deployment/shared-research/texture-pilot/SAM-LICENSE.txt']=ROOT/'deployment/model-files/face-age/src/SAM/LICENSE'
+    for notice in (ROOT/'deployment/model-files/face-age/src/SAM/licenses').iterdir():
+        if notice.is_file():files['deployment/shared-research/texture-pilot/licenses/'+notice.name]=notice
     files['deployment/shared-research/texture-pilot/report.md']=ROOT/'integration/quality/20261124_高龄纹理单卡对照结果.md'
     items.append(helper.archive('evidence',files))
     manifest=dict(schema_version=1,repository='prummn/face-age-transformation-course-project',release_tag=TAG,
         source_branch='dev/mobei-gan-portable-20261116',source_base_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
         groups=dict(weights='Two small high-resolution generator research patches; original SAM weights also required.',
-                    evidence='Audits, recipes, FFHQ sources, two source-attributed public panels; no private/APPA portraits or W+ codes.'),items=items)
+                    evidence='Audits, recipes, FFHQ sources, two source-attributed public panels; no private/APPA portraits or W+ codes.',
+                    examples='Two publicly viewable FFHQ comparison panels; source author and licence appear in each image and the evidence archive.'),items=items)
     helper.save(a.manifest,manifest);helper.save(helper.ASSETS/'manifest.json',manifest)
     sums=''.join(helper.sha(path)+'  '+path.name+'\n' for path in sorted(helper.ASSETS.iterdir()) if path.name!='SHA256SUMS')
     (helper.ASSETS/'SHA256SUMS').write_text(sums)

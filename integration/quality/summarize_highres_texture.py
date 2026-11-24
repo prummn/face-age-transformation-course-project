@@ -20,7 +20,13 @@ def main():
     ages={x['name']:x['prediction'] for x in json.loads(a.age_report.read_text())['results']}
     if set(ages)!={x['name'] for x in inputs}:raise ValueError('Independent age coverage differs')
     groups=defaultdict(list)
+    metadata={x['name']:x for x in r['records']}
+    anchors={(x['name'],x['route']):x for x in r['outputs'] if x['condition']=='same'}
+    aliases=[]
     for o in r['outputs']:
+        if o['condition']!='same' and o['target']==metadata[o['name']]['source_age']:
+            original=o;o=dict(anchors[o['name'],o['route']],condition=o['condition'],target=o['target'])
+            aliases.append(dict(name=o['name'],route=o['route'],condition=o['condition'],raw_native=original['native'],canonical_native=o['native']))
         groups[o['cohort'],o['route']].append(o);groups['pooled',o['route']].append(o)
     result=defaultdict(dict);criteria=json.loads((run/'experiment.json').read_text())['criteria']
     for (cohort,route),items in groups.items():
@@ -41,7 +47,7 @@ def main():
             checks[route][cohort+'-same-identity']=cand['same_identity'] is not None and cand['same_identity']>=base['same_identity']-criteria['identity_drop_max']
             checks[route][cohort+'-detection']=cand['missing_faces']<=base['missing_faces']
             checks[route][cohort+'-age-span']=cand['span_valid']>=base['span_valid'] and cand['age20to75_span'] is not None and cand['age20to75_span']>=base['age20to75_span']*criteria['age_span_min_ratio']
-    summary=dict(cohorts=result,checks=checks,independent_ages=ages,
+    summary=dict(cohorts=result,checks=checks,independent_ages=ages,source_equals_target_aliases=aliases,
         numeric_guard_pass=[route for route,flags in checks.items() if all(flags.values())],
         promotion=False,note='Texture naturalness requires native review. Passing numeric guards does not establish improvement; this small previously reviewed panel is development/regression, not a new blind test.')
     write_json(run/'summary.json',summary);print(json.dumps(dict(pooled=result['pooled'],checks=checks),indent=2))

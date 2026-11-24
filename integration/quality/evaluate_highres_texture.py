@@ -92,6 +92,9 @@ def main():
                 opt.step()
             codes=torch.cat([state['anchor'],(pivot+torch.cat([correction,torch.zeros_like(pivot[:,8:])],1)).detach()])
             torch.cuda.synchronize();fit_seconds=time.monotonic()-t
+        # Source-equal targets must use the same reconstruction anchor.
+        for index,target in enumerate(targets,1):
+            if target==source:codes[index].copy_(codes[0])
         torch.save(dict(codes=codes.cpu(),conditions=['same','20','40','60','75']),folder/'fixed_codes.pt')
         for route in routes:
             apply(original if route=='wplus_base' else patches[route]);t=time.monotonic()
@@ -102,7 +105,7 @@ def main():
                 native=((image.clamp(-1,1)+1)*127.5).permute(1,2,0).byte().cpu().numpy();f=feature(native)
                 file=folder/f'{route}_{label}.png';Image.fromarray(native).save(file)
                 with Image.open(file) as check:check.load();assert check.size==(1024,1024) and check.format=='PNG'
-                if reuse and route=='wplus_base' and sha256(file)!=old_hashes[row['name'],label]:raise RuntimeError('Reused baseline PNG differs from original fixed-code comparison')
+                if reuse and route=='wplus_base' and sha256(file)!=old_hashes[row['name'],'same' if target==source else label]:raise RuntimeError('Reused baseline PNG differs from original fixed-code comparison')
                 color,_=preserve_source_chroma(rgb,native);preserved=file.with_name(file.stem+'_color.png');Image.fromarray(color).save(preserved)
                 report['outputs'].append(dict(name=row['name'],cohort=row['cohort'],route=route,condition=label,target=target,
                     native=str(file.relative_to(out)),preserved=str(preserved.relative_to(out)),sha256=sha256(file),
@@ -111,7 +114,7 @@ def main():
         write_json(out/'report.partial.json',report);print('TEXTURE_EVAL',row['name'],round(fit_seconds,2),flush=True)
         del codes,images
         if not reuse:del loss,edited,correction,opt
-    report['fixed_code_run']=str(reuse) if reuse else None;report['reused_baseline_exact']=bool(reuse)
+    report['fixed_code_run']=str(reuse) if reuse else None;report['reused_baseline_exact']=bool(reuse);report['source_equal_target_uses_anchor']=True
     report['total_seconds']=time.monotonic()-started;write_json(out/'report.json',report);(out/'DONE').write_text('Paired native generator comparison complete\n')
     print('TEXTURE_EVALUATION_DONE',len(report['outputs']),flush=True)
 

@@ -14,17 +14,25 @@ def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('run',type=Path);a=p.parse_args();run=a.run.resolve();folder=run/'evaluation'
     report=json.loads((folder/'report.json').read_text());base={(r['name'],r['condition']):r for r in report['outputs'] if r['route']=='wplus_base'}
     raw={};changes=[];reconstruction=[];cv2.setNumThreads(2)
+    metadata={r['name']:r for r in report['records']}
     def image(path):
         with Image.open(path) as im:im.load();return np.asarray(im.convert('RGB')).astype(np.float32)
+    anchors={(x['name'],x['route']):x for x in report['outputs'] if x['condition']=='same'}
+    def canonical(row):
+        if row['condition']!='same' and row['target']==metadata[row['name']]['source_age']:
+            return dict(anchors[row['name'],row['route']],condition=row['condition'],target=row['target'])
+        return row
     for row in report['outputs']:
+        row=canonical(row)
         if row['condition'] not in ('same','60','75'):continue
         key=(row['name'],row['condition'])
-        if key not in raw:raw[key]=image(folder/base[key]['native'])
+        if key not in raw:raw[key]=image(folder/canonical(base[key])['native'])
         output=image(folder/row['native']);reference=raw[key]
         changes.append(dict(name=row['name'],cohort=row['cohort'],route=row['route'],condition=row['condition'],
             difference_rgb8=float(np.abs(output-reference).mean()),face_difference_rgb8=float(np.abs(output-reference)[300:800,220:804].mean()),
             max_difference_rgb8=float(np.abs(output-reference).max())))
-        if row['condition']=='same':
+        record=metadata[row['name']]
+        if row['condition']=='same' and record.get('source_face_short_edge',record.get('native_face_short_edge',0))>=512:
             real=image(folder/row['name']/'reference.png')
             if real.shape!=(1024,1024,3):continue
             roi=(slice(300,800),slice(220,804))

@@ -1,0 +1,311 @@
+{
+  "schema_version": 1,
+  "repository": "prummn/face-age-transformation-course-project",
+  "release_tag": "research-mobei-texture-pilot-2026-11-24",
+  "source_branch": "dev/mobei-gan-portable-20261116",
+  "source_base_commit": "7bb951f15f8f4539e6e84eaa3374f9ef4ec7828c",
+  "groups": {
+    "weights": "Two small high-resolution generator research patches; original SAM weights also required.",
+    "evidence": "Audits, recipes, FFHQ sources, two source-attributed public panels; no private/APPA portraits or W+ codes.",
+    "examples": "Two publicly viewable FFHQ comparison panels; source author and licence appear in each image and the evidence archive."
+  },
+  "items": [
+    {
+      "id": "generator-highres-control.pt",
+      "group": "weights",
+      "format": "file",
+      "filename": "generator-highres-control.pt",
+      "bytes": 33351422,
+      "sha256": "ea734d14f10f6b9ecc81ab0d363448c2fed83afb870954aed5c3723c8699248c",
+      "files": [
+        {
+          "path": "deployment/shared-research/texture-pilot/generator-highres-control.pt",
+          "bytes": 33351422,
+          "sha256": "ea734d14f10f6b9ecc81ab0d363448c2fed83afb870954aed5c3723c8699248c"
+        }
+      ],
+      "assets": [
+        {
+          "name": "generator-highres-control.pt",
+          "bytes": 33351422,
+          "sha256": "ea734d14f10f6b9ecc81ab0d363448c2fed83afb870954aed5c3723c8699248c",
+          "tag": "research-mobei-texture-pilot-2026-11-24"
+        }
+      ],
+      "status": "Exploratory high-resolution generator parameter patch, not an encoder or a promoted default."
+    },
+    {
+      "id": "generator-highres-patch-gan.pt",
+      "group": "weights",
+      "format": "file",
+      "filename": "generator-highres-patch-gan.pt",
+      "bytes": 33351422,
+      "sha256": "00e52cd314b5eb42a6814c696cb15a62164a80e80ccffccb69e29cd62d372e1b",
+      "files": [
+        {
+          "path": "deployment/shared-research/texture-pilot/generator-highres-patch-gan.pt",
+          "bytes": 33351422,
+          "sha256": "00e52cd314b5eb42a6814c696cb15a62164a80e80ccffccb69e29cd62d372e1b"
+        }
+      ],
+      "assets": [
+        {
+          "name": "generator-highres-patch-gan.pt",
+          "bytes": 33351422,
+          "sha256": "00e52cd314b5eb42a6814c696cb15a62164a80e80ccffccb69e29cd62d372e1b",
+          "tag": "research-mobei-texture-pilot-2026-11-24"
+        }
+      ],
+      "status": "Exploratory high-resolution generator parameter patch, not an encoder or a promoted default."
+    },
+    {
+      "id": "ffhq_64376-native75.png",
+      "group": "examples",
+      "format": "file",
+      "filename": "ffhq_64376-native75.png",
+      "bytes": 965148,
+      "sha256": "77873bd350c0f1ef4611129af27c61e031f4fb51f7104a1b04bc61f7b1f7cc68",
+      "files": [
+        {
+          "path": "deployment/shared-research/texture-pilot/ffhq_64376-native75.png",
+          "bytes": 965148,
+          "sha256": "77873bd350c0f1ef4611129af27c61e031f4fb51f7104a1b04bc61f7b1f7cc68"
+        }
+      ],
+      "assets": [
+        {
+          "name": "ffhq_64376-native75.png",
+          "bytes": 965148,
+          "sha256": "77873bd350c0f1ef4611129af27c61e031f4fb51f7104a1b04bc61f7b1f7cc68",
+          "tag": "research-mobei-texture-pilot-2026-11-24"
+        }
+      ]
+    },
+    {
+      "id": "ffhq_64919-native75.png",
+      "group": "examples",
+      "format": "file",
+      "filename": "ffhq_64919-native75.png",
+      "bytes": 892496,
+      "sha256": "7f5a80b322414a7ec56867a9d0df71d516c047efe1af9aea7d851983b72e66c6",
+      "files": [
+        {
+          "path": "deployment/shared-research/texture-pilot/ffhq_64919-native75.png",
+          "bytes": 892496,
+          "sha256": "7f5a80b322414a7ec56867a9d0df71d516c047efe1af9aea7d851983b72e66c6"
+        }
+      ],
+      "assets": [
+        {
+          "name": "ffhq_64919-native75.png",
+          "bytes": 892496,
+          "sha256": "7f5a80b322414a7ec56867a9d0df71d516c047efe1af9aea7d851983b72e66c6",
+          "tag": "research-mobei-texture-pilot-2026-11-24"
+        }
+      ]
+    },
+    {
+      "id": "evidence",
+      "group": "evidence",
+      "format": "tar.gz",
+      "filename": "evidence.tar.gz",
+      "bytes": 2849144,
+      "sha256": "48a87269f202ff8874a0b6c1d9cb3cbb7a0788bb0ead39128b7c8c20c3daaede",
+      "files": [
+        {
+          "path": "deployment/shared-research/texture-pilot/SAM-LICENSE.txt",
+          "bytes": 1068,
+          "sha256": "966ec903a9efd640e248743d877cc538c2a8e384ff533d3cfacc3a3bf152f3d5"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/control-train.json",
+          "bytes": 1470172,
+          "sha256": "65372d12db199ff1f8671b76735005320f6da00e53365e259f61936dacfc26c4"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/encoder-and-audit.json",
+          "bytes": 15586,
+          "sha256": "cdcc97b6dc3a6585f19a36f016a44094bf0622175bccba83637c852a4008cd72"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/ffhq_64376-native75.png",
+          "bytes": 965148,
+          "sha256": "77873bd350c0f1ef4611129af27c61e031f4fb51f7104a1b04bc61f7b1f7cc68"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/ffhq_64919-native75.png",
+          "bytes": 892496,
+          "sha256": "7f5a80b322414a7ec56867a9d0df71d516c047efe1af9aea7d851983b72e66c6"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/initial500-source/deterministic_quality_ops.py",
+          "bytes": 2842,
+          "sha256": "dcf5cedcbe05eff331e4e996561330330feb56780c68980652a866c0afa86e7e"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/initial500-source/evaluate_highres_texture.py",
+          "bytes": 8069,
+          "sha256": "b594f53f372afa7b550732f6c2610f47b38e3f03c2e2437c336dd7914058f2ee"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/initial500-source/latent_quality.py",
+          "bytes": 6159,
+          "sha256": "a0f95a3bc89a0077d5d18879e31bc08608ce502b281b3f8773621e6e56c07b50"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/initial500-source/probe_inversion.py",
+          "bytes": 15890,
+          "sha256": "febc5153b69994b5ba50ac7b7dc5ec721aeaddf5d430da8fdb6324c925d69d47"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/initial500-source/run_highres_texture.sh",
+          "bytes": 1557,
+          "sha256": "788eb7cb41d10d26cdc5c9551798d11637b7ce6350b4bddad36990dc69f95324"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/initial500-source/source_color.py",
+          "bytes": 6066,
+          "sha256": "1759c7a0a5fa842fa84af46e35ed0d72457b224c661f74de62495f0f026e3c54"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/initial500-source/submit_highres_texture.py",
+          "bytes": 5976,
+          "sha256": "3c8853eecf77d2635b6efb2ee0e3ec4dae2b142716a0a369c7a57f795edc1918"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/initial500-source/train_highres_texture.py",
+          "bytes": 12102,
+          "sha256": "f7aa4d354135fcd21b9148e20989919aaaa6253e28302bd2ba18aacb96bad92e"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/licenses/LICENSE_InterDigitalInc",
+          "bytes": 14328,
+          "sha256": "d03fc2a3421fff8865b04536332945fc6904d3f83cc7679088f1cf1c9a0c1b0a"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/licenses/LICENSE_S-aiueo32",
+          "bytes": 1319,
+          "sha256": "eb1f0bfe2b74df5858a01a34e2eb2b01286a6301d5e35d8460db305fa2262370"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/licenses/LICENSE_TreB1eN",
+          "bytes": 1063,
+          "sha256": "d32944f257baa4fd84e239e7fa0d0e68e9d3fc80f2a6b17c5655495790626410"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/licenses/LICENSE_eladrich",
+          "bytes": 1085,
+          "sha256": "38e139da8fdfedea3e4d458baa0cd096a8637a3e48503c8e842ae0cefd16c52c"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/licenses/LICENSE_lessw2020",
+          "bytes": 11356,
+          "sha256": "43070e2d4e532684de521b885f385d0841030efa2b1a20bafb76133a5e1379c1"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/licenses/LICENSE_rosinality",
+          "bytes": 1070,
+          "sha256": "93a85fe21c420c9f0dac24f578447094399656fed5555103236f89084452991d"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/patch_gan-train.json",
+          "bytes": 1531229,
+          "sha256": "8a55174d9759326bd3fa90c25f3b22a29ecebc6c9d2d3fb170530c044c8a5b1a"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/postprocess/build_public_texture_panels.py",
+          "bytes": 2839,
+          "sha256": "b1510e2972fbe4df3892e04ee460027b42d726b3fe8f4a648beb57ea94f621c2"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/postprocess/build_texture_review.py",
+          "bytes": 6936,
+          "sha256": "78aa616b5b0e6fc49f5e72272a04a81a3cb67826a0f1e6d80396bae4d160de32"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/postprocess/check_independent_age.py",
+          "bytes": 7241,
+          "sha256": "3dff3eadb31542b571f6ef9eea98969d2daff15c522575457a4bf5875b4c1f9a"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/postprocess/measure_texture_changes.py",
+          "bytes": 3665,
+          "sha256": "f3c875392a1c88d5b1687d50fbf79ce129fdc73e8b210b962d56efe2f1934607"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/postprocess/summarize_highres_texture.py",
+          "bytes": 3997,
+          "sha256": "7eb05956c797564b7481692db46f2c9393195fe8aa68183cf6f583c403686842"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/public-panel-credits.json",
+          "bytes": 1164,
+          "sha256": "8efddd23108c3f5704df453b147db37b8514bd7960cd16d58e0391b83d5d14cb"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/report.md",
+          "bytes": 15272,
+          "sha256": "b0cd49002262f610deeaaeec37128342a9a2f7b944af67bb73af3a24c4455c35"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/results.json",
+          "bytes": 215669,
+          "sha256": "f8ce13e13286f7a44bc90b21eb3eef8266f9afa412dec873df5677798ad5ec13"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/source/deterministic_quality_ops.py",
+          "bytes": 2842,
+          "sha256": "dcf5cedcbe05eff331e4e996561330330feb56780c68980652a866c0afa86e7e"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/source/evaluate_highres_texture.py",
+          "bytes": 9220,
+          "sha256": "e6bf4c88922476b97e23ae6aa9218bd3f41a61142ec1918ed435504079a7334c"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/source/latent_quality.py",
+          "bytes": 6159,
+          "sha256": "a0f95a3bc89a0077d5d18879e31bc08608ce502b281b3f8773621e6e56c07b50"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/source/probe_inversion.py",
+          "bytes": 15890,
+          "sha256": "febc5153b69994b5ba50ac7b7dc5ec721aeaddf5d430da8fdb6324c925d69d47"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/source/run_highres_texture.sh",
+          "bytes": 2018,
+          "sha256": "c7e973c4cc3556a0f9e67795853825b155e111f99f246de15afbdd4e430b4e16"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/source/source_color.py",
+          "bytes": 6066,
+          "sha256": "1759c7a0a5fa842fa84af46e35ed0d72457b224c661f74de62495f0f026e3c54"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/source/submit_highres_texture.py",
+          "bytes": 7008,
+          "sha256": "9ae143db133007c7bb272f735e67499aab38a255ced4d57400402d70c019bfe1"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/source/train_highres_texture.py",
+          "bytes": 12687,
+          "sha256": "a1186c332f71fe0efa7be577e708a64e1a67ba41c91b51003aef88e16d2de659"
+        },
+        {
+          "path": "deployment/shared-research/texture-pilot/training-sources.json",
+          "bytes": 776915,
+          "sha256": "ef91578559aa1ec09fa8d2cf00b5517a3844a596ee5912b884ad9a2587c3a703"
+        }
+      ],
+      "assets": [
+        {
+          "name": "evidence.tar.gz",
+          "bytes": 2849144,
+          "sha256": "48a87269f202ff8874a0b6c1d9cb3cbb7a0788bb0ead39128b7c8c20c3daaede",
+          "tag": "research-mobei-texture-pilot-2026-11-24"
+        }
+      ]
+    }
+  ]
+}
