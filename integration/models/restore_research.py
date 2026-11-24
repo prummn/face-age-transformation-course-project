@@ -154,14 +154,14 @@ def main():
     p.add_argument('--manifest',type=Path,default=Path(__file__).with_name('research-20261117.json'))
     p.add_argument('--list',action='store_true');p.add_argument('--verify-only',action='store_true')
     a=p.parse_args();manifest=json.loads(a.manifest.read_text());groups=a.group or ['demo']
-    unknown=set(groups)-set(manifest['groups'])
-    if unknown:p.error('Unknown groups: '+', '.join(sorted(unknown)))
-    items=[x for x in manifest['items'] if x['group'] in groups]
     if a.list:
         for key,spec in manifest['groups'].items():
             size=sum(x['bytes'] for x in manifest['items'] if x['group']==key)
             print(f'{key}: {size/1024**3:.3f} GiB — {spec}')
         return
+    unknown=set(groups)-set(manifest['groups'])
+    if unknown:p.error('Unknown groups: '+', '.join(sorted(unknown)))
+    items=[x for x in manifest['items'] if x['group'] in groups]
     tag=manifest.get('release_tag',TAG)
     if not isinstance(tag,str) or not tag or tag in ('.','..') or '/' in tag or '\\' in tag:
         raise ValueError('Invalid research release cache name')
