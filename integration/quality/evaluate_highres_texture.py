@@ -41,11 +41,13 @@ def main():
     detector=cv2.FaceDetectorYN.create(str(base/'models/yunet/face_detection_yunet_2023mar.onnx'),'',(256,256),.6,.3,100)
     sf=cv2.FaceRecognizerSF.create(str(repo/'deployment/gan-research/face_recognition_sface_2021dec.onnx'),'')
     named=dict(net.decoder.named_parameters());patches={}
-    for label,arm in [('highres_control','control'),('highres_patch_gan','patch_gan')]:
+    generator_routes=experiment.get('generator_routes',{'highres_control':'control','highres_patch_gan':'patch_gan'})
+    for label,arm in generator_routes.items():
         patches[label]=torch.load(run/arm/'generator_patch.pt',map_location='cuda:0',weights_only=True)
         if not set(patches[label])<=set(named):raise ValueError('Unknown generator parameter')
-    if set(patches['highres_control'])!=set(patches['highres_patch_gan']):raise ValueError('Paired generator scopes differ')
-    original={n:named[n].detach().clone() for n in patches['highres_control']}
+    scopes=list(patches.values())
+    if len(scopes)!=2 or set(scopes[0])!=set(scopes[1]):raise ValueError('Paired generator scopes differ')
+    original={n:named[n].detach().clone() for n in scopes[0]}
     def apply(state):
         with torch.no_grad():
             for n,value in state.items():named[n].copy_(value)

@@ -46,7 +46,8 @@ def main():
                     o=dict(anchors[o['name'],o['route']],condition=o['condition'],target=o['target'])
                 item['outputs'].append(dict(route=o['route'],condition=o['condition'],age=summary['independent_ages'][o['native']],identity=o['source_cosine'],raw=asset(run/'evaluation'/o['native']),color=asset(run/'evaluation'/o['preserved'])))
         cases.append(item)
-    data=dict(cases=cases,note=decision['gallery_note'],labels=dict(wplus_base='W+ 基线',highres_control='高清重建适配',highres_patch_gan='高清重建＋局部 GAN'))
+    labels=dict(wplus_base='W+ 基线',highres_control='高清重建适配',highres_patch_gan='高清重建＋局部 GAN',direct_latent='直接编码潜变量训练',matched_wplus='匹配 W+ 潜变量训练')
+    data=dict(cases=cases,note=decision['gallery_note'],labels=labels)
     (out/'index.html').write_text(PAGE.replace('__DATA__',json.dumps(data,ensure_ascii=False).replace('<','\\u003c')))
     print('TEXTURE_GALLERY_READY',len(cases),out)
 

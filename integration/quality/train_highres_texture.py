@@ -28,7 +28,12 @@ def main():
     p.add_argument('--min-resolution',type=int,choices=(64,128,256),default=256)
     p.add_argument('--generator-lr',type=float,default=2e-5)
     p.add_argument('--adversarial-weight',type=float,default=.02)
-    a=p.parse_args();run=a.run.resolve();out=run/a.arm
+    p.add_argument('--latent-source',choices=('encoder','wplus'),default='encoder')
+    p.add_argument('--output-name',choices=('direct_latent','matched_wplus'))
+    p.add_argument('--no-input-flip',action='store_true')
+    p.add_argument('--native-reference-input',action='store_true',help='Use the same OpenCV native-reference downsample as fixed-code inference')
+    a=p.parse_args();run=a.run.resolve();out=run/(a.output_name or a.arm)
+    if a.latent_source=='wplus' and not a.no_input_flip:raise ValueError('Cached W+ requires unflipped input')
     if not 1<=a.steps<=3000:raise ValueError('Bounded study requires 1..3000 steps')
     if not 0<a.generator_lr<=1e-4 or not 0<=a.adversarial_weight<=.2:raise ValueError('Learning rate or adversarial weight exceeds bounded study')
     records=read(run/'data/train.jsonl');evaluation=read(run/'data/eval.jsonl')+read(run/'data/external.jsonl')
@@ -46,6 +51,7 @@ def main():
         patch_gan='conditional age-bin and region discriminator; real native crops; common jitter/flip/contrast; patch-space lazy R1',
         target_ages=[60,75],weights=dict(pixel512=.5,lpips=.8,identity=.8,local_reconstruction=.15,
             teacher128=.5,target_identity=.5,generator_trust=.1,adversarial=a.adversarial_weight),
+        latent_source=a.latent_source,input_flip=not a.no_input_flip,native_reference_input=a.native_reference_input,
         caution='Exploratory generator pilot. FFHQ pretraining source; coarse apparent-age bins are not exact chronological labels. Direct encoder training must also be checked on fixed W+ latents.')
     print(json.dumps(plan,ensure_ascii=False),flush=True)
     if not a.execute:return
@@ -74,6 +80,17 @@ def main():
         if 2**(3+index//2)>=a.min_resolution:
             module.conv.requires_grad_(True);module.activate.requires_grad_(True)
     named={n:q for n,q in net.decoder.named_parameters() if q.requires_grad}
+    cached={}
+    if a.latent_source=='wplus':
+        index=json.loads((run/'train-codes/index.json').read_text())
+        if {r['name'] for r in eligible}!=set(index['items']):raise ValueError('W+ cache selection differs')
+        for row in eligible:
+            spec=index['items'][row['name']];path=run/'train-codes'/spec['file']
+            if spec['input_sha256']!=row['reference_sha256'] or spec['source_age']!=row['source_age'] or sha256(path)!=spec['sha256']:
+                raise ValueError('Training W+ cache changed')
+            value=torch.load(path,map_location='cuda:0',weights_only=True)
+            if value['conditions']!=['same','20','40','60','75'] or tuple(value['codes'].shape)!=(5,18,512):raise ValueError('Invalid training codes')
+            cached[row['name']]=value['codes']
     initial={n:q.detach().clone() for n,q in named.items()}
     frozen_before=digest_tensors((n,t) for n,t in net.state_dict().items() if n not in {'decoder.'+k for k in named})
     identity=IDLoss().cuda().eval().requires_grad_(False)
@@ -98,6 +115,8 @@ def main():
         path=r[key];expected=r.get('reference_sha256' if key=='reference_path' else 'sha256')
         if sha256(path)!=expected:raise ValueError('Image digest changed: '+r['name'])
         rgb=np.asarray(Image.open(path).convert('RGB'))
+        if key=='image_path' and a.native_reference_input:
+            rgb=cv2.resize(np.asarray(Image.open(r['reference_path']).convert('RGB')),(256,256),interpolation=cv2.INTER_AREA)
         if key=='image_path' and rgb.shape[:2]!=(256,256):raise ValueError('Expected aligned256')
         if key=='reference_path' and rgb.shape[:2]!=(1024,1024):raise ValueError('Native1024 reference required')
         return torch.from_numpy(np.array(rgb,copy=True,order='C')).permute(2,0,1)[None].cuda().float()/127.5-1
@@ -115,14 +134,19 @@ def main():
         return z.flip(-1) if flip else z
     for step in range(a.steps):
         low=rng.choice(list(bins));r=rng.choice(bins[low]);target=rng.choice((60,75));real=rng.choice(high[50 if target==60 else 70])
-        flip=rng.random()<.5;jitter=[(rng.randint(-12,12),rng.randint(-12,12)) for _ in REGIONS]
+        flip=rng.random()<.5
+        if a.no_input_flip:flip=False
+        jitter=[(rng.randint(-12,12),rng.randint(-12,12)) for _ in REGIONS]
         patch_flip=rng.random()<.5;contrast=rng.uniform(.85,1.15)
         x=image(r,'image_path');ref=image(r,'reference_path');real_native=image(real,'reference_path')
         if flip:x=x.flip(-1);ref=ref.flip(-1);real_native=real_native.flip(-1)
         used.add(r['name']);used_real.add(real['name'])
         with torch.no_grad():
-            b=net.pretrained_encoder(x)+net.latent_avg
-            same_code=b+net.encoder(cond(x,r['source_age']));target_code=b+net.encoder(cond(x,target))
+            if a.latent_source=='wplus':
+                codes=cached[r['name']];same_code=codes[:1];target_code=codes[3:4] if target==60 else codes[4:5]
+            else:
+                b=net.pretrained_encoder(x)+net.latent_avg
+                same_code=b+net.encoder(cond(x,r['source_age']));target_code=b+net.encoder(cond(x,target))
             # Evaluate the unmodified decoder at the same codes. Restore only the
             # explicitly trainable tensors, then put this arm's tensors back.
             saved={n:q.detach().clone() for n,q in named.items()}
