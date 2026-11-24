@@ -18,4 +18,4 @@ class AgeEst(nn.Module):
         s.register_buffer("m", torch.tensor([0.485, 0.456, 0.406]).view(1, 3, 1, 1)); s.register_buffer("sd", torch.tensor([0.229, 0.224, 0.225]).view(1, 3, 1, 1))
     def forward(s, x):
         x = F.interpolate((x + 1) / 2, size=(224, 224), mode="bilinear", align_corners=False); r, g, a = s.net((x - s.m) / s.sd)
-        return a.float().softmax(1) @ s.mid, r.float().softmax(1)[:, [0, 6]].sum(1)
+        return a.to(s.mid.dtype).softmax(1) @ s.mid, r.to(s.mid.dtype).softmax(1)[:, [0, 6]].sum(1)

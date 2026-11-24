@@ -36,8 +36,17 @@ class PrecisionTests(unittest.TestCase):
         self.torch.cuda.is_bf16_supported.return_value = True
         self.assertEqual(resolve_wplus_precision(self.torch, "cuda:0", "texture", "bf16"), "bf16")
 
+    def test_full_bf16_is_explicit_native_constrained_mode(self):
+        self.torch.cuda.is_bf16_supported.return_value = True
+        self.assertEqual(resolve_wplus_precision(self.torch, "cuda:0", "constrained", "bf16-full"), "bf16-full")
+        with self.assertRaisesRegex(ValueError, "requires constrained"):
+            resolve_wplus_precision(self.torch, "cuda:0", "texture", "bf16-full")
+        self.torch.cuda.is_bf16_supported.return_value = False
+        with self.assertRaisesRegex(ValueError, "Native BF16 is unavailable"):
+            resolve_wplus_precision(self.torch, "cuda:0", "constrained", "bf16-full")
+
     def test_unknown_precision_is_rejected(self):
-        with self.assertRaisesRegex(ValueError, "must be auto, fp32, or bf16"):
+        with self.assertRaisesRegex(ValueError, "must be auto, fp32, bf16, or bf16-full"):
             resolve_wplus_precision(self.torch, "cuda:0", "constrained", "fp16")
 
     def test_projection_receives_fp32_inputs_with_autocast_disabled(self):

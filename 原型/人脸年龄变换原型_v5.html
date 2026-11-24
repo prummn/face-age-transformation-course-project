@@ -692,19 +692,68 @@ async function continueFromInput(){
  stopGeneration();S.editSnapshot=null;S.ageRevision=(S.ageRevision||0)+1;S.age=age;S.results.forEach(release);S.results.clear();S.tasks=new Map(S.targets.map(t=>[t,{state:'queued',elapsed:0,error:''}]));S.demonstration=!adapters().generate;S.log=[];
  show('s-warp');$('#taskDetails').open=false;renderTasks();await runTargets([...S.targets]);
 }
-async function runTargets(targets){
- if(!S.face)return;const epoch=S.epoch,revision=++S.revision,sourceImage=S.face,sourceAge=S.age;S.generating=true;
- for(const target of targets){
-  if(epoch!==S.epoch||revision!==S.revision)break;
-  const task=S.tasks.get(target);task.state='running';task.error='';renderTasks();const start=performance.now();
-  try{
-   await new Promise(r=>setTimeout(r,30));
-   if(epoch!==S.epoch||revision!==S.revision)return;
-   const out=adapters().generate?await generateWithTimeout({image:sourceImage,sourceAge,targetAge:target,requestId:`${epoch}-${revision}-${target}`}):ageFace(sourceImage,sourceAge,target);
-   if(epoch!==S.epoch||revision!==S.revision){release(out);return;}
-   if(!(out instanceof HTMLCanvasElement||out instanceof ImageBitmap||out instanceof HTMLImageElement))throw new Error('生成模块没有返回图像');
-   const saved=canvas(out.naturalWidth||out.width,out.naturalHeight||out.height);saved.getContext('2d').drawImage(out,0,0,saved.width,saved.height);saved.ageMeta=out.ageMeta;saved.ageRaw=out.ageRaw||null;if(out!==S.face){out.ageRaw=null;release(out);}S.results.set(target,saved);task.state='done';task.elapsed=performance.now()-start;addLog(`${target} 岁：${S.demonstration?'本地演示滤镜':'真实模型生成'}完成 · ${saved.width}×${saved.height} · ${(task.elapsed/1000).toFixed(2)} s`);
-  }catch(error){if(epoch!==S.epoch||revision!==S.revision)return;task.state='failed';task.elapsed=performance.now()-start;task.error=String(error.message||'处理失败').slice(0,150);addLog(`${target} 岁：失败，${task.error}`);}
+async function runTargets(targets) {
+ if(!S.face)return;
+ const epoch=S.epoch,revision=++S.revision,sourceImage=S.face,sourceAge=S.age;
+ const adapter=adapters();
+ const pending=[...targets];
+ const batchSize=adapter.generateBatch ? Math.max(1,adapter.batchSize) : 1;
+ const current=()=>epoch===S.epoch && revision===S.revision;
+ S.generating=true;
+ let first=true;
+ while(pending.length && current()){
+  const group=pending.splice(0,first ? 1 : batchSize);
+  first=false;
+  for(const age of group){
+   const task=S.tasks.get(age);
+   task.state='running';
+   task.error='';
+  }
+  renderTasks();
+  const start=performance.now();
+  let outputs=[];
+  try {
+   await new Promise(resolve=>setTimeout(resolve,30));
+   if(!current())return;
+   if(group.length>1){
+    outputs=await adapter.generateBatch(group);
+   }else{
+    const age=group[0];
+    const requestId=[epoch,revision,age].join('-');
+    outputs=[adapter.generate
+      ? await generateWithTimeout({image:sourceImage,sourceAge,targetAge:age,requestId})
+      : ageFace(sourceImage,sourceAge,age)];
+   }
+   if(!current()){outputs.forEach(release);return;}
+   if(outputs.length!==group.length || outputs.some(out=>!(out instanceof HTMLCanvasElement ||
+         out instanceof ImageBitmap || out instanceof HTMLImageElement))){
+    throw new Error('生成模块没有返回完整图像');
+   }
+   for(let i=0;i<group.length;i++){
+    const age=group[i],out=outputs[i],task=S.tasks.get(age);
+    const saved=canvas(out.naturalWidth||out.width,out.naturalHeight||out.height);
+    saved.getContext('2d').drawImage(out,0,0,saved.width,saved.height);
+    saved.ageMeta=out.ageMeta;
+    saved.ageRaw=out.ageRaw||null;
+    if(out!==S.face){out.ageRaw=null;release(out);}
+    S.results.set(age,saved);
+    task.state='done';
+    task.elapsed=performance.now()-start;
+    addLog(age+' 岁：'+(S.demonstration?'本地演示滤镜':'真实模型生成')+'完成 · '+
+      saved.width+'×'+saved.height+' · '+(task.elapsed/1000).toFixed(2)+' s');
+   }
+  }catch(error){
+   outputs.forEach(release);
+   if(!current())return;
+   for(const age of group){
+    const task=S.tasks.get(age);
+    if(task.state==='done')continue;
+    task.state='failed';
+    task.elapsed=performance.now()-start;
+    task.error=String(error.message||'处理失败').slice(0,150);
+    addLog(age+' 岁：失败，'+task.error);
+   }
+  }
   renderTasks();
  }
  if(epoch===S.epoch&&revision===S.revision){S.generating=false;renderTasks();if(S.state==='s-warp'&&[...S.tasks.values()].every(t=>t.state==='done')){buildPages();startPlay();}else if(S.state==='s-grid'){returnToResults();}else if(S.state==='s-overview'){returnToResults();buildOverview();}}

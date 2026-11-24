@@ -19,8 +19,8 @@ import sys
 import threading
 import time
 from contextlib import asynccontextmanager, contextmanager
-from dataclasses import dataclass
-from typing import Optional
+from dataclasses import dataclass, field
+from typing import Annotated, Optional
 
 import numpy as np
 from PIL import Image, ImageOps, UnidentifiedImageError
@@ -40,6 +40,8 @@ MAX_REQUEST_BYTES = 21 * 1024 * 1024
 MAX_PIXELS = 24_000_000
 SESSION_TTL = 30 * 60
 MAX_SESSIONS = 8
+MAX_CACHED_AGES = 8
+MAX_AGE_BATCH_SIZE = 4
 ENGINE_NAME = "SAM / StyleGAN2"
 LOG = logging.getLogger("face_age_api")
 
@@ -66,6 +68,19 @@ class TransformRequest(BaseModel):
     preserve_color: bool = True
 
 
+class BatchTransformRequest(BaseModel):
+    session_id: str = Field(min_length=16, max_length=128)
+    target_ages: list[Annotated[int, Field(ge=5, le=90, strict=True)]] = Field(
+        min_length=1, max_length=MAX_AGE_BATCH_SIZE)
+    preserve_color: bool = True
+
+
+@dataclass
+class CachedAge:
+    native: np.ndarray
+    responses: dict[bool, dict] = field(default_factory=dict)
+
+
 @dataclass
 class Session:
     aligned: np.ndarray
@@ -76,6 +91,7 @@ class Session:
     latent_offset: object = None
     reference_rgb: object = None
     quality_state: object = None
+    age_cache: dict[int, CachedAge] = field(default_factory=dict)
 
 
 class SessionStore:
@@ -242,6 +258,8 @@ class SamePersonEngine:
         self.sr = None
         self.dev = os.environ.get("FACE_AGE_DEVICE", "npu:0")
         self.device_label = self.dev
+        self.full_bf16 = False
+        self.max_age_batch = 1
 
     def set_device(self):
         if self.accelerator is not None:
@@ -274,7 +292,16 @@ class SamePersonEngine:
                 raise ValueError("Unsupported FACE_AGE_DEVICE")
             sys.path.insert(0, str(BASE / "src"))
             from sam_npu import load_sam
-            from sam_losses import AgeEst
+            self.full_bf16 = QUALITY_PROFILE == "constrained" and WPLUS_PRECISION == "bf16-full"
+            if self.full_bf16:
+                from ascend.src.sam_losses import AgeEst
+
+                self.max_age_batch = int(os.environ.get("FACE_AGE_WPLUS_BATCH", "3"))
+                if not 1 <= self.max_age_batch <= MAX_AGE_BATCH_SIZE:
+                    raise ValueError(f"FACE_AGE_WPLUS_BATCH must be 1 through {MAX_AGE_BATCH_SIZE}")
+            else:
+                from sam_losses import AgeEst
+            self.tensor_dtype = torch.bfloat16 if self.full_bf16 else torch.float32
             self.cv2, self.torch = cv2, torch
             self.set_device()
             self.net = load_sam(self.dev)
@@ -282,7 +309,11 @@ class SamePersonEngine:
             self.identity_encoder = deepcopy(self.net.encoder)
             self.identity_encoder.load_state_dict(state)
             del state
-            self.age_net = AgeEst().to(self.dev).eval()
+            self.age_net = AgeEst().to(self.dev, dtype=self.tensor_dtype).eval()
+            if self.full_bf16:
+                self.net.to(dtype=self.tensor_dtype)
+                self.net.latent_avg = self.net.latent_avg.to(dtype=self.tensor_dtype)
+                self.identity_encoder.to(dtype=self.tensor_dtype)
             self.quality_refiner = None
             if QUALITY_PROFILE != "original":
                 if QUALITY_PROFILE not in ("anchor", "constrained", "texture", "texture_robust"):
@@ -293,7 +324,7 @@ class SamePersonEngine:
                 self.quality_refiner = LatentQuality(self, QUALITY_PROFILE, precision=WPLUS_PRECISION)
             self.yunet = str(BASE / "models/yunet/face_detection_yunet_2023mar.onnx")
             with torch.inference_mode():
-                warmup = torch.zeros(1, 4, 256, 256, device=self.dev)
+                warmup = torch.zeros(1, 4, 256, 256, device=self.dev, dtype=self.tensor_dtype)
                 self.net(warmup, randomize_noise=False, resize=False)
                 self.age_net(warmup[:, :3])
                 self.synchronize()
@@ -308,7 +339,7 @@ class SamePersonEngine:
             raise HTTPException(503, self.error or "年龄模型正在启动，请稍后重试。")
 
     def tensor(self, rgb):
-        return self.torch.from_numpy(np.ascontiguousarray(rgb)).permute(2, 0, 1).float().div(127.5).sub(1)[None].to(self.dev)
+        return self.torch.from_numpy(np.ascontiguousarray(rgb)).permute(2, 0, 1).float().div(127.5).sub(1)[None].to(self.dev, dtype=self.tensor_dtype)
 
     def align(self, rgb, selected):
         cv2 = self.cv2
@@ -381,9 +412,7 @@ class SamePersonEngine:
                 generated = self.net(codes, input_code=True, input_is_full=True,
                                      randomize_noise=False, resize=False)
             self.synchronize()
-            native = ((generated[0].clamp(-1, 1) + 1) * 127.5).permute(1, 2, 0).byte().cpu().numpy()
-            if native.shape != (1024, 1024, 3):
-                raise RuntimeError("Model output must be native 1024 x 1024")
+            native = self.native_pixels(generated)[0]
             elapsed = time.monotonic() - started
             output = native
             warning = None
@@ -405,6 +434,51 @@ class SamePersonEngine:
                     warning = "超分增强未完成，已保留可下载的原生 1024 结果。"
             assert_active()
             return native, output, elapsed, output_kind, warning
+
+    def native_pixels(self, generated):
+        if self.full_bf16 and (generated.dtype != self.torch.bfloat16 or not self.torch.isfinite(generated).all()):
+            raise RuntimeError("Invalid full BF16 model output")
+        native = ((generated.float().clamp(-1, 1) + 1) * 127.5).permute(0, 2, 3, 1).byte().cpu().numpy()
+        if native.shape[1:] != (1024, 1024, 3):
+            raise RuntimeError("Model output must be native 1024 x 1024")
+        return native
+
+    def transform_cached(self, item, ages, assert_active):
+        self.ensure_ready()
+        torch = self.torch
+        with self.lock, torch.inference_mode():
+            assert_active()
+            ready = {age: item.age_cache[age] for age in ages if age in item.age_cache}
+            missing = [age for age in ages if age not in ready]
+            elapsed = 0.0
+            batch_size = len(missing)
+            if missing:
+                self.set_device()
+                started = time.monotonic()
+                try:
+                    images = self.native_pixels(self.quality_refiner.run_many(item, missing, assert_active))
+                except torch.cuda.OutOfMemoryError:
+                    if len(missing) == 1:
+                        raise
+                    images = None
+                if images is None:
+                    LOG.warning("W+ batch of %d exceeded available GPU memory; retrying individually", len(missing))
+                    torch.cuda.empty_cache()
+                    batch_size = 1
+                    images = [self.native_pixels(self.quality_refiner.run(item, age, assert_active))[0]
+                              for age in missing]
+                self.synchronize()
+                elapsed = time.monotonic() - started
+                assert_active()
+                if len(images) != len(missing):
+                    raise RuntimeError("Model output count does not match requested ages")
+                for age, pixels in zip(missing, images):
+                    if len(item.age_cache) == MAX_CACHED_AGES:
+                        item.age_cache.pop(next(iter(item.age_cache)))
+                    entry = CachedAge(pixels.copy())
+                    item.age_cache[age] = entry
+                    ready[age] = entry
+            return ready, set(missing), elapsed, batch_size
 
 
 store = SessionStore()
@@ -514,6 +588,7 @@ def health():
             "source_color_preservation": True,
             "raw_model_output": True,
             "wplus_precision": refiner.precision if refiner is not None else None,
+            "age_batch_size": getattr(engine, "max_age_batch", 1),
         },
     }
 
@@ -538,30 +613,89 @@ def prepare(payload: PrepareRequest):
         return response
 
 
+def render_age(item, age, native, output, kind, warning, preserve_color):
+    from source_color import preserve_source_chroma
+
+    started = time.monotonic()
+    corrected, color_meta = preserve_source_chroma(item.aligned, native, .65 if preserve_color else 0)
+    if kind == "super_resolution":
+        output, _ = preserve_source_chroma(item.aligned, output, .65 if preserve_color else 0)
+    else:
+        output = corrected
+    elapsed = time.monotonic() - started
+    raw = image_data_url(native)
+    response = {
+        "image": raw if output is native else image_data_url(output),
+        "raw_image": raw,
+        "width": output.shape[1],
+        "height": output.shape[0],
+        "meta": {
+            "engine": ENGINE_NAME, "model": MODEL_NAME, "target_age": age,
+            "output_kind": kind, "alignment": "sam_ffhq", "color_preservation": color_meta,
+            "postprocess_seconds": round(elapsed, 3), "raw_model_size": 1024,
+        },
+    }
+    if kind == "super_resolution":
+        response["native_image"] = image_data_url(corrected)
+    if warning:
+        response["warning"] = warning
+    return response
+
+
+def request_metadata(result, request_id, elapsed, cached=False):
+    return {
+        **result,
+        "request_id": request_id,
+        "meta": {**result["meta"], "elapsed_seconds": round(elapsed, 3), "cached": cached},
+    }
+
+
+def generate_ages(session_id, item, ages, preserve_color, request_id=None):
+    ready, generated, elapsed, batch_size = engine.transform_cached(
+        item, ages, lambda: store.check(session_id, item))
+    results = []
+    for age in ages:
+        entry = ready[age]
+        store.check(session_id, item)
+        with store.lock:
+            cached = entry.responses.get(preserve_color)
+        if cached is None:
+            rendered = render_age(item, age, entry.native, entry.native, "native", None, preserve_color)
+            with store.lock:
+                store.check(session_id, item)
+                cached = entry.responses.setdefault(preserve_color, rendered)
+        results.append(request_metadata(cached, request_id, elapsed if age in generated else 0,
+                                        cached=age not in generated))
+    store.check(session_id, item)
+    return {"results": results, "model_seconds": round(elapsed, 3), "gpu_batch_size": batch_size}
+
+
 @app.post("/api/transform")
 def transform(payload: TransformRequest):
     engine.ensure_ready()
     with admitted():
         item = store.get(payload.session_id)
-        native, output, elapsed, kind, warning = engine.transform(item, payload.target_age, payload.enhance, lambda: store.check(payload.session_id, item))
+        if getattr(engine, "full_bf16", False) and not payload.enhance:
+            return generate_ages(payload.session_id, item, [payload.target_age],
+                                 payload.preserve_color, payload.request_id)["results"][0]
+        native, output, elapsed, kind, warning = engine.transform(
+            item, payload.target_age, payload.enhance, lambda: store.check(payload.session_id, item))
         store.check(payload.session_id, item)
-        # Keep the model output available. This bounded chroma correction is an
-        # optional presentation step, not a newly trained model or super-resolution.
-        from source_color import preserve_source_chroma
-        color_started = time.monotonic()
-        corrected_native, color_meta = preserve_source_chroma(item.aligned, native, .65 if payload.preserve_color else 0)
-        if kind == "super_resolution":
-            output, _ = preserve_source_chroma(item.aligned, output, .65 if payload.preserve_color else 0)
-        else:
-            output = corrected_native
-        color_elapsed = time.monotonic()-color_started
-        response = {"image": image_data_url(output), "raw_image": image_data_url(native), "width": output.shape[1], "height": output.shape[0], "request_id": payload.request_id, "meta": {"engine": ENGINE_NAME, "model": MODEL_NAME, "target_age": payload.target_age, "elapsed_seconds": round(elapsed, 3), "output_kind": kind, "alignment": "sam_ffhq", "color_preservation": color_meta, "postprocess_seconds": round(color_elapsed,3), "raw_model_size": 1024}}
-        if kind == "super_resolution":
-            response["native_image"] = image_data_url(corrected_native)
-        if warning:
-            response["warning"] = warning
+        response = render_age(item, payload.target_age, native, output, kind, warning, payload.preserve_color)
         store.check(payload.session_id, item)
-        return response
+        return request_metadata(response, payload.request_id, elapsed)
+
+
+@app.post("/api/transform-batch")
+def transform_batch(payload: BatchTransformRequest):
+    engine.ensure_ready()
+    if not getattr(engine, "full_bf16", False):
+        raise HTTPException(409, "当前模型未启用批量生成。")
+    if len(payload.target_ages) > engine.max_age_batch or len(set(payload.target_ages)) != len(payload.target_ages):
+        raise HTTPException(422, f"请提供 1 至 {engine.max_age_batch} 个不同的年龄。")
+    with admitted():
+        item = store.get(payload.session_id)
+        return generate_ages(payload.session_id, item, payload.target_ages, payload.preserve_color)
 
 
 @app.delete("/api/sessions/{session_id}")

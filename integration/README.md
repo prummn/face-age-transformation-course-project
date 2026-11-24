@@ -54,6 +54,8 @@ python3 integration/launch.py
 
 BF16 只用于 StyleGAN2 解码器中支持自动混合精度的算子。模型权重、调制与归一化计算、W+ 潜变量、Adam 状态及损失计算使用 FP32。人脸拟合和跨龄优化仍分别为 200 步和 180 步。`GET /api/health` 的 `features.wplus_precision` 显示实际启用的精度。
 
+全 BF16 使用 FACE_AGE_QUALITY=constrained 和 FACE_AGE_WPLUS_PRECISION=bf16-full。FACE_AGE_WPLUS_BATCH 可设为 1–4，默认 3。网页先单独请求首张，再按健康接口发布的批大小调用 /api/transform-batch。服务在同一照片会话内复用最多八个目标年龄的结果，清除或到期后释放缓存。批量运算显存不足时，服务会尝试依次生成各目标。
+
 ## 接口与几何约定
 
 | 接口 | 用途 |

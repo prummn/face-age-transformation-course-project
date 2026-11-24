@@ -147,24 +147,76 @@
     return {face:aligned,referenceFace:reference,transform:data.transform,ageInfo:data.age,meta:data.meta,alignment:data.alignment};
   }
 
-  async function generate({targetAge,requestId}) {
+  function generationSession() {
     if (!state.session) throw new Error('本次人脸尚未准备好，请重新选择照片。');
-    const serial=state.serial,session=state.session;
-    const data=await request('/api/transform',{method:'POST',body:JSON.stringify({session_id:session,target_age:targetAge,request_id:requestId,enhance:false,preserve_color:true})},60000,'generate');
-    if (serial !== state.serial || session !== state.session) throw new Error('本次处理已取消。');
-    if (data.meta?.output_kind !== 'native' || data.width !== 1024 || data.height !== 1024) throw new Error('返回结果不是原生 1024 图像，请重新处理。');
+    return {serial:state.serial,session:state.session};
+  }
+
+  function releaseGenerated(output) {
+    if (output.ageRaw) output.ageRaw.width=output.ageRaw.height=0;
+    output.width=output.height=0;
+  }
+
+  async function decodeGenerated(data, selection) {
+    const current=() => selection.serial===state.serial && selection.session===state.session;
+    if (!current()) throw new Error('本次处理已取消。');
+    if (data.meta?.output_kind !== 'native' || data.width !== 1024 || data.height !== 1024) {
+      throw new Error('返回结果不是原生 1024 图像，请重新处理。');
+    }
     const output=await decodeImage(data.image,1024);
-    let raw=null;
-    try {if(data.raw_image) raw=await decodeImage(data.raw_image,1024);}catch(error){output.width=output.height=0;throw error;}
-    if (serial !== state.serial || session !== state.session) {output.width=output.height=0;if(raw)raw.width=raw.height=0;throw new Error('本次处理已取消。');}
+    try {
+      output.ageRaw=data.raw_image ? await decodeImage(data.raw_image,1024) : null;
+      if (!current()) throw new Error('本次处理已取消。');
+    } catch(error) {
+      releaseGenerated(output);
+      throw error;
+    }
     output.ageMeta=data.meta;
-    output.ageRaw=raw;
-    state.ready=true;state.error='';display();
     return output;
   }
 
+  function markGenerated() {
+    state.ready=true;
+    state.error='';
+    display();
+  }
+
+  async function generate({targetAge,requestId}) {
+    const selection=generationSession();
+    const data=await request('/api/transform',{method:'POST',body:JSON.stringify({
+      session_id:selection.session,target_age:targetAge,request_id:requestId,
+      enhance:false,preserve_color:true
+    })},60000,'generate');
+    const output=await decodeGenerated(data,selection);
+    markGenerated();
+    return output;
+  }
+
+  async function generateBatch(ages) {
+    const selection=generationSession();
+    const data=await request('/api/transform-batch',{method:'POST',body:JSON.stringify({
+      session_id:selection.session,target_ages:ages,preserve_color:true
+    })},60000,'generate');
+    if (!Array.isArray(data.results) || data.results.length!==ages.length ||
+        data.results.some((result,i)=>result.meta?.target_age!==ages[i])) {
+      throw new Error('模型返回的年龄顺序不匹配，请重试。');
+    }
+    const outputs=[];
+    try {
+      for (const result of data.results) outputs.push(await decodeGenerated(result,selection));
+    } catch(error) {
+      outputs.forEach(releaseGenerated);
+      throw error;
+    }
+    markGenerated();
+    return outputs;
+  }
+
   // Install immediately in live mode. A disconnected service can never become a demo success.
-  window.AgeMirrorAdapters={live:true,prepare,generate,cancel,clear};
+  window.AgeMirrorAdapters={
+    live:true,prepare,generate,generateBatch,cancel,clear,
+    get batchSize() {return Math.min(4,Number(state.health?.features?.age_batch_size)||1);}
+  };
   window.AgeMirrorAPI={state,health};
   $('#bReconnect').onclick=health;
   $('#serviceBadge').onclick=() => $('#bInfo').click();

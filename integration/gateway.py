@@ -35,7 +35,7 @@ class Gateway(SimpleHTTPRequestHandler):
     def proxy(self):
         path = urlsplit(self.path).path
         allowed = (path == "/api/health" and self.command == "GET"
-                   or path in ("/api/prepare", "/api/transform") and self.command == "POST"
+                   or path in ("/api/prepare", "/api/transform", "/api/transform-batch") and self.command == "POST"
                    or path.startswith("/api/sessions/") and self.command == "DELETE")
         if not allowed:
             self.json_error(404, "接口不存在。")
