@@ -12,7 +12,7 @@ PREFIX='deployment/shared-research/native-full/'
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('action',choices=['data','results']);p.add_argument('run',type=Path);p.add_argument('stage',type=Path);p.add_argument('--public-panels',type=Path);p.add_argument('--diagnostic-run',type=Path,action='append',default=[]);p.add_argument('--diagnostic-panels',type=Path);a=p.parse_args();run=a.run.resolve();stage=a.stage.resolve()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('action',choices=['data','results']);p.add_argument('run',type=Path);p.add_argument('stage',type=Path);p.add_argument('--public-panels',type=Path);p.add_argument('--diagnostic-run',type=Path,action='append',default=[]);p.add_argument('--diagnostic-panels',type=Path);p.add_argument('--api-validation-run',type=Path);a=p.parse_args();run=a.run.resolve();stage=a.stage.resolve()
     spec=importlib.util.spec_from_file_location('bundler',Path(__file__).with_name('build_research_release.py'));h=importlib.util.module_from_spec(spec);spec.loader.exec_module(h)
     h.TAG=TAG;h.STAGE=stage;h.ASSETS=stage/'assets';h.PAYLOAD=stage/'payload';h.ASSETS.mkdir(parents=True,exist_ok=True);h.PAYLOAD.mkdir(exist_ok=True)
     def generated(relative,obj):return h.generated(PREFIX+relative,h.scrub(obj))
@@ -75,6 +75,8 @@ def main():
         if not (diagnostic/'DONE').is_file() or not d.get('visually_reviewed') or completion['native_review_pending']:raise ValueError('Finish diagnostic review before archiving')
         for name in ['experiment.json','selection.json','summary.json','decision.json','browser-validation.json','artifact-validation.json','independent-age.json','native-change-summary.json','platform-final.json','automatic-completion.json','evaluation/report.json']:
             addjson('diagnostics/'+diagnostic.name+'/'+name,diagnostic/name)
+        for name in ['supplemental-publisher-labels.json','four-case-reproduction.json','native-review-observations.json']:
+            if (diagnostic/name).is_file():addjson('diagnostics/'+diagnostic.name+'/'+name,diagnostic/name)
         for path in (diagnostic/'source').iterdir():
             if path.is_file():evidence[PREFIX+'diagnostics/'+diagnostic.name+'/source/'+path.name]=path
         diagnostic_index.append(dict(run=diagnostic.name,cases=json.loads((diagnostic/'experiment.json').read_text())['cases'],promotion=d['promotion'],no_image_or_latent_payload=True))
@@ -83,6 +85,15 @@ def main():
         evidence[PREFIX+'diagnostics/report.md']=ROOT/'integration/quality/20261125_年龄差值与预训练判别器诊断.md'
         evidence[PREFIX+'diagnostics/discriminator-provenance.json']=generated('diagnostics/discriminator-provenance.json',json.loads((ROOT/'deployment/gan-research/stylegan2ada-ffhq-checkpoint.json').read_text()))
         evidence[PREFIX+'postprocess/finish_small_quality.py']=ROOT/'integration/quality/finish_small_quality.py'
+    if a.api_validation_run:
+        api=a.api_validation_run.resolve()
+        if not api.is_relative_to(ROOT/'deployment/training-runs'):raise ValueError('API run outside research runs')
+        validation=json.loads((api/'api-validation/report.json').read_text())
+        if validation['cancelled_inflight_status']!=410 or validation['active_sessions_after']!=0:raise ValueError('API session invalidation failed')
+        for name in ['protocol.json','api-validation/report.json','platform-final.json']:
+            addjson('api/'+name,api/name)
+        for path in (api/'source').iterdir():
+            if path.is_file():evidence[PREFIX+'api/source/'+path.name]=path
     for name in ['SAM-LICENSE.txt']:
         evidence[PREFIX+'licenses/'+name]=ROOT/'deployment/model-files/face-age/src/SAM/LICENSE'
     for path in (ROOT/'deployment/model-files/face-age/src/SAM/licenses').iterdir():
