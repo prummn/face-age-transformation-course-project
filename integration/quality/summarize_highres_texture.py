@@ -28,16 +28,25 @@ def main():
             original=o;o=dict(anchors[o['name'],o['route']],condition=o['condition'],target=o['target'])
             aliases.append(dict(name=o['name'],route=o['route'],condition=o['condition'],raw_native=original['native'],canonical_native=o['native']))
         groups[o['cohort'],o['route']].append(o);groups['pooled',o['route']].append(o)
-    result=defaultdict(dict);criteria=json.loads((run/'experiment.json').read_text())['criteria']
-    for (cohort,route),items in groups.items():
+    def describe(items):
         cross=[o for o in items if o['condition']!='same'];same=[o for o in items if o['condition']=='same']
         paired={(o['name'],o['condition']):ages[o['native']] for o in items}
         names={o['name'] for o in items}
         spans=[paired[n,'75']-paired[n,'20'] for n in names if paired[n,'75'] is not None and paired[n,'20'] is not None]
-        result[cohort][route]=dict(cases=len(names),outputs=len(items),missing_faces=sum(not o['detected'] for o in items),
+        return dict(cases=len(names),outputs=len(items),missing_faces=sum(not o['detected'] for o in items),
             identity=mean(o['source_cosine'] for o in cross),same_identity=mean(o['source_cosine'] for o in same),
             high_age_error=mean(abs(ages[o['native']]-o['target']) for o in cross if o['condition'] in ('60','75') and ages[o['native']] is not None),
             age20to75_span=mean(spans),span_valid=len(spans),mean_age75=mean(ages[o['native']] for o in cross if o['condition']=='75'))
+    result=defaultdict(dict);criteria=json.loads((run/'experiment.json').read_text())['criteria']
+    for (cohort,route),items in groups.items():result[cohort][route]=describe(items)
+    # Supplemental source-labelled strata do not alter preregistered guards.
+    # APPA's published annotation is carried by its existing cohort, never
+    # inferred from appearance; native HD cases use the publisher label field.
+    labelled={
+        'published-asian-hd':{n for n,m in metadata.items() if m.get('published_demographic_label')=='Asian' and m.get('source_face_short_edge',m.get('native_face_short_edge',0))>=512},
+        'published-asian-appa':{n for n,m in metadata.items() if m['cohort']=='new_appa_asian'},
+    }
+    supplemental={name:{route:describe([o for o in groups['pooled',route] if o['name'] in names]) for route in r['routes']} for name,names in labelled.items() if names}
     checks={}
     for route in r['routes'][1:]:
         checks[route]={}
@@ -47,7 +56,9 @@ def main():
             checks[route][cohort+'-same-identity']=cand['same_identity'] is not None and cand['same_identity']>=base['same_identity']-criteria['identity_drop_max']
             checks[route][cohort+'-detection']=cand['missing_faces']<=base['missing_faces']
             checks[route][cohort+'-age-span']=cand['span_valid']>=base['span_valid'] and cand['age20to75_span'] is not None and cand['age20to75_span']>=base['age20to75_span']*criteria['age_span_min_ratio']
-    summary=dict(cohorts=result,checks=checks,independent_ages=ages,source_equals_target_aliases=aliases,
+    summary=dict(cohorts=result,checks=checks,supplemental_publisher_label_strata=supplemental,
+        supplemental_note='Source annotations only, not ethnicity inferred from photographs. Descriptive overlapping strata; preregistered guard decisions unchanged.',
+        independent_ages=ages,source_equals_target_aliases=aliases,
         numeric_guard_pass=[route for route,flags in checks.items() if all(flags.values())],
         promotion=False,note='Texture naturalness requires native review. Passing numeric guards does not establish improvement; this small previously reviewed panel is development/regression, not a new blind test.')
     write_json(run/'summary.json',summary);print(json.dumps(dict(pooled=result['pooled'],checks=checks),indent=2))
