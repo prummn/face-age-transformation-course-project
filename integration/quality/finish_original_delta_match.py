@@ -8,6 +8,7 @@ import subprocess
 import sys
 import time
 from probe_inversion import sha256,write_json
+from finish_small_quality import read_state
 
 ROOT=Path(__file__).resolve().parents[2]
 SLUG='age-direction-match'
@@ -51,7 +52,7 @@ def main():
             update(cached=n,control_steps=c,original_steps=g,message=message)
             if time.monotonic()>deadline:raise TimeoutError('Observer deadline; job has75m cap')
             if time.monotonic()-lastcheck>60:
-                result=job.get_job(ctx,job.models.GetJobReq(Project='fdj-infra',JobId=receipt['job_id']));lastcheck=time.monotonic()
+                result=read_state(job,ctx,receipt['job_id']);lastcheck=time.monotonic()
                 if result.Phase in ('Failed','Stopped'):raise RuntimeError('Platform '+result.Phase+'; inspect worker.log')
             time.sleep(15)
         update(state='scoring',cached=60,control_steps=2000,original_steps=2000,message='GPU输出完成，CPU独立估龄与采样核验')
@@ -83,7 +84,7 @@ def main():
         write_json(run/'decision.json',dict(selected='wplus_base',baseline_route='original_delta_constrained',promotion=False,visually_reviewed=[],numeric_guard_pass=summary['numeric_guard_pass'],gallery_note='当前原SAM差值＋约束作为固定基线。两支生成器训练仅改变训练潜变量方向；原生1024／原始和保色全部留档。35图为开发回归；数值已评估，原生自然度尚待复核，演示模型未替换。'))
         cmd(sys.executable,ROOT/'integration/quality/build_texture_review.py',run,run/'gallery');link(SLUG+'-review',run/'gallery')
         cmd(ROOT/'deployment/control-venv/bin/python',ROOT/'integration/quality/verify_texture_review_browser.py','http://127.0.0.1:65512/'+SLUG+'-review/',run,'--texture',timeout=180)
-        result=job.get_job(ctx,job.models.GetJobReq(Project='fdj-infra',JobId=receipt['job_id']))
+        result=read_state(job,ctx,receipt['job_id'])
         write_json(run/'platform-final.json',dict(job_id=receipt['job_id'],phase=result.Phase,allocated_gpus=1))
         write_json(run/'automatic-completion.json',dict(status='ready',native_review_pending=True,default_model_changed=False,gallery='/'+SLUG+'-review/'))
         update(state='ready',message='训练、独立评估、1024和网页核验完成；原生纹理待复核')

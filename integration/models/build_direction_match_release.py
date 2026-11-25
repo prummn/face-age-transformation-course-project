@@ -12,7 +12,7 @@ PREFIX='deployment/shared-research/direction-match/'
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('run',type=Path);p.add_argument('stage',type=Path);p.add_argument('--public-panels',type=Path,required=True);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('run',type=Path);p.add_argument('stage',type=Path);p.add_argument('--public-panels',type=Path,required=True);p.add_argument('--personalized',type=Path);a=p.parse_args()
     run=a.run.resolve();stage=a.stage.resolve()
     spec=importlib.util.spec_from_file_location('bundle',Path(__file__).with_name('build_research_release.py'));h=importlib.util.module_from_spec(spec);spec.loader.exec_module(h)
     h.TAG=TAG;h.STAGE=stage;h.ASSETS=stage/'assets';h.PAYLOAD=stage/'payload';h.ASSETS.mkdir(parents=True,exist_ok=True);h.PAYLOAD.mkdir(exist_ok=True)
@@ -44,6 +44,29 @@ def main():
     rows=[json.loads(s) for s in (run/'data/train.jsonl').read_text().splitlines()]
     addjson('training-sources.json',[{k:r[k] for k in fields if k in r} for r in rows])
     for name in ['ffhq_readme.txt','ffhq_aging_readme.txt']:evidence[PREFIX+'licenses/'+name]=ROOT/'deployment/data-research/20261113'/name
+    reserve=ROOT/'deployment/age-quality-final/fresh-hd-reserve-20261125'
+    for name in ['collection-report.json','prepared/audit.json','prepared/source-qc-observations.json']:
+        if (reserve/name).is_file():addjson('fresh-holdout/'+name,json.loads((reserve/name).read_text()))
+    evidence[PREFIX+'fresh-holdout/report.md']=ROOT/'integration/quality/20261125_新增高清验证储备.md'
+    commons=ROOT/'deployment/age-quality-final/commons-retry-20261125'
+    for name in ['audit.json','records.json','rejected.json','count-amendment.json']:
+        if (commons/name).is_file():addjson('commons-intake/'+name,json.loads((commons/name).read_text()))
+    evidence[PREFIX+'commons-intake/report.md']=ROOT/'integration/quality/20261125_高龄公开来源重试与质检.md'
+    if a.personalized:
+        personal=a.personalized.resolve()
+        for name in ['DONE','summary.json','decision.json','paired-verification.json','artifact-validation.json','browser-validation.json','platform-final.json']:
+            if not (personal/name).is_file():raise ValueError('Complete per-photo diagnostic first: '+name)
+        if not json.loads((personal/'decision.json').read_text()).get('visually_reviewed'):raise ValueError('Per-photo native review required')
+        for name in ['experiment.json','summary.json','decision.json','paired-verification.json','artifact-validation.json','browser-validation.json','platform-final.json','independent-age.json','native-change-summary.json','automatic-completion.json']:
+            if (personal/name).is_file():addjson('per-photo/'+name,json.loads((personal/name).read_text()))
+        report=json.loads((personal/'evaluation/report.json').read_text())
+        addjson('per-photo/timing-and-frozen-verification.json',{k:report[k] for k in ['timings','total_seconds','cuda_peak_bytes','frozen_tensors_sha256','reused_baseline_exact']})
+        for row in report['records']:
+            if Path(row['name']).name!=row['name']:raise ValueError('Unsafe diagnostic record name')
+            for route in report['routes'][1:]:addjson('per-photo/logs/'+row['name']+'/'+route+'.json',json.loads((personal/'evaluation'/row['name']/(route+'_train.json')).read_text()))
+        for path in (personal/'source').iterdir():
+            if path.is_file():evidence[PREFIX+'per-photo/source/'+path.name]=path
+        evidence[PREFIX+'per-photo/report.md']=ROOT/'integration/quality/20261125_逐图生成器适配诊断.md'
     evidence[PREFIX+'licenses/SAM-LICENSE.txt']=ROOT/'deployment/model-files/face-age/src/SAM/LICENSE'
     credits=json.loads((a.public_panels/'public-panel-credits.json').read_text())
     for row in credits:

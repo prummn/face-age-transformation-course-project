@@ -90,7 +90,7 @@ def main():
     detector=cv2.FaceDetectorYN.create(str(root/'deployment/model-files/face-age/models/yunet/face_detection_yunet_2023mar.onnx'),'',(256,256),.7,.3,100)
     recognizer=cv2.FaceRecognizerSF.create(str(root/'deployment/gan-research/face_recognition_sface_2021dec.onnx'),'')
     old=np.load(root/'deployment/age-quality-final/common-audit-20261124/features.npz',allow_pickle=False)['features']
-    records=[];vectors=[]
+    records=[];vectors=[];verified_downloads=[]
     for row in selected:
         try:
             spec=official[row['pageid']];url=urlsplit(spec['url']);url=urlunsplit(url._replace(query=''))
@@ -99,6 +99,7 @@ def main():
                 data=response.read(25*1024**2+1)
             if len(data)!=spec['size'] or hashlib.sha1(data).hexdigest()!=spec['sha1']:raise ValueError('Official SHA1/size mismatch')
             path.write_bytes(data)
+            verified_downloads.append(dict(pageid=row['pageid'],path=str(path),sha256=sha256(path),bytes=len(data)))
             with Image.open(path) as im:im.load();rgb=np.asarray(im.convert('RGB'))
             h,w=rgb.shape[:2];scale=min(1,1600/max(h,w));small=cv2.resize(rgb,(round(w*scale),round(h*scale)),interpolation=cv2.INTER_AREA)
             detector.setInputSize((small.shape[1],small.shape[0]));_,faces=detector.detect(cv2.cvtColor(small,cv2.COLOR_RGB2BGR))
@@ -143,7 +144,8 @@ def main():
         with Image.open(r['aligned']) as im:sheet.paste(im.resize((300,300)),((i%4)*300,(i//4)*340))
         draw.text(((i%4)*300+5,(i//4)*340+302),str(r['pageid'])+' age '+str(r['age_interval'])+' edge '+str(round(r['native_face_short_edge'])),fill='black')
     sheet.save(out/'review-contact-sheet.jpg',quality=92)
-    report=dict(downloaded=len(records),quality_candidates=len(good),candidate_subjects=len({r['subject_id'] for r in good}),
+    write_json(out/'verified-downloads.json',verified_downloads)
+    report=dict(downloaded=len(verified_downloads),aligned_records=len(records),quality_candidates=len(good),candidate_subjects=len({r['subject_id'] for r in good}),
         candidate_age_intervals=[r['age_interval'] for r in good],training_admitted=0,prior_similarity_ge_point4=sum(r['old_similarity_max']>=.4 for r in records),
         note='Quarantine only. Public figure photographs do not constitute a balanced Asian cohort. Birth/date claims and source licences are preserved, not assumed ground truth.')
     write_json(out/'audit.json',report);print(json.dumps(report),flush=True)
