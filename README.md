@@ -18,6 +18,8 @@
 
 后续[年龄差值与预训练判别器诊断](integration/quality/20261125_年龄差值与预训练判别器诊断.md)将推理年龄方向单独比较：相同W+重建锚点改用原SAM差值，四图观察到密纹减轻，但未约束方向会损害眼／嘴与身份；完整35图中约束路线高龄外观误差15.33→13.46、跨龄身份.8161→.8129，但仍有一图年龄响应退步；真实API1024／会话清除已通过。`original_delta`为显式研究预览，完整结果`/age-original-delta-full-review/`，不更改原默认或已接受的W+基线。
 
+11月25日继续完成[原SAM差值匹配生成器训练](integration/quality/20261125_原SAM差值匹配生成器训练.md)：60图、两组各2,000步、35图相同潜变量评估，保护线均通过但原生刻痕没有可确认改善，不晋升。[逐图生成器重建／邻域保护](integration/quality/20261125_逐图生成器适配诊断.md)完成四图诊断＋25张固定配方确认：追加25张跨龄身份全部提高，重建组均值.818→.850、同龄.853→.891，平均年龄响应保留，但有个案退步、高龄伪纹理仍在，暂不替换演示。新收集[41张验证候选](integration/quality/20261125_新增高清验证储备.md)未用于调参；[高龄公开来源重试](integration/quality/20261125_高龄公开来源重试与质检.md)无新增入训照片。证据和署名对照见[11月25日研究Release](https://github.com/prummn/face-age-transformation-course-project/releases/tag/research-mobei-direction-match-2026-11-25)。
+
 [最新712图数据／权重／报告Release](https://github.com/prummn/face-age-transformation-course-project/releases/tag/research-mobei-native-full-2026-11-24)按需恢复，默认仅下载证据和四张署名对照；不自动切换模型。
 
 ## 莫贝研究与新机接手（2026-11-16）
