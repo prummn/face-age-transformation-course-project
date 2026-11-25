@@ -32,7 +32,9 @@ def validate_frozen(run):
 
 
 def prepare():
-    data = read(NATIVE / 'data/train.jsonl')
+    data = read(NATIVE / 'data/train-resolved.jsonl')
+    if any(not isinstance(r.get('source_age'),int) or not 0<=r['source_age']<=100 for r in data):
+        raise ValueError('Frozen FairFace source ages must be resolved before submission')
     old_index = json.loads((OLD / 'train-codes/index.json').read_text())
     rng = random.Random(20261125)
     selected, groups = [], set()
@@ -88,7 +90,7 @@ def prepare():
         if sha256(path) != spec['sha256']:
             raise ValueError('Original checkpoint changed')
         frozen[str(path)] = spec['sha256']
-    files = list((run / 'source').iterdir()) + list((run / 'data').iterdir()) + [run / 'selection.json', run / 'reusable-anchors.json', PARENT / 'evaluation/report.json']
+    files = list((run / 'source').iterdir()) + list((run / 'data').iterdir()) + [run / 'selection.json', run / 'reusable-anchors.json', PARENT / 'evaluation/report.json', NATIVE / 'data/train-resolved.jsonl']
     for row in evaluation:
         files += [PARENT / 'evaluation' / row['name'] / 'original_delta_constrained_codes.pt', PARENT / 'evaluation' / row['name'] / 'reference.png']
     files += [ROOT / 'integration/ascend/src' / n for n in ['sam_npu.py', 'sam_losses.py', 'faceattr.py']]
