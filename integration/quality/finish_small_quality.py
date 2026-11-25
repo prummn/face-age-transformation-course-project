@@ -45,7 +45,19 @@ def main():
     cmd(sys.executable,ROOT/'integration/quality/summarize_highres_texture.py',run,'--age-report',run/'independent-age.json')
     cmd(sys.executable,ROOT/'integration/quality/measure_texture_changes.py',run)
     summary=json.loads((run/'summary.json').read_text());prior=exp['profile']=='frozen_pretrained_discriminator_prior'
-    note=(f"{exp['cases']}图预训练判别器潜变量对照：所有网络冻结，两组各150步，仅细层W+可变。" if prior else f"{exp['cases']}图年龄差值分解：相同W+同龄锚点与生成器，比较原SAM年龄差值及180步跨龄约束。")+'独立指标完成，原生自然度尚待复核；未替换基线。'
+    personalized=exp['profile']=='per_photo_generator_locality_pair'
+    if personalized:
+        checks=[]
+        for row in r['records']:
+            folder=run/'evaluation'/row['name']
+            logs=[json.loads((folder/(route+'_train.json')).read_text()) for route in r['routes'][1:]]
+            if any(len(x)!=exp['steps'] for x in logs) or any(a['target_index']!=b['target_index'] or a['alpha']!=b['alpha'] for a,b in zip(*logs)):raise ValueError('Personalization sampling differs')
+            checks.append(row['name'])
+        write_json(run/'paired-verification.json',dict(cases=checks,steps=exp['steps'],same_source_pivots=True,sampling_equal=True,frozen_parameters_verified=True,baseline_png_exact=True))
+        description=f"{exp['cases']}图逐图生成器适配：固定原SAM差值＋约束W+，各200步源照重建，对照额外邻域保护。每张照片独立补丁，不是通用新权重。"
+    else:
+        description=f"{exp['cases']}图预训练判别器潜变量对照：所有网络冻结，两组各150步，仅细层W+可变。" if prior else f"{exp['cases']}图年龄差值分解：相同W+同龄锚点与生成器，比较原SAM年龄差值及180步跨龄约束。"
+    note=description+'独立指标完成，原生自然度尚待复核；未替换基线。'
     write_json(run/'decision.json',dict(selected='wplus_base',promotion=False,visually_reviewed=[],numeric_guard_pass=summary['numeric_guard_pass'],gallery_note=note))
     cmd(sys.executable,ROOT/'integration/quality/build_texture_review.py',run,run/'gallery')
     from finish_native_age import link

@@ -17,7 +17,9 @@ def main():
         conditional_control='Age-conditioned + age guard',conditional_gan='Age-conditioned + age guard + GAN',
         native_control='Full native reconstruction',native_gan='Full native + RGB local GAN',
         prior_control='Fine W+ control',pretrained_D='Fine W+ + pretrained D',
-        original_delta='Original SAM delta',original_delta_constrained='Original delta + refinement')
+        original_delta='Original SAM delta',original_delta_constrained='Original delta + refinement',
+        ft_delta_training='Trained at ft_l1 delta',original_delta_training='Trained at original SAM delta',
+        personalized_reconstruction='Per-photo generator fitting',personalized_locality='Per-photo fitting + locality')
     fonts=Path('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf')
     font=ImageFont.truetype(str(fonts),16) if fonts.exists() else ImageFont.load_default()
     credits=[]
