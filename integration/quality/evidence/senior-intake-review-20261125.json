@@ -1,0 +1,311 @@
+{
+  "schema": 1,
+  "date": "2026-11-25",
+  "kind": "source_intake_and_review_preparation_no_training",
+  "source_plan": {
+    "offline_cache_only": true,
+    "cached_source_inputs": [
+      {
+        "path": "commons-named-source-probe-20261124.json",
+        "sha256": "e5f40060a673738765fd7842c7ef4109b18124ef3223b48f39304e562f173d1a"
+      },
+      {
+        "path": "commons-named-more-20261124.json",
+        "sha256": "7602559c1a02403501f401ec11196572a72d7a19f30f5d4693c773e63f7a886a"
+      }
+    ],
+    "seed_subjects": 73,
+    "resolved_subjects": 66,
+    "candidate_files": 20,
+    "candidate_subjects": 12,
+    "search_errors": 47,
+    "max_originals": 120,
+    "max_bytes": 1073741824,
+    "training_admitted": 0,
+    "source_note": "Names/countries are source-search context; no ethnicity inferred. Dates and DOB are metadata claims, not independently verified age."
+  },
+  "source_review": {
+    "stage": "Source text review; no pixel or identity verification",
+    "candidates_sha256": "0eaf3affe26a82f274896d2795154d4fd38b5f3e6bdab9d6288ff8a470655f35",
+    "metadata_candidates": 20,
+    "metadata_subjects": 12,
+    "status_counts": {
+      "pending_original_and_depiction_review": 15,
+      "rejected_source": 3,
+      "hold_subject_evidence": 2
+    },
+    "originals_downloaded_this_run": 0,
+    "training_admitted": 0,
+    "reviews": [
+      {
+        "pageid": 114347874,
+        "source_subject_id": "Q1054887",
+        "source_subject_label": "Sayuri Yoshinaga",
+        "file_title": "File:Sayuri Yoshinaga.jpg",
+        "status": "pending_original_and_depiction_review",
+        "reason": "Only metadata available: depiction, actual shooting date, native texture and protected-group checks remain pending.",
+        "training_admitted": false
+      },
+      {
+        "pageid": 12278838,
+        "source_subject_id": "Q105927",
+        "source_subject_label": "Ei-ichi Negishi",
+        "file_title": "File:Ei-ichi Negishi 2.jpg",
+        "status": "pending_original_and_depiction_review",
+        "reason": "Only metadata available: depiction, actual shooting date, native texture and protected-group checks remain pending.",
+        "training_admitted": false
+      },
+      {
+        "pageid": 46646652,
+        "source_subject_id": "Q105927",
+        "source_subject_label": "Ei-ichi Negishi",
+        "file_title": "File:Ei-ichi Negishi at GYSS 18Jan2016.jpg",
+        "status": "pending_original_and_depiction_review",
+        "reason": "Only metadata available: depiction, actual shooting date, native texture and protected-group checks remain pending.",
+        "training_admitted": false
+      },
+      {
+        "pageid": 71011059,
+        "source_subject_id": "Q105949",
+        "source_subject_label": "Akira Suzuki",
+        "file_title": "File:Retrospectiva UnB - Akira Suzuki, vencedor do Prêmio Nobel de Química em 2010 (6602267733).jpg",
+        "status": "pending_original_and_depiction_review",
+        "reason": "Only metadata available: depiction, actual shooting date, native texture and protected-group checks remain pending.",
+        "training_admitted": false
+      },
+      {
+        "pageid": 83710994,
+        "source_subject_id": "Q1138444",
+        "source_subject_label": "Chieko Baishō",
+        "file_title": "File:Chieko Baishō at the Tokyo International Film Festival 2019 (49013476248) (cropped).jpg",
+        "status": "pending_original_and_depiction_review",
+        "reason": "Only metadata available: depiction, actual shooting date, native texture and protected-group checks remain pending.",
+        "training_admitted": false
+      },
+      {
+        "pageid": 118649792,
+        "source_subject_id": "Q1261335",
+        "source_subject_label": "Yōji Yamada",
+        "file_title": "File:Yamadayouji.jpg",
+        "status": "pending_original_and_depiction_review",
+        "reason": "Only metadata available: depiction, actual shooting date, native texture and protected-group checks remain pending.",
+        "training_admitted": false
+      },
+      {
+        "pageid": 83711238,
+        "source_subject_id": "Q1261335",
+        "source_subject_label": "Yōji Yamada",
+        "file_title": "File:Kumiko Goto at the Tokyo International Film Festival - 2019 (49014200767) (cropped).jpg",
+        "status": "rejected_source",
+        "reason": "Cropped file title names Kumiko Goto, not requested Yōji Yamada; multi-person source description is insufficient.",
+        "training_admitted": false
+      },
+      {
+        "pageid": 101606805,
+        "source_subject_id": "Q434790",
+        "source_subject_label": "Tsai Chin (actress)",
+        "file_title": "File:Tsai Chin (cropped).jpg",
+        "status": "pending_original_and_depiction_review",
+        "reason": "Only metadata available: depiction, actual shooting date, native texture and protected-group checks remain pending.",
+        "training_admitted": false
+      },
+      {
+        "pageid": 109650222,
+        "source_subject_id": "Q434790",
+        "source_subject_label": "Tsai Chin (actress)",
+        "file_title": "File:Tsai Chin (40817490063) (cropped).jpg",
+        "status": "pending_original_and_depiction_review",
+        "reason": "Only metadata available: depiction, actual shooting date, native texture and protected-group checks remain pending.",
+        "training_admitted": false
+      },
+      {
+        "pageid": 65005508,
+        "source_subject_id": "Q466963",
+        "source_subject_label": "Tetsuko Kuroyanagi",
+        "file_title": "File:Koichiro Gemba and Tetsuko Kuroyanagi 20120705 1.jpg",
+        "status": "pending_original_and_depiction_review",
+        "reason": "Only metadata available: depiction, actual shooting date, native texture and protected-group checks remain pending.",
+        "training_admitted": false
+      },
+      {
+        "pageid": 79033510,
+        "source_subject_id": "Q466963",
+        "source_subject_label": "Tetsuko Kuroyanagi",
+        "file_title": "File:Shinzō Abe, Seiko Noda and Tetsuko Kuroyanagi (2).jpg",
+        "status": "pending_original_and_depiction_review",
+        "reason": "Only metadata available: depiction, actual shooting date, native texture and protected-group checks remain pending.",
+        "training_admitted": false
+      },
+      {
+        "pageid": 124036312,
+        "source_subject_id": "Q466963",
+        "source_subject_label": "Tetsuko Kuroyanagi",
+        "file_title": "File:Img20200115 02c (cropped).jpg",
+        "status": "pending_original_and_depiction_review",
+        "reason": "Only metadata available: depiction, actual shooting date, native texture and protected-group checks remain pending.",
+        "training_admitted": false
+      },
+      {
+        "pageid": 33848804,
+        "source_subject_id": "Q484471",
+        "source_subject_label": "Kim Hae-sook",
+        "file_title": "File:20140704-TFF-Kim-Hae-Sook-4412.jpg",
+        "status": "hold_subject_evidence",
+        "reason": "Same-name search result at TFF Rudolstadt; requested actress and depicted performer not authoritatively linked.",
+        "training_admitted": false
+      },
+      {
+        "pageid": 33892611,
+        "source_subject_id": "Q484471",
+        "source_subject_label": "Kim Hae-sook",
+        "file_title": "File:20140705-TFF-Rudolstadt-Kim-Hae-Sook-5112.jpg",
+        "status": "hold_subject_evidence",
+        "reason": "Same-name search result at TFF Rudolstadt; requested actress and depicted performer not authoritatively linked.",
+        "training_admitted": false
+      },
+      {
+        "pageid": 109134148,
+        "source_subject_id": "Q484471",
+        "source_subject_label": "Kim Hae-sook",
+        "file_title": "File:Korea Pope Visit Press Center 11 (14717801219).jpg",
+        "status": "rejected_source",
+        "reason": "Description restricts publication and prohibits manipulation, conflicting with displayed CC licence; no training or redistribution admission.",
+        "training_admitted": false
+      },
+      {
+        "pageid": 25877379,
+        "source_subject_id": "Q5103870",
+        "source_subject_label": "Choi Bool-am",
+        "file_title": "File:Choi Bool-am from acrofan.jpg",
+        "status": "pending_original_and_depiction_review",
+        "reason": "Only metadata available: depiction, actual shooting date, native texture and protected-group checks remain pending.",
+        "training_admitted": false
+      },
+      {
+        "pageid": 33680885,
+        "source_subject_id": "Q5103870",
+        "source_subject_label": "Choi Bool-am",
+        "file_title": "File:Korea 59th Memorial Day 12 (14193853238).jpg",
+        "status": "pending_original_and_depiction_review",
+        "reason": "Only metadata available: depiction, actual shooting date, native texture and protected-group checks remain pending.",
+        "training_admitted": false
+      },
+      {
+        "pageid": 159304097,
+        "source_subject_id": "Q542510",
+        "source_subject_label": "Nobuko Miyamoto",
+        "file_title": "File:Miu Eng 2024.png",
+        "status": "rejected_source",
+        "reason": "Source description names Miu Eng, not requested Nobuko Miyamoto.",
+        "training_admitted": false
+      },
+      {
+        "pageid": 146050991,
+        "source_subject_id": "Q55400",
+        "source_subject_label": "Hayao Miyazaki",
+        "file_title": "File:Hayao Miyazaki (24151279914).jpg",
+        "status": "pending_original_and_depiction_review",
+        "reason": "Only metadata available: depiction, actual shooting date, native texture and protected-group checks remain pending.",
+        "training_admitted": false
+      },
+      {
+        "pageid": 23991137,
+        "source_subject_id": "Q713899",
+        "source_subject_label": "Lisa Lu",
+        "file_title": "File:Lisa Lu en una celebración.jpg",
+        "status": "pending_original_and_depiction_review",
+        "reason": "Only metadata available: depiction, actual shooting date, native texture and protected-group checks remain pending.",
+        "training_admitted": false
+      }
+    ],
+    "external_blocks": [
+      "Commons HTTP429: no further Wikimedia network requests this run",
+      "Original Flickr publisher page TLS handshake timeout",
+      "AI-Hub requires eligible approved applicant; only blurred sample public"
+    ]
+  },
+  "aihub_access": {
+    "source": "https://aihub.or.kr/aihubdata/data/view.do?dataSetSn=71415",
+    "html_sha256": "ee7a04bdb8546f3f40fea4b2f307f831c9b65fb40c5f26ced768104fcbe493c0",
+    "observations": [
+      {
+        "quote": "※ 내국인만 데이터 신청이 가능합니다.",
+        "context": "\">\n\t\t\t\t\t ※ 내국인만 데이터 신청이 가능합니다. \n\t\t\t\t\t\n\t\t\t\t\t \n\t\t\t\t\t\t \n\t\t\t\t\t\t\n\t\t  \t\t\t\t\t<a href=\"javascript:fnGoLink('inqry');\" class=\"butto"
+      },
+      {
+        "quote": "로그인 후 이용이 가능합니다.",
+        "context": "ction fnLoginLink(){\n\t\talert('로그인 후 이용이 가능합니다.');\n\t\tvar uri = '/login/login.do?currMenu=107&topMenu=107';\n\t\tvar referer = location.pathname + location.search;\n\t\t\n\t\t$('#referer').val(referer);\n\t\t$('#loginFor"
+      },
+      {
+        "quote": "샘플 데이터는 촬영 모델 얼굴을 블러링 처리",
+        "context": ">\n \n\n &nbsp; \n\n 샘플 데이터는 촬영 모델 얼굴을 블러링 처리하였으나, AI-Hub 상에서 해당 데이터 신청 승인을 득한 후 다운로드 받으면 촬영 모델 얼굴이 정상적으로 표시됨&nbsp; \n\n  \n2. 어노테이션 포맷 \n\n \n\t 2. 어노테이션 포맷"
+      }
+    ],
+    "authenticated": false,
+    "download_attempted": false,
+    "irb_requirement_verified": false,
+    "note": "Page explicitly limits data applications to Korean nationals and requires login; authorized eligible applicant needed. Public sample is face-blurred and unsuitable for texture training."
+  },
+  "blind_build": {
+    "study_id": "texture-4597badf36cb",
+    "subjects": 25,
+    "primary_trials": 50,
+    "repeat_trials": 5,
+    "native_images": 100,
+    "derived_crops": 300,
+    "html_sha256": "1b593949ffd06f5b30f043342744376de0b12c8cc3d3234841f62fd174a655ed",
+    "no_training": true,
+    "no_model_change": true,
+    "private_key_outside_public": true
+  },
+  "blind_browser": {
+    "status": 200,
+    "route_names_hidden": true,
+    "private_key_http_status": 404,
+    "native_1024": true,
+    "unresized_crops": true,
+    "no_display_upscaling": true,
+    "required_fields": true,
+    "answers_persist_reload": true,
+    "back_navigation": true,
+    "json_download": true,
+    "mobile_width": 390,
+    "horizontal_overflow": false,
+    "errors": [],
+    "synthetic_only": true,
+    "human_ratings_created": 0
+  },
+  "human_ratings_received": 0,
+  "gpu_requested": false,
+  "default_model_changed": false,
+  "new_model_weights": false,
+  "compact_evidence_note": "Only public source metadata and validation receipts. No original portraits, identity features, reviewer answers, route key, credentials or new weights.",
+  "local_evidence_sha256": {
+    "plan-audit.json": "93aefc685f82bfa77baf239ec22c7fff82e2c2ea8060b7e8795d196ffa924bb7",
+    "source-review.json": "286a0be21bd4dc616015eb4c4db8ff45a47fe6c793517e5b9a118f0ec541696f",
+    "aihub-access-audit.json": "549dae321c8da7fba3700b9921ef6ce197e24fedc264bdbc145f8ef5c53f2d5c",
+    "candidates.json": "0eaf3affe26a82f274896d2795154d4fd38b5f3e6bdab9d6288ff8a470655f35",
+    "subjects.json": "31e86f1c2cece880db78e1d5daf75cb383d0a95af2f78ebe3ce05648ff216f19",
+    "rate-limit-stop.json": "d037f0724b48368013838871cca79b3d6e9c7affd4d04fe2016bcdacb3b45058"
+  },
+  "birth_evidence_counts": {
+    "Wikidata P569 source claims": 16,
+    "Wikipedia infobox date source claims": 50
+  },
+  "platform_check": {
+    "active_project_jobs": [],
+    "gpu_requested_by_this_intake": false
+  },
+  "scorer_validation": {
+    "synthetic_only": true,
+    "swapped_repeat_orientation": true,
+    "repeats_excluded_from_effect": true,
+    "duplicate_raters_rejected": true,
+    "unknown_trials_rejected": true,
+    "human_ratings_created": 0
+  },
+  "reference_validation": {
+    "source_manifest_sha256_matches": 25,
+    "source_references": 25
+  }
+}
