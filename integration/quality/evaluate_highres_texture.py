@@ -21,7 +21,10 @@ def main():
     experiment=json.loads((run/'experiment.json').read_text())
     reuse=Path(experiment['fixed_code_run']) if experiment.get('fixed_code_run') and not a.fit_fresh_codes else None
     old_report=json.loads((reuse/'evaluation/report.json').read_text()) if reuse else None
-    old_hashes={(o['name'],o['condition']):o['sha256'] for o in old_report['outputs'] if o['route']=='wplus_base'} if old_report else {}
+    baseline_route=experiment.get('baseline_route','wplus_base')
+    code_filename=experiment.get('fixed_code_filename','fixed_codes.pt')
+    if Path(code_filename).name!=code_filename:raise ValueError('Invalid fixed-code filename')
+    old_hashes={(o['name'],o['condition']):o['sha256'] for o in old_report['outputs'] if o['route']==baseline_route} if old_report else {}
     import cv2
     import numpy as np
     from PIL import Image
@@ -75,7 +78,7 @@ def main():
         folder=out/row['name'];folder.mkdir();Image.fromarray(rgb).save(folder/'reference.png')
         item=SimpleNamespace(aligned=small(rgb),reference_rgb=rgb,reference_age=source,quality_state=None)
         if reuse:
-            saved=torch.load(reuse/'evaluation'/row['name']/'fixed_codes.pt',map_location='cpu',weights_only=True)
+            saved=torch.load(reuse/'evaluation'/row['name']/code_filename,map_location='cpu',weights_only=True)
             if saved['conditions']!=['same','20','40','60','75'] or tuple(saved['codes'].shape)!=(5,18,512):raise ValueError('Unexpected fixed codes')
             codes=saved['codes'].cuda();fit_seconds=0;targets=[20,40,60,75]
         else:
@@ -138,7 +141,7 @@ def main():
         write_json(out/'report.partial.json',report);print('TEXTURE_EVAL',row['name'],round(fit_seconds,2),flush=True)
         del codes,images
         if not reuse:del loss,edited,correction,opt
-    report['fixed_code_run']=str(reuse) if reuse else None;report['reused_baseline_exact']=bool(reuse);report['source_equal_target_uses_anchor']=True
+    report['fixed_code_run']=str(reuse) if reuse else None;report['baseline_route']=baseline_route;report['reused_baseline_exact']=bool(reuse);report['source_equal_target_uses_anchor']=True
     report['total_seconds']=time.monotonic()-started;write_json(out/'report.json',report);(out/'DONE').write_text('Paired native generator comparison complete\n')
     print('TEXTURE_EVALUATION_DONE',len(report['outputs']),flush=True)
 

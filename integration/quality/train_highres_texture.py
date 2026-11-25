@@ -29,13 +29,19 @@ def main():
     p.add_argument('--generator-lr',type=float,default=2e-5)
     p.add_argument('--adversarial-weight',type=float,default=.02)
     p.add_argument('--latent-source',choices=('encoder','wplus'),default='encoder')
-    p.add_argument('--output-name',choices=('direct_latent','matched_wplus'))
+    p.add_argument('--cache-dir',default='train-codes',help='Immediate run child containing frozen training-only W+ codes')
+    p.add_argument('--output-name',help='Immediate run child for this arm')
     p.add_argument('--no-input-flip',action='store_true')
     p.add_argument('--native-reference-input',action='store_true',help='Use the same OpenCV native-reference downsample as fixed-code inference')
     p.add_argument('--age-conditioned',action='store_true',help='Interpolate generator parameter updates by target age, leaving20/40 unchanged')
     p.add_argument('--age-preservation',type=float,default=0,help='Frozen baseline age-distribution KL over three matching views')
     p.add_argument('--patch-edge',type=int,choices=(128,256),default=128)
+    p.add_argument('--teacher-size',type=int,choices=(32,128),default=128)
+    p.add_argument('--teacher-weight',type=float,default=.5)
     a=p.parse_args();run=a.run.resolve();out=run/(a.output_name or a.arm)
+    if a.output_name and (Path(a.output_name).name!=a.output_name or a.output_name in ('.','..')):raise ValueError('Invalid output directory')
+    if Path(a.cache_dir).name!=a.cache_dir or a.cache_dir in ('','.','..'):raise ValueError('Invalid cache directory')
+    if not 0<=a.teacher_weight<=.5:raise ValueError('Teacher weight outside0..0.5')
     if a.latent_source=='wplus' and not a.no_input_flip:raise ValueError('Cached W+ requires unflipped input')
     if not 0<=a.age_preservation<=2:raise ValueError('Age preservation weight must be0..2')
     if not 1<=a.steps<=3000:raise ValueError('Bounded study requires 1..3000 steps')
@@ -54,7 +60,8 @@ def main():
         control='same reconstruction512, LPIPS256, identity, native local high-pass reconstruction, teacher128 and parameter trust',
         patch_gan='conditional age-bin and region discriminator; real native crops; common jitter/flip/contrast; patch-space lazy R1',
         target_ages=[60,75],weights=dict(pixel512=.5,lpips=.8,identity=.8,local_reconstruction=.15,
-            teacher128=.5,target_identity=.5,generator_trust=.1,adversarial=a.adversarial_weight),
+            teacher=a.teacher_weight,target_identity=.5,generator_trust=.1,adversarial=a.adversarial_weight),
+        cache_dir=a.cache_dir,teacher_size=a.teacher_size,
         latent_source=a.latent_source,input_flip=not a.no_input_flip,native_reference_input=a.native_reference_input,
         age_conditioned=a.age_conditioned,age_preservation=a.age_preservation,patch_edge=a.patch_edge,
         caution='Exploratory generator pilot. FFHQ pretraining source; coarse apparent-age bins are not exact chronological labels. Direct encoder training must also be checked on fixed W+ latents.')
@@ -87,15 +94,16 @@ def main():
     named={n:q for n,q in net.decoder.named_parameters() if q.requires_grad}
     cached={}
     if a.latent_source=='wplus':
-        index=json.loads((run/'train-codes/index.json').read_text())
+        index=json.loads((run/a.cache_dir/'index.json').read_text())
         if {r['name'] for r in eligible}!=set(index['items']):raise ValueError('W+ cache selection differs')
         for row in eligible:
-            spec=index['items'][row['name']];path=run/'train-codes'/spec['file']
+            spec=index['items'][row['name']];path=run/a.cache_dir/spec['file']
             if spec['input_sha256']!=row['reference_sha256'] or spec['source_age']!=row['source_age'] or sha256(path)!=spec['sha256']:
                 raise ValueError('Training W+ cache changed')
             value=torch.load(path,map_location='cuda:0',weights_only=True)
-            if value['conditions']!=['same','20','40','60','75'] or tuple(value['codes'].shape)!=(5,18,512):raise ValueError('Invalid training codes')
-            cached[row['name']]=value['codes']
+            conditions=value['conditions'];codes=value['codes']
+            if conditions not in (['same','20','40','60','75'],['same','60','75']) or tuple(codes.shape)!=(len(conditions),18,512):raise ValueError('Invalid training codes')
+            cached[row['name']]={condition:codes[i:i+1] for i,condition in enumerate(conditions)}
     initial={n:q.detach().clone() for n,q in named.items()}
     frozen_before=digest_tensors((n,t) for n,t in net.state_dict().items() if n not in {'decoder.'+k for k in named})
     identity=IDLoss().cuda().eval().requires_grad_(False)
@@ -157,7 +165,7 @@ def main():
         used.add(r['name']);used_real.add(real['name'])
         with torch.no_grad():
             if a.latent_source=='wplus':
-                codes=cached[r['name']];same_code=codes[:1];target_code=codes[3:4] if target==60 else codes[4:5]
+                codes=cached[r['name']];same_code=codes['same'];target_code=codes[str(target)]
             else:
                 b=net.pretrained_encoder(x)+net.latent_avg
                 same_code=b+net.encoder(cond(x,r['source_age']));target_code=b+net.encoder(cond(x,target))
@@ -166,7 +174,7 @@ def main():
             saved={n:q.detach().clone() for n,q in named.items()}
             for n,q in named.items():q.copy_(initial[n])
             teacher_native=decode(target_code,target)
-            teacher=F.interpolate(teacher_native,(128,128),mode='area')
+            teacher=F.interpolate(teacher_native,(a.teacher_size,a.teacher_size),mode='area')
             if age_net is not None:
                 teacher256=F.interpolate(teacher_native,(256,256),mode='area')
                 teacher_probs=[age_logits(v).softmax(1) for v in views(teacher256)]
@@ -191,12 +199,12 @@ def main():
         local=(patches(same_native,jitter,False,1)-patches(ref,jitter,False,1)).abs().mean()
         pixel=(F.interpolate(same_native,(512,512),mode='area')-F.interpolate(ref,(512,512),mode='area')).abs().mean()
         lp=perceptual(same,x).mean();ids=(1-identity.cos(same,x)).mean()
-        target_id=(1-identity.cos(edited,x)).mean();teacher_loss=F.l1_loss(F.interpolate(edited_native,(128,128),mode='area'),teacher)
+        target_id=(1-identity.cos(edited,x)).mean();teacher_loss=F.l1_loss(F.interpolate(edited_native,(a.teacher_size,a.teacher_size),mode='area'),teacher)
         trust=sum((q-initial[n]).square().mean() for n,q in named.items())
         adversarial=F.softplus(-d(fake,age,regions)).mean() if a.arm=='patch_gan' else edited.new_zeros(())
         ramp=min(1,(step+1)/100)
         age_loss=sum(F.kl_div(age_logits(v).log_softmax(1),q,reduction='batchmean') for v,q in zip(views(edited),teacher_probs))/3 if age_net is not None else edited.new_zeros(())
-        loss=.5*pixel+.8*lp+.8*ids+.15*local+.5*teacher_loss+.5*target_id+.1*trust+a.adversarial_weight*ramp*adversarial+a.age_preservation*age_loss
+        loss=.5*pixel+.8*lp+.8*ids+.15*local+a.teacher_weight*teacher_loss+.5*target_id+.1*trust+a.adversarial_weight*ramp*adversarial+a.age_preservation*age_loss
         if not torch.isfinite(loss):raise RuntimeError('Nonfinite generator loss')
         gopt.zero_grad(set_to_none=True);loss.backward()
         if not all(q.grad is not None and torch.isfinite(q.grad).all() for q in named.values()):raise RuntimeError('Missing or nonfinite generator gradient')
