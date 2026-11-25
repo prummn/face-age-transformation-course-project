@@ -57,7 +57,7 @@ def main():
         for name in ['DONE','summary.json','decision.json','paired-verification.json','artifact-validation.json','browser-validation.json','platform-final.json']:
             if not (personal/name).is_file():raise ValueError('Complete per-photo diagnostic first: '+name)
         if not json.loads((personal/'decision.json').read_text()).get('visually_reviewed'):raise ValueError('Per-photo native review required')
-        for name in ['experiment.json','summary.json','decision.json','paired-verification.json','artifact-validation.json','browser-validation.json','platform-final.json','independent-age.json','native-change-summary.json','automatic-completion.json']:
+        for name in ['experiment.json','summary.json','decision.json','paired-verification.json','baseline-preflight.json','artifact-validation.json','browser-validation.json','platform-final.json','independent-age.json','native-change-summary.json','automatic-completion.json']:
             if (personal/name).is_file():addjson('per-photo/'+name,json.loads((personal/name).read_text()))
         report=json.loads((personal/'evaluation/report.json').read_text())
         addjson('per-photo/timing-and-frozen-verification.json',{k:report[k] for k in ['timings','total_seconds','cuda_peak_bytes','frozen_tensors_sha256','reused_baseline_exact']})

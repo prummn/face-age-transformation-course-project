@@ -21,7 +21,7 @@ NAMES=['ffhq_64376','ffhq_64919','ffhq_67140','ffhq_65817']
 def prepare():
     rows={r['name']:r for r in json.loads((PARENT/'selection.json').read_text())};selected=[rows[n] for n in NAMES]
     run=ROOT/'deployment/training-runs'/('personalized-generator-'+datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S'));(run/'source').mkdir(parents=True,exist_ok=False)
-    for name in ['personalized_generator_study.py','run_personalized_generator.sh','probe_inversion.py']:
+    for name in ['personalized_generator_study.py','run_personalized_generator.sh','probe_inversion.py','deterministic_quality_ops.py']:
         shutil.copy2(Path(__file__).with_name(name),run/'source'/name)
     shutil.copy2(ROOT/'integration/source_color.py',run/'source/source_color.py')
     write_json(run/'selection.json',selected);frozen={}
@@ -70,17 +70,19 @@ def fit(run):
     from torch.nn import functional as F
     import lpips
     from source_color import preserve_source_chroma
+    from deterministic_quality_ops import replace_pools,resize,verify
     e=json.loads((run/'experiment.json').read_text());parent=Path(e['parent_run'])
     for filename,digest in e['frozen_inputs'].items():
         if sha256(filename)!=digest:raise ValueError('Frozen input changed')
     if os.environ.get('FACE_AGE_EXPERIMENT_ALLOCATION')!='1' or torch.cuda.device_count()!=1:raise ValueError('One dedicated GPU required')
-    torch.set_num_threads(4);cv2.setNumThreads(2);torch.backends.cudnn.benchmark=False;torch.backends.cudnn.allow_tf32=True;torch.backends.cuda.matmul.allow_tf32=False
+    torch.set_num_threads(4);cv2.setNumThreads(2);torch.use_deterministic_algorithms(True);torch.backends.cudnn.deterministic=True;torch.backends.cudnn.benchmark=False;torch.backends.cudnn.allow_tf32=True;torch.backends.cuda.matmul.allow_tf32=False;verify()
     base=Path(os.environ['FACE_AGE_BASE']);sys.path.insert(0,str(base/'src'));from sam_npu import load_sam;from sam_losses import IDLoss
     torch.manual_seed(20261125);net=load_sam('cuda:0').eval().requires_grad_(False)
     for index,module in enumerate(net.decoder.convs):
         if 2**(3+index//2)>=64:module.conv.requires_grad_(True);module.activate.requires_grad_(True)
     named={n:q for n,q in net.decoder.named_parameters() if q.requires_grad};initial={n:q.detach().clone() for n,q in named.items()}
     identity=IDLoss().cuda().eval().requires_grad_(False);lp=lpips.LPIPS(net='alex',verbose=False).cuda().eval().requires_grad_(False)
+    replace_pools(identity);replace_pools(lp)
     def tensor(rgb):return torch.from_numpy(np.array(rgb,copy=True,order='C')).permute(2,0,1).contiguous()[None].cuda().float()/127.5-1
     def apply(state):
         with torch.no_grad():
@@ -97,12 +99,24 @@ def fit(run):
         if faces is None:return None
         face=max(faces,key=lambda f:f[2]*f[3]);v=sf.feature(sf.alignCrop(bgr,face)).ravel();return v/(np.linalg.norm(v)+1e-12)
     old={(r['name'],r['condition']):r['sha256'] for r in json.loads((parent/'evaluation/report.json').read_text())['outputs'] if r['route']=='original_delta_constrained'}
+    # Check decoder/batch/determinism compatibility before spending training steps.
+    from io import BytesIO
+    preflight=[]
+    for row in json.loads((run/'selection.json').read_text()):
+        saved=torch.load(parent/'evaluation'/row['name']/'original_delta_constrained_codes.pt',map_location='cuda',weights_only=True)
+        with torch.no_grad():baseline_images=decode(saved['codes'])
+        for image,label in zip(baseline_images,['same','20','40','60','75']):
+            rgb=((image.clamp(-1,1)+1)*127.5).permute(1,2,0).byte().cpu().numpy();buffer=BytesIO();Image.fromarray(rgb).save(buffer,format='PNG')
+            if hashlib.sha256(buffer.getvalue()).hexdigest()!=old[row['name'],label]:raise ValueError('Baseline preflight PNG differs: '+row['name']+'/'+label)
+        preflight.append(row['name'])
+    del baseline_images,saved
+    write_json(run/'baseline-preflight.json',dict(cases=preflight,pngs=5*len(preflight),exact=True,training_started=False))
     records=json.loads((run/'selection.json').read_text());out=run/'evaluation';out.mkdir(exist_ok=False);started=time.monotonic()
     report=dict(records=records,routes=['wplus_base','personalized_reconstruction','personalized_locality'],outputs=[],timings=[],baseline_route='original_delta_constrained',reused_baseline_exact=True,comparison='Same frozen original-delta W+ codes, baseline decoder versus two per-photo generator patches. Each source is fitted independently; patch is not shared across subjects.')
     def patches(y):return torch.cat([y[:,:,310:490,220:520],y[:,:,490:670,220:520],y[:,:,310:490,504:804],y[:,:,490:670,504:804]],0)
     for row in records:
         folder=out/row['name'];folder.mkdir();rgb=np.asarray(Image.open(parent/'evaluation'/row['name']/'reference.png').convert('RGB'));Image.fromarray(rgb).save(folder/'reference.png')
-        ref=tensor(rgb);x=F.interpolate(ref,(256,256),mode='area');own=feature(rgb)
+        ref=tensor(rgb);x=resize(ref,(256,256));own=feature(rgb)
         saved=torch.load(parent/'evaluation'/row['name']/'original_delta_constrained_codes.pt',map_location='cuda',weights_only=True);codes=saved['codes'];anchor=codes[:1];refs=patches(ref)
         state={};times={}
         for route in ['personalized_reconstruction','personalized_locality']:
@@ -111,14 +125,14 @@ def fit(run):
                 target=rng.choice([1,2,3,4]);alpha=rng.uniform(.25,1);near=anchor+alpha*(codes[target:target+1]-anchor)+.02*torch.randn(anchor.shape,device='cuda',generator=noise_rng)
                 if route=='personalized_locality':
                     current={n:q.detach().clone() for n,q in named.items()};apply(initial)
-                    with torch.no_grad():teacher=F.interpolate(decode(near),(256,256),mode='area')
+                    with torch.no_grad():teacher=resize(decode(near),(256,256))
                     apply(current)
-                y=decode(anchor);small=F.interpolate(y,(256,256),mode='area')
-                pixel=(F.interpolate(y,(512,512),mode='area')-F.interpolate(ref,(512,512),mode='area')).abs().mean()
+                y=decode(anchor);small=resize(y,(256,256))
+                pixel=(resize(y,(512,512))-resize(ref,(512,512))).abs().mean()
                 perceptual=lp(small,x).mean();ident=(1-identity.cos(small,x)).mean();local=(patches(y)-refs).abs().mean();trust=sum((q-initial[n]).square().mean() for n,q in named.items())
                 locality=y.new_zeros(())
                 if route=='personalized_locality':
-                    near_output=F.interpolate(decode(near),(256,256),mode='area');locality=.8*lp(near_output,teacher).mean()+.2*F.l1_loss(F.avg_pool2d(near_output,4),F.avg_pool2d(teacher,4))
+                    near_output=resize(decode(near),(256,256));locality=.8*lp(near_output,teacher).mean()+.2*F.l1_loss(F.avg_pool2d(near_output,4),F.avg_pool2d(teacher,4))
                 loss=.5*pixel+.8*perceptual+.8*ident+.15*local+.1*trust+locality
                 opt.zero_grad(set_to_none=True);loss.backward()
                 if not torch.isfinite(loss) or not all(q.grad is not None and torch.isfinite(q.grad).all() for q in named.values()):raise ValueError('Invalid personalized gradient')
