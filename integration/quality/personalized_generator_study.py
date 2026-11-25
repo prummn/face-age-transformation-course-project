@@ -18,9 +18,18 @@ PARENT=ROOT/'deployment/training-runs/original-delta-20261124-160055'
 NAMES=['ffhq_64376','ffhq_64919','ffhq_67140','ffhq_65817']
 
 
-def prepare():
+def prepare(confirm_hd=False):
     rows={r['name']:r for r in json.loads((PARENT/'selection.json').read_text())};selected=[rows[n] for n in NAMES]
-    run=ROOT/'deployment/training-runs'/('personalized-generator-'+datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S'));(run/'source').mkdir(parents=True,exist_ok=False)
+    if confirm_hd:
+        from PIL import Image
+        selected=[]
+        for row in rows.values():
+            if row['name'] in NAMES or row.get('source_face_short_edge',row.get('native_face_short_edge',0))<512:continue
+            with Image.open(PARENT/'evaluation'/row['name']/'reference.png') as image:
+                if image.size!=(1024,1024):continue
+            selected.append(row)
+        if len(selected)!=25:raise ValueError('Expected the25 remaining native HD development inputs')
+    run=ROOT/'deployment/training-runs'/(('personalized-generator-confirm-' if confirm_hd else 'personalized-generator-')+datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S'));(run/'source').mkdir(parents=True,exist_ok=False)
     for name in ['personalized_generator_study.py','run_personalized_generator.sh','probe_inversion.py','deterministic_quality_ops.py']:
         shutil.copy2(Path(__file__).with_name(name),run/'source'/name)
     shutil.copy2(ROOT/'integration/source_color.py',run/'source/source_color.py')
@@ -34,12 +43,13 @@ def prepare():
     files += [ROOT/'integration/ascend/src'/name for name in ['sam_npu.py','sam_losses.py','faceattr.py']]
     files.append(ROOT/'deployment/gan-research/face_recognition_sface_2021dec.onnx');frozen.update({str(p):sha256(p) for p in files})
     write_json(run/'experiment.json',dict(profile='per_photo_generator_locality_pair',parent_run=str(PARENT),cases=len(selected),steps=200,
+        selection_stage='Remaining25 native-HD development inputs, four diagnostic inputs excluded; same frozen recipe, no retuning.' if confirm_hd else 'Four diagnostic development inputs',
         criteria=dict(identity_drop_max=.02,age_span_min_ratio=.9,missing_faces_increase_max=0,native_review_required=True,no_automatic_promotion=True),frozen_inputs=frozen,
         code_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
         common_recipe=dict(source_anchor='Same saved W+ pivot',generator_min_resolution=64,learning_rate=1e-4,source_steps=200,pixel512=.5,lpips=.8,identity=.8,native_local=.15,parameter_trust=.1),
         sole_paired_difference='Additional LPIPS/local low-frequency regularization to original-generator images near source-to-edit latent interpolations. This is a PTI-inspired bounded diagnostic, not an exact paper reproduction.',
         locality_recipe=dict(weight=1,lpips256=.8,pixel64=.2,interpolation_range=[.25,1],noise_std=.02),
-        limitations=['Per-photo generator patches, not universal trained weights. No automatic deployment.', 'Four already-inspected development inputs, not a population or blinded test.', 'No source pixels blended into output, no age rescaling, no candidate-specific latent refitting.', 'Locality can preserve existing artifacts; improved same-age reconstruction alone is insufficient.']))
+        limitations=['Per-photo generator patches, not universal trained weights. No automatic deployment.', 'Previously inspected development inputs; confirmation excludes the four diagnostic inputs but is not a blinded or independent population test.', 'No source pixels blended into output, no age rescaling, no candidate-specific latent refitting.', 'Locality can preserve existing artifacts; improved same-age reconstruction alone is insufficient.']))
     print('PREPARED',run,flush=True)
 
 
@@ -158,9 +168,9 @@ def fit(run):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);sub=p.add_subparsers(dest='action',required=True);sub.add_parser('prepare')
+    p=argparse.ArgumentParser(description=__doc__);sub=p.add_subparsers(dest='action',required=True);prep=sub.add_parser('prepare');prep.add_argument('--confirm-hd',action='store_true')
     for action in ['submit','fit']:sub.add_parser(action).add_argument('run',type=Path)
     a=p.parse_args()
-    if a.action=='prepare':prepare()
+    if a.action=='prepare':prepare(a.confirm_hd)
     elif a.action=='submit':submit(a.run.resolve())
     else:fit(a.run.resolve())
