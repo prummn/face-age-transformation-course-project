@@ -9,7 +9,7 @@
 <header><a class="brand" href="./">年龄手记</a><nav><a href="./">拍摄 / 上传</a><a href="./人脸年龄变换原型_v5.html?mode=live&amp;experience=mirror">镜子模式</a></nav></header>
 <main>
 <div class="heading"><div><p class="eyebrow">高清人像样例</p><h1>看看不同人生阶段</h1></div><p id="intro">正在读取样例…</p></div>
-<p class="muted">同一基线的真实生成留档。选择人像和年龄即可对比；处理自己的照片请返回“拍摄 / 上传”。</p>
+<p class="muted">历史基线的真实生成留档：constrained（ft_l1 年龄方向＋W+ 约束）。这些照片已经过标准对齐，不代表当前拍摄服务的版本或实拍效果。处理自己的照片请返回“拍摄 / 上传”。</p>
 <p class="notice" id="status" role="status" aria-live="polite">加载中</p>
 <section id="viewer" hidden aria-label="年龄变化对比">
  <div class="viewer-bar"><div><h2 id="personTitle"></h2><p id="personMeta" class="muted"></p></div><div class="color-options" role="group" aria-label="结果色彩"><button data-color="raw" aria-pressed="true">原始模型</button><button data-color="preserved" aria-pressed="false">原照保色</button></div></div>

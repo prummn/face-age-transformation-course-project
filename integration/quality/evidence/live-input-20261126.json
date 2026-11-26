@@ -1,0 +1,125 @@
+{
+  "code_parent": "2c9769362dbd5c4c500b268cbe3749030721ac02",
+  "job_id": "j-1795694482-960686",
+  "quality": "original_delta",
+  "weights_changed": false,
+  "additional_gpu_allocated": false,
+  "rows": [
+    {
+      "id": "ffhq_64376",
+      "legacy_reflection_percent": 19.927978515625,
+      "context_reflection_percent": 1.87835693359375,
+      "legacy_age": 26,
+      "context_age": 25
+    },
+    {
+      "id": "ffhq_65714",
+      "legacy_reflection_percent": 14.2974853515625,
+      "context_reflection_percent": 2.2735595703125,
+      "legacy_age": 25,
+      "context_age": 23
+    }
+  ],
+  "browser": {
+    "real_api": true,
+    "synthetic_camera": true,
+    "photo": "/root/face-age-transformation-course-project/deployment/age-quality-final/expanded-ffhq/native1024/64376.png",
+    "errors": [],
+    "camera": {
+      "constraints": [
+        {
+          "video": {
+            "facingMode": {
+              "ideal": "user"
+            },
+            "width": {
+              "ideal": 1920
+            },
+            "height": {
+              "ideal": 1080
+            }
+          },
+          "audio": false
+        }
+      ],
+      "width": 1920,
+      "height": 1080,
+      "facePixels": 396
+    },
+    "native_pixel_gate": {
+      "native": 396,
+      "small": 48,
+      "nativeWarning": false,
+      "smallWarning": true
+    },
+    "camera_to_result_seconds": 13.47077070409432,
+    "result": {
+      "source": [
+        1920,
+        1080
+      ],
+      "age": 25,
+      "quality": {
+        "brightness": 121,
+        "blur": 2608,
+        "facePixels": 396,
+        "angle": -0.8727438413830854,
+        "front": 0.028959479550383044,
+        "warnings": [],
+        "manual": false
+      },
+      "output": [
+        1024,
+        1024
+      ],
+      "meta": {
+        "engine": "SAM / StyleGAN2",
+        "model": "ft_l1 W+ anchor + original SAM age direction + constrained refinement (experimental)",
+        "target_age": 75,
+        "elapsed_seconds": 11.963,
+        "output_kind": "native",
+        "alignment": "sam_ffhq",
+        "color_preservation": {
+          "enabled": true,
+          "applied": false,
+          "method": "source_cheek_lab_v2",
+          "strength": 0.65,
+          "lightness_preserved": true,
+          "note": "按本张原照局部校正色度，保留生成亮度与纹理；原始模型结果单独保留。",
+          "source_cheek_lab": [
+            80.4020004272461,
+            13.843999862670898,
+            17.687999725341797
+          ],
+          "raw_cheek_lab": [
+            78.00299835205078,
+            15.406000137329102,
+            18.75
+          ],
+          "sample_pixels": 761,
+          "reference_cheek_asymmetry": 2.432,
+          "measured_chroma_distance": 1.89,
+          "reason": "already_close"
+        },
+        "postprocess_seconds": 0.014,
+        "raw_model_size": 1024
+      }
+    },
+    "mirror_native_download": [
+      1024,
+      1024
+    ],
+    "crop_and_paste_comparison": true,
+    "after_clear_status": 410,
+    "low_quality_confirmation": {
+      "facePixels": 131,
+      "warnings": [
+        "人脸仅约 131 像素，请靠近镜头或换用更清晰的照片。"
+      ],
+      "automatic_generation": false
+    },
+    "passed": true,
+    "download_matches_raw_rgb": true
+  },
+  "caveat": "Two known development photos; crop coverage improvement, not evidence of general model quality improvement. Camera is synthetic public-photo video, not the user camera. W+ optimization is not bitwise deterministic."
+}

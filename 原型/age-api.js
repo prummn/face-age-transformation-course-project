@@ -16,7 +16,7 @@
     $('#serviceState').textContent = state.ready ? '真实估龄与年龄生成已连接。' : state.error || '正在连接自有推理服务器…';
     $('#serviceState').classList.toggle('error',!!state.error);
     $('#bReconnect').disabled = state.checking;
-    $('#privacyStorage').textContent = '确认人脸后，仅将裁切的人脸区域发送到自有推理服务器，仅在本次会话内存中处理。清除或返回主页会请求删除；断线时服务端到期自动清理。已导出的文件会保留。';
+    $('#privacyStorage').textContent = '确认人脸后，将选中人脸及对齐所需的周边区域发送到自有推理服务器，仅在本次会话内存中处理。清除或返回主页会请求删除；断线时服务端到期自动清理。已导出的文件会保留。';
     $('#privacyModel').textContent = '当前年龄由 FairFace 提供参考估计，可手动修正。变龄由 SAM 模型生成，原生结果为 1024×1024。'+(state.health?.features?.source_color_preservation?'“保留原肤色”会参考原照色度进行后处理，保留模型结果的明暗与纹理，可切换查看未校正的原始模型结果。':'')+'结果仅模拟年龄外观，不是真实年龄判定或未来容貌预测。';
     $('#privacyCamera').textContent = '电脑 localhost 可调用摄像头；手机摄像头需要可信 HTTPS。上传照片时请确认本人或被摄者同意。';
     $('#capturePrivacy').hidden = false;
@@ -108,10 +108,14 @@
     if (serial !== state.serial) throw new Error('本次处理已取消。');
     const x = face.x * image.width, y = face.y * image.height;
     const w = face.w * image.width, h = face.h * image.height;
-    const left = Math.max(0, Math.floor(x - .22 * w));
-    const top = Math.max(0, Math.floor(y - .36 * h));
-    const right = Math.min(image.width, Math.ceil(x + 1.22 * w));
-    const bottom = Math.min(image.height, Math.ceil(y + 1.18 * h));
+    // YuNet's FFHQ square extends beyond the selected face oval. Keep real
+    // source pixels around it: the old narrow crop forced reflected hair and
+    // forehead into both the encoder input and the W+ reconstruction target.
+    const side = 2.2 * Math.max(w, h), cx = x + w / 2, cy = y + .4 * h;
+    const left = Math.max(0, Math.floor(cx - side / 2));
+    const top = Math.max(0, Math.floor(cy - side / 2));
+    const right = Math.min(image.width, Math.ceil(cx + side / 2));
+    const bottom = Math.min(image.height, Math.ceil(cy + side / 2));
     const crop = document.createElement('canvas');
     crop.width = right - left;
     crop.height = bottom - top;

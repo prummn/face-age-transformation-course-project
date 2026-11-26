@@ -137,7 +137,7 @@ body[data-backend="live"] #s-grid .age-page{display:flex;flex-direction:column}b
   <button class="text native-download" id="bNativeSave" hidden>下载原生 1024 PNG</button>
   <p class="small" id="resultDisclosure">演示滤镜</p>
  </section>
-  <section id="s-detail" hidden><h2 id="detailMeta">前后对比</h2><div class="view-select"><button class="active" id="bCropView">人脸对比</button><button id="bPasteView">回贴原图</button></div><div class="color-view" id="detailColorView" hidden role="group" aria-label="对比色彩版本"><button data-color-view="preserved">保留原肤色</button><button data-color-view="raw">原始模型</button></div><div class="cmp" id="cmp"><canvas id="cmpA"></canvas><canvas id="cmpB"></canvas><span class="cmp-label left" id="lblA">原始照片</span><span class="cmp-label right" id="lblB">目标年龄</span><div class="handle" id="handle"></div></div><label class="visually-hidden" for="split">对比分割线</label><input type="range" id="split" min="0" max="100" value="50"><div class="row actions"><button id="bBack">返回手记</button><button class="primary" id="bSave">保存对比</button></div><p class="help-line" id="detailDisclosure">演示滤镜 · 外观模拟</p></section>
+ <section id="s-detail" hidden><h2 id="detailMeta">前后对比</h2><div class="view-select"><button class="active" id="bCropView">人脸对比</button><button id="bPasteView">回贴原图</button></div><div class="color-view" id="detailColorView" hidden role="group" aria-label="对比色彩版本"><button data-color-view="preserved">保留原肤色</button><button data-color-view="raw">原始模型</button></div><div class="cmp" id="cmp"><canvas id="cmpA"></canvas><canvas id="cmpB"></canvas><span class="cmp-label left" id="lblA">原始照片</span><span class="cmp-label right" id="lblB">目标年龄</span><div class="handle" id="handle"></div></div><label class="visually-hidden" for="split">对比分割线</label><input type="range" id="split" min="0" max="100" value="50"><div class="row actions"><button id="bBack">返回手记</button><button class="primary" id="bSave">保存对比</button></div><button class="text native-download" id="bDetailNativeSave" hidden>下载原生 1024 PNG</button><p class="help-line" id="detailDisclosure">演示滤镜 · 外观模拟</p></section>
  <section id="s-overview" hidden><h2>年龄总览</h2><div class="overview-grid" id="overviewGrid"></div><div class="row actions"><button id="bOverviewBack">返回手记</button><button class="primary" id="bOverviewSave">导出拼图</button></div></section>
  </main>
 </div>
@@ -318,7 +318,8 @@ async function startCamera(){
  const request=++cameraRequest,epoch=S.epoch;stopCamera();notice('#hudText','正在请求摄像头…');
  try{
   if(!navigator.mediaDevices?.getUserMedia)throw new Error('INSECURE');
-  const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:S.facing},width:{ideal:720},height:{ideal:960}},audio:false});
+  const portrait=matchMedia('(orientation: portrait)').matches;
+  const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:S.facing},width:{ideal:portrait?1080:1920},height:{ideal:portrait?1920:1080}},audio:false});
   if(request!==cameraRequest||epoch!==S.epoch||S.state!=='s-mirror'){stream.getTracks().forEach(t=>t.stop());return;}
   S.stream=stream;$('#video').srcObject=stream;await $('#video').play();$('#video').style.transform=S.facing==='user'?'scaleX(-1)':'none';
   const settings=stream.getVideoTracks()[0].getSettings();$('#cameraMetrics').textContent=`${$('#video').videoWidth} × ${$('#video').videoHeight}${settings.frameRate?` · ${Math.round(settings.frameRate)} fps（视频配置）`:''} · 轮廓检测上限 5 次/秒`;
@@ -328,6 +329,7 @@ async function startCamera(){
 }
 const probe=canvas(384,288);
 function autoCaptureReadiness(image,now){
+ const video=$('#video'),nativeSize={width:video.videoWidth||image.width,height:video.videoHeight||image.height};
  const participants=S.mode==='mirror'?[selectedFace()].filter(Boolean):F.faces;
  const signature=participants.map(f=>f.id).join(','),gap=F.lastAutoCheck&&now-F.lastAutoCheck>750;
  F.lastAutoCheck=now;
@@ -337,7 +339,7 @@ function autoCaptureReadiness(image,now){
  if(gap||signature!==F.autoSignature){resetAutoCapture();F.lastAutoCheck=now;}
  F.autoSignature=signature;
  for(const face of participants){
-  const q=qualityOf(image,face);if(face.id===F.selectedId)F.quality=q;
+  const q=qualityOf(image,face,nativeSize);if(face.id===F.selectedId)F.quality=q;
   const prefix=F.faces.length>1?`人脸 ${face.id}：`:'';
   if(q.warnings.length)return fail(prefix+q.warnings[0]);
   if(face.w<.18||face.h<.2)return fail(prefix+'人脸偏小，请靠近一些。');
@@ -346,7 +348,7 @@ function autoCaptureReadiness(image,now){
   const anchor=F.anchors?.get(face.id);
   if(anchor&&(faceDistance(anchor,face)/face.w>.07||Math.abs(Math.log(face.w/anchor.w))>.09||Math.abs(Math.log(face.h/anchor.h))>.09||Math.abs(q.angle-anchor.angle)>6||Math.abs(q.front-anchor.front)>.1))return fail('请保持静止，正在重新确认…');
  }
- if(!F.anchors){F.anchors=new Map(participants.map(f=>{const q=qualityOf(image,f);return [f.id,{...f,angle:q.angle,front:q.front}];}));F.stableSince=now;}
+ if(!F.anchors){F.anchors=new Map(participants.map(f=>{const q=qualityOf(image,f,nativeSize);return [f.id,{...f,angle:q.angle,front:q.front}];}));F.stableSince=now;}
  if(now-F.stableSince<CONFIG.stableMs)return {ready:false,message:'请站稳，准备自动拍摄…'};
  if(!F.countStart)F.countStart=now;const left=Math.ceil((CONFIG.countdownMs-now+F.countStart)/1000);
  const prefix=S.gestureMode&&S.gestureIntent==='start'?'已确认拍摄 · ':'';
@@ -371,16 +373,17 @@ function detectLoop(now){
 }
 
 // Uploaded and captured images share the same selection and alignment pipeline.
-function qualityOf(image,face){
+function qualityOf(image,face,nativeSize=image){
  const w=image.width,h=image.height,x=clamp(Math.floor(face.x*w),0,w-1),y=clamp(Math.floor(face.y*h),0,h-1),rw=Math.max(1,Math.min(w-x,Math.ceil(face.w*w))),rh=Math.max(1,Math.min(h-y,Math.ceil(face.h*h)));
  const test=canvas(64,64),g=test.getContext('2d',{willReadFrequently:true});g.drawImage(image,x,y,rw,rh,0,0,64,64);const data=g.getImageData(0,0,64,64).data,luma=new Float32Array(4096);let brightness=0,sum=0,sq=0,n=0;
  for(let i=0;i<4096;i++){luma[i]=.299*data[i*4]+.587*data[i*4+1]+.114*data[i*4+2];brightness+=luma[i];}
  for(let j=1;j<63;j++)for(let i=1;i<63;i++){const k=j*64+i,a=luma[k-1]+luma[k+1]+luma[k-64]+luma[k+64]-4*luma[k];sum+=a;sq+=a*a;n++;}
  brightness/=4096;const blur=sq/n-(sum/n)**2;const warnings=[];
- if(face.w*w<Math.min(120,w*.18))warnings.push('人脸偏小，请靠近镜头。');
+ const facePixels=Math.round(Math.min(face.w*nativeSize.width,face.h*nativeSize.height));
+ if(facePixels<256)warnings.push(`人脸仅约 ${facePixels} 像素，请靠近镜头或换用更清晰的照片。`);
  if(brightness<60)warnings.push('面部偏暗，请改善照明。');if(brightness>210)warnings.push('面部过亮，请避开强光。');if(blur<25)warnings.push('照片偏模糊，请保持稳定。');
  let angle=null,front=null;if(face.eyes){const [a,b]=[...face.eyes].sort((a,b)=>a.x-b.x);angle=Math.atan2((b.y-a.y)*h,(b.x-a.x)*w)*180/Math.PI;if(Math.abs(angle)>20)warnings.push('头部倾斜较大，请稍微转正。');if(face.nose){front=Math.abs(face.nose.x-(a.x+b.x)/2)/Math.max(.001,Math.abs(b.x-a.x));if(front>.35)warnings.push('侧脸角度较大，请正对镜头。');}}
- return {brightness:Math.round(brightness),blur:Math.round(blur),angle,front,warnings,manual:!!face.manual};
+ return {brightness:Math.round(brightness),blur:Math.round(blur),facePixels,angle,front,warnings,manual:!!face.manual};
 }
 async function capture(){
  if(!S.stream||S.capturing||S.state!=='s-mirror')return;const v=$('#video');if(!v.videoWidth)return;
@@ -436,7 +439,7 @@ function alignFace(image,face){
 async function confirmFace(){
  const f=staticFace();if(!f||!S.original)return;const epoch=S.epoch;S.ageRevision=(S.ageRevision||0)+1;const ageRevision=S.ageRevision;
  stopGeneration();S.results.forEach(release);S.results.clear();S.tasks.clear();release(S.face);release(S.referenceFace);S.referenceFace=null;const result=alignFace(S.original,f);S.face=result.face;S.transform=result.transform;
- const quality=qualityOf(S.original,f);$('#qualitySummary').textContent=`亮度 ${quality.brightness} / 255 · 清晰度 ${quality.blur}${quality.angle===null?' · 手动区域，未做关键点对齐':` · 倾斜 ${Math.abs(quality.angle).toFixed(0)}°`}${quality.warnings.length?'\n'+quality.warnings.join(' '):'\n图像检查通过，可继续。'}${f.manual?'\n手动框选未验证人脸与朝向。':''}`;
+ const quality=qualityOf(S.original,f);$('#qualitySummary').textContent=`人脸约 ${quality.facePixels} 像素 · 亮度 ${quality.brightness} / 255 · 清晰度 ${quality.blur}${quality.angle===null?' · 手动区域，未做关键点对齐':` · 倾斜 ${Math.abs(quality.angle).toFixed(0)}°`}${quality.warnings.length?'\n'+quality.warnings.join(' '):'\n图像检查通过，可继续。'}${f.manual?'\n手动框选未验证人脸与朝向。':''}`;
  S.age=null;S.ageInfo=null;S.quality=quality;$('#currentAgeInput').value='';show('s-warp');$('#taskSummary').textContent=adapters().estimate?'正在估计当前年龄…':'正在准备演示预览…';$('#taskList').replaceChildren();$('#progressFill').style.width='0%';$('#bShowResults').disabled=true;$('#taskDetails').open=false;
  let info=null;
  if(adapters().prepare){
@@ -447,7 +450,9 @@ async function confirmFace(){
    release(S.face);S.face=prepared.face;S.referenceFace=prepared.referenceFace||null;S.transform=prepared.transform;S.demonstration=false;S.preparing=false;
    info=prepared.ageInfo;
    if(!info||!Number.isFinite(info.age)||info.age<1||info.age>99){S.ageInfo=null;S.age=null;S.targets=[20,40,60,80];showInput();notice('#inputNotice','参考年龄未能获得，请填写当前年龄后继续。',true);return;}
-   S.ageInfo={...info,source:'model'};S.age=Math.round(info.age);$('#currentAgeInput').value=S.age;$('#estimateStatus').textContent=ageSourceLabel();$('#ageDetails').textContent=JSON.stringify({...S.ageInfo,alignment:prepared.alignment},null,2);S.targets=defaultTargets(S.age);await continueFromInput();return;
+   S.ageInfo={...info,source:'model'};S.age=Math.round(info.age);$('#currentAgeInput').value=S.age;$('#estimateStatus').textContent=ageSourceLabel();$('#ageDetails').textContent=JSON.stringify({...S.ageInfo,alignment:prepared.alignment},null,2);S.targets=defaultTargets(S.age);
+   if(quality.warnings.length){showInput();notice('#inputNotice','这张照片可能影响生成效果，可重新拍摄，也可继续生成。');return;}
+   await continueFromInput();return;
   }catch(error){
    if(epoch!==S.epoch||ageRevision!==S.ageRevision)return;
    release(S.face);release(S.referenceFace);S.face=null;S.referenceFace=null;S.transform=null;S.preparing=false;show('s-select');drawSource();renderStaticChoices();drawStaticOverlay();$('#bSelectConfirm').disabled=false;notice('#selectNotice',String(error.message||'处理未完成，请重新确认人脸。'),true);return;
@@ -637,7 +642,7 @@ function updatePageDots(){
  const p=S.pages[S.pageIndex];S.pick=p?.t??null;
  document.querySelectorAll('#pageDots button').forEach((b,i)=>{b.classList.toggle('active',i===S.pageIndex);b.setAttribute('aria-current',i===S.pageIndex?'page':'false');});
  $('#pageCounter').textContent=`${String(S.pageIndex+1).padStart(2,'0')} / ${String(S.pages.length).padStart(2,'0')}`;$('#pagePrev').disabled=S.pageIndex===0;$('#pageNext').disabled=S.pageIndex===S.pages.length-1;
- const version=resultVersion(p?.t);$('#bNativeSave').hidden=!adapters().live||!p;$('#bNativeSave').textContent=p?.t===null?(S.referenceFace?'下载对齐原照 1024 PNG（源图重采样）':'下载对齐原照 256 PNG（模型输入）'):`下载${version.corrected?'保色':'原始模型'} ${p?.image?.width||1024} PNG`;
+ const version=resultVersion(p?.t);$('#bNativeSave').hidden=!adapters().live||!p;$('#bNativeSave').textContent=p?.t===null?(S.referenceFace?'下载对齐原照 1024 PNG（源图重采样）':'下载对齐原照 256 PNG（模型输入）'):`下载${version.corrected?'保色':'原始模型'} 1024 PNG`;
  $('#bCompareNow').hidden=!adapters().live;$('#bCompareNow').disabled=!S.results.size;
  if(adapters().live)$('#resultDisclosure').textContent=version.note;
 }
@@ -656,6 +661,7 @@ function pasteBack(result, includeBackground=true){
 let comparisonImages=null;
 function openDetail(target){if(!S.results.has(target))return;S.detailReturn=S.state==='s-overview'?'s-overview':'s-grid';S.pick=target;S.view='crop';$('#split').value=50;$('#bBack').textContent=S.detailReturn==='s-overview'?'返回总览':'返回手记';show('s-detail');prepareComparison();}
 function prepareComparison(){
+ $('#bDetailNativeSave').hidden=!adapters().live;$('#bDetailNativeSave').textContent=`下载${resultVersion(S.pick).corrected?'保色':'原始模型'} 1024 PNG`;
  if(!S.face||!S.results.has(S.pick))return;
  if(comparisonImages?.temporary)release(comparisonImages.right);
  comparisonImages=S.view==='paste'?{left:S.original,right:pasteBack(resultImage(S.pick)),temporary:true}:{left:S.referenceFace||S.face,right:resultImage(S.pick),temporary:false};
@@ -673,7 +679,8 @@ async function saveCanvas(out,name,share=false){
  }catch(error){toast('保存失败，请重试；当前结果已保留。');}finally{release(out);}
 }
 function sharePick(){const p=S.pages[S.pageIndex];if(!p)return;const version=resultVersion(p.t),out=exportLabel(p.image,p.t===null?`此刻 · ${S.age} 岁`:`${p.t} 岁 · 年龄预览`,version.fileLabel);return saveCanvas(out,`时空镜_扉页_${p.t??S.age}岁_${version.fileLabel}.png`,true);}
-function saveNative(){const p=S.pages[S.pageIndex];if(!p||!adapters().live)return;const version=resultVersion(p.t),out=canvas(p.image.width,p.image.height);out.getContext('2d').drawImage(p.image,0,0);return saveCanvas(out,p.t===null?(S.referenceFace?'时空镜_对齐原照1024_源图重采样.png':'时空镜_对齐原照256_模型输入.png'):`时空镜_SAM_${version.fileLabel}${out.width}_${p.t}岁_年龄外观模拟.png`);}
+function saveNativeImage(target){if(!adapters().live)return;const version=resultVersion(target),source=target===null?(S.referenceFace||S.face):resultImage(target);if(!source)return;const out=canvas(source.width,source.height);out.getContext('2d').drawImage(source,0,0);return saveCanvas(out,target===null?(S.referenceFace?'时空镜_对齐原照1024_源图重采样.png':'时空镜_对齐原照256_模型输入.png'):`时空镜_SAM_${version.fileLabel}${out.width}_${target}岁_年龄外观模拟.png`);}
+function saveNative(){const p=S.pages[S.pageIndex];if(p)return saveNativeImage(p.t);}
 function savePick(){if(!comparisonImages||S.pick===null)return;const out=canvas($('#cmpA').width,$('#cmpA').height),g=out.getContext('2d');g.drawImage($('#cmpA'),0,0);g.drawImage($('#cmpB'),0,0);const labeled=exportLabel(out,`${S.age} 岁 → ${S.pick} 岁 · ${S.view==='paste'?'回贴':'人脸'}对比`);release(out);return saveCanvas(labeled,`时空镜_${S.view}_对比_${S.age}岁至${S.pick}岁.png`);}
 function saveOverview(){
  const pages=[...S.pages].sort((a,b)=>(a.t??S.age)-(b.t??S.age)),cols=2,cell=320,rows=Math.ceil(pages.length/cols),sheet=canvas(cols*cell,rows*356),g=sheet.getContext('2d');g.fillStyle='#f5f3ee';g.fillRect(0,0,sheet.width,sheet.height);pages.forEach((p,i)=>{const x=i%cols*cell,y=Math.floor(i/cols)*356;g.drawImage(p.image,x,y,cell,cell);g.fillStyle='#28352e';g.font='17px sans-serif';g.fillText(p.t===null?`此刻 · ${S.age} 岁`:`${p.t} 岁`,x+14,y+343);});const labeled=exportLabel(sheet,'时空镜 · 年龄总览',S.colorView==='raw'?'原始模型':adapters().live&&[...S.results.values()].some(r=>r.ageMeta?.color_preservation?.applied)?'保色后处理（未适用的照片保留原始结果）':'原始模型');release(sheet);return saveCanvas(labeled,`时空镜_年龄总览_${S.age}岁.png`);
@@ -702,6 +709,7 @@ $('#bContinue').onclick=continueFromInput;$('#bRetakeInput').onclick=retake;$('#
 $('#pagePrev').onclick=()=>{stopPlay();goPage(S.pageIndex-1);};$('#pageNext').onclick=()=>{stopPlay();goPage(S.pageIndex+1);};$('#pageTrack').addEventListener('pointerdown',stopPlay,{passive:true});$('#bPlay').onclick=()=>{closeOptions();if(S.state!=='s-grid'){show('s-grid');goPage(S.pageIndex);}S.autoTimer?stopPlay():startPlay();};
 $('#bOverview').onclick=()=>{closeOptions();buildOverview();};$('#bOverviewBack').onclick=returnToResults;$('#bOverviewSave').onclick=saveOverview;$('#bShare').onclick=sharePick;$('#bBack').onclick=leaveComparison;$('#bSave').onclick=savePick;$('#bTaskStatus').onclick=()=>{closeOptions();show('s-warp');$('#taskDetails').open=true;renderTasks();};
 $('#bNativeSave').onclick=saveNative;
+$('#bDetailNativeSave').onclick=()=>saveNativeImage(S.pick);
 $('#bCompareNow').onclick=()=>{const p=S.pages[S.pageIndex],target=p?.t??S.pages.find(item=>item.t!==null)?.t;if(target!==undefined)openDetail(target);};
 document.querySelectorAll('[data-color-view]').forEach(button=>button.onclick=()=>setColorView(button.dataset.colorView));
 $('#split').oninput=updateSplit;$('#bCropView').onclick=()=>{S.view='crop';prepareComparison();};$('#bPasteView').onclick=()=>{S.view='paste';prepareComparison();};
