@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-26",
+  "megaage_counts": {
+    "train": {
+      "60-64": 991,
+      "65-69": 1108,
+      "70+": 0
+    },
+    "test": {
+      "60-64": 30,
+      "65-69": 58,
+      "70+": 0
+    }
+  },
+  "megaage_archive_sha256": "bb2abe5efa0572ffc1bdb5810eabd6177b95b5d8972b5c3aa221bea49adddf2c",
+  "megaage_all_images_size": "178x218",
+  "megaage_exact_train_test_shared_files": 152,
+  "aaf_readme_sha256": "889fd6e18af6a74e2a16c10e0ac283ec8da92dcc8ccad2e8e3afc01b89f77b3d",
+  "aaf_repository_sha256": "84aa98fde4367987714a289614e096cb8033b149fe99c612dcad6c18a8215cb7",
+  "aaf_original_archive_acquired": false,
+  "aaf_older_age_counts_known": false,
+  "aaf_generative_use_terms": "Not specified in retrieved README; neither broad permission nor explicit prohibition established",
+  "model_weights_changed": false,
+  "gpu_requested": false,
+  "aaf_baidu_public_share": {
+    "source_url": "https://pan.baidu.com/s/1WtHQsb73rLa-cZpBLi2dtg",
+    "http_status": 200,
+    "bytes": 75735,
+    "sha256": "878e0b6716dbb0ed0c7a03620e1a49603ba8f866a7ae7727383004e60e74a702",
+    "title": "All-Age-Faces Dataset.zip_免费高速下载|百度网盘-分享无限制",
+    "archive_downloaded": false,
+    "advertised_archive_bytes": 365164027,
+    "public_page_login_state": 0,
+    "direct_download_url_present": false
+  }
+}
