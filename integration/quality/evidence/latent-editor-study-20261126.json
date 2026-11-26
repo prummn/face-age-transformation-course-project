@@ -1,0 +1,362 @@
+{
+  "run": "latent-age-editor-20261126-111542",
+  "training_code_commit": "c3d0d10243ce3227ec0d48cf546927b02fac7232",
+  "profile": "frozen_generator_low_rank_latent_editor_pair",
+  "job": {
+    "job_id": "j-1795691800-643140",
+    "phase": "Succeeded",
+    "allocated_gpus": 1
+  },
+  "device": {
+    "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+    "torch": "2.6.0+cu124",
+    "cuda": "12.4",
+    "device": "NVIDIA H200",
+    "device_count": 1,
+    "total_memory_bytes": 150393585664
+  },
+  "sample_counts": {
+    "train": 60,
+    "available_real": 381,
+    "seen_real_gan": 367,
+    "development": 35
+  },
+  "completed": {
+    "latent_editor_control": {
+      "steps": 2000,
+      "seconds": 151.25415432825685,
+      "source_images": 60,
+      "sampled_real_references": 367,
+      "real_references_used_for_gradients": 0,
+      "parameter_count": 141008,
+      "maximum_state_update": 0.030720610171556473,
+      "editor_sha256": "d78e9275e534ca5ee1c20383c9d5cbf2653393c489e3194147061a02f10e3f4f",
+      "cuda_peak_bytes": 4805500928
+    },
+    "latent_editor_gan": {
+      "steps": 2000,
+      "seconds": 220.4761315267533,
+      "source_images": 60,
+      "sampled_real_references": 367,
+      "real_references_used_for_gradients": 367,
+      "parameter_count": 141008,
+      "maximum_state_update": 0.07103604078292847,
+      "editor_sha256": "8f7d6300b7ea82df2594aeee99c43c58005a3a0800254e52af8a271facc8e62e",
+      "cuda_peak_bytes": 4859488256
+    }
+  },
+  "artifact_validation": {
+    "raw": 525,
+    "color": 525,
+    "size": [
+      1024,
+      1024
+    ],
+    "all_decoded": true,
+    "raw_sha256_verified": true,
+    "protected_same_young_pngs": 315
+  },
+  "paired_verification": {
+    "steps": 2000,
+    "all60_seen": true,
+    "sampling_equal": true,
+    "actual_real_coverage": 367,
+    "all_sam_frozen": true
+  },
+  "frozen_verification": {
+    "before": "29c9119baafd4ed645cfe5a6bf877a7a996fa5f4f8ea0098ee04e32d0c94aa3c",
+    "after": "29c9119baafd4ed645cfe5a6bf877a7a996fa5f4f8ea0098ee04e32d0c94aa3c",
+    "all_sam_parameters_unchanged": true
+  },
+  "baseline_preflight": {
+    "cases": [
+      "ffhq_64376",
+      "ffhq_62644",
+      "ffhq_61921",
+      "ffhq_69847",
+      "ffhq_64919",
+      "ffhq_61680",
+      "ffhq_61580",
+      "ffhq_67140",
+      "ffhq_68335",
+      "appa_new_006765",
+      "appa_new_006975",
+      "appa_new_007161",
+      "appa_new_007185",
+      "appa_new_005791",
+      "appa_new_006010",
+      "ffhq_60764",
+      "ffhq_60512",
+      "ffhq_61690",
+      "ffhq_63721",
+      "ffhq_65835",
+      "ffhq_61172",
+      "ffhq_63046",
+      "ffhq_69817",
+      "ffhq_60058",
+      "ffhq_60148",
+      "ffhq_62840",
+      "ffhq_66577",
+      "ffhq_68299",
+      "ffhq_60241",
+      "ffhq_65817",
+      "ffhq_61908",
+      "ffhq_62688",
+      "ffhq_64985",
+      "ffhq_65302",
+      "ffhq_65714"
+    ],
+    "pngs": 175,
+    "exact": true,
+    "training_started": false
+  },
+  "cohort_metrics": {
+    "new-hd-holdout": {
+      "wplus_base": {
+        "cases": 17,
+        "outputs": 85,
+        "missing_faces": 0,
+        "identity": 0.8123389762990615,
+        "same_identity": 0.8488550992573008,
+        "high_age_error": 13.265016667983112,
+        "age20to75_span": 24.272692063275507,
+        "span_valid": 17,
+        "mean_age75": 61.77580889533548
+      },
+      "latent_editor_control": {
+        "cases": 17,
+        "outputs": 85,
+        "missing_faces": 0,
+        "identity": 0.8132689700407141,
+        "same_identity": 0.8488550992573008,
+        "high_age_error": 13.399334402645335,
+        "age20to75_span": 24.044621860279758,
+        "span_valid": 17,
+        "mean_age75": 61.54773869233973
+      },
+      "latent_editor_gan": {
+        "cases": 17,
+        "outputs": 85,
+        "missing_faces": 0,
+        "identity": 0.8121024606858983,
+        "same_identity": 0.8488550992573008,
+        "high_age_error": 13.314923679127412,
+        "age20to75_span": 24.086685629451978,
+        "span_valid": 17,
+        "mean_age75": 61.58980246151195
+      }
+    },
+    "pooled": {
+      "wplus_base": {
+        "cases": 35,
+        "outputs": 175,
+        "missing_faces": 0,
+        "identity": 0.8129486083984375,
+        "same_identity": 0.8475006682532175,
+        "high_age_error": 13.462010138375419,
+        "age20to75_span": 26.563664627075195,
+        "span_valid": 35,
+        "mean_age75": 60.500239671979635
+      },
+      "latent_editor_control": {
+        "cases": 35,
+        "outputs": 175,
+        "missing_faces": 0,
+        "identity": 0.8139748330627169,
+        "same_identity": 0.8475006682532175,
+        "high_age_error": 13.563769749232701,
+        "age20to75_span": 26.37229445321219,
+        "span_valid": 35,
+        "mean_age75": 60.30886949811663
+      },
+      "latent_editor_gan": {
+        "cases": 35,
+        "outputs": 175,
+        "missing_faces": 0,
+        "identity": 0.8123488643339702,
+        "same_identity": 0.8475006682532175,
+        "high_age_error": 13.630141285487584,
+        "age20to75_span": 26.317169897896903,
+        "span_valid": 35,
+        "mean_age75": 60.25374494280134
+      }
+    },
+    "new_appa_asian": {
+      "wplus_base": {
+        "cases": 6,
+        "outputs": 30,
+        "missing_faces": 0,
+        "identity": 0.7724669029315313,
+        "same_identity": 0.8102408150831858,
+        "high_age_error": 11.670672416687012,
+        "age20to75_span": 33.35907300313314,
+        "span_valid": 6,
+        "mean_age75": 65.56798489888509
+      },
+      "latent_editor_control": {
+        "cases": 6,
+        "outputs": 30,
+        "missing_faces": 0,
+        "identity": 0.7736555760105451,
+        "same_identity": 0.8102408150831858,
+        "high_age_error": 11.653635342915853,
+        "age20to75_span": 33.215569178263344,
+        "span_valid": 6,
+        "mean_age75": 65.4244810740153
+      },
+      "latent_editor_gan": {
+        "cases": 6,
+        "outputs": 30,
+        "missing_faces": 0,
+        "identity": 0.7701765845219294,
+        "same_identity": 0.8102408150831858,
+        "high_age_error": 11.697352727254232,
+        "age20to75_span": 33.17484219868978,
+        "span_valid": 6,
+        "mean_age75": 65.38375409444173
+      }
+    },
+    "annotated-ffhq": {
+      "wplus_base": {
+        "cases": 11,
+        "outputs": 55,
+        "missing_faces": 0,
+        "identity": 0.8356266590681943,
+        "same_identity": 0.8679050261324103,
+        "high_age_error": 13.71982834555886,
+        "age20to75_span": 27.13529534773393,
+        "span_valid": 11,
+        "mean_age75": 57.09863073175604
+      },
+      "latent_editor_control": {
+        "cases": 11,
+        "outputs": 55,
+        "missing_faces": 0,
+        "identity": 0.8367496661164544,
+        "same_identity": 0.8679050261324103,
+        "high_age_error": 13.85104751586914,
+        "age20to75_span": 26.93205590681596,
+        "span_valid": 11,
+        "mean_age75": 56.89539129083807
+      },
+      "latent_editor_gan": {
+        "cases": 11,
+        "outputs": 55,
+        "missing_faces": 0,
+        "identity": 0.8350584371523424,
+        "same_identity": 0.8679050261324103,
+        "high_age_error": 14.194815895774148,
+        "age20to75_span": 26.680027875033293,
+        "span_valid": 11,
+        "mean_age75": 56.6433632590554
+      }
+    },
+    "regional-ffhq": {
+      "wplus_base": {
+        "cases": 1,
+        "outputs": 5,
+        "missing_faces": 0,
+        "identity": 0.8167440295219421,
+        "same_identity": 0.8235865235328674,
+        "high_age_error": 24.722925186157227,
+        "age20to75_span": 18.449810028076172,
+        "span_valid": 1,
+        "mean_age75": 45.82678985595703
+      },
+      "latent_editor_control": {
+        "cases": 1,
+        "outputs": 5,
+        "missing_faces": 0,
+        "identity": 0.8173668831586838,
+        "same_identity": 0.8235865235328674,
+        "high_age_error": 24.659921646118164,
+        "age20to75_span": 18.725704193115234,
+        "span_valid": 1,
+        "mean_age75": 46.102684020996094
+      },
+      "latent_editor_gan": {
+        "cases": 1,
+        "outputs": 5,
+        "missing_faces": 0,
+        "identity": 0.819766104221344,
+        "same_identity": 0.8235865235328674,
+        "high_age_error": 24.3741512298584,
+        "age20to75_span": 19.097930908203125,
+        "span_valid": 1,
+        "mean_age75": 46.474910736083984
+      }
+    }
+  },
+  "numeric_guard_pass": [
+    "latent_editor_control",
+    "latent_editor_gan"
+  ],
+  "manual_review": {
+    "review_kind": "Single visible-route native texture inspection, not blind evaluation",
+    "cases": [
+      "ffhq_64376",
+      "ffhq_64919",
+      "ffhq_67140",
+      "ffhq_65817"
+    ],
+    "condition": "75",
+    "native_crops": [
+      "eye",
+      "cheek"
+    ],
+    "full_faces": [
+      "ffhq_64376",
+      "ffhq_67140"
+    ],
+    "original_color": true,
+    "observations": {
+      "ffhq_64376": "Existing stretched eye/cheek ridges remain; both learned editors are close to baseline; no demonstrated naturalness improvement.",
+      "ffhq_64919": "Eye/upper-cheek ridges and skin simplification persist across all three routes.",
+      "ffhq_67140": "Source skin spots/folds simplified by baseline; neither editor restores them.",
+      "ffhq_65817": "Eyeglass rim/eye/cheek changes small; persistent high yellow lighting and simplified skin; no clear gain."
+    },
+    "decision": "Do not promote either editor based on these observations; await full independent numeric checks, keep baseline regardless of numeric pass.",
+    "limitation": "35 cases are previously inspected development/regression inputs; native crops are not new independent population tests.",
+    "panels": {
+      "cheek-native75.png": "30be2194cdc05bbbe929e14be00155429d8db66948de09647b1757e3a69342e2",
+      "ffhq_64376-full75.png": "5007b9ebfadf145afa023ed35c6156fb5ab0f93e94a950fed3d294192a51aa9b",
+      "eye-native75.png": "acf692cf9e025ecf0075e641f164cc1ba9f67bb62545f5c207d7b95dc65fe4bb",
+      "ffhq_67140-full75.png": "11b3353ebc73a8f5b2217fb5f9fa55f8b45dd5afaf6d73d9e5965086917db542"
+    }
+  },
+  "browser_validation": {
+    "url": "http://127.0.0.1:65512/age-latent-editor-review/",
+    "status": 200,
+    "desktop": true,
+    "photo_switch": true,
+    "age_switch": true,
+    "color_switch": true,
+    "native_crops": true,
+    "source_equals_target_anchor": true,
+    "download_size": [
+      1024,
+      1024
+    ],
+    "mobile_width": 390,
+    "overflow": false,
+    "errors": []
+  },
+  "promotion": false,
+  "default_model_changed": false,
+  "reports_sha256": {
+    "experiment.json": "0d4854a6a43dd0710019fb8dd845d3fbc05bcf72b1df6c164d045453c354ab6a",
+    "summary.json": "5a750085459fc5827d44f7d8f085d91a7b0658fc3bf70bf411280868e19dffc6",
+    "independent-age.json": "56f1327dd353509f4cc6daedd1ef492a15e2dab3bada7eaf3b1c120040f9ef91",
+    "evaluation/report.json": "ff2740d130285b686bab5038bddd12ad29a086800788c33dfa61525c4d9c2433",
+    "artifact-validation.json": "33ff0884bc6703b1c89cd55fb54f72abcc61d624cda7756e1f1d99eab048f599",
+    "native-review-observations.json": "a3992ad337a2a02caa2b195ca9063488e4da872be2d34c573f41a6cc757d975c"
+  },
+  "limitations": [
+    "Previously inspected35 development cases; no fresh reserve consumed.",
+    "Coarse publisher apparent ages and FairFace pseudo source ages; no new chronological supervision.",
+    "PCA limits residual directions, not a guarantee of natural or on-manifold W+.",
+    "Only the paired GAN effect is isolated; this editor differs from historical generator adapters.",
+    "Offline research only; default API route and weights unchanged."
+  ],
+  "gallery": "/age-latent-editor-review/"
+}

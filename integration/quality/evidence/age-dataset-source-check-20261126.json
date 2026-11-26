@@ -1,0 +1,103 @@
+[
+  {
+    "dataset": "AgeDB",
+    "url": "https://ibug.doc.ic.ac.uk/resources/agedb/",
+    "http_status": 200,
+    "saved_bytes": 14984,
+    "sha256": "f8347623554b643023ba4853819cf519aa2d2e3e606bf7d075bae9c8672931a1",
+    "official_page_claims": [
+      "non-commercial research only",
+      "download archive password requested by email",
+      "images obtained from the Internet",
+      "page does not report Asian 65+ counts or source-face resolution distribution"
+    ],
+    "images_downloaded": 0,
+    "authors_contacted": false
+  },
+  {
+    "dataset": "CACD",
+    "url": "https://bcsiriuschen.github.io/CARC/",
+    "http_status": 200,
+    "saved_bytes": 16067,
+    "sha256": "07445775f59dfddaadddbed6e7a2327d36fc07c7c15f5643817ef2e292253b1c",
+    "official_page_claims": [
+      "163446 images from 2000 celebrities",
+      "estimated age range 16-62",
+      "original face crop archive 3.5 GB; metadata-only archive 817 KB",
+      "academic research use only; copyrights belong to original owners",
+      "year labels are rough and not recommended for age estimation"
+    ],
+    "images_downloaded": 0,
+    "authors_contacted": false
+  },
+  {
+    "dataset": "IMDB-WIKI",
+    "url": "https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/",
+    "http_status": 200,
+    "source_cache": "deployment/age-quality-final/source-search-20261126/imdb-wiki.html",
+    "official_page_sha256": "5dd6671c84428d5a629901f3f6f74d4a314c97c7d4a660280a343d85e875423c",
+    "official_page_claims": [
+      "523051 total images; 460723 IMDb images from 20284 people, plus 62328 Wikipedia images",
+      "age computed from birth date and photo year; page notes incorrect timestamps and movie stills",
+      "original-image links are split into ten approximately 24-29 GB shards; cropped-face archive is 7 GB",
+      "page does not report Asian 65+ counts or image-rights permission for this project"
+    ],
+    "metadata_only": {
+      "archive_url": "https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/static/imdb_meta.tar",
+      "archive_bytes": 22937600,
+      "publisher_md5_url": "https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/static/imdb_meta_md5sum.txt",
+      "publisher_md5": "469433135f1e961c9f4c0304d0b5db1e",
+      "archive_sha256": "c32713eefdf07aa667c143eba6dcfaed7b0035628877e1cd7778fb14dcf2b74f",
+      "imdb_mat_sha256": "be67a7d84df5f90893884cd7f206c8c935ceeaa2afc09b6a96076fd7f982a035",
+      "valid_age_bbox_rows": 460090,
+      "publisher_age_65_85": 16149,
+      "conservative_single_face_65_85": 6096,
+      "single_face_bbox_ge_512": 1077,
+      "single_face_bbox_ge_700": 603,
+      "identities_in_single_face_65_85": 1222,
+      "identities_in_bbox_ge_512_candidates": 511,
+      "age_bin_bbox_ge_512": {"65-69": 451, "70-74": 314, "75-84": 301, "85": 11},
+      "images_downloaded": 0,
+      "limitation": "Metadata face boxes are not verified native pixel dimensions; ages are computed from publisher birth year and photo year; no ethnicity labels."
+    },
+    "wikipedia_metadata_only": {
+      "archive_url": "https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/static/wiki_crop.tar",
+      "range_bytes_received": 8388608,
+      "metadata_member": "wiki_crop/wiki.mat",
+      "metadata_member_bytes": 3800373,
+      "metadata_member_tar_checksum_valid": true,
+      "whole_archive_publisher_md5_verified": false,
+      "age_65_85": 4437,
+      "conservative_single_face_65_85": 3188,
+      "single_face_bbox_ge_512": 0,
+      "maximum_bbox_short_edge": 419.1053163087946,
+      "images_downloaded": 0,
+      "limitation": "Only an 8 MiB HTTP range was fetched; candidate ages are publisher year-based and ethnicity is not labeled."
+    },
+    "crop_archive_limited_pilot": {
+      "url": "https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/static/imdb_crop.tar",
+      "range_bytes_received": 33554432,
+      "full_archive_bytes": 7012157440,
+      "range_sha256": "9e529a97cec956d697a6089ec5f3b03eb162ef12720c7b28821ab67ac07f0058",
+      "verified_tar_headers": 2197,
+      "selected_candidates_decoded": 7,
+      "all_archive_crop_sizes": "500x500 or 500x501",
+      "yunet_face_short_edge_pixels": [187, 253],
+      "manual_native_texture_reviewed": 3,
+      "notes": ["Strong flash/specular light, shadow, occlusion and/or makeup seen in reviewed examples.", "No candidate admitted to training.", "Stopped further archive transfer; archive publisher checksum not verified because only a byte range was retrieved."]
+    }
+  },
+  {
+    "dataset": "CelebAMask-HQ",
+    "url": "https://raw.githubusercontent.com/switchablenorms/CelebAMask-HQ/master/README.md",
+    "http_status": 200,
+    "source_cache": "deployment/age-quality-final/source-search-20261126/celebamask-readme.md",
+    "official_page_sha256": "5513ac4ffc64f88e289db941213e1aac2d42e039fb0cb0f3b86dc2c185d92352",
+    "official_page_claims": [
+      "30000 1024x1024 images",
+      "non-commercial research only; internal copies limited to one site; further distribution prohibited",
+      "no age or ethnicity distribution reported in the README"
+    ],
+    "images_downloaded": 0
+  }
+]
