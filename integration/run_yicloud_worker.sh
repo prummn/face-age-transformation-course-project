@@ -9,6 +9,9 @@ export PYTHONUNBUFFERED=1 PYTHONNOUSERSITE=1 OMP_NUM_THREADS=4 MKL_NUM_THREADS=4
 export FACE_AGE_BASE="$repo_dir/deployment/model-files/face-age"
 export FACE_AGE_DEVICE=cuda:0
 export FACE_AGE_QUALITY="${FACE_AGE_QUALITY:-original}"
+if [[ "${FACE_AGE_STABLE_NUMERICS:-0}" == 1 ]]; then
+    export CUBLAS_WORKSPACE_CONFIG=:4096:8
+fi
 export TORCH_HOME="$FACE_AGE_BASE/torch_cache"
 export HF_HUB_OFFLINE=1
 # Only the SHA256-verified, trusted legacy SAM checkpoint is loaded here.

@@ -1,4 +1,5 @@
 """Optional slow-quality SAM inference. Optimize per-session W+, never weights."""
+import os
 import time
 
 
@@ -10,6 +11,18 @@ class LatentQuality:
         self.resize=resize
         self.identity=IDLoss().to(engine.dev).eval().requires_grad_(False)
         self.perceptual=lpips.LPIPS(net='alex',verbose=False).to(engine.dev).eval().requires_grad_(False)
+        self.stable_numerics=os.environ.get('FACE_AGE_STABLE_NUMERICS')=='1'
+        if self.stable_numerics:
+            if not engine.dev.startswith('cuda:'):
+                raise ValueError('Stable W+ numerics currently require CUDA')
+            from quality.deterministic_quality_ops import resize as stable_resize,replace_pools
+            self.resize=stable_resize
+            engine.torch.use_deterministic_algorithms(True)
+            engine.torch.backends.cudnn.deterministic=True
+            engine.torch.backends.cudnn.benchmark=False
+            engine.torch.backends.cudnn.allow_tf32=True
+            engine.torch.backends.cuda.matmul.allow_tf32=False
+            for model in [self.identity,self.perceptual,engine.age_net]:replace_pools(model)
         for model in [engine.net,engine.identity_encoder,engine.age_net]:model.eval().requires_grad_(False)
 
     def run(self,item,target_age,assert_active):
@@ -68,7 +81,8 @@ class LatentQuality:
                 with torch.no_grad():return decode(target).detach()
             if self.mode not in ('constrained','texture','texture_robust','original_delta'):raise RuntimeError('Unknown quality profile')
             def age_logits(image):
-                value=F.interpolate((image+1)/2,(224,224),mode='bilinear',align_corners=False)
+                value=(self.resize((image+1)/2,(224,224),kind='bilinear') if self.stable_numerics
+                    else F.interpolate((image+1)/2,(224,224),mode='bilinear',align_corners=False))
                 return engine.age_net.net((value-engine.age_net.m)/engine.age_net.sd)[2].float()
             def age_views(image):
                 return [image,F.avg_pool2d(image,3,1,1),image[:,:,8:-8,8:-8]]

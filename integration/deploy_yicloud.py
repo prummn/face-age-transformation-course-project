@@ -84,6 +84,8 @@ def main():
                         help='Explicit opt-in to slower per-photo W+ optimization; original weights stay unchanged')
     parser.add_argument('--max-running-duration', default='24h',
                         help='Platform GPU runtime cap, e.g. 30m for a bounded quality preview')
+    parser.add_argument('--stable-numerics', action='store_true',
+                        help='Explicit deterministic CUDA W+ fitting; model weights and age objective unchanged')
     args = parser.parse_args()
     state = json.loads(STATE.read_text()) if STATE.exists() else None
     if args.action in ['start', 'status', 'stop']:
@@ -130,6 +132,8 @@ def main():
             if result.Phase in ['Running', 'Pending', 'Inqueue', 'Starting']:
                 if state.get('quality', 'original') != args.quality:
                     raise RuntimeError('Active demo uses a different quality profile; stop it before changing profiles')
+                if state.get('stable_numerics', False) != args.stable_numerics:
+                    raise RuntimeError('Active demo uses different numerics; stop it before changing numerics')
                 print('Reusing dedicated job', state['job_id'])
             else:
                 state = None
@@ -147,7 +151,7 @@ def main():
             command = shlex.join(['bash', str(ROOT / 'integration/run_yicloud_worker.sh'), str(ROOT), str(run_dir)])
             payload = dict(Name=name, Project='fdj-infra', ZoneId='cn-shanghai-a',
                 QuotaGroup='fdj_gpu_taskpool', Priority='3', UsePrivateMachine=False, AutoDeleteDuration='168h',
-                TaskSpecs={'inference':dict(Command=['bash','-c',command], Env={'FACE_AGE_QUALITY':args.quality}, Image=IMAGE,
+                TaskSpecs={'inference':dict(Command=['bash','-c',command], Env={'FACE_AGE_QUALITY':args.quality,'FACE_AGE_STABLE_NUMERICS':'1' if args.stable_numerics else '0'}, Image=IMAGE,
                     Replicas=1, CPU='4', Memory='32Gi', GPU='1', Internet=False,
                     MaxRunningDuration=args.max_running_duration, MaxWaitDuration='10m', RestartPolicy='Never',
                     MountGPFS='gpfs://gpfs2/haobinzhang:/root')})
@@ -165,7 +169,7 @@ def main():
             state = dict(job_id=result.JobId, name=name, run_dir=str(run_dir), image=IMAGE,
                          code_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
                          submitted_at=datetime.now(timezone.utc).isoformat(), max_running_duration=args.max_running_duration,
-                         quality=args.quality)
+                         quality=args.quality, stable_numerics=args.stable_numerics)
             save(run_dir / 'receipt.json', state)
             save(STATE, state)
             print('Submitted dedicated GPU job', result.JobId)

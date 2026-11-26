@@ -31,6 +31,9 @@ from pydantic import BaseModel, Field
 
 VERSION = "1.4.0"
 QUALITY_PROFILE = os.environ.get("FACE_AGE_QUALITY", "original")
+if os.environ.get("FACE_AGE_STABLE_NUMERICS") == "1":
+    # Must be configured before the first CUDA BLAS operation in model loading.
+    os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
 MODEL_NAME = "ft_l1 + SAM age direction" if QUALITY_PROFILE == "original" else "ft_l1 direct + identity/perceptual W+ " + QUALITY_PROFILE
 if QUALITY_PROFILE == "original_delta":
     MODEL_NAME = "ft_l1 W+ anchor + original SAM age direction + constrained refinement (experimental)"
@@ -499,7 +502,7 @@ async def unexpected_error(request, exc):
 
 @app.get("/api/health")
 def health():
-    return {"ready": engine.ready, "engine": ENGINE_NAME, "device": engine.device_label, "model": MODEL_NAME, "native_size": 1024, "version": VERSION, "status": "ready" if engine.ready else ("failed" if engine.error else "loading"), "detail": engine.error, "active_sessions": store.count(), "session_ttl_seconds": SESSION_TTL, "features": {"source_color_preservation": True, "raw_model_output": True}}
+    return {"ready": engine.ready, "engine": ENGINE_NAME, "device": engine.device_label, "model": MODEL_NAME, "native_size": 1024, "version": VERSION, "status": "ready" if engine.ready else ("failed" if engine.error else "loading"), "detail": engine.error, "active_sessions": store.count(), "session_ttl_seconds": SESSION_TTL, "numerics": "stable" if getattr(getattr(engine,"quality_refiner",None),"stable_numerics",False) else "legacy", "features": {"source_color_preservation": True, "raw_model_output": True}}
 
 
 @app.post("/api/prepare")
