@@ -14,7 +14,7 @@ function render(){const r=data.cases.find(x=>x.name==$('subject').value),region=
 
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('run',type=Path);p.add_argument('output',type=Path);a=p.parse_args()
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('run',type=Path);p.add_argument('output',type=Path);p.add_argument('--title');a=p.parse_args()
     run=a.run.resolve();out=a.output.resolve();out.mkdir(parents=True,exist_ok=False)
     r=json.loads((run/'evaluation/report.json').read_text());summary=json.loads((run/'summary.json').read_text())
     decision=json.loads((run/'decision.json').read_text());cases=[]
@@ -52,9 +52,13 @@ def main():
     labels.update(ft_delta_training='微调编码器差值匹配训练',original_delta_training='原SAM差值匹配训练')
     labels.update(personalized_reconstruction='逐图生成器重建',personalized_locality='逐图生成器重建＋邻域保护')
     labels.update(latent_editor_control='W+残差编辑器（无纹理GAN）',latent_editor_gan='W+残差编辑器＋高龄局部纹理GAN')
+    labels.update(accepted_baseline='历史原SAM差值＋约束留档',teacher_control='同预算旧teacher对照',
+                  target_age='明确目标年龄',target_age_order='目标年龄＋年龄顺序',
+                  target_age_order_floor='目标年龄＋顺序＋身份下限')
     if r.get('baseline_route')=='original_delta_constrained':labels['wplus_base']='原SAM差值＋约束（当前候选）'
     data=dict(cases=cases,note=decision['gallery_note'],labels=labels)
-    (out/'index.html').write_text(PAGE.replace('__DATA__',json.dumps(data,ensure_ascii=False).replace('<','\\u003c')))
+    page=PAGE.replace('高清纹理训练对照',a.title or r.get('review_title','高清纹理训练对照'))
+    (out/'index.html').write_text(page.replace('__DATA__',json.dumps(data,ensure_ascii=False).replace('<','\\u003c')))
     print('TEXTURE_GALLERY_READY',len(cases),out)
 
 if __name__=='__main__':main()

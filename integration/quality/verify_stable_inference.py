@@ -45,6 +45,21 @@ def main():
                 (args.out/(str(repeat)+'-'+field+'.png')).write_bytes(raw)
                 row[field+'_sha256']=hashlib.sha256(raw).hexdigest()
             report['repeats'].append(row);print('STABLE_API_REPEAT',repeat,row['request_seconds'],flush=True)
+            if repeat==0:
+                report['other_targets']=[]
+                for label,target in [('same',prepared['age']['age']),('20',20),('40',40),('60',60)]:
+                    tick=time.monotonic();extra=call('/api/transform',dict(session_id=session,target_age=target,
+                        request_id='public-stable-'+label,preserve_color=True,enhance=False))
+                    check=dict(condition=label,target=target,request_seconds=time.monotonic()-tick,meta=extra['meta'])
+                    for field in ['image','raw_image']:
+                        raw=base64.b64decode(extra[field].split(',',1)[1])
+                        with Image.open(io.BytesIO(raw)) as image:
+                            image.load()
+                            if image.format!='PNG' or image.size!=(1024,1024):raise ValueError('Invalid extra-target PNG')
+                        (args.out/(label+'-'+field+'.png')).write_bytes(raw)
+                        check[field+'_sha256']=hashlib.sha256(raw).hexdigest()
+                    report['other_targets'].append(check)
+                    print('STABLE_API_TARGET',label,check['request_seconds'],flush=True)
         finally:
             if session is not None:call('/api/sessions/'+session,method='DELETE')
         try:call('/api/transform',dict(session_id=session,target_age=75))
