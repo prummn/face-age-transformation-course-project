@@ -1,0 +1,1578 @@
+{
+  "date": "2026-11-26",
+  "archive_audit": {
+    "schema": 1,
+    "archive_name": "All-Age-Faces Dataset.zip",
+    "archive_bytes": 365164027,
+    "archive_sha256": "0dcebf92031e43b987d78fb3621ab7f0bcb3af62aaf8871de060681c1f08db77",
+    "archive_hash_kind": "Local upload fingerprint; no publisher independent checksum provided",
+    "publisher_advertised_bytes_match": true,
+    "zip_crc_all_members": true,
+    "non_directory_members": 39971,
+    "encrypted_members": 0,
+    "paired_inventories_equal": true,
+    "unique_publisher_ids": 13322,
+    "published_gender_counts": {
+      "female": 7381,
+      "male": 5941
+    },
+    "landmark_point_counts": {
+      "49": 13322
+    },
+    "annotation_sha256": {
+      "train": "8d1cdecb90d4b36c6337a36fe4ff81d3e720c3daad907e19c43f94c942bd758a",
+      "val": "783603f7124ff5f116cc3029d20f443b3721df17c3194bbcf82d43c1b7d9fb12"
+    },
+    "internal_terms_members": [],
+    "all": {
+      "records": 13322,
+      "by_published_gender": {
+        "female": 7381,
+        "male": 5941
+      },
+      "by_split": {
+        "train": 6637,
+        "val": 6685
+      },
+      "by_published_age": {
+        "2": 154,
+        "3": 127,
+        "4": 124,
+        "5": 118,
+        "6": 141,
+        "7": 122,
+        "8": 127,
+        "9": 134,
+        "10": 102,
+        "11": 104,
+        "12": 120,
+        "13": 142,
+        "14": 112,
+        "15": 110,
+        "16": 112,
+        "17": 128,
+        "18": 160,
+        "19": 147,
+        "20": 181,
+        "21": 177,
+        "22": 219,
+        "23": 243,
+        "24": 282,
+        "25": 287,
+        "26": 401,
+        "27": 501,
+        "28": 394,
+        "29": 459,
+        "30": 313,
+        "31": 367,
+        "32": 439,
+        "33": 419,
+        "34": 355,
+        "35": 342,
+        "36": 352,
+        "37": 329,
+        "38": 245,
+        "39": 236,
+        "40": 247,
+        "41": 271,
+        "42": 255,
+        "43": 235,
+        "44": 181,
+        "45": 211,
+        "46": 186,
+        "47": 178,
+        "48": 140,
+        "49": 167,
+        "50": 120,
+        "51": 114,
+        "52": 108,
+        "53": 116,
+        "54": 123,
+        "55": 127,
+        "56": 155,
+        "57": 120,
+        "58": 70,
+        "59": 107,
+        "60": 110,
+        "61": 99,
+        "62": 62,
+        "63": 88,
+        "64": 60,
+        "65": 53,
+        "66": 69,
+        "67": 77,
+        "68": 58,
+        "69": 74,
+        "70": 47,
+        "71": 47,
+        "72": 30,
+        "73": 50,
+        "74": 50,
+        "75": 36,
+        "76": 50,
+        "77": 50,
+        "78": 61,
+        "79": 43,
+        "80": 52
+      },
+      "original": {
+        "short_edge_percentiles": {
+          "0": 246.0,
+          "10": 301.0,
+          "50": 304.0,
+          "90": 311.0,
+          "100": 393.0
+        },
+        "short_edge512_count": 0,
+        "common_sizes": [
+          {
+            "size": [
+              302,
+              340
+            ],
+            "count": 694
+          },
+          {
+            "size": [
+              304,
+              342
+            ],
+            "count": 628
+          },
+          {
+            "size": [
+              300,
+              338
+            ],
+            "count": 539
+          },
+          {
+            "size": [
+              302,
+              339
+            ],
+            "count": 508
+          },
+          {
+            "size": [
+              301,
+              338
+            ],
+            "count": 474
+          },
+          {
+            "size": [
+              306,
+              345
+            ],
+            "count": 459
+          },
+          {
+            "size": [
+              302,
+              341
+            ],
+            "count": 459
+          },
+          {
+            "size": [
+              301,
+              339
+            ],
+            "count": 456
+          },
+          {
+            "size": [
+              302,
+              342
+            ],
+            "count": 412
+          },
+          {
+            "size": [
+              303,
+              341
+            ],
+            "count": 357
+          }
+        ]
+      },
+      "aligned": {
+        "short_edge_percentiles": {
+          "0": 189.0,
+          "10": 292.0,
+          "50": 309.0,
+          "90": 309.0,
+          "100": 309.0
+        },
+        "short_edge512_count": 0,
+        "common_sizes": [
+          {
+            "size": [
+              309,
+              398
+            ],
+            "count": 3135
+          },
+          {
+            "size": [
+              309,
+              392
+            ],
+            "count": 228
+          },
+          {
+            "size": [
+              309,
+              393
+            ],
+            "count": 226
+          },
+          {
+            "size": [
+              309,
+              390
+            ],
+            "count": 218
+          },
+          {
+            "size": [
+              309,
+              397
+            ],
+            "count": 216
+          },
+          {
+            "size": [
+              309,
+              394
+            ],
+            "count": 209
+          },
+          {
+            "size": [
+              309,
+              395
+            ],
+            "count": 206
+          },
+          {
+            "size": [
+              309,
+              396
+            ],
+            "count": 203
+          },
+          {
+            "size": [
+              309,
+              391
+            ],
+            "count": 191
+          },
+          {
+            "size": [
+              309,
+              389
+            ],
+            "count": 188
+          }
+        ]
+      },
+      "face_qc": {
+        "tested": 847,
+        "detected": 847,
+        "no_face": 0,
+        "multiple_prominent_faces": 18,
+        "detected_box_short_edge_percentiles": {
+          "0": 129.29493713378906,
+          "10": 146.0667236328125,
+          "50": 161.7404327392578,
+          "90": 181.29713745117186,
+          "100": 247.71621704101562
+        },
+        "visible_crop_short_edge_percentiles": {
+          "0": 131.0,
+          "10": 147.0,
+          "50": 163.0,
+          "90": 182.0,
+          "100": 249.0
+        },
+        "single_face512_candidates": 0
+      }
+    },
+    "age_groups": {
+      "55-64": {
+        "records": 998,
+        "by_published_gender": {
+          "female": 464,
+          "male": 534
+        },
+        "by_split": {
+          "train": 496,
+          "val": 502
+        },
+        "by_published_age": {
+          "55": 127,
+          "56": 155,
+          "57": 120,
+          "58": 70,
+          "59": 107,
+          "60": 110,
+          "61": 99,
+          "62": 62,
+          "63": 88,
+          "64": 60
+        },
+        "original": {
+          "short_edge_percentiles": {
+            "0": 262.0,
+            "10": 300.0,
+            "50": 303.0,
+            "90": 311.0,
+            "100": 345.0
+          },
+          "short_edge512_count": 0,
+          "common_sizes": [
+            {
+              "size": [
+                302,
+                340
+              ],
+              "count": 70
+            },
+            {
+              "size": [
+                304,
+                342
+              ],
+              "count": 47
+            },
+            {
+              "size": [
+                302,
+                341
+              ],
+              "count": 44
+            },
+            {
+              "size": [
+                300,
+                338
+              ],
+              "count": 41
+            },
+            {
+              "size": [
+                301,
+                339
+              ],
+              "count": 38
+            },
+            {
+              "size": [
+                302,
+                339
+              ],
+              "count": 36
+            },
+            {
+              "size": [
+                302,
+                342
+              ],
+              "count": 36
+            },
+            {
+              "size": [
+                301,
+                338
+              ],
+              "count": 34
+            },
+            {
+              "size": [
+                306,
+                345
+              ],
+              "count": 32
+            },
+            {
+              "size": [
+                305,
+                342
+              ],
+              "count": 28
+            }
+          ]
+        },
+        "aligned": {
+          "short_edge_percentiles": {
+            "0": 246.0,
+            "10": 293.0,
+            "50": 309.0,
+            "90": 309.0,
+            "100": 309.0
+          },
+          "short_edge512_count": 0,
+          "common_sizes": [
+            {
+              "size": [
+                309,
+                398
+              ],
+              "count": 207
+            },
+            {
+              "size": [
+                309,
+                397
+              ],
+              "count": 21
+            },
+            {
+              "size": [
+                309,
+                396
+              ],
+              "count": 19
+            },
+            {
+              "size": [
+                309,
+                387
+              ],
+              "count": 18
+            },
+            {
+              "size": [
+                309,
+                389
+              ],
+              "count": 18
+            },
+            {
+              "size": [
+                309,
+                395
+              ],
+              "count": 16
+            },
+            {
+              "size": [
+                309,
+                388
+              ],
+              "count": 14
+            },
+            {
+              "size": [
+                309,
+                393
+              ],
+              "count": 14
+            },
+            {
+              "size": [
+                309,
+                392
+              ],
+              "count": 14
+            },
+            {
+              "size": [
+                309,
+                391
+              ],
+              "count": 14
+            }
+          ]
+        }
+      },
+      "65-69": {
+        "records": 331,
+        "by_published_gender": {
+          "female": 178,
+          "male": 153
+        },
+        "by_split": {
+          "val": 165,
+          "train": 166
+        },
+        "by_published_age": {
+          "65": 53,
+          "66": 69,
+          "67": 77,
+          "68": 58,
+          "69": 74
+        },
+        "original": {
+          "short_edge_percentiles": {
+            "0": 285.0,
+            "10": 300.0,
+            "50": 303.0,
+            "90": 309.0,
+            "100": 330.0
+          },
+          "short_edge512_count": 0,
+          "common_sizes": [
+            {
+              "size": [
+                302,
+                340
+              ],
+              "count": 21
+            },
+            {
+              "size": [
+                302,
+                341
+              ],
+              "count": 15
+            },
+            {
+              "size": [
+                306,
+                345
+              ],
+              "count": 14
+            },
+            {
+              "size": [
+                304,
+                342
+              ],
+              "count": 14
+            },
+            {
+              "size": [
+                301,
+                338
+              ],
+              "count": 13
+            },
+            {
+              "size": [
+                302,
+                339
+              ],
+              "count": 13
+            },
+            {
+              "size": [
+                303,
+                343
+              ],
+              "count": 11
+            },
+            {
+              "size": [
+                300,
+                338
+              ],
+              "count": 11
+            },
+            {
+              "size": [
+                301,
+                339
+              ],
+              "count": 9
+            },
+            {
+              "size": [
+                304,
+                341
+              ],
+              "count": 9
+            }
+          ]
+        },
+        "aligned": {
+          "short_edge_percentiles": {
+            "0": 226.0,
+            "10": 293.0,
+            "50": 309.0,
+            "90": 309.0,
+            "100": 309.0
+          },
+          "short_edge512_count": 0,
+          "common_sizes": [
+            {
+              "size": [
+                309,
+                398
+              ],
+              "count": 63
+            },
+            {
+              "size": [
+                309,
+                391
+              ],
+              "count": 8
+            },
+            {
+              "size": [
+                309,
+                386
+              ],
+              "count": 7
+            },
+            {
+              "size": [
+                309,
+                395
+              ],
+              "count": 7
+            },
+            {
+              "size": [
+                309,
+                393
+              ],
+              "count": 7
+            },
+            {
+              "size": [
+                309,
+                394
+              ],
+              "count": 6
+            },
+            {
+              "size": [
+                309,
+                387
+              ],
+              "count": 6
+            },
+            {
+              "size": [
+                309,
+                397
+              ],
+              "count": 6
+            },
+            {
+              "size": [
+                309,
+                388
+              ],
+              "count": 5
+            },
+            {
+              "size": [
+                309,
+                382
+              ],
+              "count": 5
+            }
+          ]
+        },
+        "face_qc": {
+          "tested": 331,
+          "detected": 331,
+          "no_face": 0,
+          "multiple_prominent_faces": 6,
+          "detected_box_short_edge_percentiles": {
+            "0": 133.28172302246094,
+            "10": 148.8778076171875,
+            "50": 163.24252319335938,
+            "90": 181.03030395507812,
+            "100": 231.7677459716797
+          },
+          "visible_crop_short_edge_percentiles": {
+            "0": 134.0,
+            "10": 150.0,
+            "50": 164.0,
+            "90": 182.0,
+            "100": 233.0
+          },
+          "single_face512_candidates": 0
+        }
+      },
+      "70-74": {
+        "records": 224,
+        "by_published_gender": {
+          "female": 97,
+          "male": 127
+        },
+        "by_split": {
+          "val": 113,
+          "train": 111
+        },
+        "by_published_age": {
+          "70": 47,
+          "71": 47,
+          "72": 30,
+          "73": 50,
+          "74": 50
+        },
+        "original": {
+          "short_edge_percentiles": {
+            "0": 287.0,
+            "10": 300.0,
+            "50": 303.5,
+            "90": 309.0,
+            "100": 372.0
+          },
+          "short_edge512_count": 0,
+          "common_sizes": [
+            {
+              "size": [
+                302,
+                339
+              ],
+              "count": 11
+            },
+            {
+              "size": [
+                301,
+                338
+              ],
+              "count": 11
+            },
+            {
+              "size": [
+                302,
+                340
+              ],
+              "count": 10
+            },
+            {
+              "size": [
+                304,
+                342
+              ],
+              "count": 10
+            },
+            {
+              "size": [
+                306,
+                345
+              ],
+              "count": 10
+            },
+            {
+              "size": [
+                300,
+                338
+              ],
+              "count": 10
+            },
+            {
+              "size": [
+                306,
+                344
+              ],
+              "count": 10
+            },
+            {
+              "size": [
+                302,
+                341
+              ],
+              "count": 9
+            },
+            {
+              "size": [
+                307,
+                346
+              ],
+              "count": 9
+            },
+            {
+              "size": [
+                303,
+                341
+              ],
+              "count": 9
+            }
+          ]
+        },
+        "aligned": {
+          "short_edge_percentiles": {
+            "0": 236.0,
+            "10": 291.0,
+            "50": 309.0,
+            "90": 309.0,
+            "100": 309.0
+          },
+          "short_edge512_count": 0,
+          "common_sizes": [
+            {
+              "size": [
+                309,
+                398
+              ],
+              "count": 49
+            },
+            {
+              "size": [
+                309,
+                395
+              ],
+              "count": 5
+            },
+            {
+              "size": [
+                309,
+                389
+              ],
+              "count": 5
+            },
+            {
+              "size": [
+                309,
+                387
+              ],
+              "count": 4
+            },
+            {
+              "size": [
+                309,
+                385
+              ],
+              "count": 4
+            },
+            {
+              "size": [
+                309,
+                381
+              ],
+              "count": 4
+            },
+            {
+              "size": [
+                309,
+                386
+              ],
+              "count": 4
+            },
+            {
+              "size": [
+                309,
+                396
+              ],
+              "count": 3
+            },
+            {
+              "size": [
+                308,
+                383
+              ],
+              "count": 3
+            },
+            {
+              "size": [
+                309,
+                393
+              ],
+              "count": 3
+            }
+          ]
+        },
+        "face_qc": {
+          "tested": 224,
+          "detected": 224,
+          "no_face": 0,
+          "multiple_prominent_faces": 7,
+          "detected_box_short_edge_percentiles": {
+            "0": 132.6931915283203,
+            "10": 146.6857681274414,
+            "50": 159.98350524902344,
+            "90": 184.5990173339844,
+            "100": 247.71621704101562
+          },
+          "visible_crop_short_edge_percentiles": {
+            "0": 134.0,
+            "10": 148.0,
+            "50": 161.0,
+            "90": 186.0,
+            "100": 249.0
+          },
+          "single_face512_candidates": 0
+        }
+      },
+      "75-80": {
+        "records": 292,
+        "by_published_gender": {
+          "female": 135,
+          "male": 157
+        },
+        "by_split": {
+          "val": 148,
+          "train": 144
+        },
+        "by_published_age": {
+          "75": 36,
+          "76": 50,
+          "77": 50,
+          "78": 61,
+          "79": 43,
+          "80": 52
+        },
+        "original": {
+          "short_edge_percentiles": {
+            "0": 255.0,
+            "10": 301.0,
+            "50": 304.0,
+            "90": 311.0,
+            "100": 326.0
+          },
+          "short_edge512_count": 0,
+          "common_sizes": [
+            {
+              "size": [
+                302,
+                340
+              ],
+              "count": 16
+            },
+            {
+              "size": [
+                302,
+                339
+              ],
+              "count": 15
+            },
+            {
+              "size": [
+                304,
+                342
+              ],
+              "count": 14
+            },
+            {
+              "size": [
+                300,
+                338
+              ],
+              "count": 13
+            },
+            {
+              "size": [
+                304,
+                341
+              ],
+              "count": 11
+            },
+            {
+              "size": [
+                308,
+                347
+              ],
+              "count": 11
+            },
+            {
+              "size": [
+                301,
+                338
+              ],
+              "count": 11
+            },
+            {
+              "size": [
+                302,
+                342
+              ],
+              "count": 9
+            },
+            {
+              "size": [
+                303,
+                340
+              ],
+              "count": 8
+            },
+            {
+              "size": [
+                306,
+                345
+              ],
+              "count": 8
+            }
+          ]
+        },
+        "aligned": {
+          "short_edge_percentiles": {
+            "0": 225.0,
+            "10": 290.1,
+            "50": 309.0,
+            "90": 309.0,
+            "100": 309.0
+          },
+          "short_edge512_count": 0,
+          "common_sizes": [
+            {
+              "size": [
+                309,
+                398
+              ],
+              "count": 67
+            },
+            {
+              "size": [
+                309,
+                382
+              ],
+              "count": 7
+            },
+            {
+              "size": [
+                309,
+                390
+              ],
+              "count": 5
+            },
+            {
+              "size": [
+                309,
+                387
+              ],
+              "count": 5
+            },
+            {
+              "size": [
+                309,
+                389
+              ],
+              "count": 5
+            },
+            {
+              "size": [
+                309,
+                385
+              ],
+              "count": 4
+            },
+            {
+              "size": [
+                309,
+                397
+              ],
+              "count": 4
+            },
+            {
+              "size": [
+                309,
+                380
+              ],
+              "count": 4
+            },
+            {
+              "size": [
+                309,
+                396
+              ],
+              "count": 4
+            },
+            {
+              "size": [
+                309,
+                395
+              ],
+              "count": 3
+            }
+          ]
+        },
+        "face_qc": {
+          "tested": 292,
+          "detected": 292,
+          "no_face": 0,
+          "multiple_prominent_faces": 5,
+          "detected_box_short_edge_percentiles": {
+            "0": 129.29493713378906,
+            "10": 143.4970275878906,
+            "50": 161.48597717285156,
+            "90": 181.09292755126955,
+            "100": 238.44239807128906
+          },
+          "visible_crop_short_edge_percentiles": {
+            "0": 131.0,
+            "10": 145.0,
+            "50": 162.5,
+            "90": 182.0,
+            "100": 239.0
+          },
+          "single_face512_candidates": 0
+        }
+      },
+      "65-80": {
+        "records": 847,
+        "by_published_gender": {
+          "female": 410,
+          "male": 437
+        },
+        "by_split": {
+          "val": 426,
+          "train": 421
+        },
+        "by_published_age": {
+          "65": 53,
+          "66": 69,
+          "67": 77,
+          "68": 58,
+          "69": 74,
+          "70": 47,
+          "71": 47,
+          "72": 30,
+          "73": 50,
+          "74": 50,
+          "75": 36,
+          "76": 50,
+          "77": 50,
+          "78": 61,
+          "79": 43,
+          "80": 52
+        },
+        "original": {
+          "short_edge_percentiles": {
+            "0": 255.0,
+            "10": 300.0,
+            "50": 304.0,
+            "90": 309.0,
+            "100": 372.0
+          },
+          "short_edge512_count": 0,
+          "common_sizes": [
+            {
+              "size": [
+                302,
+                340
+              ],
+              "count": 47
+            },
+            {
+              "size": [
+                302,
+                339
+              ],
+              "count": 39
+            },
+            {
+              "size": [
+                304,
+                342
+              ],
+              "count": 38
+            },
+            {
+              "size": [
+                301,
+                338
+              ],
+              "count": 35
+            },
+            {
+              "size": [
+                300,
+                338
+              ],
+              "count": 34
+            },
+            {
+              "size": [
+                306,
+                345
+              ],
+              "count": 32
+            },
+            {
+              "size": [
+                302,
+                341
+              ],
+              "count": 31
+            },
+            {
+              "size": [
+                302,
+                342
+              ],
+              "count": 23
+            },
+            {
+              "size": [
+                304,
+                341
+              ],
+              "count": 22
+            },
+            {
+              "size": [
+                303,
+                343
+              ],
+              "count": 21
+            }
+          ]
+        },
+        "aligned": {
+          "short_edge_percentiles": {
+            "0": 225.0,
+            "10": 291.6,
+            "50": 309.0,
+            "90": 309.0,
+            "100": 309.0
+          },
+          "short_edge512_count": 0,
+          "common_sizes": [
+            {
+              "size": [
+                309,
+                398
+              ],
+              "count": 179
+            },
+            {
+              "size": [
+                309,
+                387
+              ],
+              "count": 15
+            },
+            {
+              "size": [
+                309,
+                395
+              ],
+              "count": 15
+            },
+            {
+              "size": [
+                309,
+                389
+              ],
+              "count": 14
+            },
+            {
+              "size": [
+                309,
+                386
+              ],
+              "count": 14
+            },
+            {
+              "size": [
+                309,
+                382
+              ],
+              "count": 13
+            },
+            {
+              "size": [
+                309,
+                397
+              ],
+              "count": 13
+            },
+            {
+              "size": [
+                309,
+                393
+              ],
+              "count": 12
+            },
+            {
+              "size": [
+                309,
+                396
+              ],
+              "count": 12
+            },
+            {
+              "size": [
+                309,
+                394
+              ],
+              "count": 11
+            }
+          ]
+        },
+        "face_qc": {
+          "tested": 847,
+          "detected": 847,
+          "no_face": 0,
+          "multiple_prominent_faces": 18,
+          "detected_box_short_edge_percentiles": {
+            "0": 129.29493713378906,
+            "10": 146.0667236328125,
+            "50": 161.7404327392578,
+            "90": 181.29713745117186,
+            "100": 247.71621704101562
+          },
+          "visible_crop_short_edge_percentiles": {
+            "0": 131.0,
+            "10": 147.0,
+            "50": 163.0,
+            "90": 182.0,
+            "100": 249.0
+          },
+          "single_face512_candidates": 0
+        }
+      }
+    },
+    "exact_duplicates": {
+      "original": {
+        "sha256": {
+          "redundant_rows": 198,
+          "duplicate_groups": 188,
+          "shared_train_val_groups": 97,
+          "conflicting_age_groups": 163
+        },
+        "pixel_sha256": {
+          "redundant_rows": 198,
+          "duplicate_groups": 188,
+          "shared_train_val_groups": 97,
+          "conflicting_age_groups": 163
+        }
+      },
+      "aligned": {
+        "sha256": {
+          "redundant_rows": 196,
+          "duplicate_groups": 186,
+          "shared_train_val_groups": 95,
+          "conflicting_age_groups": 161
+        },
+        "pixel_sha256": {
+          "redundant_rows": 196,
+          "duplicate_groups": 186,
+          "shared_train_val_groups": 95,
+          "conflicting_age_groups": 161
+        }
+      }
+    },
+    "manifest_sha256": "fff229d7bf8f9d7269bb0d22808be62f388f5d84b08d87db8a1c484cfdde5523",
+    "detector_sha256": "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4",
+    "training_admitted": 0,
+    "gpu_used": false,
+    "elapsed_seconds": 142.698,
+    "decision": "No original image canvas reaches512 short edge, so none meets the native512 texture criterion. Age-supervision candidate only; no training started.",
+    "limitations": [
+      "Publisher original images are delivered images, not proof of unresized camera originals.",
+      "Publisher mostly-Asian is a dataset-level description; no individual ethnicity inferred.",
+      "Published filename age provenance is not established as chronological age.",
+      "Exact duplicate audit is not approximate identity isolation; no new training split made.",
+      "Public README names age prediction/gender classification; generative-use terms remain unclear."
+    ]
+  },
+  "exact_age_screen": {
+    "stage": "Exact-duplicate cleaned adult quarantine candidates; not approved training splits",
+    "source_records": 13322,
+    "grouping": "Transitive union of identical decoded original or aligned pixels",
+    "exact_groups": 13124,
+    "conflicting_age_groups": 163,
+    "conflicting_gender_groups": 2,
+    "cross_split_exact_groups": 97,
+    "candidates": {
+      "train": {
+        "records": 5455,
+        "age65plus": 389,
+        "age_counts": {
+          "18": 78,
+          "19": 72,
+          "20": 87,
+          "21": 85,
+          "22": 106,
+          "23": 117,
+          "24": 136,
+          "25": 136,
+          "26": 194,
+          "27": 246,
+          "28": 193,
+          "29": 224,
+          "30": 154,
+          "31": 178,
+          "32": 213,
+          "33": 207,
+          "34": 176,
+          "35": 162,
+          "36": 175,
+          "37": 161,
+          "38": 118,
+          "39": 111,
+          "40": 119,
+          "41": 134,
+          "42": 125,
+          "43": 114,
+          "44": 88,
+          "45": 101,
+          "46": 88,
+          "47": 86,
+          "48": 67,
+          "49": 78,
+          "50": 56,
+          "51": 56,
+          "52": 52,
+          "53": 55,
+          "54": 59,
+          "55": 60,
+          "56": 75,
+          "57": 59,
+          "58": 30,
+          "59": 50,
+          "60": 48,
+          "61": 45,
+          "62": 26,
+          "63": 38,
+          "64": 28,
+          "65": 22,
+          "66": 33,
+          "67": 34,
+          "68": 27,
+          "69": 36,
+          "70": 19,
+          "71": 20,
+          "72": 14,
+          "73": 24,
+          "74": 24,
+          "75": 17,
+          "76": 24,
+          "77": 24,
+          "78": 25,
+          "79": 21,
+          "80": 25
+        }
+      },
+      "val": {
+        "records": 5528,
+        "age65plus": 399,
+        "age_counts": {
+          "18": 80,
+          "19": 74,
+          "20": 90,
+          "21": 88,
+          "22": 107,
+          "23": 121,
+          "24": 136,
+          "25": 142,
+          "26": 198,
+          "27": 249,
+          "28": 196,
+          "29": 230,
+          "30": 148,
+          "31": 180,
+          "32": 211,
+          "33": 208,
+          "34": 174,
+          "35": 170,
+          "36": 174,
+          "37": 159,
+          "38": 118,
+          "39": 116,
+          "40": 119,
+          "41": 133,
+          "42": 124,
+          "43": 115,
+          "44": 89,
+          "45": 103,
+          "46": 87,
+          "47": 88,
+          "48": 67,
+          "49": 80,
+          "50": 58,
+          "51": 57,
+          "52": 49,
+          "53": 54,
+          "54": 61,
+          "55": 60,
+          "56": 73,
+          "57": 60,
+          "58": 33,
+          "59": 49,
+          "60": 55,
+          "61": 46,
+          "62": 30,
+          "63": 42,
+          "64": 28,
+          "65": 27,
+          "66": 29,
+          "67": 36,
+          "68": 26,
+          "69": 34,
+          "70": 25,
+          "71": 22,
+          "72": 14,
+          "73": 23,
+          "74": 23,
+          "75": 17,
+          "76": 25,
+          "77": 23,
+          "78": 31,
+          "79": 19,
+          "80": 25
+        }
+      }
+    },
+    "rejections_by_reason": {
+      "outside_adult_course_scope": 1961,
+      "exact_group_touches_publisher_validation": 15,
+      "exact_group_label_conflict": 336,
+      "exact_duplicate_within_split": 9,
+      "multiple_prominent_faces": 18
+    },
+    "rejected_records": 2339,
+    "rejected_age65plus": 59,
+    "exact_train_val_overlap_after_screen": 0,
+    "approximate_identity_isolation_done": false,
+    "all_age_labels_verified": false,
+    "training_admitted": 0,
+    "texture_training_admitted": 0
+  },
+  "independent_duplicate_recheck": {
+    "names": [
+      "07313A78.jpg",
+      "11719A46.jpg"
+    ],
+    "publisher_age_labels": [
+      78,
+      46
+    ],
+    "splits": [
+      "train",
+      "val"
+    ],
+    "same_bytes": true,
+    "sha256": "c41d4429ba092c72302edd26507f23cbec7ed287aabed9d0e2a492f2c3c2e30c"
+  },
+  "source_quality_observations": {
+    "review_kind": "Single-person source quality observation, not model evaluation",
+    "selection": "Six images chosen by published age/gender strata and median detected visible-face size; no GAN results involved",
+    "examples": 6,
+    "display_upscaled": false,
+    "observations": [
+      "Stored face detail is limited; compression/softening visible in examples.",
+      "Color/grayscale and lighting/makeup vary.",
+      "No individual ethnicity inferred.",
+      "No age claim independently verified from these images."
+    ],
+    "training_admitted": 0
+  },
+  "code": "integration/quality/audit_aaf.py",
+  "source_manifest_included": false,
+  "portraits_included": false,
+  "weights_changed": false,
+  "gpu_requested": false,
+  "local_output": "deployment/asia-adaptation/20261126-aaf/audit-native-v2",
+  "local_evidence_sha256": {
+    "audit.json": "852e3cb212e1f8d216ca6de4c3cbd46bd9add4b566963f37d85557557a591ef7",
+    "records.jsonl": "fff229d7bf8f9d7269bb0d22808be62f388f5d84b08d87db8a1c484cfdde5523",
+    "exact-age-screen.json": "de60782fcd6e1003469e8b66fd1ab28c4367a66f42cdf43cfaae5125b5aacc65",
+    "exact-age-rejections.json": "f3793741b9c225882f7b63c41b6a377a2ff3541cf91bb22d5ed3d9a58fd564aa",
+    "age-train.candidates.jsonl": "14d3b91c1d8ffef62e3852c98f81ff634a4e1c25fae9ae8633fd73b024f7d986",
+    "age-val.candidates.jsonl": "98baa03226bd40fd6e2170254357e625846b13b8ce0ac729ee4587df41fa39da",
+    "source-quality-six.jpg": "b4a347a86472617c807e76d6364a8a90b0ac4e7751da8de4e6c5d4fa8068493f"
+  },
+  "candidate_screen_regression": {
+    "passed": true,
+    "label_conflict_rejected": true,
+    "transitive_original_aligned_bridge_rejected": true,
+    "validation_content_protected": true,
+    "training_not_admitted": true,
+    "synthetic_fixture": true
+  },
+  "audit_code_sha256": "385f7fb27e560bb85c18dcb73ee3da2741a7b0b8a2a31777b8d95cfd3f11acc9",
+  "code_note": "Candidate-screen function added after primary audit; independently executed on unchanged records.jsonl. Same source now reproduces both steps."
+}
