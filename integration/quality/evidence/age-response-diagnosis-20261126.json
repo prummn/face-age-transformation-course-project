@@ -1,0 +1,338 @@
+{
+  "code_parent": "ad91016af153b4d1ec936217bacff8b6b0990313",
+  "model_weights_changed": false,
+  "training_performed": false,
+  "previous_job_id": "j-1795694482-960686",
+  "restored_job_id": "j-1795698219-51993",
+  "gpu_limit": 1,
+  "parent_run": "/root/face-age-transformation-course-project/deployment/training-runs/original-delta-20261124-160055",
+  "summary": {
+    "wplus_base": {
+      "cases": 35,
+      "mean_age60": 54.9888924734933,
+      "mean_age75": 59.776207024710516,
+      "mean_span60to75": 4.787314551217215,
+      "span60to75_below5": 19,
+      "reversed60to75": 7,
+      "age75_below60": 19,
+      "mean_cross_age_identity": 0.8160810713257108
+    },
+    "original_delta": {
+      "cases": 35,
+      "mean_age60": 61.39634486607143,
+      "mean_age75": 71.06006644112723,
+      "mean_span60to75": 9.663721575055803,
+      "span60to75_below5": 5,
+      "reversed60to75": 1,
+      "age75_below60": 0,
+      "mean_cross_age_identity": 0.6996771599565234
+    },
+    "original_delta_constrained": {
+      "cases": 35,
+      "mean_age60": 55.26514609200614,
+      "mean_age75": 60.500239671979635,
+      "mean_span60to75": 5.235093579973493,
+      "span60to75_below5": 20,
+      "reversed60to75": 0,
+      "age75_below60": 18,
+      "mean_cross_age_identity": 0.8129486083984375
+    }
+  },
+  "source_reference_age_groups": {
+    "under40": {
+      "cases": 15,
+      "mean_age20": 24.6116278330485,
+      "mean_age60": 45.06463470458984,
+      "mean_age75": 51.905731709798175,
+      "mean_span60to75": 6.841097005208334,
+      "span60to75_below5": 6,
+      "reversed60to75": 0,
+      "age75_below60": 13,
+      "mean_cross_age_identity": 0.8004979153474172
+    },
+    "40to59": {
+      "cases": 14,
+      "mean_age20": 39.281277247837615,
+      "mean_age60": 58.32583727155413,
+      "mean_age75": 62.35053498404367,
+      "mean_span60to75": 4.0246977124895364,
+      "span60to75_below5": 10,
+      "reversed60to75": 0,
+      "age75_below60": 5,
+      "mean_cross_age_identity": 0.8257167392543384
+    },
+    "60plus": {
+      "cases": 6,
+      "mean_age20": 44.777971267700195,
+      "mean_age60": 73.62481180826823,
+      "mean_age75": 77.66915384928386,
+      "mean_span60to75": 4.044342041015625,
+      "span60to75_below5": 4,
+      "reversed60to75": 0,
+      "age75_below60": 0,
+      "mean_cross_age_identity": 0.8142830356955528
+    }
+  },
+  "supplemental_publisher_rejoined_asian_hd": {
+    "wplus_base": {
+      "cases": 19,
+      "outputs": 95,
+      "missing_faces": 0,
+      "identity": 0.8247066046062269,
+      "same_identity": 0.8507675685380635,
+      "high_age_error": 20.057915286013955,
+      "age20to75_span": 21.894779104935495,
+      "span_valid": 19,
+      "mean_age75": 49.21637695714047
+    },
+    "original_delta": {
+      "cases": 19,
+      "outputs": 95,
+      "missing_faces": 0,
+      "identity": 0.6877325349732449,
+      "same_identity": 0.8507675685380635,
+      "high_age_error": 5.642446919491417,
+      "age20to75_span": 50.09476270173725,
+      "span_valid": 19,
+      "mean_age75": 69.6080974779631
+    },
+    "original_delta_constrained": {
+      "cases": 19,
+      "outputs": 95,
+      "missing_faces": 0,
+      "identity": 0.8166963818826174,
+      "same_identity": 0.8507675685380635,
+      "high_age_error": 16.499105654264753,
+      "age20to75_span": 27.323488436247175,
+      "span_valid": 19,
+      "mean_age75": 54.56990934673109
+    }
+  },
+  "live_api": {
+    "photo": "/root/face-age-transformation-course-project/deployment/age-quality-final/expanded-ffhq/native1024/64376.png",
+    "health": {
+      "ready": true,
+      "engine": "SAM / StyleGAN2",
+      "device": "NVIDIA H200",
+      "model": "ft_l1 W+ anchor + original SAM age direction + constrained refinement (experimental)",
+      "native_size": 1024,
+      "version": "1.4.0",
+      "status": "ready",
+      "detail": null,
+      "active_sessions": 0,
+      "session_ttl_seconds": 1800,
+      "features": {
+        "source_color_preservation": true,
+        "raw_model_output": true
+      }
+    },
+    "outputs": [
+      {
+        "condition": "same",
+        "target": 25,
+        "request_seconds": 6.6436445051804185,
+        "meta": {
+          "engine": "SAM / StyleGAN2",
+          "model": "ft_l1 W+ anchor + original SAM age direction + constrained refinement (experimental)",
+          "target_age": 25,
+          "elapsed_seconds": 5.833,
+          "output_kind": "native",
+          "alignment": "sam_ffhq",
+          "color_preservation": {
+            "enabled": true,
+            "applied": false,
+            "method": "source_cheek_lab_v2",
+            "strength": 0.65,
+            "lightness_preserved": true,
+            "note": "按本张原照局部校正色度，保留生成亮度与纹理；原始模型结果单独保留。",
+            "source_cheek_lab": [
+              81.10700225830078,
+              13.484000205993652,
+              17.327999114990234
+            ],
+            "raw_cheek_lab": [
+              80.7249984741211,
+              13.687999725341797,
+              20.19499969482422
+            ],
+            "sample_pixels": 786,
+            "reference_cheek_asymmetry": 2.112,
+            "measured_chroma_distance": 2.874,
+            "reason": "already_close"
+          },
+          "postprocess_seconds": 0.013,
+          "raw_model_size": 1024
+        }
+      },
+      {
+        "condition": "60",
+        "target": 60,
+        "request_seconds": 7.008402131963521,
+        "meta": {
+          "engine": "SAM / StyleGAN2",
+          "model": "ft_l1 W+ anchor + original SAM age direction + constrained refinement (experimental)",
+          "target_age": 60,
+          "elapsed_seconds": 6.131,
+          "output_kind": "native",
+          "alignment": "sam_ffhq",
+          "color_preservation": {
+            "enabled": true,
+            "applied": true,
+            "method": "source_cheek_lab_v2",
+            "strength": 0.65,
+            "lightness_preserved": true,
+            "note": "按本张原照局部校正色度，保留生成亮度与纹理；原始模型结果单独保留。",
+            "source_cheek_lab": [
+              81.25,
+              13.406000137329102,
+              17.108999252319336
+            ],
+            "raw_cheek_lab": [
+              78.69300079345703,
+              13.625,
+              20.422000885009766
+            ],
+            "sample_pixels": 787,
+            "reference_cheek_asymmetry": 2.112,
+            "measured_chroma_distance": 3.32,
+            "reason": "corrected",
+            "chroma_offset": [
+              -0.1420000046491623,
+              -2.1530001163482666
+            ],
+            "output_kind": "colour_corrected_1024"
+          },
+          "postprocess_seconds": 0.064,
+          "raw_model_size": 1024
+        }
+      },
+      {
+        "condition": "75",
+        "target": 75,
+        "request_seconds": 6.979921113234013,
+        "meta": {
+          "engine": "SAM / StyleGAN2",
+          "model": "ft_l1 W+ anchor + original SAM age direction + constrained refinement (experimental)",
+          "target_age": 75,
+          "elapsed_seconds": 6.123,
+          "output_kind": "native",
+          "alignment": "sam_ffhq",
+          "color_preservation": {
+            "enabled": true,
+            "applied": true,
+            "method": "source_cheek_lab_v2",
+            "strength": 0.65,
+            "lightness_preserved": true,
+            "note": "按本张原照局部校正色度，保留生成亮度与纹理；原始模型结果单独保留。",
+            "source_cheek_lab": [
+              81.20700073242188,
+              13.484000205993652,
+              17.312000274658203
+            ],
+            "raw_cheek_lab": [
+              79.8030014038086,
+              13.04699993133545,
+              20.483999252319336
+            ],
+            "sample_pixels": 785,
+            "reference_cheek_asymmetry": 2.112,
+            "measured_chroma_distance": 3.202,
+            "reason": "corrected",
+            "chroma_offset": [
+              0.2840000092983246,
+              -2.062000036239624
+            ],
+            "output_kind": "colour_corrected_1024"
+          },
+          "postprocess_seconds": 0.064,
+          "raw_model_size": 1024
+        }
+      }
+    ],
+    "prepare_seconds": 0.5378536302596331,
+    "source_reference_age": 25
+  },
+  "live_independent_appearance_age": {
+    "reference": 24.648021697998047,
+    "same": 22.653648376464844,
+    "60": 39.827110290527344,
+    "75": 42.88124465942383
+  },
+  "repeat_equality": {
+    "reference_equal": [
+      true,
+      true,
+      true
+    ],
+    "encoder_input_equal": [
+      true,
+      true,
+      true
+    ],
+    "source_reference_ages": [
+      25,
+      25,
+      25
+    ],
+    "paths": [
+      "/root/face-age-transformation-course-project/deployment/runs/20261126-120122/input-diagnostic-64376",
+      "/root/face-age-transformation-course-project/deployment/runs/20261126-120122/input-diagnostic-64376-fixed",
+      "/root/face-age-transformation-course-project/deployment/age-quality-final/age-response-diagnosis-20261126/live-64376"
+    ]
+  },
+  "repeat_75_independent_appearance_ages": {
+    "first75": 41.345149993896484,
+    "second75": 37.111534118652344,
+    "third75": 42.88124465942383
+  },
+  "visual_review": {
+    "public_subjects": [
+      "ffhq_64376",
+      "ffhq_65817",
+      "ffhq_67140"
+    ],
+    "conditions": [
+      "source",
+      "same",
+      "20",
+      "60",
+      "75"
+    ],
+    "native_unresized_crop_subject": "ffhq_67140",
+    "observations": [
+      "Refinement restores some eye/mouth identity while reducing aging appearance.",
+      "Current same-age reconstruction of an older source loses some real skin lines and spots.",
+      "Unconstrained outputs show identity deformation; stronger estimated age alone is insufficient."
+    ]
+  },
+  "browser": {
+    "status": 200,
+    "three_public_cases": true,
+    "switch_20_60_75": true,
+    "three_trajectory_curves": true,
+    "raw_png_download": [
+      1024,
+      1024
+    ],
+    "mobile_width": 390,
+    "overflow": false,
+    "errors": []
+  },
+  "caveats": [
+    "Previously inspected35-image development regression, not a new blinded test.",
+    "Age predictions are independent MiVOLO appearance estimates, not chronological ground truth.",
+    "Source groups use FairFace pseudo ages and are descriptive; source-age confounding prevents causal claims.",
+    "Unconstrained vs constrained routes isolate the complete refinement package, not a single loss term.",
+    "Absolute appearance and per-photo age response must be checked in addition to relative guard ratios."
+  ],
+  "live_pngs": {
+    "75-color.png": "898211a69e70b37b755f33062c54f207c9625628589de9752f2a2f955667ea78",
+    "reference.png": "cc28ce4d0a7946bc3385a676ef6b023e91b6a5891ceaaab13bc2feff147f3ae3",
+    "60-raw.png": "e50d5f3ce5ead075d816a8993cabcb1077e267d43c5c48d05f95718165d0b14d",
+    "75-raw.png": "759320debf37499739d1c8bf4a93ef944a98bd8c98a7be9dd948af0315461b8a",
+    "60-color.png": "14d7cfe397bcf31d8267e023c2eb612198681a5636d8cdadb805220c6ea8648c",
+    "same-raw.png": "d6a96819b7d1b7874042c0b35c5c56b65add10023e466c4fb27a004fb0e36bc2",
+    "aligned.png": "88e71aeb4724722c8644c20a70e7cb25e2d7ac9ad43bc0ad961e8a75be72be50",
+    "same-color.png": "d6a96819b7d1b7874042c0b35c5c56b65add10023e466c4fb27a004fb0e36bc2"
+  }
+}
