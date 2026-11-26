@@ -2,8 +2,8 @@
 import argparse
 import json
 from pathlib import Path
+import subprocess
 
-from PIL import Image
 from playwright.sync_api import sync_playwright
 
 
@@ -44,9 +44,10 @@ def main():
             page.locator('#grid figure').last.locator('a').click()
         downloaded = args.run / 'browser-download.png'
         pending.value.save_as(downloaded)
-        with Image.open(downloaded) as image:
-            image.load()
-            assert image.format == 'PNG' and image.size == (1024, 1024)
+        # Reuse the workspace image environment; the browser venv needs no new packages.
+        subprocess.run(['/usr/bin/python3', '-c',
+            'from PIL import Image;import sys;im=Image.open(sys.argv[1]);im.load();'
+            "assert im.format=='PNG' and im.size==(1024,1024)", str(downloaded)], check=True)
 
         page.locator('#subject').select_option('appa_new_006975')
         page.locator('#region').select_option('full')

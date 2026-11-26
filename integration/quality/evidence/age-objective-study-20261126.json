@@ -1,0 +1,5498 @@
+{
+  "run": "age-objective-20261126-133958",
+  "experiment_code_commit": "69f41aae24a539a05c5794a60931df2632c4d9ab",
+  "profile": "explicit_age_objective_frozen_sam",
+  "job": {
+    "job_id": "j-1795700554-892901",
+    "phase": "Succeeded",
+    "allocated_gpus": 1
+  },
+  "device": {
+    "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+    "torch": "2.6.0+cu124",
+    "cuda": "12.4",
+    "gpu": "NVIDIA H200",
+    "device_count": 1,
+    "memory_bytes": 150393585664
+  },
+  "design": {
+    "cases": 35,
+    "diagnostic_cases": [
+      "ffhq_64376",
+      "ffhq_62644",
+      "ffhq_64919",
+      "ffhq_65817",
+      "ffhq_67140",
+      "ffhq_60764"
+    ],
+    "diagnostic_arms": [
+      "teacher_control",
+      "target_age",
+      "target_age_order",
+      "target_age_order_floor"
+    ],
+    "confirmation_arms": [
+      "teacher_control",
+      "target_age_order_floor"
+    ],
+    "common_recipe": {
+      "all_networks_frozen": true,
+      "anchor": "Fixed accepted source W+",
+      "layers": "W+0:8",
+      "learning_rate": 0.012,
+      "lr_final_ratio": 0.2,
+      "identity": 0.8,
+      "age_KL": 0.5,
+      "lpips": 0.6,
+      "delta_L2": 0.05,
+      "color": 0.1,
+      "numerics": "Deterministic resize/pool backward, CUDA deterministic, TF32 convolution only"
+    },
+    "objective_recipe": {
+      "explicit_target": "Barycentric distribution at unchanged60/75 over FairFace representatives;75 is top75 bin",
+      "order": "Additional.25*relu((.075-(expected_age75-expected_age60))/.1)",
+      "floor": "Identity hinge at same-target teacher-control ArcFace cosine minus.01, coefficient.8",
+      "inactive": "Target==source fixed at source anchor; same/20/40 PNG protected exactly"
+    },
+    "criteria": {
+      "identity_drop_max": 0.02,
+      "age_span_min_ratio": 0.9,
+      "missing_faces_increase_max": 0,
+      "high_age_error_must_improve": true,
+      "high_age60to75_must_not_shrink": true,
+      "protected_same_young_exact": true,
+      "native_review_required": true,
+      "no_automatic_promotion": true
+    },
+    "caveats": [
+      "Previously inspected35 development cases, not a new blinded test.",
+      "Independent MiVOLO is evaluation only; fixed recipe, no tuning against its gradients.",
+      "Six diagnostic cases plus remaining29 confirmation, final recipe chosen before results.",
+      "Two-target fitting differs from historical batch4 and live sequential fitting; compare same-budget teacher control.",
+      "Pseudo-age head ending at75 provides no80/90 calibration.",
+      "Classifier objective alone does not guarantee natural elderly skin."
+    ]
+  },
+  "fitting_seconds_sum": 942.273024844937,
+  "worker_wall_seconds": 1516,
+  "cuda_peak_bytes": 8425510400,
+  "baseline_preflight": {
+    "cases": [
+      "ffhq_64376",
+      "ffhq_62644",
+      "ffhq_61921",
+      "ffhq_69847",
+      "ffhq_64919",
+      "ffhq_61680",
+      "ffhq_61580",
+      "ffhq_67140",
+      "ffhq_68335",
+      "appa_new_006765",
+      "appa_new_006975",
+      "appa_new_007161",
+      "appa_new_007185",
+      "appa_new_005791",
+      "appa_new_006010",
+      "ffhq_60764",
+      "ffhq_60512",
+      "ffhq_61690",
+      "ffhq_63721",
+      "ffhq_65835",
+      "ffhq_61172",
+      "ffhq_63046",
+      "ffhq_69817",
+      "ffhq_60058",
+      "ffhq_60148",
+      "ffhq_62840",
+      "ffhq_66577",
+      "ffhq_68299",
+      "ffhq_60241",
+      "ffhq_65817",
+      "ffhq_61908",
+      "ffhq_62688",
+      "ffhq_64985",
+      "ffhq_65302",
+      "ffhq_65714"
+    ],
+    "pngs": 175,
+    "exact": true
+  },
+  "repeatability": {
+    "repeats": 2,
+    "anchor_codes_equal": true,
+    "target_codes_equal": true,
+    "pngs_equal": true,
+    "png_sha256": [
+      "8726dfd3e40faed7e07a1d302f1248599a91f5e171a9f9a506e1eacacf4c3f06",
+      "c0e9d144cf57e6b8671ef61b29473ed59503747fd9d3f757a221f303e3788332",
+      "38581ff29e74dfc767f3a5da42b6635021630acec559200f18758adabcb0c9b9"
+    ],
+    "seconds": [
+      20.8781605232507,
+      20.350438183173537
+    ]
+  },
+  "artifact_validation": {
+    "raw": 585,
+    "color": 585,
+    "all_decodable": true,
+    "native_size": [
+      1024,
+      1024
+    ],
+    "raw_sha256_verified": true,
+    "protected_same_young_or_source_exact": 354,
+    "protected_color_exact": true,
+    "all_models_unchanged": true,
+    "repeatable": true
+  },
+  "frozen_verification": {
+    "before": "8159e797cab1dd8d7807e549bc34f358b1b2ea670c813b67785b644d10ae14e7",
+    "after": "8159e797cab1dd8d7807e549bc34f358b1b2ea670c813b67785b644d10ae14e7",
+    "equal": true
+  },
+  "metric_groups": {
+    "diagnostic6": {
+      "accepted_baseline": {
+        "cases": 6,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity": 0.8299689988295237,
+        "high_age_identity": 0.8247558027505875,
+        "high_age_error": 14.429814656575521,
+        "mean_age75": 58.88447570800781,
+        "age20to75_span": 24.80316734313965,
+        "age60to75_span": 7.3899586995442705,
+        "weak60to75": 2,
+        "reversed60to75": 0
+      },
+      "teacher_control": {
+        "cases": 6,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity": 0.8323523104190826,
+        "high_age_identity": 0.8295224259297053,
+        "high_age_error": 14.369455655415853,
+        "mean_age75": 58.865655263264976,
+        "age20to75_span": 24.78434689839681,
+        "age60to75_span": 7.217706680297852,
+        "weak60to75": 2,
+        "reversed60to75": 0
+      },
+      "target_age": {
+        "cases": 6,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity": 0.8198710406819979,
+        "high_age_identity": 0.8045598864555359,
+        "high_age_error": 10.067536036173502,
+        "mean_age75": 66.15270932515462,
+        "age20to75_span": 32.07140096028646,
+        "age60to75_span": 14.347618103027344,
+        "weak60to75": 1,
+        "reversed60to75": 0
+      },
+      "target_age_order": {
+        "cases": 6,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity": 0.819832369685173,
+        "high_age_identity": 0.804482544461886,
+        "high_age_error": 10.03549067179362,
+        "mean_age75": 66.14199129740398,
+        "age20to75_span": 32.060682932535805,
+        "age60to75_span": 14.284191131591797,
+        "weak60to75": 1,
+        "reversed60to75": 0
+      },
+      "target_age_order_floor": {
+        "cases": 6,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity": 0.8168272276719412,
+        "high_age_identity": 0.7984722604354223,
+        "high_age_error": 9.456671714782715,
+        "mean_age75": 66.96361033121745,
+        "age20to75_span": 32.88230196634928,
+        "age60to75_span": 14.658029556274414,
+        "weak60to75": 1,
+        "reversed60to75": 0
+      }
+    },
+    "pooled": {
+      "accepted_baseline": {
+        "cases": 35,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity": 0.8129486083984375,
+        "high_age_identity": 0.807421692780086,
+        "high_age_error": 13.462010138375419,
+        "mean_age75": 60.500239671979635,
+        "age20to75_span": 26.563664627075195,
+        "age60to75_span": 5.235093579973493,
+        "weak60to75": 20,
+        "reversed60to75": 0
+      },
+      "teacher_control": {
+        "cases": 35,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity": 0.812613947050912,
+        "high_age_identity": 0.8067523700850351,
+        "high_age_error": 13.464592960902623,
+        "mean_age75": 60.43378851754325,
+        "age20to75_span": 26.497213472638812,
+        "age60to75_span": 5.140106637137277,
+        "weak60to75": 19,
+        "reversed60to75": 0
+      },
+      "target_age": {
+        "cases": 6,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity": 0.8198710406819979,
+        "high_age_identity": 0.8045598864555359,
+        "high_age_error": 10.067536036173502,
+        "mean_age75": 66.15270932515462,
+        "age20to75_span": 32.07140096028646,
+        "age60to75_span": 14.347618103027344,
+        "weak60to75": 1,
+        "reversed60to75": 0
+      },
+      "target_age_order": {
+        "cases": 6,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity": 0.819832369685173,
+        "high_age_identity": 0.804482544461886,
+        "high_age_error": 10.03549067179362,
+        "mean_age75": 66.14199129740398,
+        "age20to75_span": 32.060682932535805,
+        "age60to75_span": 14.284191131591797,
+        "weak60to75": 1,
+        "reversed60to75": 0
+      },
+      "target_age_order_floor": {
+        "cases": 35,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity": 0.7984673908778599,
+        "high_age_identity": 0.7784592577389309,
+        "high_age_error": 9.9679867880685,
+        "mean_age75": 66.02930668422154,
+        "age20to75_span": 32.0927316393171,
+        "age60to75_span": 9.212186867850168,
+        "weak60to75": 7,
+        "reversed60to75": 0
+      }
+    },
+    "confirmation29": {
+      "accepted_baseline": {
+        "cases": 29,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity": 0.8094271483092472,
+        "high_age_identity": 0.8038353251999822,
+        "high_age_error": 13.261774720816776,
+        "mean_age75": 60.834535664525525,
+        "age20to75_span": 26.92790544444117,
+        "age60to75_span": 4.789259417303677,
+        "weak60to75": 18,
+        "reversed60to75": 0
+      },
+      "teacher_control": {
+        "cases": 29,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity": 0.8085301477333595,
+        "high_age_identity": 0.8020413240482067,
+        "high_age_error": 13.277379989624023,
+        "mean_age75": 60.758229880497375,
+        "age20to75_span": 26.85159966041302,
+        "age60to75_span": 4.710258352345433,
+        "weak60to75": 17,
+        "reversed60to75": 0
+      },
+      "target_age_order_floor": {
+        "cases": 29,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity": 0.7946688039549465,
+        "high_age_identity": 0.7743186364913809,
+        "high_age_error": 10.073776113575903,
+        "mean_age75": 65.8360024813948,
+        "age20to75_span": 31.929372261310444,
+        "age60to75_span": 8.085460794383081,
+        "weak60to75": 6,
+        "reversed60to75": 0
+      }
+    }
+  },
+  "numeric_checks": {
+    "diagnostic6": {
+      "accepted_baseline": {
+        "identity": true,
+        "high_age_identity": false,
+        "relative_span": true,
+        "high_age_error": true,
+        "high_age_span": true,
+        "detection": true,
+        "independent_detection": true
+      },
+      "teacher_control": {
+        "identity": true,
+        "high_age_identity": false,
+        "relative_span": true,
+        "high_age_error": true,
+        "high_age_span": true,
+        "detection": true,
+        "independent_detection": true
+      }
+    },
+    "confirmation29": {
+      "accepted_baseline": {
+        "identity": true,
+        "high_age_identity": false,
+        "relative_span": true,
+        "high_age_error": true,
+        "high_age_span": true,
+        "detection": true,
+        "independent_detection": true
+      },
+      "teacher_control": {
+        "identity": true,
+        "high_age_identity": false,
+        "relative_span": true,
+        "high_age_error": true,
+        "high_age_span": true,
+        "detection": true,
+        "independent_detection": true
+      }
+    },
+    "pooled": {
+      "accepted_baseline": {
+        "identity": true,
+        "high_age_identity": false,
+        "relative_span": true,
+        "high_age_error": true,
+        "high_age_span": true,
+        "detection": true,
+        "independent_detection": true
+      },
+      "teacher_control": {
+        "identity": true,
+        "high_age_identity": false,
+        "relative_span": true,
+        "high_age_error": true,
+        "high_age_span": true,
+        "detection": true,
+        "independent_detection": true
+      }
+    }
+  },
+  "paired": {
+    "diagnostic6": {
+      "accepted_baseline": {
+        "conditions": 12,
+        "identity_drop_over02": 6,
+        "age_error_improved": 11,
+        "rows": [
+          {
+            "name": "ffhq_64376",
+            "condition": "60",
+            "identity_delta": -0.020514369010925293,
+            "age_error_delta": -0.9909820556640625
+          },
+          {
+            "name": "ffhq_64376",
+            "condition": "75",
+            "identity_delta": -0.07639336585998535,
+            "age_error_delta": -1.8713226318359375
+          },
+          {
+            "name": "ffhq_62644",
+            "condition": "60",
+            "identity_delta": -0.00916290283203125,
+            "age_error_delta": -0.6649742126464844
+          },
+          {
+            "name": "ffhq_62644",
+            "condition": "75",
+            "identity_delta": -0.02811795473098755,
+            "age_error_delta": -13.70791244506836
+          },
+          {
+            "name": "ffhq_64919",
+            "condition": "60",
+            "identity_delta": -0.013393402099609375,
+            "age_error_delta": -0.7146453857421875
+          },
+          {
+            "name": "ffhq_64919",
+            "condition": "75",
+            "identity_delta": -0.018062233924865723,
+            "age_error_delta": -1.7648963928222656
+          },
+          {
+            "name": "ffhq_65817",
+            "condition": "60",
+            "identity_delta": 0.005882859230041504,
+            "age_error_delta": -5.664043426513672
+          },
+          {
+            "name": "ffhq_65817",
+            "condition": "75",
+            "identity_delta": -0.07313907146453857,
+            "age_error_delta": -26.302146911621094
+          },
+          {
+            "name": "ffhq_67140",
+            "condition": "60",
+            "identity_delta": -0.03390568494796753,
+            "age_error_delta": -4.107791900634766
+          },
+          {
+            "name": "ffhq_67140",
+            "condition": "75",
+            "identity_delta": -0.01093900203704834,
+            "age_error_delta": -2.4837799072265625
+          },
+          {
+            "name": "ffhq_60764",
+            "condition": "60",
+            "identity_delta": -0.011648893356323242,
+            "age_error_delta": 0.9395294189453125
+          },
+          {
+            "name": "ffhq_60764",
+            "condition": "75",
+            "identity_delta": -0.0260084867477417,
+            "age_error_delta": -2.3447494506835938
+          }
+        ]
+      },
+      "teacher_control": {
+        "conditions": 12,
+        "identity_drop_over02": 6,
+        "age_error_improved": 11,
+        "rows": [
+          {
+            "name": "ffhq_64376",
+            "condition": "60",
+            "identity_delta": -0.031109929084777832,
+            "age_error_delta": -0.794647216796875
+          },
+          {
+            "name": "ffhq_64376",
+            "condition": "75",
+            "identity_delta": -0.10649740695953369,
+            "age_error_delta": -2.5392532348632812
+          },
+          {
+            "name": "ffhq_62644",
+            "condition": "60",
+            "identity_delta": -0.0015869140625,
+            "age_error_delta": -0.11103057861328125
+          },
+          {
+            "name": "ffhq_62644",
+            "condition": "75",
+            "identity_delta": -0.03254002332687378,
+            "age_error_delta": -14.564678192138672
+          },
+          {
+            "name": "ffhq_64919",
+            "condition": "60",
+            "identity_delta": -0.012682974338531494,
+            "age_error_delta": -0.759185791015625
+          },
+          {
+            "name": "ffhq_64919",
+            "condition": "75",
+            "identity_delta": -0.015534579753875732,
+            "age_error_delta": -1.426727294921875
+          },
+          {
+            "name": "ffhq_65817",
+            "condition": "60",
+            "identity_delta": -0.008959412574768066,
+            "age_error_delta": -5.490871429443359
+          },
+          {
+            "name": "ffhq_65817",
+            "condition": "75",
+            "identity_delta": -0.08422297239303589,
+            "age_error_delta": -25.330440521240234
+          },
+          {
+            "name": "ffhq_67140",
+            "condition": "60",
+            "identity_delta": -0.03307145833969116,
+            "age_error_delta": -4.221813201904297
+          },
+          {
+            "name": "ffhq_67140",
+            "condition": "75",
+            "identity_delta": -0.010422050952911377,
+            "age_error_delta": -2.486663818359375
+          },
+          {
+            "name": "ffhq_60764",
+            "condition": "60",
+            "identity_delta": -0.01179969310760498,
+            "age_error_delta": 1.011871337890625
+          },
+          {
+            "name": "ffhq_60764",
+            "condition": "75",
+            "identity_delta": -0.02417457103729248,
+            "age_error_delta": -2.2399673461914062
+          }
+        ]
+      }
+    },
+    "confirmation29": {
+      "accepted_baseline": {
+        "conditions": 58,
+        "identity_drop_over02": 28,
+        "age_error_improved": 47,
+        "rows": [
+          {
+            "name": "appa_new_005791",
+            "condition": "60",
+            "identity_delta": -0.018512368202209473,
+            "age_error_delta": -2.1798362731933594
+          },
+          {
+            "name": "appa_new_005791",
+            "condition": "75",
+            "identity_delta": -0.21919870376586914,
+            "age_error_delta": -12.837871551513672
+          },
+          {
+            "name": "appa_new_006010",
+            "condition": "60",
+            "identity_delta": 0.06399703025817871,
+            "age_error_delta": -1.0356063842773438
+          },
+          {
+            "name": "appa_new_006010",
+            "condition": "75",
+            "identity_delta": -0.05258142948150635,
+            "age_error_delta": 2.11944580078125
+          },
+          {
+            "name": "appa_new_006765",
+            "condition": "60",
+            "identity_delta": -0.03016197681427002,
+            "age_error_delta": -5.0923004150390625
+          },
+          {
+            "name": "appa_new_006765",
+            "condition": "75",
+            "identity_delta": -0.009688794612884521,
+            "age_error_delta": 2.4107437133789062
+          },
+          {
+            "name": "appa_new_006975",
+            "condition": "60",
+            "identity_delta": 0.0,
+            "age_error_delta": 0.0
+          },
+          {
+            "name": "appa_new_006975",
+            "condition": "75",
+            "identity_delta": -0.019737839698791504,
+            "age_error_delta": 2.6634597778320312
+          },
+          {
+            "name": "appa_new_007161",
+            "condition": "60",
+            "identity_delta": -0.008235633373260498,
+            "age_error_delta": -4.863155364990234
+          },
+          {
+            "name": "appa_new_007161",
+            "condition": "75",
+            "identity_delta": -0.016929447650909424,
+            "age_error_delta": -1.3439979553222656
+          },
+          {
+            "name": "appa_new_007185",
+            "condition": "60",
+            "identity_delta": -0.00802081823348999,
+            "age_error_delta": 0.4158935546875
+          },
+          {
+            "name": "appa_new_007185",
+            "condition": "75",
+            "identity_delta": -0.020254909992218018,
+            "age_error_delta": -2.3649253845214844
+          },
+          {
+            "name": "ffhq_60058",
+            "condition": "60",
+            "identity_delta": -0.008528649806976318,
+            "age_error_delta": -0.6601142883300781
+          },
+          {
+            "name": "ffhq_60058",
+            "condition": "75",
+            "identity_delta": -0.05680537223815918,
+            "age_error_delta": -5.412940979003906
+          },
+          {
+            "name": "ffhq_60148",
+            "condition": "60",
+            "identity_delta": -0.02834177017211914,
+            "age_error_delta": -2.1782188415527344
+          },
+          {
+            "name": "ffhq_60148",
+            "condition": "75",
+            "identity_delta": -0.15408557653427124,
+            "age_error_delta": -8.903541564941406
+          },
+          {
+            "name": "ffhq_60241",
+            "condition": "60",
+            "identity_delta": -0.005556941032409668,
+            "age_error_delta": -0.8508415222167969
+          },
+          {
+            "name": "ffhq_60241",
+            "condition": "75",
+            "identity_delta": -0.024165868759155273,
+            "age_error_delta": -6.786716461181641
+          },
+          {
+            "name": "ffhq_60512",
+            "condition": "60",
+            "identity_delta": -0.0046201348304748535,
+            "age_error_delta": -0.8222732543945312
+          },
+          {
+            "name": "ffhq_60512",
+            "condition": "75",
+            "identity_delta": -0.014148533344268799,
+            "age_error_delta": -0.91168212890625
+          },
+          {
+            "name": "ffhq_61172",
+            "condition": "60",
+            "identity_delta": 0.01668417453765869,
+            "age_error_delta": 2.932220458984375
+          },
+          {
+            "name": "ffhq_61172",
+            "condition": "75",
+            "identity_delta": -0.023258090019226074,
+            "age_error_delta": -1.4198150634765625
+          },
+          {
+            "name": "ffhq_61580",
+            "condition": "60",
+            "identity_delta": -0.0031476616859436035,
+            "age_error_delta": -2.51153564453125
+          },
+          {
+            "name": "ffhq_61580",
+            "condition": "75",
+            "identity_delta": -0.03461945056915283,
+            "age_error_delta": -6.6042327880859375
+          },
+          {
+            "name": "ffhq_61680",
+            "condition": "60",
+            "identity_delta": -0.004866540431976318,
+            "age_error_delta": 0.18168258666992188
+          },
+          {
+            "name": "ffhq_61680",
+            "condition": "75",
+            "identity_delta": -0.0462338924407959,
+            "age_error_delta": -5.540245056152344
+          },
+          {
+            "name": "ffhq_61690",
+            "condition": "60",
+            "identity_delta": -0.0006998777389526367,
+            "age_error_delta": -2.1409759521484375
+          },
+          {
+            "name": "ffhq_61690",
+            "condition": "75",
+            "identity_delta": -0.015090405941009521,
+            "age_error_delta": 1.4742279052734375
+          },
+          {
+            "name": "ffhq_61908",
+            "condition": "60",
+            "identity_delta": -0.026549458503723145,
+            "age_error_delta": -0.1572265625
+          },
+          {
+            "name": "ffhq_61908",
+            "condition": "75",
+            "identity_delta": -0.06820756196975708,
+            "age_error_delta": -6.492580413818359
+          },
+          {
+            "name": "ffhq_61921",
+            "condition": "60",
+            "identity_delta": -0.0256536602973938,
+            "age_error_delta": -3.3371315002441406
+          },
+          {
+            "name": "ffhq_61921",
+            "condition": "75",
+            "identity_delta": -0.08201003074645996,
+            "age_error_delta": -7.535259246826172
+          },
+          {
+            "name": "ffhq_62688",
+            "condition": "60",
+            "identity_delta": -0.04293811321258545,
+            "age_error_delta": 1.7205352783203125
+          },
+          {
+            "name": "ffhq_62688",
+            "condition": "75",
+            "identity_delta": -0.08003073930740356,
+            "age_error_delta": -7.116176605224609
+          },
+          {
+            "name": "ffhq_62840",
+            "condition": "60",
+            "identity_delta": -0.01737302541732788,
+            "age_error_delta": -0.4484291076660156
+          },
+          {
+            "name": "ffhq_62840",
+            "condition": "75",
+            "identity_delta": -0.01603102684020996,
+            "age_error_delta": -2.6332550048828125
+          },
+          {
+            "name": "ffhq_63046",
+            "condition": "60",
+            "identity_delta": -0.019640445709228516,
+            "age_error_delta": -5.774745941162109
+          },
+          {
+            "name": "ffhq_63046",
+            "condition": "75",
+            "identity_delta": -0.05976545810699463,
+            "age_error_delta": -10.29608154296875
+          },
+          {
+            "name": "ffhq_63721",
+            "condition": "60",
+            "identity_delta": -0.008399486541748047,
+            "age_error_delta": -0.6067657470703125
+          },
+          {
+            "name": "ffhq_63721",
+            "condition": "75",
+            "identity_delta": 0.018161892890930176,
+            "age_error_delta": -1.0901870727539062
+          },
+          {
+            "name": "ffhq_64985",
+            "condition": "60",
+            "identity_delta": -0.01046454906463623,
+            "age_error_delta": -1.9477577209472656
+          },
+          {
+            "name": "ffhq_64985",
+            "condition": "75",
+            "identity_delta": -0.08156180381774902,
+            "age_error_delta": -6.441043853759766
+          },
+          {
+            "name": "ffhq_65302",
+            "condition": "60",
+            "identity_delta": -0.05423051118850708,
+            "age_error_delta": -6.267543792724609
+          },
+          {
+            "name": "ffhq_65302",
+            "condition": "75",
+            "identity_delta": -0.021076083183288574,
+            "age_error_delta": -10.040565490722656
+          },
+          {
+            "name": "ffhq_65714",
+            "condition": "60",
+            "identity_delta": -0.030469834804534912,
+            "age_error_delta": -12.121898651123047
+          },
+          {
+            "name": "ffhq_65714",
+            "condition": "75",
+            "identity_delta": -0.10829484462738037,
+            "age_error_delta": -15.44919204711914
+          },
+          {
+            "name": "ffhq_65835",
+            "condition": "60",
+            "identity_delta": -0.015318155288696289,
+            "age_error_delta": -0.5933380126953125
+          },
+          {
+            "name": "ffhq_65835",
+            "condition": "75",
+            "identity_delta": -0.033769845962524414,
+            "age_error_delta": -0.5931015014648438
+          },
+          {
+            "name": "ffhq_66577",
+            "condition": "60",
+            "identity_delta": -0.05054432153701782,
+            "age_error_delta": -0.3182487487792969
+          },
+          {
+            "name": "ffhq_66577",
+            "condition": "75",
+            "identity_delta": -0.01897275447845459,
+            "age_error_delta": -5.6039581298828125
+          },
+          {
+            "name": "ffhq_68299",
+            "condition": "60",
+            "identity_delta": -0.010862886905670166,
+            "age_error_delta": -3.128459930419922
+          },
+          {
+            "name": "ffhq_68299",
+            "condition": "75",
+            "identity_delta": -0.05236220359802246,
+            "age_error_delta": -4.464698791503906
+          },
+          {
+            "name": "ffhq_68335",
+            "condition": "60",
+            "identity_delta": 0.01057523488998413,
+            "age_error_delta": 2.4925994873046875
+          },
+          {
+            "name": "ffhq_68335",
+            "condition": "75",
+            "identity_delta": 0.005842030048370361,
+            "age_error_delta": 1.127777099609375
+          },
+          {
+            "name": "ffhq_69817",
+            "condition": "60",
+            "identity_delta": 0.004323005676269531,
+            "age_error_delta": -0.21697616577148438
+          },
+          {
+            "name": "ffhq_69817",
+            "condition": "75",
+            "identity_delta": -0.015046477317810059,
+            "age_error_delta": -1.8072586059570312
+          },
+          {
+            "name": "ffhq_69847",
+            "condition": "60",
+            "identity_delta": -0.020872116088867188,
+            "age_error_delta": -5.703350067138672
+          },
+          {
+            "name": "ffhq_69847",
+            "condition": "75",
+            "identity_delta": -0.03361523151397705,
+            "age_error_delta": -7.79644775390625
+          }
+        ]
+      },
+      "teacher_control": {
+        "conditions": 58,
+        "identity_drop_over02": 27,
+        "age_error_improved": 45,
+        "rows": [
+          {
+            "name": "appa_new_005791",
+            "condition": "60",
+            "identity_delta": -0.021172940731048584,
+            "age_error_delta": -2.5274658203125
+          },
+          {
+            "name": "appa_new_005791",
+            "condition": "75",
+            "identity_delta": -0.21519184112548828,
+            "age_error_delta": -12.487129211425781
+          },
+          {
+            "name": "appa_new_006010",
+            "condition": "60",
+            "identity_delta": 0.059579670429229736,
+            "age_error_delta": 0.14649200439453125
+          },
+          {
+            "name": "appa_new_006010",
+            "condition": "75",
+            "identity_delta": -0.024806618690490723,
+            "age_error_delta": 0.34345245361328125
+          },
+          {
+            "name": "appa_new_006765",
+            "condition": "60",
+            "identity_delta": -0.02908492088317871,
+            "age_error_delta": -4.9936981201171875
+          },
+          {
+            "name": "appa_new_006765",
+            "condition": "75",
+            "identity_delta": -0.008770525455474854,
+            "age_error_delta": 2.5985488891601562
+          },
+          {
+            "name": "appa_new_006975",
+            "condition": "60",
+            "identity_delta": 0.0,
+            "age_error_delta": 0.0
+          },
+          {
+            "name": "appa_new_006975",
+            "condition": "75",
+            "identity_delta": -0.018164634704589844,
+            "age_error_delta": 2.6924972534179688
+          },
+          {
+            "name": "appa_new_007161",
+            "condition": "60",
+            "identity_delta": -0.008259892463684082,
+            "age_error_delta": -4.784400939941406
+          },
+          {
+            "name": "appa_new_007161",
+            "condition": "75",
+            "identity_delta": -0.016190171241760254,
+            "age_error_delta": -1.4217338562011719
+          },
+          {
+            "name": "appa_new_007185",
+            "condition": "60",
+            "identity_delta": -0.008098721504211426,
+            "age_error_delta": 0.5123176574707031
+          },
+          {
+            "name": "appa_new_007185",
+            "condition": "75",
+            "identity_delta": -0.02111750841140747,
+            "age_error_delta": -2.47943115234375
+          },
+          {
+            "name": "ffhq_60058",
+            "condition": "60",
+            "identity_delta": -0.0070858001708984375,
+            "age_error_delta": -0.6462020874023438
+          },
+          {
+            "name": "ffhq_60058",
+            "condition": "75",
+            "identity_delta": -0.05609333515167236,
+            "age_error_delta": -5.867584228515625
+          },
+          {
+            "name": "ffhq_60148",
+            "condition": "60",
+            "identity_delta": -0.029738247394561768,
+            "age_error_delta": -2.184406280517578
+          },
+          {
+            "name": "ffhq_60148",
+            "condition": "75",
+            "identity_delta": -0.1562313437461853,
+            "age_error_delta": -8.800788879394531
+          },
+          {
+            "name": "ffhq_60241",
+            "condition": "60",
+            "identity_delta": -0.003203153610229492,
+            "age_error_delta": -0.976837158203125
+          },
+          {
+            "name": "ffhq_60241",
+            "condition": "75",
+            "identity_delta": -0.007186710834503174,
+            "age_error_delta": -6.757801055908203
+          },
+          {
+            "name": "ffhq_60512",
+            "condition": "60",
+            "identity_delta": -0.006871044635772705,
+            "age_error_delta": -0.8282852172851562
+          },
+          {
+            "name": "ffhq_60512",
+            "condition": "75",
+            "identity_delta": -0.016611576080322266,
+            "age_error_delta": -0.9110641479492188
+          },
+          {
+            "name": "ffhq_61172",
+            "condition": "60",
+            "identity_delta": 0.007892012596130371,
+            "age_error_delta": 3.2019882202148438
+          },
+          {
+            "name": "ffhq_61172",
+            "condition": "75",
+            "identity_delta": -0.022170066833496094,
+            "age_error_delta": -1.2252883911132812
+          },
+          {
+            "name": "ffhq_61580",
+            "condition": "60",
+            "identity_delta": 0.0001475214958190918,
+            "age_error_delta": -2.1828536987304688
+          },
+          {
+            "name": "ffhq_61580",
+            "condition": "75",
+            "identity_delta": -0.0330926775932312,
+            "age_error_delta": -6.620143890380859
+          },
+          {
+            "name": "ffhq_61680",
+            "condition": "60",
+            "identity_delta": -0.0071350932121276855,
+            "age_error_delta": 0.17573165893554688
+          },
+          {
+            "name": "ffhq_61680",
+            "condition": "75",
+            "identity_delta": -0.03364008665084839,
+            "age_error_delta": -4.710807800292969
+          },
+          {
+            "name": "ffhq_61690",
+            "condition": "60",
+            "identity_delta": 0.001326918601989746,
+            "age_error_delta": -2.0172271728515625
+          },
+          {
+            "name": "ffhq_61690",
+            "condition": "75",
+            "identity_delta": -0.014596819877624512,
+            "age_error_delta": 1.2477798461914062
+          },
+          {
+            "name": "ffhq_61908",
+            "condition": "60",
+            "identity_delta": -0.025702834129333496,
+            "age_error_delta": 0.6555862426757812
+          },
+          {
+            "name": "ffhq_61908",
+            "condition": "75",
+            "identity_delta": -0.07388478517532349,
+            "age_error_delta": -6.945690155029297
+          },
+          {
+            "name": "ffhq_61921",
+            "condition": "60",
+            "identity_delta": -0.020637869834899902,
+            "age_error_delta": -4.7015533447265625
+          },
+          {
+            "name": "ffhq_61921",
+            "condition": "75",
+            "identity_delta": -0.08102083206176758,
+            "age_error_delta": -8.013813018798828
+          },
+          {
+            "name": "ffhq_62688",
+            "condition": "60",
+            "identity_delta": -0.03772437572479248,
+            "age_error_delta": 1.3176040649414062
+          },
+          {
+            "name": "ffhq_62688",
+            "condition": "75",
+            "identity_delta": -0.07456988096237183,
+            "age_error_delta": -6.36541748046875
+          },
+          {
+            "name": "ffhq_62840",
+            "condition": "60",
+            "identity_delta": -0.018597006797790527,
+            "age_error_delta": -0.20891571044921875
+          },
+          {
+            "name": "ffhq_62840",
+            "condition": "75",
+            "identity_delta": -0.010593235492706299,
+            "age_error_delta": -3.1615066528320312
+          },
+          {
+            "name": "ffhq_63046",
+            "condition": "60",
+            "identity_delta": -0.006537437438964844,
+            "age_error_delta": -5.5367431640625
+          },
+          {
+            "name": "ffhq_63046",
+            "condition": "75",
+            "identity_delta": -0.0579836368560791,
+            "age_error_delta": -10.253509521484375
+          },
+          {
+            "name": "ffhq_63721",
+            "condition": "60",
+            "identity_delta": -0.007791996002197266,
+            "age_error_delta": -0.6050338745117188
+          },
+          {
+            "name": "ffhq_63721",
+            "condition": "75",
+            "identity_delta": 0.0038421154022216797,
+            "age_error_delta": -1.6326675415039062
+          },
+          {
+            "name": "ffhq_64985",
+            "condition": "60",
+            "identity_delta": -0.011757850646972656,
+            "age_error_delta": -1.8076744079589844
+          },
+          {
+            "name": "ffhq_64985",
+            "condition": "75",
+            "identity_delta": -0.08951354026794434,
+            "age_error_delta": -6.5709228515625
+          },
+          {
+            "name": "ffhq_65302",
+            "condition": "60",
+            "identity_delta": -0.049423813819885254,
+            "age_error_delta": -7.5442962646484375
+          },
+          {
+            "name": "ffhq_65302",
+            "condition": "75",
+            "identity_delta": -0.024933576583862305,
+            "age_error_delta": -10.968780517578125
+          },
+          {
+            "name": "ffhq_65714",
+            "condition": "60",
+            "identity_delta": -0.030861377716064453,
+            "age_error_delta": -12.132083892822266
+          },
+          {
+            "name": "ffhq_65714",
+            "condition": "75",
+            "identity_delta": -0.10824501514434814,
+            "age_error_delta": -15.470428466796875
+          },
+          {
+            "name": "ffhq_65835",
+            "condition": "60",
+            "identity_delta": -0.016015052795410156,
+            "age_error_delta": -0.591796875
+          },
+          {
+            "name": "ffhq_65835",
+            "condition": "75",
+            "identity_delta": -0.03603541851043701,
+            "age_error_delta": -1.047149658203125
+          },
+          {
+            "name": "ffhq_66577",
+            "condition": "60",
+            "identity_delta": -0.052761197090148926,
+            "age_error_delta": -0.42620849609375
+          },
+          {
+            "name": "ffhq_66577",
+            "condition": "75",
+            "identity_delta": 0.004635930061340332,
+            "age_error_delta": -5.461620330810547
+          },
+          {
+            "name": "ffhq_68299",
+            "condition": "60",
+            "identity_delta": -0.007113099098205566,
+            "age_error_delta": -2.9977493286132812
+          },
+          {
+            "name": "ffhq_68299",
+            "condition": "75",
+            "identity_delta": -0.05157381296157837,
+            "age_error_delta": -4.544776916503906
+          },
+          {
+            "name": "ffhq_68335",
+            "condition": "60",
+            "identity_delta": 0.011834502220153809,
+            "age_error_delta": 2.459014892578125
+          },
+          {
+            "name": "ffhq_68335",
+            "condition": "75",
+            "identity_delta": 0.005526065826416016,
+            "age_error_delta": 1.29638671875
+          },
+          {
+            "name": "ffhq_69817",
+            "condition": "60",
+            "identity_delta": 0.0027413368225097656,
+            "age_error_delta": -0.13888931274414062
+          },
+          {
+            "name": "ffhq_69817",
+            "condition": "75",
+            "identity_delta": -0.003652334213256836,
+            "age_error_delta": -1.750762939453125
+          },
+          {
+            "name": "ffhq_69847",
+            "condition": "60",
+            "identity_delta": -0.015011906623840332,
+            "age_error_delta": -4.8604583740234375
+          },
+          {
+            "name": "ffhq_69847",
+            "condition": "75",
+            "identity_delta": -0.028986334800720215,
+            "age_error_delta": -6.294826507568359
+          }
+        ]
+      }
+    },
+    "pooled": {
+      "accepted_baseline": {
+        "conditions": 70,
+        "identity_drop_over02": 34,
+        "age_error_improved": 58,
+        "rows": [
+          {
+            "name": "ffhq_64376",
+            "condition": "60",
+            "identity_delta": -0.020514369010925293,
+            "age_error_delta": -0.9909820556640625
+          },
+          {
+            "name": "ffhq_64376",
+            "condition": "75",
+            "identity_delta": -0.07639336585998535,
+            "age_error_delta": -1.8713226318359375
+          },
+          {
+            "name": "ffhq_62644",
+            "condition": "60",
+            "identity_delta": -0.00916290283203125,
+            "age_error_delta": -0.6649742126464844
+          },
+          {
+            "name": "ffhq_62644",
+            "condition": "75",
+            "identity_delta": -0.02811795473098755,
+            "age_error_delta": -13.70791244506836
+          },
+          {
+            "name": "ffhq_64919",
+            "condition": "60",
+            "identity_delta": -0.013393402099609375,
+            "age_error_delta": -0.7146453857421875
+          },
+          {
+            "name": "ffhq_64919",
+            "condition": "75",
+            "identity_delta": -0.018062233924865723,
+            "age_error_delta": -1.7648963928222656
+          },
+          {
+            "name": "ffhq_65817",
+            "condition": "60",
+            "identity_delta": 0.005882859230041504,
+            "age_error_delta": -5.664043426513672
+          },
+          {
+            "name": "ffhq_65817",
+            "condition": "75",
+            "identity_delta": -0.07313907146453857,
+            "age_error_delta": -26.302146911621094
+          },
+          {
+            "name": "ffhq_67140",
+            "condition": "60",
+            "identity_delta": -0.03390568494796753,
+            "age_error_delta": -4.107791900634766
+          },
+          {
+            "name": "ffhq_67140",
+            "condition": "75",
+            "identity_delta": -0.01093900203704834,
+            "age_error_delta": -2.4837799072265625
+          },
+          {
+            "name": "ffhq_60764",
+            "condition": "60",
+            "identity_delta": -0.011648893356323242,
+            "age_error_delta": 0.9395294189453125
+          },
+          {
+            "name": "ffhq_60764",
+            "condition": "75",
+            "identity_delta": -0.0260084867477417,
+            "age_error_delta": -2.3447494506835938
+          },
+          {
+            "name": "appa_new_005791",
+            "condition": "60",
+            "identity_delta": -0.018512368202209473,
+            "age_error_delta": -2.1798362731933594
+          },
+          {
+            "name": "appa_new_005791",
+            "condition": "75",
+            "identity_delta": -0.21919870376586914,
+            "age_error_delta": -12.837871551513672
+          },
+          {
+            "name": "appa_new_006010",
+            "condition": "60",
+            "identity_delta": 0.06399703025817871,
+            "age_error_delta": -1.0356063842773438
+          },
+          {
+            "name": "appa_new_006010",
+            "condition": "75",
+            "identity_delta": -0.05258142948150635,
+            "age_error_delta": 2.11944580078125
+          },
+          {
+            "name": "appa_new_006765",
+            "condition": "60",
+            "identity_delta": -0.03016197681427002,
+            "age_error_delta": -5.0923004150390625
+          },
+          {
+            "name": "appa_new_006765",
+            "condition": "75",
+            "identity_delta": -0.009688794612884521,
+            "age_error_delta": 2.4107437133789062
+          },
+          {
+            "name": "appa_new_006975",
+            "condition": "60",
+            "identity_delta": 0.0,
+            "age_error_delta": 0.0
+          },
+          {
+            "name": "appa_new_006975",
+            "condition": "75",
+            "identity_delta": -0.019737839698791504,
+            "age_error_delta": 2.6634597778320312
+          },
+          {
+            "name": "appa_new_007161",
+            "condition": "60",
+            "identity_delta": -0.008235633373260498,
+            "age_error_delta": -4.863155364990234
+          },
+          {
+            "name": "appa_new_007161",
+            "condition": "75",
+            "identity_delta": -0.016929447650909424,
+            "age_error_delta": -1.3439979553222656
+          },
+          {
+            "name": "appa_new_007185",
+            "condition": "60",
+            "identity_delta": -0.00802081823348999,
+            "age_error_delta": 0.4158935546875
+          },
+          {
+            "name": "appa_new_007185",
+            "condition": "75",
+            "identity_delta": -0.020254909992218018,
+            "age_error_delta": -2.3649253845214844
+          },
+          {
+            "name": "ffhq_60058",
+            "condition": "60",
+            "identity_delta": -0.008528649806976318,
+            "age_error_delta": -0.6601142883300781
+          },
+          {
+            "name": "ffhq_60058",
+            "condition": "75",
+            "identity_delta": -0.05680537223815918,
+            "age_error_delta": -5.412940979003906
+          },
+          {
+            "name": "ffhq_60148",
+            "condition": "60",
+            "identity_delta": -0.02834177017211914,
+            "age_error_delta": -2.1782188415527344
+          },
+          {
+            "name": "ffhq_60148",
+            "condition": "75",
+            "identity_delta": -0.15408557653427124,
+            "age_error_delta": -8.903541564941406
+          },
+          {
+            "name": "ffhq_60241",
+            "condition": "60",
+            "identity_delta": -0.005556941032409668,
+            "age_error_delta": -0.8508415222167969
+          },
+          {
+            "name": "ffhq_60241",
+            "condition": "75",
+            "identity_delta": -0.024165868759155273,
+            "age_error_delta": -6.786716461181641
+          },
+          {
+            "name": "ffhq_60512",
+            "condition": "60",
+            "identity_delta": -0.0046201348304748535,
+            "age_error_delta": -0.8222732543945312
+          },
+          {
+            "name": "ffhq_60512",
+            "condition": "75",
+            "identity_delta": -0.014148533344268799,
+            "age_error_delta": -0.91168212890625
+          },
+          {
+            "name": "ffhq_61172",
+            "condition": "60",
+            "identity_delta": 0.01668417453765869,
+            "age_error_delta": 2.932220458984375
+          },
+          {
+            "name": "ffhq_61172",
+            "condition": "75",
+            "identity_delta": -0.023258090019226074,
+            "age_error_delta": -1.4198150634765625
+          },
+          {
+            "name": "ffhq_61580",
+            "condition": "60",
+            "identity_delta": -0.0031476616859436035,
+            "age_error_delta": -2.51153564453125
+          },
+          {
+            "name": "ffhq_61580",
+            "condition": "75",
+            "identity_delta": -0.03461945056915283,
+            "age_error_delta": -6.6042327880859375
+          },
+          {
+            "name": "ffhq_61680",
+            "condition": "60",
+            "identity_delta": -0.004866540431976318,
+            "age_error_delta": 0.18168258666992188
+          },
+          {
+            "name": "ffhq_61680",
+            "condition": "75",
+            "identity_delta": -0.0462338924407959,
+            "age_error_delta": -5.540245056152344
+          },
+          {
+            "name": "ffhq_61690",
+            "condition": "60",
+            "identity_delta": -0.0006998777389526367,
+            "age_error_delta": -2.1409759521484375
+          },
+          {
+            "name": "ffhq_61690",
+            "condition": "75",
+            "identity_delta": -0.015090405941009521,
+            "age_error_delta": 1.4742279052734375
+          },
+          {
+            "name": "ffhq_61908",
+            "condition": "60",
+            "identity_delta": -0.026549458503723145,
+            "age_error_delta": -0.1572265625
+          },
+          {
+            "name": "ffhq_61908",
+            "condition": "75",
+            "identity_delta": -0.06820756196975708,
+            "age_error_delta": -6.492580413818359
+          },
+          {
+            "name": "ffhq_61921",
+            "condition": "60",
+            "identity_delta": -0.0256536602973938,
+            "age_error_delta": -3.3371315002441406
+          },
+          {
+            "name": "ffhq_61921",
+            "condition": "75",
+            "identity_delta": -0.08201003074645996,
+            "age_error_delta": -7.535259246826172
+          },
+          {
+            "name": "ffhq_62688",
+            "condition": "60",
+            "identity_delta": -0.04293811321258545,
+            "age_error_delta": 1.7205352783203125
+          },
+          {
+            "name": "ffhq_62688",
+            "condition": "75",
+            "identity_delta": -0.08003073930740356,
+            "age_error_delta": -7.116176605224609
+          },
+          {
+            "name": "ffhq_62840",
+            "condition": "60",
+            "identity_delta": -0.01737302541732788,
+            "age_error_delta": -0.4484291076660156
+          },
+          {
+            "name": "ffhq_62840",
+            "condition": "75",
+            "identity_delta": -0.01603102684020996,
+            "age_error_delta": -2.6332550048828125
+          },
+          {
+            "name": "ffhq_63046",
+            "condition": "60",
+            "identity_delta": -0.019640445709228516,
+            "age_error_delta": -5.774745941162109
+          },
+          {
+            "name": "ffhq_63046",
+            "condition": "75",
+            "identity_delta": -0.05976545810699463,
+            "age_error_delta": -10.29608154296875
+          },
+          {
+            "name": "ffhq_63721",
+            "condition": "60",
+            "identity_delta": -0.008399486541748047,
+            "age_error_delta": -0.6067657470703125
+          },
+          {
+            "name": "ffhq_63721",
+            "condition": "75",
+            "identity_delta": 0.018161892890930176,
+            "age_error_delta": -1.0901870727539062
+          },
+          {
+            "name": "ffhq_64985",
+            "condition": "60",
+            "identity_delta": -0.01046454906463623,
+            "age_error_delta": -1.9477577209472656
+          },
+          {
+            "name": "ffhq_64985",
+            "condition": "75",
+            "identity_delta": -0.08156180381774902,
+            "age_error_delta": -6.441043853759766
+          },
+          {
+            "name": "ffhq_65302",
+            "condition": "60",
+            "identity_delta": -0.05423051118850708,
+            "age_error_delta": -6.267543792724609
+          },
+          {
+            "name": "ffhq_65302",
+            "condition": "75",
+            "identity_delta": -0.021076083183288574,
+            "age_error_delta": -10.040565490722656
+          },
+          {
+            "name": "ffhq_65714",
+            "condition": "60",
+            "identity_delta": -0.030469834804534912,
+            "age_error_delta": -12.121898651123047
+          },
+          {
+            "name": "ffhq_65714",
+            "condition": "75",
+            "identity_delta": -0.10829484462738037,
+            "age_error_delta": -15.44919204711914
+          },
+          {
+            "name": "ffhq_65835",
+            "condition": "60",
+            "identity_delta": -0.015318155288696289,
+            "age_error_delta": -0.5933380126953125
+          },
+          {
+            "name": "ffhq_65835",
+            "condition": "75",
+            "identity_delta": -0.033769845962524414,
+            "age_error_delta": -0.5931015014648438
+          },
+          {
+            "name": "ffhq_66577",
+            "condition": "60",
+            "identity_delta": -0.05054432153701782,
+            "age_error_delta": -0.3182487487792969
+          },
+          {
+            "name": "ffhq_66577",
+            "condition": "75",
+            "identity_delta": -0.01897275447845459,
+            "age_error_delta": -5.6039581298828125
+          },
+          {
+            "name": "ffhq_68299",
+            "condition": "60",
+            "identity_delta": -0.010862886905670166,
+            "age_error_delta": -3.128459930419922
+          },
+          {
+            "name": "ffhq_68299",
+            "condition": "75",
+            "identity_delta": -0.05236220359802246,
+            "age_error_delta": -4.464698791503906
+          },
+          {
+            "name": "ffhq_68335",
+            "condition": "60",
+            "identity_delta": 0.01057523488998413,
+            "age_error_delta": 2.4925994873046875
+          },
+          {
+            "name": "ffhq_68335",
+            "condition": "75",
+            "identity_delta": 0.005842030048370361,
+            "age_error_delta": 1.127777099609375
+          },
+          {
+            "name": "ffhq_69817",
+            "condition": "60",
+            "identity_delta": 0.004323005676269531,
+            "age_error_delta": -0.21697616577148438
+          },
+          {
+            "name": "ffhq_69817",
+            "condition": "75",
+            "identity_delta": -0.015046477317810059,
+            "age_error_delta": -1.8072586059570312
+          },
+          {
+            "name": "ffhq_69847",
+            "condition": "60",
+            "identity_delta": -0.020872116088867188,
+            "age_error_delta": -5.703350067138672
+          },
+          {
+            "name": "ffhq_69847",
+            "condition": "75",
+            "identity_delta": -0.03361523151397705,
+            "age_error_delta": -7.79644775390625
+          }
+        ]
+      },
+      "teacher_control": {
+        "conditions": 70,
+        "identity_drop_over02": 33,
+        "age_error_improved": 56,
+        "rows": [
+          {
+            "name": "ffhq_64376",
+            "condition": "60",
+            "identity_delta": -0.031109929084777832,
+            "age_error_delta": -0.794647216796875
+          },
+          {
+            "name": "ffhq_64376",
+            "condition": "75",
+            "identity_delta": -0.10649740695953369,
+            "age_error_delta": -2.5392532348632812
+          },
+          {
+            "name": "ffhq_62644",
+            "condition": "60",
+            "identity_delta": -0.0015869140625,
+            "age_error_delta": -0.11103057861328125
+          },
+          {
+            "name": "ffhq_62644",
+            "condition": "75",
+            "identity_delta": -0.03254002332687378,
+            "age_error_delta": -14.564678192138672
+          },
+          {
+            "name": "ffhq_64919",
+            "condition": "60",
+            "identity_delta": -0.012682974338531494,
+            "age_error_delta": -0.759185791015625
+          },
+          {
+            "name": "ffhq_64919",
+            "condition": "75",
+            "identity_delta": -0.015534579753875732,
+            "age_error_delta": -1.426727294921875
+          },
+          {
+            "name": "ffhq_65817",
+            "condition": "60",
+            "identity_delta": -0.008959412574768066,
+            "age_error_delta": -5.490871429443359
+          },
+          {
+            "name": "ffhq_65817",
+            "condition": "75",
+            "identity_delta": -0.08422297239303589,
+            "age_error_delta": -25.330440521240234
+          },
+          {
+            "name": "ffhq_67140",
+            "condition": "60",
+            "identity_delta": -0.03307145833969116,
+            "age_error_delta": -4.221813201904297
+          },
+          {
+            "name": "ffhq_67140",
+            "condition": "75",
+            "identity_delta": -0.010422050952911377,
+            "age_error_delta": -2.486663818359375
+          },
+          {
+            "name": "ffhq_60764",
+            "condition": "60",
+            "identity_delta": -0.01179969310760498,
+            "age_error_delta": 1.011871337890625
+          },
+          {
+            "name": "ffhq_60764",
+            "condition": "75",
+            "identity_delta": -0.02417457103729248,
+            "age_error_delta": -2.2399673461914062
+          },
+          {
+            "name": "appa_new_005791",
+            "condition": "60",
+            "identity_delta": -0.021172940731048584,
+            "age_error_delta": -2.5274658203125
+          },
+          {
+            "name": "appa_new_005791",
+            "condition": "75",
+            "identity_delta": -0.21519184112548828,
+            "age_error_delta": -12.487129211425781
+          },
+          {
+            "name": "appa_new_006010",
+            "condition": "60",
+            "identity_delta": 0.059579670429229736,
+            "age_error_delta": 0.14649200439453125
+          },
+          {
+            "name": "appa_new_006010",
+            "condition": "75",
+            "identity_delta": -0.024806618690490723,
+            "age_error_delta": 0.34345245361328125
+          },
+          {
+            "name": "appa_new_006765",
+            "condition": "60",
+            "identity_delta": -0.02908492088317871,
+            "age_error_delta": -4.9936981201171875
+          },
+          {
+            "name": "appa_new_006765",
+            "condition": "75",
+            "identity_delta": -0.008770525455474854,
+            "age_error_delta": 2.5985488891601562
+          },
+          {
+            "name": "appa_new_006975",
+            "condition": "60",
+            "identity_delta": 0.0,
+            "age_error_delta": 0.0
+          },
+          {
+            "name": "appa_new_006975",
+            "condition": "75",
+            "identity_delta": -0.018164634704589844,
+            "age_error_delta": 2.6924972534179688
+          },
+          {
+            "name": "appa_new_007161",
+            "condition": "60",
+            "identity_delta": -0.008259892463684082,
+            "age_error_delta": -4.784400939941406
+          },
+          {
+            "name": "appa_new_007161",
+            "condition": "75",
+            "identity_delta": -0.016190171241760254,
+            "age_error_delta": -1.4217338562011719
+          },
+          {
+            "name": "appa_new_007185",
+            "condition": "60",
+            "identity_delta": -0.008098721504211426,
+            "age_error_delta": 0.5123176574707031
+          },
+          {
+            "name": "appa_new_007185",
+            "condition": "75",
+            "identity_delta": -0.02111750841140747,
+            "age_error_delta": -2.47943115234375
+          },
+          {
+            "name": "ffhq_60058",
+            "condition": "60",
+            "identity_delta": -0.0070858001708984375,
+            "age_error_delta": -0.6462020874023438
+          },
+          {
+            "name": "ffhq_60058",
+            "condition": "75",
+            "identity_delta": -0.05609333515167236,
+            "age_error_delta": -5.867584228515625
+          },
+          {
+            "name": "ffhq_60148",
+            "condition": "60",
+            "identity_delta": -0.029738247394561768,
+            "age_error_delta": -2.184406280517578
+          },
+          {
+            "name": "ffhq_60148",
+            "condition": "75",
+            "identity_delta": -0.1562313437461853,
+            "age_error_delta": -8.800788879394531
+          },
+          {
+            "name": "ffhq_60241",
+            "condition": "60",
+            "identity_delta": -0.003203153610229492,
+            "age_error_delta": -0.976837158203125
+          },
+          {
+            "name": "ffhq_60241",
+            "condition": "75",
+            "identity_delta": -0.007186710834503174,
+            "age_error_delta": -6.757801055908203
+          },
+          {
+            "name": "ffhq_60512",
+            "condition": "60",
+            "identity_delta": -0.006871044635772705,
+            "age_error_delta": -0.8282852172851562
+          },
+          {
+            "name": "ffhq_60512",
+            "condition": "75",
+            "identity_delta": -0.016611576080322266,
+            "age_error_delta": -0.9110641479492188
+          },
+          {
+            "name": "ffhq_61172",
+            "condition": "60",
+            "identity_delta": 0.007892012596130371,
+            "age_error_delta": 3.2019882202148438
+          },
+          {
+            "name": "ffhq_61172",
+            "condition": "75",
+            "identity_delta": -0.022170066833496094,
+            "age_error_delta": -1.2252883911132812
+          },
+          {
+            "name": "ffhq_61580",
+            "condition": "60",
+            "identity_delta": 0.0001475214958190918,
+            "age_error_delta": -2.1828536987304688
+          },
+          {
+            "name": "ffhq_61580",
+            "condition": "75",
+            "identity_delta": -0.0330926775932312,
+            "age_error_delta": -6.620143890380859
+          },
+          {
+            "name": "ffhq_61680",
+            "condition": "60",
+            "identity_delta": -0.0071350932121276855,
+            "age_error_delta": 0.17573165893554688
+          },
+          {
+            "name": "ffhq_61680",
+            "condition": "75",
+            "identity_delta": -0.03364008665084839,
+            "age_error_delta": -4.710807800292969
+          },
+          {
+            "name": "ffhq_61690",
+            "condition": "60",
+            "identity_delta": 0.001326918601989746,
+            "age_error_delta": -2.0172271728515625
+          },
+          {
+            "name": "ffhq_61690",
+            "condition": "75",
+            "identity_delta": -0.014596819877624512,
+            "age_error_delta": 1.2477798461914062
+          },
+          {
+            "name": "ffhq_61908",
+            "condition": "60",
+            "identity_delta": -0.025702834129333496,
+            "age_error_delta": 0.6555862426757812
+          },
+          {
+            "name": "ffhq_61908",
+            "condition": "75",
+            "identity_delta": -0.07388478517532349,
+            "age_error_delta": -6.945690155029297
+          },
+          {
+            "name": "ffhq_61921",
+            "condition": "60",
+            "identity_delta": -0.020637869834899902,
+            "age_error_delta": -4.7015533447265625
+          },
+          {
+            "name": "ffhq_61921",
+            "condition": "75",
+            "identity_delta": -0.08102083206176758,
+            "age_error_delta": -8.013813018798828
+          },
+          {
+            "name": "ffhq_62688",
+            "condition": "60",
+            "identity_delta": -0.03772437572479248,
+            "age_error_delta": 1.3176040649414062
+          },
+          {
+            "name": "ffhq_62688",
+            "condition": "75",
+            "identity_delta": -0.07456988096237183,
+            "age_error_delta": -6.36541748046875
+          },
+          {
+            "name": "ffhq_62840",
+            "condition": "60",
+            "identity_delta": -0.018597006797790527,
+            "age_error_delta": -0.20891571044921875
+          },
+          {
+            "name": "ffhq_62840",
+            "condition": "75",
+            "identity_delta": -0.010593235492706299,
+            "age_error_delta": -3.1615066528320312
+          },
+          {
+            "name": "ffhq_63046",
+            "condition": "60",
+            "identity_delta": -0.006537437438964844,
+            "age_error_delta": -5.5367431640625
+          },
+          {
+            "name": "ffhq_63046",
+            "condition": "75",
+            "identity_delta": -0.0579836368560791,
+            "age_error_delta": -10.253509521484375
+          },
+          {
+            "name": "ffhq_63721",
+            "condition": "60",
+            "identity_delta": -0.007791996002197266,
+            "age_error_delta": -0.6050338745117188
+          },
+          {
+            "name": "ffhq_63721",
+            "condition": "75",
+            "identity_delta": 0.0038421154022216797,
+            "age_error_delta": -1.6326675415039062
+          },
+          {
+            "name": "ffhq_64985",
+            "condition": "60",
+            "identity_delta": -0.011757850646972656,
+            "age_error_delta": -1.8076744079589844
+          },
+          {
+            "name": "ffhq_64985",
+            "condition": "75",
+            "identity_delta": -0.08951354026794434,
+            "age_error_delta": -6.5709228515625
+          },
+          {
+            "name": "ffhq_65302",
+            "condition": "60",
+            "identity_delta": -0.049423813819885254,
+            "age_error_delta": -7.5442962646484375
+          },
+          {
+            "name": "ffhq_65302",
+            "condition": "75",
+            "identity_delta": -0.024933576583862305,
+            "age_error_delta": -10.968780517578125
+          },
+          {
+            "name": "ffhq_65714",
+            "condition": "60",
+            "identity_delta": -0.030861377716064453,
+            "age_error_delta": -12.132083892822266
+          },
+          {
+            "name": "ffhq_65714",
+            "condition": "75",
+            "identity_delta": -0.10824501514434814,
+            "age_error_delta": -15.470428466796875
+          },
+          {
+            "name": "ffhq_65835",
+            "condition": "60",
+            "identity_delta": -0.016015052795410156,
+            "age_error_delta": -0.591796875
+          },
+          {
+            "name": "ffhq_65835",
+            "condition": "75",
+            "identity_delta": -0.03603541851043701,
+            "age_error_delta": -1.047149658203125
+          },
+          {
+            "name": "ffhq_66577",
+            "condition": "60",
+            "identity_delta": -0.052761197090148926,
+            "age_error_delta": -0.42620849609375
+          },
+          {
+            "name": "ffhq_66577",
+            "condition": "75",
+            "identity_delta": 0.004635930061340332,
+            "age_error_delta": -5.461620330810547
+          },
+          {
+            "name": "ffhq_68299",
+            "condition": "60",
+            "identity_delta": -0.007113099098205566,
+            "age_error_delta": -2.9977493286132812
+          },
+          {
+            "name": "ffhq_68299",
+            "condition": "75",
+            "identity_delta": -0.05157381296157837,
+            "age_error_delta": -4.544776916503906
+          },
+          {
+            "name": "ffhq_68335",
+            "condition": "60",
+            "identity_delta": 0.011834502220153809,
+            "age_error_delta": 2.459014892578125
+          },
+          {
+            "name": "ffhq_68335",
+            "condition": "75",
+            "identity_delta": 0.005526065826416016,
+            "age_error_delta": 1.29638671875
+          },
+          {
+            "name": "ffhq_69817",
+            "condition": "60",
+            "identity_delta": 0.0027413368225097656,
+            "age_error_delta": -0.13888931274414062
+          },
+          {
+            "name": "ffhq_69817",
+            "condition": "75",
+            "identity_delta": -0.003652334213256836,
+            "age_error_delta": -1.750762939453125
+          },
+          {
+            "name": "ffhq_69847",
+            "condition": "60",
+            "identity_delta": -0.015011906623840332,
+            "age_error_delta": -4.8604583740234375
+          },
+          {
+            "name": "ffhq_69847",
+            "condition": "75",
+            "identity_delta": -0.028986334800720215,
+            "age_error_delta": -6.294826507568359
+          }
+        ]
+      }
+    }
+  },
+  "all_numeric_checks_pass": false,
+  "diagnostic_fitting": [
+    {
+      "name": "ffhq_64376",
+      "arm": "teacher_control",
+      "seconds": 11.543679973110557,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 0.47549229860305786,
+          "expected_age": [
+            54.88374710083008,
+            69.84004974365234
+          ],
+          "identity_cosine": [
+            0.6087106466293335,
+            0.5061373710632324
+          ],
+          "loss_identity": 0.3540607988834381,
+          "loss_age": 0.11327226459980011,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.008159231394529343,
+          "loss_order": 0.0
+        },
+        {
+          "step": 60,
+          "loss": 0.11375941336154938,
+          "expected_age": [
+            52.3582763671875,
+            65.81520080566406
+          ],
+          "identity_cosine": [
+            0.9344620108604431,
+            0.8655643463134766
+          ],
+          "loss_identity": 0.07998945564031601,
+          "loss_age": 0.002005632035434246,
+          "loss_perceptual": 0.024071915075182915,
+          "loss_trust": 0.0006477732677012682,
+          "loss_color": 0.007044635713100433,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.06045868620276451,
+          "expected_age": [
+            52.671058654785156,
+            66.05650329589844
+          ],
+          "identity_cosine": [
+            0.9750924110412598,
+            0.9483702778816223
+          ],
+          "loss_identity": 0.030614925548434258,
+          "loss_age": 0.0008295709267258644,
+          "loss_perceptual": 0.021701470017433167,
+          "loss_trust": 0.001117090112529695,
+          "loss_color": 0.006195628549903631,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.049445219337940216,
+          "expected_age": [
+            52.662681579589844,
+            66.10160827636719
+          ],
+          "identity_cosine": [
+            0.9819111824035645,
+            0.9653761982917786
+          ],
+          "loss_identity": 0.021085048094391823,
+          "loss_age": 0.0005734041333198547,
+          "loss_perceptual": 0.02045644260942936,
+          "loss_trust": 0.0013202762929722667,
+          "loss_color": 0.006010049022734165,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        52.53034210205078,
+        66.2282943725586
+      ],
+      "final_shared_age": [
+        52.662109375,
+        66.17047119140625
+      ],
+      "final_identity": [
+        0.9819464683532715,
+        0.9654885530471802
+      ],
+      "identity_floor": null,
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.08422968536615372,
+          "cosine_with_age_gradient": 0.38803452253341675,
+          "descent_cosine_with_sam_age_displacement": -0.14514924585819244
+        },
+        "age": {
+          "norm": 0.40197065472602844,
+          "cosine_with_age_gradient": 1.0,
+          "descent_cosine_with_sam_age_displacement": -0.10714533179998398
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.004607876297086477,
+          "cosine_with_age_gradient": 0.03519329056143761,
+          "descent_cosine_with_sam_age_displacement": -0.06330724060535431
+        },
+        "order": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        }
+      }
+    },
+    {
+      "name": "ffhq_64376",
+      "arm": "target_age",
+      "seconds": 11.55203119199723,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 0.5473077893257141,
+          "expected_age": [
+            54.88374710083008,
+            69.84004974365234
+          ],
+          "identity_cosine": [
+            0.6087106466293335,
+            0.5061373710632324
+          ],
+          "loss_identity": 0.3540607988834381,
+          "loss_age": 0.18508780002593994,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.008159231394529343,
+          "loss_order": 0.0
+        },
+        {
+          "step": 60,
+          "loss": 0.14022722840309143,
+          "expected_age": [
+            58.30944061279297,
+            74.02986907958984
+          ],
+          "identity_cosine": [
+            0.9193363189697266,
+            0.8622230887413025
+          ],
+          "loss_identity": 0.08737623691558838,
+          "loss_age": 0.018369019031524658,
+          "loss_perceptual": 0.026239676401019096,
+          "loss_trust": 0.0009248644346371293,
+          "loss_color": 0.0073174298740923405,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.08086062967777252,
+          "expected_age": [
+            58.85353088378906,
+            74.17433166503906
+          ],
+          "identity_cosine": [
+            0.9649540781974792,
+            0.9471213817596436
+          ],
+          "loss_identity": 0.035169817507267,
+          "loss_age": 0.013222499750554562,
+          "loss_perceptual": 0.023981256410479546,
+          "loss_trust": 0.001625172677449882,
+          "loss_color": 0.0068618799559772015,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.06693655252456665,
+          "expected_age": [
+            59.036277770996094,
+            74.28579711914062
+          ],
+          "identity_cosine": [
+            0.9751279354095459,
+            0.9647486209869385
+          ],
+          "loss_identity": 0.02404937706887722,
+          "loss_age": 0.01162362564355135,
+          "loss_perceptual": 0.022805778309702873,
+          "loss_trust": 0.0019334324169903994,
+          "loss_color": 0.006524336524307728,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        52.53034210205078,
+        66.2282943725586
+      ],
+      "final_shared_age": [
+        58.98157501220703,
+        74.28675079345703
+      ],
+      "final_identity": [
+        0.9752465486526489,
+        0.9648610353469849
+      ],
+      "identity_floor": null,
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.08422968536615372,
+          "cosine_with_age_gradient": 0.11866159737110138,
+          "descent_cosine_with_sam_age_displacement": -0.14514924585819244
+        },
+        "age": {
+          "norm": 0.30713382363319397,
+          "cosine_with_age_gradient": 1.0,
+          "descent_cosine_with_sam_age_displacement": -0.017535999417304993
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.004607876297086477,
+          "cosine_with_age_gradient": 0.011731691658496857,
+          "descent_cosine_with_sam_age_displacement": -0.06330724060535431
+        },
+        "order": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        }
+      }
+    },
+    {
+      "name": "ffhq_64376",
+      "arm": "target_age_order",
+      "seconds": 11.58005928248167,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 0.5473077893257141,
+          "expected_age": [
+            54.88374710083008,
+            69.84004974365234
+          ],
+          "identity_cosine": [
+            0.6087106466293335,
+            0.5061373710632324
+          ],
+          "loss_identity": 0.3540607988834381,
+          "loss_age": 0.18508780002593994,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.008159231394529343,
+          "loss_order": 0.0
+        },
+        {
+          "step": 60,
+          "loss": 0.14022722840309143,
+          "expected_age": [
+            58.30944061279297,
+            74.02986907958984
+          ],
+          "identity_cosine": [
+            0.9193363189697266,
+            0.8622230887413025
+          ],
+          "loss_identity": 0.08737623691558838,
+          "loss_age": 0.018369019031524658,
+          "loss_perceptual": 0.026239676401019096,
+          "loss_trust": 0.0009248644346371293,
+          "loss_color": 0.0073174298740923405,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.08086062967777252,
+          "expected_age": [
+            58.85353088378906,
+            74.17433166503906
+          ],
+          "identity_cosine": [
+            0.9649540781974792,
+            0.9471213817596436
+          ],
+          "loss_identity": 0.035169817507267,
+          "loss_age": 0.013222499750554562,
+          "loss_perceptual": 0.023981256410479546,
+          "loss_trust": 0.001625172677449882,
+          "loss_color": 0.0068618799559772015,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.06693655252456665,
+          "expected_age": [
+            59.036277770996094,
+            74.28579711914062
+          ],
+          "identity_cosine": [
+            0.9751279354095459,
+            0.9647486209869385
+          ],
+          "loss_identity": 0.02404937706887722,
+          "loss_age": 0.01162362564355135,
+          "loss_perceptual": 0.022805778309702873,
+          "loss_trust": 0.0019334324169903994,
+          "loss_color": 0.006524336524307728,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        52.53034210205078,
+        66.2282943725586
+      ],
+      "final_shared_age": [
+        58.98157501220703,
+        74.28675079345703
+      ],
+      "final_identity": [
+        0.9752465486526489,
+        0.9648610353469849
+      ],
+      "identity_floor": null,
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.08422968536615372,
+          "cosine_with_age_gradient": 0.11866159737110138,
+          "descent_cosine_with_sam_age_displacement": -0.14514924585819244
+        },
+        "age": {
+          "norm": 0.30713382363319397,
+          "cosine_with_age_gradient": 1.0,
+          "descent_cosine_with_sam_age_displacement": -0.017535999417304993
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.004607876297086477,
+          "cosine_with_age_gradient": 0.011731691658496857,
+          "descent_cosine_with_sam_age_displacement": -0.06330724060535431
+        },
+        "order": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        }
+      }
+    },
+    {
+      "name": "ffhq_64376",
+      "arm": "target_age_order_floor",
+      "seconds": 11.582962685264647,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 0.518281877040863,
+          "expected_age": [
+            54.88374710083008,
+            69.84004974365234
+          ],
+          "identity_cosine": [
+            0.6087106466293335,
+            0.5061373710632324
+          ],
+          "loss_identity": 0.32503482699394226,
+          "loss_age": 0.18508780002593994,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.008159231394529343,
+          "loss_order": 0.0
+        },
+        {
+          "step": 60,
+          "loss": 0.11120124161243439,
+          "expected_age": [
+            58.30944061279297,
+            74.02986907958984
+          ],
+          "identity_cosine": [
+            0.9193363189697266,
+            0.8622230887413025
+          ],
+          "loss_identity": 0.058350253850221634,
+          "loss_age": 0.018369019031524658,
+          "loss_perceptual": 0.026239676401019096,
+          "loss_trust": 0.0009248644346371293,
+          "loss_color": 0.0073174298740923405,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.05183464288711548,
+          "expected_age": [
+            58.85353088378906,
+            74.17433166503906
+          ],
+          "identity_cosine": [
+            0.9649540781974792,
+            0.9471213817596436
+          ],
+          "loss_identity": 0.006143832113593817,
+          "loss_age": 0.013222499750554562,
+          "loss_perceptual": 0.023981256410479546,
+          "loss_trust": 0.001625172677449882,
+          "loss_color": 0.0068618799559772015,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.04076880216598511,
+          "expected_age": [
+            59.12066650390625,
+            74.3267593383789
+          ],
+          "identity_cosine": [
+            0.9720035791397095,
+            0.9554440975189209
+          ],
+          "loss_identity": 1.7786025637178682e-05,
+          "loss_age": 0.010796679183840752,
+          "loss_perceptual": 0.021574899554252625,
+          "loss_trust": 0.0018432497745379806,
+          "loss_color": 0.006536184344440699,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        52.53034210205078,
+        66.2282943725586
+      ],
+      "final_shared_age": [
+        59.09299087524414,
+        74.32601928710938
+      ],
+      "final_identity": [
+        0.9720247983932495,
+        0.9557061195373535
+      ],
+      "identity_floor": [
+        0.9719464778900146,
+        0.9554885625839233
+      ],
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.08422968536615372,
+          "cosine_with_age_gradient": 0.11866159737110138,
+          "descent_cosine_with_sam_age_displacement": -0.14514924585819244
+        },
+        "age": {
+          "norm": 0.30713382363319397,
+          "cosine_with_age_gradient": 1.0,
+          "descent_cosine_with_sam_age_displacement": -0.017535999417304993
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.004607876297086477,
+          "cosine_with_age_gradient": 0.011731691658496857,
+          "descent_cosine_with_sam_age_displacement": -0.06330724060535431
+        },
+        "order": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        }
+      }
+    },
+    {
+      "name": "ffhq_62644",
+      "arm": "teacher_control",
+      "seconds": 11.551636737771332,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 0.5941813588142395,
+          "expected_age": [
+            52.466552734375,
+            62.77053451538086
+          ],
+          "identity_cosine": [
+            0.6238128542900085,
+            0.425309956073761
+          ],
+          "loss_identity": 0.38035088777542114,
+          "loss_age": 0.2046874761581421,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.009143008850514889,
+          "loss_order": 0.0
+        },
+        {
+          "step": 60,
+          "loss": 0.15110988914966583,
+          "expected_age": [
+            56.02891540527344,
+            66.0196762084961
+          ],
+          "identity_cosine": [
+            0.9218794107437134,
+            0.8021914958953857
+          ],
+          "loss_identity": 0.11037164181470871,
+          "loss_age": 0.0025405921041965485,
+          "loss_perceptual": 0.03013717569410801,
+          "loss_trust": 0.0005339657072909176,
+          "loss_color": 0.007526503410190344,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.10453133285045624,
+          "expected_age": [
+            56.012428283691406,
+            65.88660430908203
+          ],
+          "identity_cosine": [
+            0.9503761529922485,
+            0.8840932250022888
+          ],
+          "loss_identity": 0.0662122517824173,
+          "loss_age": 0.0019168080762028694,
+          "loss_perceptual": 0.02797579951584339,
+          "loss_trust": 0.0008845184347592294,
+          "loss_color": 0.007541955914348364,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.08730363845825195,
+          "expected_age": [
+            55.94677734375,
+            66.01280212402344
+          ],
+          "identity_cosine": [
+            0.9596664905548096,
+            0.9135655164718628
+          ],
+          "loss_identity": 0.050707198679447174,
+          "loss_age": 0.0014790454879403114,
+          "loss_perceptual": 0.026636606082320213,
+          "loss_trust": 0.001097758300602436,
+          "loss_color": 0.007383023854345083,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        55.42976379394531,
+        65.35655975341797
+      ],
+      "final_shared_age": [
+        55.92915344238281,
+        65.99323272705078
+      ],
+      "final_identity": [
+        0.9597428441047668,
+        0.9138065576553345
+      ],
+      "identity_floor": null,
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.07908954471349716,
+          "cosine_with_age_gradient": -0.22612331807613373,
+          "descent_cosine_with_sam_age_displacement": -0.14464585483074188
+        },
+        "age": {
+          "norm": 0.5387750864028931,
+          "cosine_with_age_gradient": 1.0000001192092896,
+          "descent_cosine_with_sam_age_displacement": 0.09036338329315186
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.005190275143831968,
+          "cosine_with_age_gradient": 0.04201514273881912,
+          "descent_cosine_with_sam_age_displacement": -0.04124124348163605
+        },
+        "order": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        }
+      }
+    },
+    {
+      "name": "ffhq_62644",
+      "arm": "target_age",
+      "seconds": 11.555776027031243,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 1.0227924585342407,
+          "expected_age": [
+            52.466552734375,
+            62.77053451538086
+          ],
+          "identity_cosine": [
+            0.6238128542900085,
+            0.425309956073761
+          ],
+          "loss_identity": 0.38035088777542114,
+          "loss_age": 0.6332986354827881,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.009143008850514889,
+          "loss_order": 0.0
+        },
+        {
+          "step": 60,
+          "loss": 0.22040534019470215,
+          "expected_age": [
+            59.19924545288086,
+            73.74152374267578
+          ],
+          "identity_cosine": [
+            0.9022694826126099,
+            0.6995062828063965
+          ],
+          "loss_identity": 0.15928970277309418,
+          "loss_age": 0.017242809757590294,
+          "loss_perceptual": 0.035346195101737976,
+          "loss_trust": 0.0005304569494910538,
+          "loss_color": 0.007996189408004284,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.16174741089344025,
+          "expected_age": [
+            59.40425491333008,
+            73.99745178222656
+          ],
+          "identity_cosine": [
+            0.9401319622993469,
+            0.7957558631896973
+          ],
+          "loss_identity": 0.10564487427473068,
+          "loss_age": 0.013707835227251053,
+          "loss_perceptual": 0.03380969539284706,
+          "loss_trust": 0.0008549332851544023,
+          "loss_color": 0.007730070035904646,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.1392352432012558,
+          "expected_age": [
+            59.323585510253906,
+            74.14566802978516
+          ],
+          "identity_cosine": [
+            0.9512761831283569,
+            0.8343974351882935
+          ],
+          "loss_identity": 0.08573055267333984,
+          "loss_age": 0.011615683324635029,
+          "loss_perceptual": 0.033299773931503296,
+          "loss_trust": 0.0010483255609869957,
+          "loss_color": 0.007540901191532612,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        55.42976379394531,
+        65.35655975341797
+      ],
+      "final_shared_age": [
+        59.39468002319336,
+        74.14751434326172
+      ],
+      "final_identity": [
+        0.9513702392578125,
+        0.8346951603889465
+      ],
+      "identity_floor": null,
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.07908954471349716,
+          "cosine_with_age_gradient": -0.18250775337219238,
+          "descent_cosine_with_sam_age_displacement": -0.14464585483074188
+        },
+        "age": {
+          "norm": 0.9509755373001099,
+          "cosine_with_age_gradient": 1.0,
+          "descent_cosine_with_sam_age_displacement": 0.0946577787399292
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.005190275143831968,
+          "cosine_with_age_gradient": 0.03993796557188034,
+          "descent_cosine_with_sam_age_displacement": -0.04124124348163605
+        },
+        "order": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        }
+      }
+    },
+    {
+      "name": "ffhq_62644",
+      "arm": "target_age_order",
+      "seconds": 11.5815893933177,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 1.0227924585342407,
+          "expected_age": [
+            52.466552734375,
+            62.77053451538086
+          ],
+          "identity_cosine": [
+            0.6238128542900085,
+            0.425309956073761
+          ],
+          "loss_identity": 0.38035088777542114,
+          "loss_age": 0.6332986354827881,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.009143008850514889,
+          "loss_order": 0.0
+        },
+        {
+          "step": 60,
+          "loss": 0.22040534019470215,
+          "expected_age": [
+            59.19924545288086,
+            73.74152374267578
+          ],
+          "identity_cosine": [
+            0.9022694826126099,
+            0.6995062828063965
+          ],
+          "loss_identity": 0.15928970277309418,
+          "loss_age": 0.017242809757590294,
+          "loss_perceptual": 0.035346195101737976,
+          "loss_trust": 0.0005304569494910538,
+          "loss_color": 0.007996189408004284,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.16174741089344025,
+          "expected_age": [
+            59.40425491333008,
+            73.99745178222656
+          ],
+          "identity_cosine": [
+            0.9401319622993469,
+            0.7957558631896973
+          ],
+          "loss_identity": 0.10564487427473068,
+          "loss_age": 0.013707835227251053,
+          "loss_perceptual": 0.03380969539284706,
+          "loss_trust": 0.0008549332851544023,
+          "loss_color": 0.007730070035904646,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.1392352432012558,
+          "expected_age": [
+            59.323585510253906,
+            74.14566802978516
+          ],
+          "identity_cosine": [
+            0.9512761831283569,
+            0.8343974351882935
+          ],
+          "loss_identity": 0.08573055267333984,
+          "loss_age": 0.011615683324635029,
+          "loss_perceptual": 0.033299773931503296,
+          "loss_trust": 0.0010483255609869957,
+          "loss_color": 0.007540901191532612,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        55.42976379394531,
+        65.35655975341797
+      ],
+      "final_shared_age": [
+        59.39468002319336,
+        74.14751434326172
+      ],
+      "final_identity": [
+        0.9513702392578125,
+        0.8346951603889465
+      ],
+      "identity_floor": null,
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.07908954471349716,
+          "cosine_with_age_gradient": -0.18250775337219238,
+          "descent_cosine_with_sam_age_displacement": -0.14464585483074188
+        },
+        "age": {
+          "norm": 0.9509755373001099,
+          "cosine_with_age_gradient": 1.0,
+          "descent_cosine_with_sam_age_displacement": 0.0946577787399292
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.005190275143831968,
+          "cosine_with_age_gradient": 0.03993796557188034,
+          "descent_cosine_with_sam_age_displacement": -0.04124124348163605
+        },
+        "order": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        }
+      }
+    },
+    {
+      "name": "ffhq_62644",
+      "arm": "target_age_order_floor",
+      "seconds": 11.650393331423402,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 0.9642122983932495,
+          "expected_age": [
+            52.466552734375,
+            62.77053451538086
+          ],
+          "identity_cosine": [
+            0.6238128542900085,
+            0.425309956073761
+          ],
+          "loss_identity": 0.32177063822746277,
+          "loss_age": 0.6332986354827881,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.009143008850514889,
+          "loss_order": 0.0
+        },
+        {
+          "step": 60,
+          "loss": 0.16182510554790497,
+          "expected_age": [
+            59.19924545288086,
+            73.74152374267578
+          ],
+          "identity_cosine": [
+            0.9022694826126099,
+            0.6995062828063965
+          ],
+          "loss_identity": 0.1007094606757164,
+          "loss_age": 0.017242809757590294,
+          "loss_perceptual": 0.035346195101737976,
+          "loss_trust": 0.0005304569494910538,
+          "loss_color": 0.007996189408004284,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.10316716879606247,
+          "expected_age": [
+            59.40425491333008,
+            73.99745178222656
+          ],
+          "identity_cosine": [
+            0.9401319622993469,
+            0.7957558631896973
+          ],
+          "loss_identity": 0.0470646396279335,
+          "loss_age": 0.013707835227251053,
+          "loss_perceptual": 0.03380969539284706,
+          "loss_trust": 0.0008549332851544023,
+          "loss_color": 0.007730070035904646,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.08087442815303802,
+          "expected_age": [
+            59.38447570800781,
+            74.14566802978516
+          ],
+          "identity_cosine": [
+            0.9497370719909668,
+            0.8343974351882935
+          ],
+          "loss_identity": 0.027765965089201927,
+          "loss_age": 0.011521060951054096,
+          "loss_perceptual": 0.032964322715997696,
+          "loss_trust": 0.0010451253037899733,
+          "loss_color": 0.007577955722808838,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        55.42976379394531,
+        65.35655975341797
+      ],
+      "final_shared_age": [
+        59.40056610107422,
+        74.14751434326172
+      ],
+      "final_identity": [
+        0.9498234987258911,
+        0.8346951603889465
+      ],
+      "identity_floor": [
+        0.94974285364151,
+        0.9038065671920776
+      ],
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.07908954471349716,
+          "cosine_with_age_gradient": -0.18250775337219238,
+          "descent_cosine_with_sam_age_displacement": -0.14464585483074188
+        },
+        "age": {
+          "norm": 0.9509755373001099,
+          "cosine_with_age_gradient": 1.0,
+          "descent_cosine_with_sam_age_displacement": 0.0946577787399292
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.005190275143831968,
+          "cosine_with_age_gradient": 0.03993796557188034,
+          "descent_cosine_with_sam_age_displacement": -0.04124124348163605
+        },
+        "order": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        }
+      }
+    },
+    {
+      "name": "ffhq_64919",
+      "arm": "teacher_control",
+      "seconds": 11.561036671511829,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 0.3330666720867157,
+          "expected_age": [
+            53.24995422363281,
+            56.184261322021484
+          ],
+          "identity_cosine": [
+            0.9734050631523132,
+            0.8875297904014587
+          ],
+          "loss_identity": 0.05562606081366539,
+          "loss_age": 0.2732783257961273,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.004162285011261702,
+          "loss_order": 0.0
+        },
+        {
+          "step": 60,
+          "loss": 0.027312571182847023,
+          "expected_age": [
+            56.995601654052734,
+            61.07975387573242
+          ],
+          "identity_cosine": [
+            0.99311763048172,
+            0.9740022420883179
+          ],
+          "loss_identity": 0.013152050785720348,
+          "loss_age": 0.002234156709164381,
+          "loss_perceptual": 0.008151732385158539,
+          "loss_trust": 0.0002490467159077525,
+          "loss_color": 0.0035255849361419678,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.01979829929769039,
+          "expected_age": [
+            57.015228271484375,
+            60.73358154296875
+          ],
+          "identity_cosine": [
+            0.9953910708427429,
+            0.983237087726593
+          ],
+          "loss_identity": 0.008548736572265625,
+          "loss_age": 0.0014743483625352383,
+          "loss_perceptual": 0.0062189665623009205,
+          "loss_trust": 0.0003532187547534704,
+          "loss_color": 0.003203029278665781,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.017796078696846962,
+          "expected_age": [
+            57.01587677001953,
+            60.65635681152344
+          ],
+          "identity_cosine": [
+            0.9959800243377686,
+            0.9859578609466553
+          ],
+          "loss_identity": 0.007224846165627241,
+          "loss_age": 0.0012643947266042233,
+          "loss_perceptual": 0.005815495736896992,
+          "loss_trust": 0.00041496354970149696,
+          "loss_color": 0.003076378023251891,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        56.859134674072266,
+        60.368614196777344
+      ],
+      "final_shared_age": [
+        57.01163864135742,
+        60.6577262878418
+      ],
+      "final_identity": [
+        0.9959837198257446,
+        0.985973596572876
+      ],
+      "identity_floor": null,
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.04575429484248161,
+          "cosine_with_age_gradient": -0.336246520280838,
+          "descent_cosine_with_sam_age_displacement": -0.1909889429807663
+        },
+        "age": {
+          "norm": 0.37624144554138184,
+          "cosine_with_age_gradient": 1.0000001192092896,
+          "descent_cosine_with_sam_age_displacement": 0.13075095415115356
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.005146498791873455,
+          "cosine_with_age_gradient": -0.0859583392739296,
+          "descent_cosine_with_sam_age_displacement": -0.054027851670980453
+        },
+        "order": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        }
+      }
+    },
+    {
+      "name": "ffhq_64919",
+      "arm": "target_age",
+      "seconds": 11.570806604810059,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 1.0729068517684937,
+          "expected_age": [
+            53.24995422363281,
+            56.184261322021484
+          ],
+          "identity_cosine": [
+            0.9734050631523132,
+            0.8875297904014587
+          ],
+          "loss_identity": 0.05562606081366539,
+          "loss_age": 1.0131185054779053,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.004162285011261702,
+          "loss_order": 0.0
+        },
+        {
+          "step": 60,
+          "loss": 0.0872393548488617,
+          "expected_age": [
+            58.99138641357422,
+            73.48302459716797
+          ],
+          "identity_cosine": [
+            0.987515389919281,
+            0.9193249940872192
+          ],
+          "loss_identity": 0.03726384788751602,
+          "loss_age": 0.019892511889338493,
+          "loss_perceptual": 0.02461334504187107,
+          "loss_trust": 0.0003697617503348738,
+          "loss_color": 0.005099886562675238,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.058733612298965454,
+          "expected_age": [
+            59.18144989013672,
+            73.93704223632812
+          ],
+          "identity_cosine": [
+            0.9929303526878357,
+            0.9576057195663452
+          ],
+          "loss_identity": 0.019785571843385696,
+          "loss_age": 0.01485373079776764,
+          "loss_perceptual": 0.019066989421844482,
+          "loss_trust": 0.0005206052446737885,
+          "loss_color": 0.004506715573370457,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.05221892148256302,
+          "expected_age": [
+            59.22389221191406,
+            74.0794677734375
+          ],
+          "identity_cosine": [
+            0.9940791726112366,
+            0.965679407119751
+          ],
+          "loss_identity": 0.01609656773507595,
+          "loss_age": 0.013109168969094753,
+          "loss_perceptual": 0.018114520236849785,
+          "loss_trust": 0.0006054537952877581,
+          "loss_color": 0.004293213132768869,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        56.859134674072266,
+        60.368614196777344
+      ],
+      "final_shared_age": [
+        59.218971252441406,
+        74.07998657226562
+      ],
+      "final_identity": [
+        0.994094967842102,
+        0.9657384157180786
+      ],
+      "identity_floor": null,
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.04575429484248161,
+          "cosine_with_age_gradient": -0.3804008364677429,
+          "descent_cosine_with_sam_age_displacement": -0.1909889429807663
+        },
+        "age": {
+          "norm": 0.6412095427513123,
+          "cosine_with_age_gradient": 1.0000001192092896,
+          "descent_cosine_with_sam_age_displacement": 0.1313667893409729
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.005146498791873455,
+          "cosine_with_age_gradient": -0.11049426347017288,
+          "descent_cosine_with_sam_age_displacement": -0.054027851670980453
+        },
+        "order": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        }
+      }
+    },
+    {
+      "name": "ffhq_64919",
+      "arm": "target_age_order",
+      "seconds": 11.588425740599632,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 1.187049150466919,
+          "expected_age": [
+            53.24995422363281,
+            56.184261322021484
+          ],
+          "identity_cosine": [
+            0.9734050631523132,
+            0.8875297904014587
+          ],
+          "loss_identity": 0.05562606081366539,
+          "loss_age": 1.0131185054779053,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.004162285011261702,
+          "loss_order": 0.11414233595132828
+        },
+        {
+          "step": 60,
+          "loss": 0.08607582002878189,
+          "expected_age": [
+            58.95628356933594,
+            73.36532592773438
+          ],
+          "identity_cosine": [
+            0.9910045862197876,
+            0.912624716758728
+          ],
+          "loss_identity": 0.03854827955365181,
+          "loss_age": 0.021216273307800293,
+          "loss_perceptual": 0.02143034152686596,
+          "loss_trust": 0.0003785386506933719,
+          "loss_color": 0.004502385389059782,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.05831773951649666,
+          "expected_age": [
+            59.110618591308594,
+            73.86853790283203
+          ],
+          "identity_cosine": [
+            0.9936368465423584,
+            0.9544378519058228
+          ],
+          "loss_identity": 0.0207701213657856,
+          "loss_age": 0.015227346681058407,
+          "loss_perceptual": 0.01749597117304802,
+          "loss_trust": 0.0005382291856221855,
+          "loss_color": 0.004286069422960281,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.051557786762714386,
+          "expected_age": [
+            59.19076156616211,
+            74.02692413330078
+          ],
+          "identity_cosine": [
+            0.9944314956665039,
+            0.963162899017334
+          ],
+          "loss_identity": 0.016962243244051933,
+          "loss_age": 0.013226523995399475,
+          "loss_perceptual": 0.01665785163640976,
+          "loss_trust": 0.0006381458952091634,
+          "loss_color": 0.004073018673807383,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        56.859134674072266,
+        60.368614196777344
+      ],
+      "final_shared_age": [
+        59.18940353393555,
+        74.02694702148438
+      ],
+      "final_identity": [
+        0.9944294095039368,
+        0.9632012844085693
+      ],
+      "identity_floor": null,
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.04575429484248161,
+          "cosine_with_age_gradient": -0.3804008364677429,
+          "descent_cosine_with_sam_age_displacement": -0.1909889429807663
+        },
+        "age": {
+          "norm": 0.6412095427513123,
+          "cosine_with_age_gradient": 1.0000001192092896,
+          "descent_cosine_with_sam_age_displacement": 0.1313667893409729
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.005146498791873455,
+          "cosine_with_age_gradient": -0.11049426347017288,
+          "descent_cosine_with_sam_age_displacement": -0.054027851670980453
+        },
+        "order": {
+          "norm": 0.16557693481445312,
+          "cosine_with_age_gradient": 0.3153759837150574,
+          "descent_cosine_with_sam_age_displacement": 0.05006776750087738
+        }
+      }
+    },
+    {
+      "name": "ffhq_64919",
+      "arm": "target_age_order_floor",
+      "seconds": 11.59719849191606,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 1.1718320846557617,
+          "expected_age": [
+            53.24995422363281,
+            56.184261322021484
+          ],
+          "identity_cosine": [
+            0.9734050631523132,
+            0.8875297904014587
+          ],
+          "loss_identity": 0.04040899500250816,
+          "loss_age": 1.0131185054779053,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.004162285011261702,
+          "loss_order": 0.11414233595132828
+        },
+        {
+          "step": 60,
+          "loss": 0.07217670977115631,
+          "expected_age": [
+            59.05829620361328,
+            73.36532592773438
+          ],
+          "identity_cosine": [
+            0.986079752445221,
+            0.912624716758728
+          ],
+          "loss_identity": 0.025339556857943535,
+          "loss_age": 0.020716451108455658,
+          "loss_perceptual": 0.02123481035232544,
+          "loss_trust": 0.00037119907210581005,
+          "loss_color": 0.004514690488576889,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.045269135385751724,
+          "expected_age": [
+            59.15670394897461,
+            73.86853790283203
+          ],
+          "identity_cosine": [
+            0.9865920543670654,
+            0.9544378519058228
+          ],
+          "loss_identity": 0.008614301681518555,
+          "loss_age": 0.014775334857404232,
+          "loss_perceptual": 0.01711430773139,
+          "loss_trust": 0.0005070971674285829,
+          "loss_color": 0.004258093889802694,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.03878483921289444,
+          "expected_age": [
+            59.21532440185547,
+            74.02692413330078
+          ],
+          "identity_cosine": [
+            0.9861101508140564,
+            0.963162899017334
+          ],
+          "loss_identity": 0.005124283023178577,
+          "loss_age": 0.012729048728942871,
+          "loss_perceptual": 0.01629415526986122,
+          "loss_trust": 0.0005923041026107967,
+          "loss_color": 0.004045052453875542,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        56.859134674072266,
+        60.368614196777344
+      ],
+      "final_shared_age": [
+        59.21614074707031,
+        74.02694702148438
+      ],
+      "final_identity": [
+        0.986140251159668,
+        0.9632012844085693
+      ],
+      "identity_floor": [
+        0.9859837293624878,
+        0.9759736061096191
+      ],
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.04575429484248161,
+          "cosine_with_age_gradient": -0.3804008364677429,
+          "descent_cosine_with_sam_age_displacement": -0.1909889429807663
+        },
+        "age": {
+          "norm": 0.6412095427513123,
+          "cosine_with_age_gradient": 1.0000001192092896,
+          "descent_cosine_with_sam_age_displacement": 0.1313667893409729
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.005146498791873455,
+          "cosine_with_age_gradient": -0.11049426347017288,
+          "descent_cosine_with_sam_age_displacement": -0.054027851670980453
+        },
+        "order": {
+          "norm": 0.16557693481445312,
+          "cosine_with_age_gradient": 0.3153759837150574,
+          "descent_cosine_with_sam_age_displacement": 0.05006776750087738
+        }
+      }
+    },
+    {
+      "name": "ffhq_65817",
+      "arm": "teacher_control",
+      "seconds": 11.539560256525874,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 0.4752030074596405,
+          "expected_age": [
+            43.683250427246094,
+            52.080196380615234
+          ],
+          "identity_cosine": [
+            0.6730765104293823,
+            0.6016362905502319
+          ],
+          "loss_identity": 0.2901148796081543,
+          "loss_age": 0.17574864625930786,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.009339474141597748,
+          "loss_order": 0.0
+        },
+        {
+          "step": 60,
+          "loss": 0.09827934950590134,
+          "expected_age": [
+            47.2025260925293,
+            56.374752044677734
+          ],
+          "identity_cosine": [
+            0.948854386806488,
+            0.9074615240097046
+          ],
+          "loss_identity": 0.05747363716363907,
+          "loss_age": 0.0008652573451399803,
+          "loss_perceptual": 0.031138833612203598,
+          "loss_trust": 0.000623599742539227,
+          "loss_color": 0.00817802082747221,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.07128164917230606,
+          "expected_age": [
+            47.237640380859375,
+            56.335594177246094
+          ],
+          "identity_cosine": [
+            0.9668384790420532,
+            0.9504693746566772
+          ],
+          "loss_identity": 0.03307686001062393,
+          "loss_age": 0.0005425373092293739,
+          "loss_perceptual": 0.028818964958190918,
+          "loss_trust": 0.0009543726337142289,
+          "loss_color": 0.007888910360634327,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.06231318414211273,
+          "expected_age": [
+            47.22578048706055,
+            56.43281936645508
+          ],
+          "identity_cosine": [
+            0.9729734063148499,
+            0.9647725820541382
+          ],
+          "loss_identity": 0.024901604279875755,
+          "loss_age": 0.0002971300855278969,
+          "loss_perceptual": 0.028149086982011795,
+          "loss_trust": 0.0011478335363790393,
+          "loss_color": 0.007817529141902924,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        47.23252487182617,
+        56.413917541503906
+      ],
+      "final_shared_age": [
+        47.237876892089844,
+        56.44054412841797
+      ],
+      "final_identity": [
+        0.9730145931243896,
+        0.9648767113685608
+      ],
+      "identity_floor": null,
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.060119058936834335,
+          "cosine_with_age_gradient": -0.12746497988700867,
+          "descent_cosine_with_sam_age_displacement": -0.1444065421819687
+        },
+        "age": {
+          "norm": 0.4450306296348572,
+          "cosine_with_age_gradient": 0.9999999403953552,
+          "descent_cosine_with_sam_age_displacement": 0.09582225233316422
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.005153276026248932,
+          "cosine_with_age_gradient": -0.029159191995859146,
+          "descent_cosine_with_sam_age_displacement": -0.045807935297489166
+        },
+        "order": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        }
+      }
+    },
+    {
+      "name": "ffhq_65817",
+      "arm": "target_age",
+      "seconds": 11.553224192000926,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 1.6466695070266724,
+          "expected_age": [
+            43.683250427246094,
+            52.080196380615234
+          ],
+          "identity_cosine": [
+            0.6730765104293823,
+            0.6016362905502319
+          ],
+          "loss_identity": 0.2901148796081543,
+          "loss_age": 1.347215175628662,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.009339474141597748,
+          "loss_order": 0.0
+        },
+        {
+          "step": 60,
+          "loss": 0.23779970407485962,
+          "expected_age": [
+            58.89561080932617,
+            74.13227844238281
+          ],
+          "identity_cosine": [
+            0.8274204730987549,
+            0.7525091171264648
+          ],
+          "loss_identity": 0.16802816092967987,
+          "loss_age": 0.015465752221643925,
+          "loss_perceptual": 0.0448889285326004,
+          "loss_trust": 0.0004227527533657849,
+          "loss_color": 0.00899411179125309,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.16297923028469086,
+          "expected_age": [
+            59.21385192871094,
+            74.32254791259766
+          ],
+          "identity_cosine": [
+            0.9097702503204346,
+            0.833736777305603
+          ],
+          "loss_identity": 0.1025971919298172,
+          "loss_age": 0.0114161791279912,
+          "loss_perceptual": 0.03965234011411667,
+          "loss_trust": 0.00070256955223158,
+          "loss_color": 0.00861093308776617,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.13790681958198547,
+          "expected_age": [
+            59.36722183227539,
+            74.4146728515625
+          ],
+          "identity_cosine": [
+            0.93211829662323,
+            0.8669657707214355
+          ],
+          "loss_identity": 0.08036637306213379,
+          "loss_age": 0.009549064561724663,
+          "loss_perceptual": 0.03872980177402496,
+          "loss_trust": 0.0008736778399907053,
+          "loss_color": 0.008387898094952106,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        47.23252487182617,
+        56.413917541503906
+      ],
+      "final_shared_age": [
+        59.38956069946289,
+        74.41581726074219
+      ],
+      "final_identity": [
+        0.9323197603225708,
+        0.8671743869781494
+      ],
+      "identity_floor": null,
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.060119058936834335,
+          "cosine_with_age_gradient": -0.1481269747018814,
+          "descent_cosine_with_sam_age_displacement": -0.1444065421819687
+        },
+        "age": {
+          "norm": 0.9359599351882935,
+          "cosine_with_age_gradient": 1.0,
+          "descent_cosine_with_sam_age_displacement": 0.08057843148708344
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.005153276026248932,
+          "cosine_with_age_gradient": -0.017965221777558327,
+          "descent_cosine_with_sam_age_displacement": -0.045807935297489166
+        },
+        "order": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        }
+      }
+    },
+    {
+      "name": "ffhq_65817",
+      "arm": "target_age_order",
+      "seconds": 11.573136460967362,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 1.6466695070266724,
+          "expected_age": [
+            43.683250427246094,
+            52.080196380615234
+          ],
+          "identity_cosine": [
+            0.6730765104293823,
+            0.6016362905502319
+          ],
+          "loss_identity": 0.2901148796081543,
+          "loss_age": 1.347215175628662,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.009339474141597748,
+          "loss_order": 0.0
+        },
+        {
+          "step": 60,
+          "loss": 0.23779970407485962,
+          "expected_age": [
+            58.89561080932617,
+            74.13227844238281
+          ],
+          "identity_cosine": [
+            0.8274204730987549,
+            0.7525091171264648
+          ],
+          "loss_identity": 0.16802816092967987,
+          "loss_age": 0.015465752221643925,
+          "loss_perceptual": 0.0448889285326004,
+          "loss_trust": 0.0004227527533657849,
+          "loss_color": 0.00899411179125309,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.16297923028469086,
+          "expected_age": [
+            59.21385192871094,
+            74.32254791259766
+          ],
+          "identity_cosine": [
+            0.9097702503204346,
+            0.833736777305603
+          ],
+          "loss_identity": 0.1025971919298172,
+          "loss_age": 0.0114161791279912,
+          "loss_perceptual": 0.03965234011411667,
+          "loss_trust": 0.00070256955223158,
+          "loss_color": 0.00861093308776617,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.13790681958198547,
+          "expected_age": [
+            59.36722183227539,
+            74.4146728515625
+          ],
+          "identity_cosine": [
+            0.93211829662323,
+            0.8669657707214355
+          ],
+          "loss_identity": 0.08036637306213379,
+          "loss_age": 0.009549064561724663,
+          "loss_perceptual": 0.03872980177402496,
+          "loss_trust": 0.0008736778399907053,
+          "loss_color": 0.008387898094952106,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        47.23252487182617,
+        56.413917541503906
+      ],
+      "final_shared_age": [
+        59.38956069946289,
+        74.41581726074219
+      ],
+      "final_identity": [
+        0.9323197603225708,
+        0.8671743869781494
+      ],
+      "identity_floor": null,
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.060119058936834335,
+          "cosine_with_age_gradient": -0.1481269747018814,
+          "descent_cosine_with_sam_age_displacement": -0.1444065421819687
+        },
+        "age": {
+          "norm": 0.9359599351882935,
+          "cosine_with_age_gradient": 1.0,
+          "descent_cosine_with_sam_age_displacement": 0.08057843148708344
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.005153276026248932,
+          "cosine_with_age_gradient": -0.017965221777558327,
+          "descent_cosine_with_sam_age_displacement": -0.045807935297489166
+        },
+        "order": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        }
+      }
+    },
+    {
+      "name": "ffhq_65817",
+      "arm": "target_age_order_floor",
+      "seconds": 11.66175202652812,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 1.613826036453247,
+          "expected_age": [
+            43.683250427246094,
+            52.080196380615234
+          ],
+          "identity_cosine": [
+            0.6730765104293823,
+            0.6016362905502319
+          ],
+          "loss_identity": 0.257271409034729,
+          "loss_age": 1.347215175628662,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.009339474141597748,
+          "loss_order": 0.0
+        },
+        {
+          "step": 60,
+          "loss": 0.20495623350143433,
+          "expected_age": [
+            58.89561080932617,
+            74.13227844238281
+          ],
+          "identity_cosine": [
+            0.8274204730987549,
+            0.7525091171264648
+          ],
+          "loss_identity": 0.13518469035625458,
+          "loss_age": 0.015465752221643925,
+          "loss_perceptual": 0.0448889285326004,
+          "loss_trust": 0.0004227527533657849,
+          "loss_color": 0.00899411179125309,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.13013574481010437,
+          "expected_age": [
+            59.21385192871094,
+            74.32254791259766
+          ],
+          "identity_cosine": [
+            0.9097702503204346,
+            0.833736777305603
+          ],
+          "loss_identity": 0.0697537213563919,
+          "loss_age": 0.0114161791279912,
+          "loss_perceptual": 0.03965234011411667,
+          "loss_trust": 0.00070256955223158,
+          "loss_color": 0.00861093308776617,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.10506334900856018,
+          "expected_age": [
+            59.36722183227539,
+            74.4146728515625
+          ],
+          "identity_cosine": [
+            0.93211829662323,
+            0.8669657707214355
+          ],
+          "loss_identity": 0.047522902488708496,
+          "loss_age": 0.009549064561724663,
+          "loss_perceptual": 0.03872980177402496,
+          "loss_trust": 0.0008736778399907053,
+          "loss_color": 0.008387898094952106,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        47.23252487182617,
+        56.413917541503906
+      ],
+      "final_shared_age": [
+        59.38956069946289,
+        74.41581726074219
+      ],
+      "final_identity": [
+        0.9323197603225708,
+        0.8671743869781494
+      ],
+      "identity_floor": [
+        0.9630146026611328,
+        0.954876720905304
+      ],
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.060119058936834335,
+          "cosine_with_age_gradient": -0.1481269747018814,
+          "descent_cosine_with_sam_age_displacement": -0.1444065421819687
+        },
+        "age": {
+          "norm": 0.9359599351882935,
+          "cosine_with_age_gradient": 1.0,
+          "descent_cosine_with_sam_age_displacement": 0.08057843148708344
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.005153276026248932,
+          "cosine_with_age_gradient": -0.017965221777558327,
+          "descent_cosine_with_sam_age_displacement": -0.045807935297489166
+        },
+        "order": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        }
+      }
+    },
+    {
+      "name": "ffhq_67140",
+      "arm": "teacher_control",
+      "seconds": 11.55703141540289,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 0.07517965883016586,
+          "expected_age": [
+            59.77690887451172,
+            68.23728942871094
+          ],
+          "identity_cosine": [
+            0.9449435472488403,
+            0.9935199618339539
+          ],
+          "loss_identity": 0.024614596739411354,
+          "loss_age": 0.04732710123062134,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.003237965749576688,
+          "loss_order": 0.0
+        },
+        {
+          "step": 60,
+          "loss": 0.01044624112546444,
+          "expected_age": [
+            63.13747787475586,
+            69.48359680175781
+          ],
+          "identity_cosine": [
+            0.9929741621017456,
+            0.9967575669288635
+          ],
+          "loss_identity": 0.004107308574020863,
+          "loss_age": 0.0006354133365675807,
+          "loss_perceptual": 0.002947424538433552,
+          "loss_trust": 8.054659701883793e-05,
+          "loss_color": 0.0026755481958389282,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.00885023083537817,
+          "expected_age": [
+            63.17670440673828,
+            69.53002166748047
+          ],
+          "identity_cosine": [
+            0.9949519038200378,
+            0.9970563650131226
+          ],
+          "loss_identity": 0.0031966925598680973,
+          "loss_age": 0.00048232171684503555,
+          "loss_perceptual": 0.002586000831797719,
+          "loss_trust": 0.00012112658441765234,
+          "loss_color": 0.002464089309796691,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.008406644687056541,
+          "expected_age": [
+            63.20042037963867,
+            69.5428695678711
+          ],
+          "identity_cosine": [
+            0.995391845703125,
+            0.9971643686294556
+          ],
+          "loss_identity": 0.0029775144066661596,
+          "loss_age": 0.00042593013495206833,
+          "loss_perceptual": 0.0024482286535203457,
+          "loss_trust": 0.00014705459761898965,
+          "loss_color": 0.0024079172872006893,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        63.356910705566406,
+        69.7061767578125
+      ],
+      "final_shared_age": [
+        63.2001953125,
+        69.55101776123047
+      ],
+      "final_identity": [
+        0.9954028129577637,
+        0.9971683025360107
+      ],
+      "identity_floor": null,
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.03033393807709217,
+          "cosine_with_age_gradient": 0.5218310356140137,
+          "descent_cosine_with_sam_age_displacement": -0.12686724960803986
+        },
+        "age": {
+          "norm": 0.18917277455329895,
+          "cosine_with_age_gradient": 1.0,
+          "descent_cosine_with_sam_age_displacement": -0.08067037910223007
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.0030998538713902235,
+          "cosine_with_age_gradient": 0.20918938517570496,
+          "descent_cosine_with_sam_age_displacement": -0.05151742324233055
+        },
+        "order": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        }
+      }
+    },
+    {
+      "name": "ffhq_67140",
+      "arm": "target_age",
+      "seconds": 11.542567820288241,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 0.21589642763137817,
+          "expected_age": [
+            59.77690887451172,
+            68.23728942871094
+          ],
+          "identity_cosine": [
+            0.9449435472488403,
+            0.9935199618339539
+          ],
+          "loss_identity": 0.024614596739411354,
+          "loss_age": 0.18804386258125305,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.003237965749576688,
+          "loss_order": 0.0
+        },
+        {
+          "step": 60,
+          "loss": 0.04808822274208069,
+          "expected_age": [
+            58.382015228271484,
+            73.48808288574219
+          ],
+          "identity_cosine": [
+            0.9825948476791382,
+            0.9941567778587341
+          ],
+          "loss_identity": 0.00929934997111559,
+          "loss_age": 0.022388331592082977,
+          "loss_perceptual": 0.012729023583233356,
+          "loss_trust": 0.0002662276092451066,
+          "loss_color": 0.0034052920527756214,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.038711272180080414,
+          "expected_age": [
+            58.800350189208984,
+            73.69257354736328
+          ],
+          "identity_cosine": [
+            0.9878048300743103,
+            0.9953386783599854
+          ],
+          "loss_identity": 0.006742596626281738,
+          "loss_age": 0.017011262476444244,
+          "loss_perceptual": 0.011330008506774902,
+          "loss_trust": 0.00043384821037761867,
+          "loss_color": 0.0031935572624206543,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.035898882895708084,
+          "expected_age": [
+            58.904266357421875,
+            73.78372192382812
+          ],
+          "identity_cosine": [
+            0.9894218444824219,
+            0.9956763386726379
+          ],
+          "loss_identity": 0.005960726644843817,
+          "loss_age": 0.01534400787204504,
+          "loss_perceptual": 0.010943026281893253,
+          "loss_trust": 0.0005364459939301014,
+          "loss_color": 0.0031146768014878035,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        63.356910705566406,
+        69.7061767578125
+      ],
+      "final_shared_age": [
+        58.91972351074219,
+        73.78531646728516
+      ],
+      "final_identity": [
+        0.9894461631774902,
+        0.9956800937652588
+      ],
+      "identity_floor": null,
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.03033393807709217,
+          "cosine_with_age_gradient": -0.45021823048591614,
+          "descent_cosine_with_sam_age_displacement": -0.12686724960803986
+        },
+        "age": {
+          "norm": 0.41772300004959106,
+          "cosine_with_age_gradient": 1.0,
+          "descent_cosine_with_sam_age_displacement": 0.0883839875459671
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.0030998538713902235,
+          "cosine_with_age_gradient": -0.2620294392108917,
+          "descent_cosine_with_sam_age_displacement": -0.05151742324233055
+        },
+        "order": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        }
+      }
+    },
+    {
+      "name": "ffhq_67140",
+      "arm": "target_age_order",
+      "seconds": 11.57328690495342,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 0.21589642763137817,
+          "expected_age": [
+            59.77690887451172,
+            68.23728942871094
+          ],
+          "identity_cosine": [
+            0.9449435472488403,
+            0.9935199618339539
+          ],
+          "loss_identity": 0.024614596739411354,
+          "loss_age": 0.18804386258125305,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.003237965749576688,
+          "loss_order": 0.0
+        },
+        {
+          "step": 60,
+          "loss": 0.04808822274208069,
+          "expected_age": [
+            58.382015228271484,
+            73.48808288574219
+          ],
+          "identity_cosine": [
+            0.9825948476791382,
+            0.9941567778587341
+          ],
+          "loss_identity": 0.00929934997111559,
+          "loss_age": 0.022388331592082977,
+          "loss_perceptual": 0.012729023583233356,
+          "loss_trust": 0.0002662276092451066,
+          "loss_color": 0.0034052920527756214,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.038711272180080414,
+          "expected_age": [
+            58.800350189208984,
+            73.69257354736328
+          ],
+          "identity_cosine": [
+            0.9878048300743103,
+            0.9953386783599854
+          ],
+          "loss_identity": 0.006742596626281738,
+          "loss_age": 0.017011262476444244,
+          "loss_perceptual": 0.011330008506774902,
+          "loss_trust": 0.00043384821037761867,
+          "loss_color": 0.0031935572624206543,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.035898882895708084,
+          "expected_age": [
+            58.904266357421875,
+            73.78372192382812
+          ],
+          "identity_cosine": [
+            0.9894218444824219,
+            0.9956763386726379
+          ],
+          "loss_identity": 0.005960726644843817,
+          "loss_age": 0.01534400787204504,
+          "loss_perceptual": 0.010943026281893253,
+          "loss_trust": 0.0005364459939301014,
+          "loss_color": 0.0031146768014878035,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        63.356910705566406,
+        69.7061767578125
+      ],
+      "final_shared_age": [
+        58.91972351074219,
+        73.78531646728516
+      ],
+      "final_identity": [
+        0.9894461631774902,
+        0.9956800937652588
+      ],
+      "identity_floor": null,
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.03033393807709217,
+          "cosine_with_age_gradient": -0.45021823048591614,
+          "descent_cosine_with_sam_age_displacement": -0.12686724960803986
+        },
+        "age": {
+          "norm": 0.41772300004959106,
+          "cosine_with_age_gradient": 1.0,
+          "descent_cosine_with_sam_age_displacement": 0.0883839875459671
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.0030998538713902235,
+          "cosine_with_age_gradient": -0.2620294392108917,
+          "descent_cosine_with_sam_age_displacement": -0.05151742324233055
+        },
+        "order": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        }
+      }
+    },
+    {
+      "name": "ffhq_67140",
+      "arm": "target_age_order_floor",
+      "seconds": 11.581099503673613,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 0.2074655294418335,
+          "expected_age": [
+            59.77690887451172,
+            68.23728942871094
+          ],
+          "identity_cosine": [
+            0.9449435472488403,
+            0.9935199618339539
+          ],
+          "loss_identity": 0.01618370972573757,
+          "loss_age": 0.18804386258125305,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.003237965749576688,
+          "loss_order": 0.0
+        },
+        {
+          "step": 60,
+          "loss": 0.03789335861802101,
+          "expected_age": [
+            58.382015228271484,
+            73.53730010986328
+          ],
+          "identity_cosine": [
+            0.9825948476791382,
+            0.9870529174804688
+          ],
+          "loss_identity": 0.0011693477863445878,
+          "loss_age": 0.021837258711457253,
+          "loss_perceptual": 0.011468514800071716,
+          "loss_trust": 0.00025482839555479586,
+          "loss_color": 0.0031634089536964893,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.029805272817611694,
+          "expected_age": [
+            58.83742141723633,
+            73.75784301757812
+          ],
+          "identity_cosine": [
+            0.9853212833404541,
+            0.9870089292526245
+          ],
+          "loss_identity": 9.636879258323461e-05,
+          "loss_age": 0.01609555259346962,
+          "loss_perceptual": 0.010195774026215076,
+          "loss_trust": 0.00040067240479402244,
+          "loss_color": 0.003016906324774027,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.02761204168200493,
+          "expected_age": [
+            58.94963836669922,
+            73.83613586425781
+          ],
+          "identity_cosine": [
+            0.9854984283447266,
+            0.9871099591255188
+          ],
+          "loss_identity": 2.334117925784085e-05,
+          "loss_age": 0.014406499452888966,
+          "loss_perceptual": 0.009778706356883049,
+          "loss_trust": 0.0004836988227907568,
+          "loss_color": 0.002919795922935009,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        63.356910705566406,
+        69.7061767578125
+      ],
+      "final_shared_age": [
+        58.95820999145508,
+        73.83495330810547
+      ],
+      "final_identity": [
+        0.9854766130447388,
+        0.9872283935546875
+      ],
+      "identity_floor": [
+        0.9854028224945068,
+        0.9871683120727539
+      ],
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.02968320995569229,
+          "cosine_with_age_gradient": -0.4362720251083374,
+          "descent_cosine_with_sam_age_displacement": -0.12307432293891907
+        },
+        "age": {
+          "norm": 0.41772300004959106,
+          "cosine_with_age_gradient": 1.0,
+          "descent_cosine_with_sam_age_displacement": 0.0883839875459671
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.0030998538713902235,
+          "cosine_with_age_gradient": -0.2620294392108917,
+          "descent_cosine_with_sam_age_displacement": -0.05151742324233055
+        },
+        "order": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        }
+      }
+    },
+    {
+      "name": "ffhq_60764",
+      "arm": "teacher_control",
+      "seconds": 11.5539818610996,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 0.09573804587125778,
+          "expected_age": [
+            58.92056655883789,
+            63.91221237182617
+          ],
+          "identity_cosine": [
+            0.9905999898910522,
+            0.8811765909194946
+          ],
+          "loss_identity": 0.05128936842083931,
+          "loss_age": 0.038215503096580505,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.006233180407434702,
+          "loss_order": 0.0
+        },
+        {
+          "step": 60,
+          "loss": 0.016783714294433594,
+          "expected_age": [
+            57.09391403198242,
+            62.037384033203125
+          ],
+          "identity_cosine": [
+            0.9969997406005859,
+            0.9899997711181641
+          ],
+          "loss_identity": 0.005200195591896772,
+          "loss_age": 0.000539371045306325,
+          "loss_perceptual": 0.006188976112753153,
+          "loss_trust": 0.00012316442735027522,
+          "loss_color": 0.004732006229460239,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.01383038517087698,
+          "expected_age": [
+            57.141639709472656,
+            61.91558837890625
+          ],
+          "identity_cosine": [
+            0.99746173620224,
+            0.9929681420326233
+          ],
+          "loss_identity": 0.0038280487060546875,
+          "loss_age": 0.0003458070568740368,
+          "loss_perceptual": 0.004850761033594608,
+          "loss_trust": 0.00016771547961980104,
+          "loss_color": 0.004638053476810455,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.013075935654342175,
+          "expected_age": [
+            57.15268325805664,
+            61.90658187866211
+          ],
+          "identity_cosine": [
+            0.9975470900535583,
+            0.9938332438468933
+          ],
+          "loss_identity": 0.0034478665329515934,
+          "loss_age": 0.00030596950091421604,
+          "loss_perceptual": 0.004574763122946024,
+          "loss_trust": 0.00019774316751863807,
+          "loss_color": 0.004549593664705753,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        57.35441589355469,
+        61.85277557373047
+      ],
+      "final_shared_age": [
+        57.14333724975586,
+        61.89665985107422
+      ],
+      "final_identity": [
+        0.9975482225418091,
+        0.9938471913337708
+      ],
+      "identity_floor": null,
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.04936649277806282,
+          "cosine_with_age_gradient": 0.2265567034482956,
+          "descent_cosine_with_sam_age_displacement": -0.16142241656780243
+        },
+        "age": {
+          "norm": 0.2821614146232605,
+          "cosine_with_age_gradient": 0.9999998807907104,
+          "descent_cosine_with_sam_age_displacement": -0.07930466532707214
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.006815467495471239,
+          "cosine_with_age_gradient": 0.010478705167770386,
+          "descent_cosine_with_sam_age_displacement": -0.057363107800483704
+        },
+        "order": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        }
+      }
+    },
+    {
+      "name": "ffhq_60764",
+      "arm": "target_age",
+      "seconds": 11.546758017502725,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 0.3522540330886841,
+          "expected_age": [
+            58.92056655883789,
+            63.91221237182617
+          ],
+          "identity_cosine": [
+            0.9905999898910522,
+            0.8811765909194946
+          ],
+          "loss_identity": 0.05128936842083931,
+          "loss_age": 0.294731467962265,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.006233180407434702,
+          "loss_order": 0.0
+        },
+        {
+          "step": 60,
+          "loss": 0.047976553440093994,
+          "expected_age": [
+            58.51981735229492,
+            73.93617248535156
+          ],
+          "identity_cosine": [
+            0.9957740306854248,
+            0.9746917486190796
+          ],
+          "loss_identity": 0.011813688091933727,
+          "loss_age": 0.017509404569864273,
+          "loss_perceptual": 0.013043864630162716,
+          "loss_trust": 0.0002484417927917093,
+          "loss_color": 0.005361150950193405,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.03749245032668114,
+          "expected_age": [
+            58.78666687011719,
+            74.20791625976562
+          ],
+          "identity_cosine": [
+            0.9964470267295837,
+            0.9849845767021179
+          ],
+          "loss_identity": 0.0074273585341870785,
+          "loss_age": 0.013648772612214088,
+          "loss_perceptual": 0.010877484455704689,
+          "loss_trust": 0.0003775774675887078,
+          "loss_color": 0.005161256995052099,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.03447134420275688,
+          "expected_age": [
+            58.86079788208008,
+            74.27265167236328
+          ],
+          "identity_cosine": [
+            0.9967020750045776,
+            0.9876731634140015
+          ],
+          "loss_identity": 0.006249904632568359,
+          "loss_age": 0.012294143438339233,
+          "loss_perceptual": 0.01036856696009636,
+          "loss_trust": 0.0004621378320734948,
+          "loss_color": 0.005096592009067535,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        57.35441589355469,
+        61.85277557373047
+      ],
+      "final_shared_age": [
+        58.871673583984375,
+        74.27300262451172
+      ],
+      "final_identity": [
+        0.9967041015625,
+        0.9876863360404968
+      ],
+      "identity_floor": null,
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.04936649277806282,
+          "cosine_with_age_gradient": -0.19520963728427887,
+          "descent_cosine_with_sam_age_displacement": -0.16142241656780243
+        },
+        "age": {
+          "norm": 0.7116912603378296,
+          "cosine_with_age_gradient": 0.9999998807907104,
+          "descent_cosine_with_sam_age_displacement": 0.07775953412055969
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.006815467495471239,
+          "cosine_with_age_gradient": -0.11937160044908524,
+          "descent_cosine_with_sam_age_displacement": -0.057363107800483704
+        },
+        "order": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        }
+      }
+    },
+    {
+      "name": "ffhq_60764",
+      "arm": "target_age_order",
+      "seconds": 11.574627568013966,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 0.41496291756629944,
+          "expected_age": [
+            58.92056655883789,
+            63.91221237182617
+          ],
+          "identity_cosine": [
+            0.9905999898910522,
+            0.8811765909194946
+          ],
+          "loss_identity": 0.05128936842083931,
+          "loss_age": 0.294731467962265,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.006233180407434702,
+          "loss_order": 0.06270889192819595
+        },
+        {
+          "step": 60,
+          "loss": 0.053386397659778595,
+          "expected_age": [
+            58.331573486328125,
+            74.00811767578125
+          ],
+          "identity_cosine": [
+            0.9943198561668396,
+            0.9709486961364746
+          ],
+          "loss_identity": 0.013892578892409801,
+          "loss_age": 0.018223559483885765,
+          "loss_perceptual": 0.015229317359626293,
+          "loss_trust": 0.0002326732937945053,
+          "loss_color": 0.005808267276734114,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.041299670934677124,
+          "expected_age": [
+            58.66606140136719,
+            74.17804718017578
+          ],
+          "identity_cosine": [
+            0.9961212873458862,
+            0.9826130867004395
+          ],
+          "loss_identity": 0.008506250567734241,
+          "loss_age": 0.014606746844947338,
+          "loss_perceptual": 0.01236565038561821,
+          "loss_trust": 0.0003358170506544411,
+          "loss_color": 0.00548520777374506,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.037734255194664,
+          "expected_age": [
+            58.77906036376953,
+            74.23856353759766
+          ],
+          "identity_cosine": [
+            0.9963650703430176,
+            0.9860484600067139
+          ],
+          "loss_identity": 0.007034588139504194,
+          "loss_age": 0.01334791537374258,
+          "loss_perceptual": 0.011564509943127632,
+          "loss_trust": 0.00040665073902346194,
+          "loss_color": 0.0053805941715836525,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        57.35441589355469,
+        61.85277557373047
+      ],
+      "final_shared_age": [
+        58.78144454956055,
+        74.23826599121094
+      ],
+      "final_identity": [
+        0.9963700175285339,
+        0.9860441088676453
+      ],
+      "identity_floor": null,
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.04936649277806282,
+          "cosine_with_age_gradient": -0.19520963728427887,
+          "descent_cosine_with_sam_age_displacement": -0.16142241656780243
+        },
+        "age": {
+          "norm": 0.7116912603378296,
+          "cosine_with_age_gradient": 0.9999998807907104,
+          "descent_cosine_with_sam_age_displacement": 0.07775953412055969
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.006815467495471239,
+          "cosine_with_age_gradient": -0.11937160044908524,
+          "descent_cosine_with_sam_age_displacement": -0.057363107800483704
+        },
+        "order": {
+          "norm": 0.3650095760822296,
+          "cosine_with_age_gradient": 0.886882483959198,
+          "descent_cosine_with_sam_age_displacement": 0.05154942348599434
+        }
+      }
+    },
+    {
+      "name": "ffhq_60764",
+      "arm": "target_age_order_floor",
+      "seconds": 11.654826087877154,
+      "trace": [
+        {
+          "step": 1,
+          "loss": 0.4047417938709259,
+          "expected_age": [
+            58.92056655883789,
+            63.91221237182617
+          ],
+          "identity_cosine": [
+            0.9905999898910522,
+            0.8811765909194946
+          ],
+          "loss_identity": 0.041068244725465775,
+          "loss_age": 0.294731467962265,
+          "loss_perceptual": 0.0,
+          "loss_trust": 0.0,
+          "loss_color": 0.006233180407434702,
+          "loss_order": 0.06270889192819595
+        },
+        {
+          "step": 60,
+          "loss": 0.044096317142248154,
+          "expected_age": [
+            58.447242736816406,
+            74.00811767578125
+          ],
+          "identity_cosine": [
+            0.9876660108566284,
+            0.9709486961364746
+          ],
+          "loss_identity": 0.005159401800483465,
+          "loss_age": 0.017315750941634178,
+          "loss_perceptual": 0.015527267940342426,
+          "loss_trust": 0.00024053621746134013,
+          "loss_color": 0.005853361915796995,
+          "loss_order": 0.0
+        },
+        {
+          "step": 120,
+          "loss": 0.032634519040584564,
+          "expected_age": [
+            58.736419677734375,
+            74.17804718017578
+          ],
+          "identity_cosine": [
+            0.9877251982688904,
+            0.9826130867004395
+          ],
+          "loss_identity": 0.0004936456680297852,
+          "loss_age": 0.013911011628806591,
+          "loss_perceptual": 0.012391016818583012,
+          "loss_trust": 0.00033709374838508666,
+          "loss_color": 0.005501750390976667,
+          "loss_order": 0.0
+        },
+        {
+          "step": 180,
+          "loss": 0.029587309807538986,
+          "expected_age": [
+            58.83863067626953,
+            74.25450134277344
+          ],
+          "identity_cosine": [
+            0.9877985715866089,
+            0.9837784767150879
+          ],
+          "loss_identity": 2.7489662898005918e-05,
+          "loss_age": 0.012553922832012177,
+          "loss_perceptual": 0.011223315261304379,
+          "loss_trust": 0.00039606160135008395,
+          "loss_color": 0.005386519245803356,
+          "loss_order": 0.0
+        }
+      ],
+      "teacher_age": [
+        57.35441589355469,
+        61.85277557373047
+      ],
+      "final_shared_age": [
+        58.83237075805664,
+        74.25542449951172
+      ],
+      "final_identity": [
+        0.9877743721008301,
+        0.9837549328804016
+      ],
+      "identity_floor": [
+        0.9875482320785522,
+        0.9838472008705139
+      ],
+      "initial_gradient_terms": {
+        "identity": {
+          "norm": 0.048008032143116,
+          "cosine_with_age_gradient": -0.22228847444057465,
+          "descent_cosine_with_sam_age_displacement": -0.15725566446781158
+        },
+        "age": {
+          "norm": 0.7116912603378296,
+          "cosine_with_age_gradient": 0.9999998807907104,
+          "descent_cosine_with_sam_age_displacement": 0.07775953412055969
+        },
+        "perceptual": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "trust": {
+          "norm": 0.0,
+          "cosine_with_age_gradient": 0.0,
+          "descent_cosine_with_sam_age_displacement": 0.0
+        },
+        "color": {
+          "norm": 0.006815467495471239,
+          "cosine_with_age_gradient": -0.11937160044908524,
+          "descent_cosine_with_sam_age_displacement": -0.057363107800483704
+        },
+        "order": {
+          "norm": 0.3650095760822296,
+          "cosine_with_age_gradient": 0.886882483959198,
+          "descent_cosine_with_sam_age_displacement": 0.05154942348599434
+        }
+      }
+    }
+  ],
+  "manual_review": {
+    "method": "Single reviewer, visible routes; selected full faces and native256 crops, not a blinded study.",
+    "cases": [
+      "ffhq_64376",
+      "ffhq_62644",
+      "ffhq_65817",
+      "ffhq_67140",
+      "ffhq_60148",
+      "ffhq_61908"
+    ],
+    "findings": [
+      "Explicit targets improve elderly appearance in some cases but do not resolve smooth reconstruction or etched skin.",
+      "64376 has shared age74.3 but independent age53.1; proxy agreement is not guaranteed.",
+      "60148 and61908 show eye/mouth/identity changes; original fine details in67140 remain simplified."
+    ],
+    "naturalness_improvement_confirmed": false
+  },
+  "decision": {
+    "promotion": false,
+    "default_model_changed": false,
+    "reason": "High-age SFace drop exceeds0.02 in both fixed six and remaining29; native naturalness improvement not confirmed.",
+    "manual_review": {
+      "method": "Single reviewer, visible routes; selected full faces and native256 crops, not a blinded study.",
+      "cases": [
+        "ffhq_64376",
+        "ffhq_62644",
+        "ffhq_65817",
+        "ffhq_67140",
+        "ffhq_60148",
+        "ffhq_61908"
+      ],
+      "findings": [
+        "Explicit targets improve elderly appearance in some cases but do not resolve smooth reconstruction or etched skin.",
+        "64376 has shared age74.3 but independent age53.1; proxy agreement is not guaranteed.",
+        "60148 and61908 show eye/mouth/identity changes; original fine details in67140 remain simplified."
+      ],
+      "naturalness_improvement_confirmed": false
+    },
+    "gallery_note": "35张既有开发回归，非新盲测。前6张比较全部配方，其余29张只确认事前固定方案。明确年龄目标使75岁平均独立外观估龄60.5→66.0，60→75变化不足5岁的样本20→7；但60／75身份相似度.807→.778，未通过保护线，眼嘴／皮肤自然度也未确认改善，不接入上传服务。same／20／40保持原样；页面提供原始及保色输出，估龄不是照片真实年龄。"
+  },
+  "browser_validation": {
+    "url": "http://127.0.0.1:65512/age-objective-review/",
+    "status": 200,
+    "cases": 35,
+    "diagnostic_figures": 6,
+    "confirmation_figures": 4,
+    "age_switch": true,
+    "color_switch": true,
+    "native_regions": [
+      "eye",
+      "cheek",
+      "mouth"
+    ],
+    "download_size": [
+      1024,
+      1024
+    ],
+    "source_equals_target_anchor": true,
+    "source_credit": true,
+    "mobile_width": 390,
+    "overflow": false,
+    "errors": []
+  },
+  "live_api_validation": {
+    "health": {
+      "ready": true,
+      "engine": "SAM / StyleGAN2",
+      "device": "NVIDIA H200",
+      "model": "ft_l1 W+ anchor + original SAM age direction + constrained refinement (experimental)",
+      "native_size": 1024,
+      "version": "1.4.0",
+      "status": "ready",
+      "detail": null,
+      "active_sessions": 0,
+      "session_ttl_seconds": 1800,
+      "numerics": "stable",
+      "features": {
+        "source_color_preservation": true,
+        "raw_model_output": true
+      }
+    },
+    "source_sha256": "481aab21dd8d7a6f394b9f57c57b2bbeb1f9d4f74a35619a81e117c23632ac4b",
+    "repeats": [
+      {
+        "prepare_seconds": 0.5652455100789666,
+        "request_seconds": 17.975457839667797,
+        "reference_age": 25,
+        "meta": {
+          "engine": "SAM / StyleGAN2",
+          "model": "ft_l1 W+ anchor + original SAM age direction + constrained refinement (experimental)",
+          "target_age": 75,
+          "elapsed_seconds": 17.022,
+          "output_kind": "native",
+          "alignment": "sam_ffhq",
+          "color_preservation": {
+            "enabled": true,
+            "applied": true,
+            "method": "source_cheek_lab_v2",
+            "strength": 0.65,
+            "lightness_preserved": true,
+            "note": "按本张原照局部校正色度，保留生成亮度与纹理；原始模型结果单独保留。",
+            "source_cheek_lab": [
+              76.1780014038086,
+              14.515999794006348,
+              20.562000274658203
+            ],
+            "raw_cheek_lab": [
+              74.90799713134766,
+              16.05500030517578,
+              23.5
+            ],
+            "sample_pixels": 762,
+            "reference_cheek_asymmetry": 1.061,
+            "measured_chroma_distance": 3.316,
+            "reason": "corrected",
+            "chroma_offset": [
+              -1.0,
+              -1.909000039100647
+            ],
+            "output_kind": "colour_corrected_1024"
+          },
+          "postprocess_seconds": 0.138,
+          "raw_model_size": 1024
+        },
+        "image_sha256": "94f90a0f3dfe9744acabe1c27fae73fe4e6c5766ac99fab23ec6614060a0e463",
+        "raw_image_sha256": "4d5a2983a0e7bae74a6095f0e26a164221d5f4f7a3d3b91075ef1f035bb62794"
+      },
+      {
+        "prepare_seconds": 0.48698558704927564,
+        "request_seconds": 17.5952158421278,
+        "reference_age": 25,
+        "meta": {
+          "engine": "SAM / StyleGAN2",
+          "model": "ft_l1 W+ anchor + original SAM age direction + constrained refinement (experimental)",
+          "target_age": 75,
+          "elapsed_seconds": 16.697,
+          "output_kind": "native",
+          "alignment": "sam_ffhq",
+          "color_preservation": {
+            "enabled": true,
+            "applied": true,
+            "method": "source_cheek_lab_v2",
+            "strength": 0.65,
+            "lightness_preserved": true,
+            "note": "按本张原照局部校正色度，保留生成亮度与纹理；原始模型结果单独保留。",
+            "source_cheek_lab": [
+              76.1780014038086,
+              14.515999794006348,
+              20.562000274658203
+            ],
+            "raw_cheek_lab": [
+              74.90799713134766,
+              16.05500030517578,
+              23.5
+            ],
+            "sample_pixels": 762,
+            "reference_cheek_asymmetry": 1.061,
+            "measured_chroma_distance": 3.316,
+            "reason": "corrected",
+            "chroma_offset": [
+              -1.0,
+              -1.909000039100647
+            ],
+            "output_kind": "colour_corrected_1024"
+          },
+          "postprocess_seconds": 0.064,
+          "raw_model_size": 1024
+        },
+        "image_sha256": "94f90a0f3dfe9744acabe1c27fae73fe4e6c5766ac99fab23ec6614060a0e463",
+        "raw_image_sha256": "4d5a2983a0e7bae74a6095f0e26a164221d5f4f7a3d3b91075ef1f035bb62794"
+      }
+    ],
+    "other_targets": [
+      {
+        "condition": "same",
+        "target": 25,
+        "request_seconds": 0.8289951789192855,
+        "meta": {
+          "engine": "SAM / StyleGAN2",
+          "model": "ft_l1 W+ anchor + original SAM age direction + constrained refinement (experimental)",
+          "target_age": 25,
+          "elapsed_seconds": 0.033,
+          "output_kind": "native",
+          "alignment": "sam_ffhq",
+          "color_preservation": {
+            "enabled": true,
+            "applied": false,
+            "method": "source_cheek_lab_v2",
+            "strength": 0.65,
+            "lightness_preserved": true,
+            "note": "按本张原照局部校正色度，保留生成亮度与纹理；原始模型结果单独保留。",
+            "source_cheek_lab": [
+              75.71399688720703,
+              14.616999626159668,
+              20.6560001373291
+            ],
+            "raw_cheek_lab": [
+              77.02300262451172,
+              15.656000137329102,
+              22.1560001373291
+            ],
+            "sample_pixels": 786,
+            "reference_cheek_asymmetry": 1.061,
+            "measured_chroma_distance": 1.825,
+            "reason": "already_close"
+          },
+          "postprocess_seconds": 0.013,
+          "raw_model_size": 1024
+        },
+        "image_sha256": "76ab5cb11a3b4159c70640dbd92e3be6d88957efb4a1ce41b72ca452cc53ef01",
+        "raw_image_sha256": "76ab5cb11a3b4159c70640dbd92e3be6d88957efb4a1ce41b72ca452cc53ef01"
+      },
+      {
+        "condition": "20",
+        "target": 20,
+        "request_seconds": 9.719339130911976,
+        "meta": {
+          "engine": "SAM / StyleGAN2",
+          "model": "ft_l1 W+ anchor + original SAM age direction + constrained refinement (experimental)",
+          "target_age": 20,
+          "elapsed_seconds": 8.936,
+          "output_kind": "native",
+          "alignment": "sam_ffhq",
+          "color_preservation": {
+            "enabled": true,
+            "applied": false,
+            "method": "source_cheek_lab_v2",
+            "strength": 0.65,
+            "lightness_preserved": true,
+            "note": "按本张原照局部校正色度，保留生成亮度与纹理；原始模型结果单独保留。",
+            "source_cheek_lab": [
+              75.69599914550781,
+              14.640999794006348,
+              20.6560001373291
+            ],
+            "raw_cheek_lab": [
+              77.0199966430664,
+              15.79699993133545,
+              21.75
+            ],
+            "sample_pixels": 791,
+            "reference_cheek_asymmetry": 1.061,
+            "measured_chroma_distance": 1.592,
+            "reason": "already_close"
+          },
+          "postprocess_seconds": 0.013,
+          "raw_model_size": 1024
+        },
+        "image_sha256": "4d9cc7fcd70c8db86b959827ae003bfb8f2f51dd670751173246d630dd009b68",
+        "raw_image_sha256": "4d9cc7fcd70c8db86b959827ae003bfb8f2f51dd670751173246d630dd009b68"
+      },
+      {
+        "condition": "40",
+        "target": 40,
+        "request_seconds": 9.759978204965591,
+        "meta": {
+          "engine": "SAM / StyleGAN2",
+          "model": "ft_l1 W+ anchor + original SAM age direction + constrained refinement (experimental)",
+          "target_age": 40,
+          "elapsed_seconds": 8.921,
+          "output_kind": "native",
+          "alignment": "sam_ffhq",
+          "color_preservation": {
+            "enabled": true,
+            "applied": false,
+            "method": "source_cheek_lab_v2",
+            "strength": 0.65,
+            "lightness_preserved": true,
+            "note": "按本张原照局部校正色度，保留生成亮度与纹理；原始模型结果单独保留。",
+            "source_cheek_lab": [
+              75.80599975585938,
+              14.593999862670898,
+              20.608999252319336
+            ],
+            "raw_cheek_lab": [
+              76.28800201416016,
+              15.156000137329102,
+              23.2189998626709
+            ],
+            "sample_pixels": 783,
+            "reference_cheek_asymmetry": 1.061,
+            "measured_chroma_distance": 2.669,
+            "reason": "already_close"
+          },
+          "postprocess_seconds": 0.014,
+          "raw_model_size": 1024
+        },
+        "image_sha256": "4b1183733eab785e22167ee21bfa4b0da9bbeadf18fc2f2f238ee72795fa1e28",
+        "raw_image_sha256": "4b1183733eab785e22167ee21bfa4b0da9bbeadf18fc2f2f238ee72795fa1e28"
+      },
+      {
+        "condition": "60",
+        "target": 60,
+        "request_seconds": 9.780233547091484,
+        "meta": {
+          "engine": "SAM / StyleGAN2",
+          "model": "ft_l1 W+ anchor + original SAM age direction + constrained refinement (experimental)",
+          "target_age": 60,
+          "elapsed_seconds": 8.922,
+          "output_kind": "native",
+          "alignment": "sam_ffhq",
+          "color_preservation": {
+            "enabled": true,
+            "applied": true,
+            "method": "source_cheek_lab_v2",
+            "strength": 0.65,
+            "lightness_preserved": true,
+            "note": "按本张原照局部校正色度，保留生成亮度与纹理；原始模型结果单独保留。",
+            "source_cheek_lab": [
+              75.99500274658203,
+              14.562000274658203,
+              20.577999114990234
+            ],
+            "raw_cheek_lab": [
+              74.70700073242188,
+              16.1560001373291,
+              24.812000274658203
+            ],
+            "sample_pixels": 775,
+            "reference_cheek_asymmetry": 1.061,
+            "measured_chroma_distance": 4.524,
+            "reason": "corrected",
+            "chroma_offset": [
+              -1.0360000133514404,
+              -2.752000093460083
+            ],
+            "output_kind": "colour_corrected_1024"
+          },
+          "postprocess_seconds": 0.065,
+          "raw_model_size": 1024
+        },
+        "image_sha256": "f9ad65635e26c4efa429995e3ab5cc4e004b03fc8a5ebfb2138352b31709e73b",
+        "raw_image_sha256": "06c5fd21e7ef9c7b067de28fe1ba63eb3251278b751ff6ebbf0a46bebbdaeb72"
+      }
+    ],
+    "post_delete_status": 410,
+    "raw_png_exact": true,
+    "preserved_png_exact": true,
+    "source_reference_age_exact": true,
+    "passed": true
+  },
+  "live_deployment": {
+    "job_id": "j-1795702367-51407",
+    "name": "face-age-demo-20261126-141246",
+    "run_dir": "/root/face-age-transformation-course-project/deployment/runs/20261126-141246",
+    "image": "registry.gate.yicloud.com.cn/library/pytorch-training-nvidia:2.6.0-py3.10-cuda12.9-h20-ubuntu22.04-v20260710",
+    "code_commit": "9704be7f017638067d7ae9d911fcf077e592d13a",
+    "submitted_at": "2026-11-26T14:12:47.187529+00:00",
+    "max_running_duration": "1h",
+    "quality": "original_delta",
+    "stable_numerics": true
+  },
+  "failed_stable_deployment": {
+    "job_id": "j-1795702128-292750",
+    "phase": "Stopped",
+    "reason": "Inference-mode cache tensors reused in autograd; fixed9704be7; serial restart only."
+  },
+  "final_active_face_age_jobs": [
+    {
+      "job_id": "j-1795702367-51407",
+      "phase": "Running",
+      "gpus": 1
+    }
+  ],
+  "reports_sha256": {
+    "deployment/training-runs/age-objective-20261126-133958/experiment.json": "a9f7a44a6d6dd9a1dfc2bc04991dc9c206ed1548eaff0c37270318ce2b3e5071",
+    "deployment/training-runs/age-objective-20261126-133958/evaluation/report.json": "5c701b6695ba9d04794ecb72db31479de86c53472556ff2a4bb7cfcc4f5e572c",
+    "deployment/training-runs/age-objective-20261126-133958/summary.json": "d637eb6e417e5e097bf3f549bb92464048b02707da0fe99cc3ee081aeab5441e",
+    "deployment/training-runs/age-objective-20261126-133958/independent-age.json": "60170723cd99fa6c8959d928d7cadb27903b0f82d6ee50da22ce662edcc395ca",
+    "deployment/training-runs/age-objective-20261126-133958/artifact-validation.json": "f323be140aff56e42759d040f3f429f497da52eb2c05213cbbf4fcb8491db6a4",
+    "deployment/training-runs/age-objective-20261126-133958/decision.json": "d312e674021f7c13139b2af45d9c3565e6cd13435af34c5cce3152bdc892b70e",
+    "deployment/training-runs/age-objective-20261126-133958/browser-validation.json": "4f20b324cd752c5ad44a9480d479f4d0b5bbc5998fed822dc3639ff56bb50184",
+    "deployment/runs/20261126-141246/stable-api-validation/report.json": "f447828656f613262aa9a82fd4585831646baa40c9aa8466fce7af243ab14ad9"
+  },
+  "gallery": "/age-objective-review/",
+  "promotion": false,
+  "default_model_changed": false,
+  "note": "Previously inspected development regression; independent appearance estimates are not chronological ground truth. Stable API keeps original_delta age objective and Release weights."
+}
