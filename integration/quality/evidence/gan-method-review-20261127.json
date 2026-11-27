@@ -161,6 +161,20 @@
       "cache_path": "deployment/model-review-20261127/mytm-readme.raw",
       "bytes": 8528,
       "sha256": "b1ba966bb9218a58863cc13d1f5cfab129f9844824daa8fc7859603d25f10a93"
+    },
+    {
+      "name": "m2aging-readme",
+      "url": "https://raw.githubusercontent.com/Mingyuan30/M2aging/main/README.md",
+      "cache_path": "deployment/model-review-20261127/m2aging-readme.raw",
+      "bytes": 271,
+      "sha256": "97059e1f69f6355a957700bc432903fcb028ed022138bd227b16f7b7d4b31a7a"
+    },
+    {
+      "name": "gmba-readme",
+      "url": "https://raw.githubusercontent.com/ku-milab/GMBA/main/README.md",
+      "cache_path": "deployment/model-review-20261127/gmba-readme.raw",
+      "bytes": 3257,
+      "sha256": "cb7c3e2da9cbd6030e20e8644e730274c8cbe183bcc5baa18a26809bdbc2ffd8"
     }
   ],
   "findings": {
@@ -189,7 +203,8 @@
       "code_license": "MIT",
       "checkpoint_link_in_readme": true,
       "checkpoint_view_probe": "HTTP 404",
-      "checkpoint_acquired": false
+      "checkpoint_acquired": false,
+      "checkpoint_direct_download_probe": "HTTP 404 for usercontent and uc endpoints too; no weights downloaded"
     },
     "ra_gan_2025": {
       "stage": "preprint; README states journal revision",
@@ -219,6 +234,17 @@
       "file": "pretrained_models/sfe_editor_light.pt",
       "bytes": 649325957,
       "publisher_lfs_sha256": "ced3e79813ec6ff1418404576cc43e3c92849ab124ec87cd72be42dcb25311ea"
+    },
+    "m2aging_2024": {
+      "official_readme_verified": true,
+      "readme_states": "model code only; remaining code release after paper acceptance",
+      "pretrained_weights_verified": false
+    },
+    "gmba_2023": {
+      "official_readme_verified": true,
+      "readme_documents_training": true,
+      "pretrained_weights_verified": false,
+      "license_text_verified": false
     }
   },
   "recommendation": "Keep SAM as fixed age-conditioned baseline; prioritize detail-preserving feature editing pilot, then age-conditioned joint feature/latent control if effective aging and identity/texture benefits are verified; do not relabel strength as years or claim Asian senior superiority from papers."
