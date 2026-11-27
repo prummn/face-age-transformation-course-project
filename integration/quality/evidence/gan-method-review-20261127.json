@@ -1,0 +1,225 @@
+{
+  "date": "2026-11-27",
+  "scope": "Literature, official code, interface, and checkpoint metadata audit; no new model inference or training",
+  "active_gpu_jobs_created": 0,
+  "new_model_files_downloaded": 0,
+  "online_model_changed": false,
+  "repo_heads": [
+    {
+      "name": "StyleFeatureEditor",
+      "url": "https://github.com/ControlGenAI/StyleFeatureEditor.git",
+      "returncode": 0,
+      "sha": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+      "error": ""
+    },
+    {
+      "name": "MyTimeMachine",
+      "url": "https://github.com/luchaoqi/mytimemachine.git",
+      "returncode": 0,
+      "sha": "ed6111fe7d5d1424215d6cad77b30c898b9b9f86",
+      "error": ""
+    },
+    {
+      "name": "AgeTransGAN",
+      "url": "https://github.com/AvLab-CV/AgeTransGAN.git",
+      "returncode": 0,
+      "sha": "5d1f8354d903f8858ea9da639c0eac80180cfde2",
+      "error": ""
+    },
+    {
+      "name": "RA-GAN",
+      "url": "https://github.com/bardiya2254kariminia/An-Age-Transformation-whitout-racial-bias-for-Kinship-verification.git",
+      "returncode": 0,
+      "sha": "350abb648d4c6f0b14f6a69a795e587d91137a27",
+      "error": ""
+    },
+    {
+      "name": "HECL",
+      "sha": "6a771d7ad96497c557101fc20d1e5371b16fd4ae"
+    },
+    {
+      "name": "HCFace",
+      "sha": "7764f69b288f42e2da7c3fa9f871bdc61d739e81"
+    }
+  ],
+  "sources": [
+    {
+      "name": "course",
+      "url": "repository",
+      "cache_path": "需求说明资料/02_课程与项目要求/whole_tasks.txt",
+      "bytes": 291,
+      "sha256": "56010f3a1258a8d9994bd6fc8590c9b4f59c99bd7c51642e2d48bddeeead405b"
+    },
+    {
+      "name": "plam-aff-2026-crossref",
+      "url": "https://api.crossref.org/works/10.1109/TIP.2026.3687069",
+      "cache_path": "deployment/model-review-20261127/2026-shape-texture.raw",
+      "bytes": 9224,
+      "sha256": "9b1b6d9578ad2ec994ccfa1ba86c8f0e31d01d830b937846b7b7c91b40d45ff2"
+    },
+    {
+      "name": "hcface-2026-crossref",
+      "url": "https://api.crossref.org/works/10.1109/TIP.2026.3689413",
+      "cache_path": "deployment/model-review-20261127/2026-causal.raw",
+      "bytes": 6221,
+      "sha256": "e4e3858034f349ebaa411c85080126b4050112c1cd07cdc652402f1e587e444e"
+    },
+    {
+      "name": "ncbi-primary-abstracts",
+      "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=42055992,42096394&retmode=xml",
+      "cache_path": "deployment/model-review-20261127/ncbi-abstracts.raw",
+      "bytes": 8993,
+      "sha256": "25a92cce9a8c9e8c3b67e27c00620547995a48171941a3a1628682c1b9f0a4fc"
+    },
+    {
+      "name": "sfe-readme",
+      "url": "https://raw.githubusercontent.com/ControlGenAI/StyleFeatureEditor/main/README.md",
+      "cache_path": "deployment/model-review-20261127/sfe-current-readme.raw",
+      "bytes": 22218,
+      "sha256": "6db3e4b7b9504b23ee2cf4467209dbc4e38a3d508d796b26300df8601a3e5d04"
+    },
+    {
+      "name": "sfe-directions",
+      "url": "https://raw.githubusercontent.com/ControlGenAI/StyleFeatureEditor/main/available_directions.txt",
+      "cache_path": "deployment/model-review-20261127/sfe-directions.raw",
+      "bytes": 3985,
+      "sha256": "a4b16bf7b1f0863124fb2dd217ffe35653cc872791569d5f4183602057bd276d"
+    },
+    {
+      "name": "sfe-license",
+      "url": "https://raw.githubusercontent.com/ControlGenAI/StyleFeatureEditor/main/LICENSE",
+      "cache_path": "deployment/model-review-20261127/sfe-current-license.raw",
+      "bytes": 1106,
+      "sha256": "8e56d0978e2f499d0b7f2741f452c8cc94658cb530dcb6916e6e90b13629e43d"
+    },
+    {
+      "name": "sfe-model-metadata",
+      "url": "https://hf-mirror.com/api/models/AIRI-Institute/StyleFeatureEditor",
+      "cache_path": "deployment/model-review-20261127/sfe-hf-meta-mirror.raw",
+      "bytes": 3053,
+      "sha256": "eda5d9e94bc2d1ea563116e820e183ff192d3dc81fda94c829416768cefa57cb"
+    },
+    {
+      "name": "sfe-model-tree",
+      "url": "https://hf-mirror.com/api/models/AIRI-Institute/StyleFeatureEditor/tree/main?recursive=true&expand=false",
+      "cache_path": "deployment/model-review-20261127/sfe-hf-mirror.raw",
+      "bytes": 14086,
+      "sha256": "a5c852614eb3487a00e84d7dc321330dd94d8bde016f678e8c04dc67c1ac1707"
+    },
+    {
+      "name": "hecl-readme",
+      "url": "https://raw.githubusercontent.com/Gloriel621/HECL/main/README.md",
+      "cache_path": "deployment/model-review-20261127/hecl-readme.raw",
+      "bytes": 2697,
+      "sha256": "7b330e0865a438551dae4f2548cdc780dd205fca5cca14f065ff7b9ab52ad869"
+    },
+    {
+      "name": "hecl-options",
+      "url": "https://raw.githubusercontent.com/Gloriel621/HECL/main/options/base_options.py",
+      "cache_path": "deployment/model-review-20261127/hecl-options.raw",
+      "bytes": 7157,
+      "sha256": "be386ce0f5a452582f53b4c0e1205b42c784a7f425d470def2ff5bbc116c4a58"
+    },
+    {
+      "name": "hecl-publication",
+      "url": "https://api.crossref.org/works/10.1145/3672608.3707795",
+      "cache_path": "deployment/model-review-20261127/hecl-crossref.raw",
+      "bytes": 14043,
+      "sha256": "861cb9f3acd6c8f4de866f954f557d4d8b5a8be46f50a12665505b174bdbf369"
+    },
+    {
+      "name": "hcface-readme",
+      "url": "https://raw.githubusercontent.com/SE-hash/HCFace/main/README.md",
+      "cache_path": "deployment/model-review-20261127/hcface-readme.raw",
+      "bytes": 3304,
+      "sha256": "93f58eb81c73a487e6122803272becbdf5b4b187f19ed5a8c4afb4ab9acaa356"
+    },
+    {
+      "name": "hcface-training-main",
+      "url": "https://raw.githubusercontent.com/SE-hash/HCFace/main/main.py",
+      "cache_path": "deployment/model-review-20261127/hcface-main.raw",
+      "bytes": 1298,
+      "sha256": "0a9ce7ae03187442c41631fcf4afd9c3d8a256e075680696438e054e8f4d883c"
+    },
+    {
+      "name": "hcface-source-tree",
+      "url": "https://api.github.com/repos/SE-hash/HCFace/git/trees/main?recursive=1",
+      "cache_path": "deployment/model-review-20261127/hcface-main-tree.raw",
+      "bytes": 6038,
+      "sha256": "01051b63c0acbc7943a57fbb40f987dcda07f77521812eb135bb12e75df7d41e"
+    },
+    {
+      "name": "ra-gan-readme",
+      "url": "https://raw.githubusercontent.com/bardiya2254kariminia/An-Age-Transformation-whitout-racial-bias-for-Kinship-verification/main/README.md",
+      "cache_path": "deployment/model-review-20261127/ra-gan-readme.raw",
+      "bytes": 10236,
+      "sha256": "1b5533b59c7d456af11cf039acfe2d9d1d15c12227c2829a111dd77b2e79b389"
+    },
+    {
+      "name": "mytm-readme",
+      "url": "https://raw.githubusercontent.com/luchaoqi/mytimemachine/main/README.md",
+      "cache_path": "deployment/model-review-20261127/mytm-readme.raw",
+      "bytes": 8528,
+      "sha256": "b1ba966bb9218a58863cc13d1f5cfab129f9844824daa8fc7859603d25f10a93"
+    }
+  ],
+  "findings": {
+    "plam_aff_2026": {
+      "publication_verified": [
+        "Crossref",
+        "NCBI PubMed XML"
+      ],
+      "description": "Continuous age modulation via normalizing flow and age/content attentional feature fusion in StyleGAN",
+      "fulltext_verified": false,
+      "official_code_verified": false,
+      "checkpoint_verified": false,
+      "numerical_api_verified": false,
+      "asian_senior_quality_verified": false
+    },
+    "hcface_2026": {
+      "official_source_verified": true,
+      "example_image_size": 112,
+      "example_age_groups": 7,
+      "official_checkpoint_located": false,
+      "license_text_located": false
+    },
+    "hecl_2025": {
+      "venue": "ACM SAC 2025",
+      "default_image_size": 256,
+      "code_license": "MIT",
+      "checkpoint_link_in_readme": true,
+      "checkpoint_view_probe": "HTTP 404",
+      "checkpoint_acquired": false
+    },
+    "ra_gan_2025": {
+      "stage": "preprint; README states journal revision",
+      "readme_core_checkpoint_link": "empty placeholder",
+      "source_public_checkpoint_share_present": true,
+      "public_share_probe": "TLS timeout",
+      "checkpoint_acquired": false,
+      "training_images": "UTKFace with GFPGAN restoration according to official README",
+      "root_license_text_located": false,
+      "numeric_age_channel_in_source": true
+    },
+    "mytm_2025": {
+      "venue": "SIGGRAPH/TOG 2025",
+      "personal_images_about": 50,
+      "age_conditioned": true,
+      "sam_prior": true,
+      "code_license": "MIT",
+      "paper_reported_training": "10,000 iterations, about 4 hours on one A6000 per person; not measured here"
+    },
+    "sfe_2024": {
+      "venue": "CVPR 2024",
+      "code_license": "MIT",
+      "hf_revision": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+      "age_api": "InterFaceGAN direction with edited_power; not target_age",
+      "checkpoint_metadata_verified": true,
+      "checkpoint_acquired": false,
+      "file": "pretrained_models/sfe_editor_light.pt",
+      "bytes": 649325957,
+      "publisher_lfs_sha256": "ced3e79813ec6ff1418404576cc43e3c92849ab124ec87cd72be42dcb25311ea"
+    }
+  },
+  "recommendation": "Keep SAM as fixed age-conditioned baseline; prioritize detail-preserving feature editing pilot, then age-conditioned joint feature/latent control if effective aging and identity/texture benefits are verified; do not relabel strength as years or claim Asian senior superiority from papers."
+}
