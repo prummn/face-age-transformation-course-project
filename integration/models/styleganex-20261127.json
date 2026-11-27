@@ -1,0 +1,12 @@
+{
+  "repository": "https://github.com/williamyang1991/StyleGANEX",
+  "code_commit": "e593d16006f64b1e105c04eeb4a7cc149c1aca98",
+  "license": "S-Lab License 1.0, non-commercial; retain upstream LICENSE.md",
+  "name": "styleganex_edit_age.pt",
+  "bytes": 1475996775,
+  "sha256": "9577fcad114b207511eb96b0071caa6735fa07d80aa5fcca73dc45d7b00e20f3",
+  "source_commit": "afcf234cdbddc9f9205ab1a71c80efe411cd760f",
+  "url": "https://huggingface.co/PKUWilliamYang/StyleGANEX/resolve/afcf234cdbddc9f9205ab1a71c80efe411cd760f/pretrained_models/styleganex_edit_age.pt?download=true",
+  "hash_source": "Official author's Hugging Face repository LFS object ID; metadata cached locally",
+  "usage": "Research comparison only. Scale factor is editing strength, not chronological target age. No automatic backend activation."
+}
