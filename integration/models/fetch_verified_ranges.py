@@ -19,9 +19,14 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('manifest', type=Path); p.add_argument('directory', type=Path)
     p.add_argument('--workers', type=int, default=8)
+    p.add_argument('--hf-mirror', action='store_true', help='Use hf-mirror.com transport; original pinned SHA256 still required')
     args = p.parse_args()
     if not 1 <= args.workers <= 8: p.error('workers must be1..8')
     spec = json.loads(args.manifest.read_text()); name = spec['name']
+    url = spec['url']
+    if args.hf_mirror:
+        if not url.startswith('https://huggingface.co/'): p.error('Mirror option requires a Hugging Face source')
+        url = url.replace('https://huggingface.co/', 'https://hf-mirror.com/', 1)
     if Path(name).name != name: raise ValueError('Expected a plain filename')
     args.directory.mkdir(parents=True, exist_ok=True); target = args.directory/name
     if target.exists():
@@ -48,7 +53,7 @@ def main():
             if offset > size: raise ValueError('Oversized cached range')
             first, last = start+offset, start+size-1
             try:
-                req = Request(spec['url'], headers={'Range': f'bytes={first}-{last}',
+                req = Request(url, headers={'Range': f'bytes={first}-{last}',
                     'User-Agent': 'face-age-verified-model-fetch'})
                 with urlopen(req, timeout=40) as response:
                     if response.status != 206 or response.headers.get('Content-Range') != f'bytes {first}-{last}/{spec["bytes"]}':
@@ -82,7 +87,8 @@ def main():
         raise ValueError('Final model SHA256/size mismatch; preserving ranges for diagnosis')
     assembled.replace(target)
     receipt = dict(path=str(target), bytes=spec['bytes'], sha256=h.hexdigest(),
-        source_commit=spec['source_commit'], manifest_sha256=digest(args.manifest), workers=args.workers)
+        source_commit=spec['source_commit'], manifest_sha256=digest(args.manifest), workers=args.workers,
+        transport_url=url)
     (args.directory/(name+'.verified.json')).write_text(json.dumps(receipt, indent=2)+'\n')
     print('MODEL_SHA256_VERIFIED', target, flush=True)
 

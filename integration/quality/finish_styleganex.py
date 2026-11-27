@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 PAGE = '''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>StyleGANEX 与 SAM 同图对照</title>
 <style>*{box-sizing:border-box}body{margin:0;background:#f1f3ef;color:#24352c;font:16px/1.6 system-ui}main{max-width:1500px;margin:auto;padding:24px}h1{font-size:27px}.controls{display:flex;gap:12px;flex-wrap:wrap}label{display:grid}select{padding:9px;font:inherit;max-width:100%}#grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:22px}figure{margin:0;padding:9px;background:white;min-width:0}img{display:block;width:100%;aspect-ratio:1;object-fit:contain}a{color:#225b47}#note{padding:14px;background:#e0e9dd}.metric,small{font-size:13px}#credit{overflow-wrap:anywhere}@media(max-width:700px){main{padding:12px}#grid{grid-template-columns:1fr}}</style>
-<main><h1>StyleGANEX 与 SAM 同图对照</h1><p id="note">固定8张开发图，原始结果全量保留。SAM按目标年龄生成；StyleGANEX按编辑强度生成，二者控制参数不等价。强度0是该编辑模型的重建，正负方向按实际结果判断；1.5／2为超过官方训练脚本强度范围的压力观察。尚未校准数值年龄，也未替换上传应用。</p><p><a href="/">应用</a> · <a href="/age-identity-budget-review/">上一项身份预算实验</a></p>
+<main><h1>StyleGANEX 与 SAM 同图对照</h1><p id="note">固定8张开发图，原始结果全量保留。SAM是现有原SAM差值＋跨龄约束留档，按目标年龄生成；StyleGANEX按编辑强度生成，二者控制参数不等价。强度0是该编辑模型的重建，正负方向按实际结果判断；1.5／2为超过官方训练脚本强度范围的压力观察。尚未校准数值年龄，也未替换上传应用。</p><p><a href="/">应用</a> · <a href="/age-identity-budget-review/">上一项身份预算实验</a></p>
 <div class="controls"><label>照片<select id="subject"></select></label><label>SAM目标年龄<select id="sam"><option value="same">同龄重建</option><option>20</option><option>40</option><option>60</option><option selected>75</option></select></label><label>StyleGANEX编辑强度<select id="scale"></select></label><label>区域<select id="region"><option value="full">全脸预览</option><option value="eye">原生眼周</option><option value="cheek">原生脸颊</option><option value="mouth">原生口周</option></select></label><label>颜色<select id="color"><option value="raw">原始模型输出</option><option value="color">按原照保色</option></select></label></div><p id="detail"></p><div id="grid"></div><p id="credit"></p><small>全脸预览缩至512显示；局部直接裁自1024PNG，下载始终为完整1024。外观估龄是独立模型诊断，不是照片真实年龄或未来容貌。8张均为看过的开发图，没有独立盲评。</small></main>
 <script id="data" type="application/json">__DATA__</script><script>
 const data=JSON.parse(document.getElementById('data').textContent),$=x=>document.getElementById(x);for(const r of data.cases)$('subject').add(new Option(r.name,r.name));for(const s of data.scales)$('scale').add(new Option(String(s),'scale_'+s));$('scale').value='scale_1';
@@ -65,13 +65,19 @@ def main():
     sources = {r['name']:predict(run/'evaluation'/r['name']/'reference.png') for r in report['records']}
     groups = defaultdict(list)
     for item in report['outputs']: groups[item['route'],item['condition']].append(item)
+    reconstruction = {(item['name'],item['route']):item for item in report['outputs']
+                      if item['condition'] in ['same','scale_0']}
     def mean(values):
         v = [x for x in values if x is not None]; return statistics.mean(v) if v else None
     summary = {}
     for (route,condition),items in groups.items():
         summary[route+'/'+condition] = dict(cases=len(items),identity=mean(r['source_cosine'] for r in items),
             independent_age=mean(ages[r['native']] for r in items),missing_sface=sum(not r['detected'] for r in items),
-            missing_age=sum(ages[r['native']] is None for r in items),reconstruction_l1=mean(r['reconstruction_l1'] for r in items))
+            missing_age=sum(ages[r['native']] is None for r in items),reconstruction_l1=mean(r['reconstruction_l1'] for r in items),
+            age_change_from_reconstruction=mean(ages[r['native']]-ages[reconstruction[r['name'],route]['native']]
+                for r in items if ages[r['native']] is not None and ages[reconstruction[r['name'],route]['native']] is not None),
+            identity_change_from_reconstruction=mean(r['source_cosine']-reconstruction[r['name'],route]['source_cosine']
+                for r in items if r['source_cosine'] is not None and reconstruction[r['name'],route]['source_cosine'] is not None))
     write_json(run/'summary.json',dict(groups=summary,independent_ages=ages,source_ages=sources,
         promotion=False,visual_review_pending=True,targets_not_calibrated=True,
         note='Fixed strength scan, not chronological-age accuracy. Eight inspected development cases only.'))

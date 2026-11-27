@@ -1,0 +1,371 @@
+{
+  "run": "styleganex-20261127-081819",
+  "job": {
+    "job_id": "j-1795768370-935438",
+    "name": "face-age-styleganex-20261127-081819",
+    "run_dir": "deployment/training-runs/styleganex-20261127-081819",
+    "gpus": 1
+  },
+  "job_phase": "Succeeded",
+  "gpus": 1,
+  "code_commit": "758b97e793aa7c8612b6d2deb06cfa161f6905f3",
+  "upstream": {
+    "repository": "https://github.com/williamyang1991/StyleGANEX",
+    "code_commit": "e593d16006f64b1e105c04eeb4a7cc149c1aca98",
+    "license": "S-Lab License 1.0, non-commercial; retain upstream LICENSE.md",
+    "name": "styleganex_edit_age.pt",
+    "bytes": 1475996775,
+    "sha256": "9577fcad114b207511eb96b0071caa6735fa07d80aa5fcca73dc45d7b00e20f3",
+    "source_commit": "afcf234cdbddc9f9205ab1a71c80efe411cd760f",
+    "url": "https://huggingface.co/PKUWilliamYang/StyleGANEX/resolve/afcf234cdbddc9f9205ab1a71c80efe411cd760f/pretrained_models/styleganex_edit_age.pt?download=true",
+    "hash_source": "Official author's Hugging Face repository LFS object ID; metadata cached locally",
+    "usage": "Research comparison only. Scale factor is editing strength, not chronological target age. No automatic backend activation."
+  },
+  "download": {
+    "path": "deployment/gan-models/styleganex/styleganex_edit_age.pt",
+    "bytes": 1475996775,
+    "sha256": "9577fcad114b207511eb96b0071caa6735fa07d80aa5fcca73dc45d7b00e20f3",
+    "source_commit": "afcf234cdbddc9f9205ab1a71c80efe411cd760f",
+    "manifest_sha256": "73c520af00a035b018240412089d14d1743f5e8b2dabc577da563a162c402b07",
+    "workers": 4,
+    "transport_url": "https://hf-mirror.com/PKUWilliamYang/StyleGANEX/resolve/afcf234cdbddc9f9205ab1a71c80efe411cd760f/pretrained_models/styleganex_edit_age.pt?download=true"
+  },
+  "device": {
+    "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+    "torch": "2.6.0+cu124",
+    "cuda": "12.4",
+    "gpu": "NVIDIA H200",
+    "device_count": 1,
+    "memory_bytes": 150393585664
+  },
+  "checkpoint": {
+    "strict_state_loading": true,
+    "editing_w_shape": [
+      2,
+      18,
+      512
+    ]
+  },
+  "direction_diagnostic": {
+    "shape": [
+      2,
+      18,
+      512
+    ],
+    "norms": [
+      5.809474945068359,
+      5.809474945068359
+    ],
+    "direction_cosine": -1.0,
+    "negative_pair_max_error": 0.0,
+    "nonzero_layers": [
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896,
+        1.5000001192092896
+      ]
+    ]
+  },
+  "scales": [
+    -1.0,
+    -0.5,
+    0.0,
+    0.5,
+    1.0,
+    1.5,
+    2.0
+  ],
+  "groups": {
+    "sam_baseline/same": {
+      "cases": 8,
+      "identity": 0.8538442254066467,
+      "independent_age": 45.32754850387573,
+      "missing_sface": 0,
+      "missing_age": 0,
+      "reconstruction_l1": 15.615262866020203,
+      "age_change_from_reconstruction": 0.0,
+      "identity_change_from_reconstruction": 0.0
+    },
+    "sam_baseline/20": {
+      "cases": 8,
+      "identity": 0.8207802549004555,
+      "independent_age": 33.20786762237549,
+      "missing_sface": 0,
+      "missing_age": 0,
+      "reconstruction_l1": null,
+      "age_change_from_reconstruction": -12.119680881500244,
+      "identity_change_from_reconstruction": -0.033063970506191254
+    },
+    "sam_baseline/40": {
+      "cases": 8,
+      "identity": 0.8338335901498795,
+      "independent_age": 42.39900040626526,
+      "missing_sface": 0,
+      "missing_age": 0,
+      "reconstruction_l1": null,
+      "age_change_from_reconstruction": -2.9285480976104736,
+      "identity_change_from_reconstruction": -0.020010635256767273
+    },
+    "sam_baseline/60": {
+      "cases": 8,
+      "identity": 0.8269695565104485,
+      "independent_age": 53.217369079589844,
+      "missing_sface": 0,
+      "missing_age": 0,
+      "reconstruction_l1": null,
+      "age_change_from_reconstruction": 7.889820575714111,
+      "identity_change_from_reconstruction": -0.026874668896198273
+    },
+    "sam_baseline/75": {
+      "cases": 8,
+      "identity": 0.8138645961880684,
+      "independent_age": 60.103028297424316,
+      "missing_sface": 0,
+      "missing_age": 0,
+      "reconstruction_l1": null,
+      "age_change_from_reconstruction": 14.775479793548584,
+      "identity_change_from_reconstruction": -0.03997962921857834
+    },
+    "styleganex_age/scale_-1": {
+      "cases": 8,
+      "identity": 0.9504267200827599,
+      "independent_age": 42.944440841674805,
+      "missing_sface": 0,
+      "missing_age": 0,
+      "reconstruction_l1": null,
+      "age_change_from_reconstruction": -5.656555652618408,
+      "identity_change_from_reconstruction": -0.03885827958583832
+    },
+    "styleganex_age/scale_-0.5": {
+      "cases": 8,
+      "identity": 0.979320578277111,
+      "independent_age": 46.14530801773071,
+      "missing_sface": 0,
+      "missing_age": 0,
+      "reconstruction_l1": null,
+      "age_change_from_reconstruction": -2.4556884765625,
+      "identity_change_from_reconstruction": -0.009964421391487122
+    },
+    "styleganex_age/scale_0": {
+      "cases": 8,
+      "identity": 0.9892849996685982,
+      "independent_age": 48.60099649429321,
+      "missing_sface": 0,
+      "missing_age": 0,
+      "reconstruction_l1": 5.376975377400716,
+      "age_change_from_reconstruction": 0.0,
+      "identity_change_from_reconstruction": 0.0
+    },
+    "styleganex_age/scale_0.5": {
+      "cases": 8,
+      "identity": 0.9824825376272202,
+      "independent_age": 50.51532697677612,
+      "missing_sface": 0,
+      "missing_age": 0,
+      "reconstruction_l1": null,
+      "age_change_from_reconstruction": 1.9143304824829102,
+      "identity_change_from_reconstruction": -0.006802462041378021
+    },
+    "styleganex_age/scale_1": {
+      "cases": 8,
+      "identity": 0.9657611101865768,
+      "independent_age": 52.344499826431274,
+      "missing_sface": 0,
+      "missing_age": 0,
+      "reconstruction_l1": null,
+      "age_change_from_reconstruction": 3.7435033321380615,
+      "identity_change_from_reconstruction": -0.023523889482021332
+    },
+    "styleganex_age/scale_1.5": {
+      "cases": 8,
+      "identity": 0.9436109960079193,
+      "independent_age": 54.06751608848572,
+      "missing_sface": 0,
+      "missing_age": 0,
+      "reconstruction_l1": null,
+      "age_change_from_reconstruction": 5.466519594192505,
+      "identity_change_from_reconstruction": -0.045674003660678864
+    },
+    "styleganex_age/scale_2": {
+      "cases": 8,
+      "identity": 0.9204077944159508,
+      "independent_age": 55.38450217247009,
+      "missing_sface": 0,
+      "missing_age": 0,
+      "reconstruction_l1": null,
+      "age_change_from_reconstruction": 6.78350567817688,
+      "identity_change_from_reconstruction": -0.0688772052526474
+    }
+  },
+  "case_results": [
+    {
+      "name": "ffhq_64376",
+      "sam_same_identity": 0.8754402995109558,
+      "ex_zero_identity": 0.9802979230880737,
+      "ex_one_identity": 0.9573773741722107,
+      "identity_reconstruction_delta": 0.10485762357711792,
+      "ex_one_independent_age_shift": 3.529510498046875
+    },
+    {
+      "name": "ffhq_61908",
+      "sam_same_identity": 0.8302294015884399,
+      "ex_zero_identity": 0.988493800163269,
+      "ex_one_identity": 0.9663828611373901,
+      "identity_reconstruction_delta": 0.1582643985748291,
+      "ex_one_independent_age_shift": 5.753410339355469
+    },
+    {
+      "name": "ffhq_62644",
+      "sam_same_identity": 0.8016606569290161,
+      "ex_zero_identity": 0.9912400841712952,
+      "ex_one_identity": 0.9725327491760254,
+      "identity_reconstruction_delta": 0.18957942724227905,
+      "ex_one_independent_age_shift": 2.1612625122070312
+    },
+    {
+      "name": "ffhq_64919",
+      "sam_same_identity": 0.8598170280456543,
+      "ex_zero_identity": 0.9891307353973389,
+      "ex_one_identity": 0.9530128240585327,
+      "identity_reconstruction_delta": 0.12931370735168457,
+      "ex_one_independent_age_shift": 7.331306457519531
+    },
+    {
+      "name": "ffhq_65817",
+      "sam_same_identity": 0.8235865235328674,
+      "ex_zero_identity": 0.9893059134483337,
+      "ex_one_identity": 0.9733408689498901,
+      "identity_reconstruction_delta": 0.1657193899154663,
+      "ex_one_independent_age_shift": 1.9313793182373047
+    },
+    {
+      "name": "ffhq_67140",
+      "sam_same_identity": 0.9268753528594971,
+      "ex_zero_identity": 0.9951517581939697,
+      "ex_one_identity": 0.9717645049095154,
+      "identity_reconstruction_delta": 0.06827640533447266,
+      "ex_one_independent_age_shift": 3.8323593139648438
+    },
+    {
+      "name": "ffhq_60764",
+      "sam_same_identity": 0.8865731358528137,
+      "ex_zero_identity": 0.9907351136207581,
+      "ex_one_identity": 0.9655601382255554,
+      "identity_reconstruction_delta": 0.10416197776794434,
+      "ex_one_independent_age_shift": 5.190116882324219
+    },
+    {
+      "name": "ffhq_68335",
+      "sam_same_identity": 0.8265714049339294,
+      "ex_zero_identity": 0.9899246692657471,
+      "ex_one_identity": 0.9661175608634949,
+      "identity_reconstruction_delta": 0.16335326433181763,
+      "ex_one_independent_age_shift": 0.21868133544921875
+    }
+  ],
+  "artifacts": {
+    "raw": 96,
+    "color": 96,
+    "native_size": [
+      1024,
+      1024
+    ],
+    "all_decodable": true,
+    "raw_sha256_verified": true,
+    "model_frozen": true,
+    "repeatable": true,
+    "same_aligned_input_pixels": true
+  },
+  "frozen_model": {
+    "before": "7bfa6b1872cdd340b05effe06483108dc31ca4200d8863b62dab0af8c31831fa",
+    "after": "7bfa6b1872cdd340b05effe06483108dc31ca4200d8863b62dab0af8c31831fa",
+    "equal": true
+  },
+  "repeatability": {
+    "case": "ffhq_64376",
+    "scale": 1.0,
+    "raw_pixels_equal": true
+  },
+  "browser": {
+    "url": "http://127.0.0.1:65512/age-styleganex-review/",
+    "status": 200,
+    "cases": 8,
+    "strengths": 7,
+    "all_strength_switches": true,
+    "sam_age_switch": true,
+    "color_switch": true,
+    "native_crops": true,
+    "native_download": [
+      1024,
+      1024
+    ],
+    "mobile_width": 390,
+    "overflow": false,
+    "errors": []
+  },
+  "timing": {
+    "worker_start_utc": "2026-11-27T08:32:58Z",
+    "worker_end_utc": "2026-11-27T08:34:12Z",
+    "worker_seconds": 74,
+    "worker_python_seconds": 62.07335288450122,
+    "cold_setup_seconds": 6.142179191112518,
+    "forward_seconds_sum": 8.198910193517804,
+    "forward_seconds_mean": 0.1464091105985322,
+    "torch_peak_allocated_bytes": 2122426368
+  },
+  "visual_review": "All8 full-face source/SAM/EX comparisons; unscaled256 eye/mouth crops on61908 and60764; one reviewer with visible route labels, not a blind rating.",
+  "decision": "Promising source-reconstruction candidate; insufficient numerical-age control and weak default-strength aging, no live replacement.",
+  "promotion": false,
+  "default_model_changed": false,
+  "training": false,
+  "fresh41_consumed": false,
+  "limitations": [
+    "Previously inspected FFHQ development images may overlap pretrained encoder/generator data; no population generalization claim.",
+    "SAM target ages and EX editing strengths differ, so cross-method identity at SAM75 versus EX1 is not an aging-matched win.",
+    "Only zero-strength reconstruction comparisons directly compare the shared source-reconstruction task.",
+    "Independent appearance age, not chronological accuracy.1.5/2 stress strengths exceed the official training-script maximum1.25.",
+    "No live application replacement or new universal training checkpoint."
+  ],
+  "source_hashes": {
+    "deployment/training-runs/styleganex-20261127-081819/experiment.json": "b8485cfba0cf998709db18b731530486435bd12f405321c3aefaba195a6f8019",
+    "deployment/training-runs/styleganex-20261127-081819/evaluation/report.json": "e3f6b8578e22b72628e738886bc4f1e7f01d6b75b5d4a6bc9bc5c80c51c94289",
+    "deployment/training-runs/styleganex-20261127-081819/summary.json": "f73798afcebd70baa857b47cd4d2dca905f1a48b1cd5a7b5caa78f4b18c309a6",
+    "deployment/StyleGANEX/LICENSE.md": "c5cdad6be69f31800b6e6c1a19869f2cad0eebaa3cfb12f1f20acb8e063ab77d"
+  },
+  "active_project_gpu_jobs_at_end": 0
+}
