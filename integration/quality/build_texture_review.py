@@ -55,6 +55,7 @@ def main():
     labels.update(accepted_baseline='历史原SAM差值＋约束留档',teacher_control='同预算旧teacher对照',
                   target_age='明确目标年龄',target_age_order='目标年龄＋年龄顺序',
                   target_age_order_floor='目标年龄＋顺序＋身份下限')
+    labels.update(warm_soft_budget='现有结果起点＋软身份惩罚',hard_identity_budget='现有结果起点＋执行身份预算')
     if r.get('baseline_route')=='original_delta_constrained':labels['wplus_base']='原SAM差值＋约束（当前候选）'
     data=dict(cases=cases,note=decision['gallery_note'],labels=labels)
     page=PAGE.replace('高清纹理训练对照',a.title or r.get('review_title','高清纹理训练对照'))
