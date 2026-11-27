@@ -1,0 +1,13 @@
+{
+  "name": "ffhq_10group_910k.pt",
+  "bytes": 1287079078,
+  "sha256": "4da9b623f4879d1d1ed614c1fa834dfc8205b8cbc9ec3ac5bf0730dfa361f9ef",
+  "code_commit": "5d1f8354d903f8858ea9da639c0eac80180cfde2",
+  "local_path": "deployment/gan-models/ffhq_10group_910k.pt",
+  "source": "https://drive.google.com/file/d/1a3GXTGjch9rl-_JRiIfM5cbM1jCPpQHY/view",
+  "hash_source": "Local complete SHA256; publisher digest unavailable. Range size and full file size verified, model strict load required.",
+  "license": "No separate code/model license found; CAF dataset license is not asserted to cover model.",
+  "url": "https://drive.usercontent.google.com/download?id=1a3GXTGjch9rl-_JRiIfM5cbM1jCPpQHY&export=download&confirm=t",
+  "source_commit": "Google Drive file 1a3GXTGjch9rl-_JRiIfM5cbM1jCPpQHY; no publisher model commit or digest",
+  "repository": "https://github.com/AvLab-CV/AgeTransGAN"
+}

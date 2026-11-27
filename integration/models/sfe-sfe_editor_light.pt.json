@@ -1,0 +1,11 @@
+{
+  "name": "sfe_editor_light.pt",
+  "bytes": 649325957,
+  "sha256": "ced3e79813ec6ff1418404576cc43e3c92849ab124ec87cd72be42dcb25311ea",
+  "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+  "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+  "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/sfe_editor_light.pt",
+  "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+  "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+  "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+}

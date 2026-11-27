@@ -24,10 +24,23 @@ def main():
     import onnxruntime as ort
     from PIL import Image
     from check_independent_age import MODEL_SHA256, MODEL_SOURCE, MEAN, STD
-    p = argparse.ArgumentParser(description=__doc__); p.add_argument('run',type=Path); args = p.parse_args()
+    p = argparse.ArgumentParser(description=__doc__); p.add_argument('run',type=Path)
+    p.add_argument('--profile',choices=['styleganex','sfe','agetrans'],default='styleganex'); args = p.parse_args()
     run = args.run.resolve(); report = json.loads((run/'evaluation/report.json').read_text())
+    expected = {'styleganex':96,'sfe':152,'agetrans':120}[args.profile]
+    profile=json.loads((run/'experiment.json').read_text()).get('profile')
+    cpu_pilot = profile in ['official_sfe_cpu_pilot','official_agetrans_cpu_pilot']
+    cases = 2 if cpu_pilot else 8
+    if cpu_pilot and args.profile == 'sfe':
+        if report['scales'] != [0.,5.,10.] or [r['name'] for r in report['records']] != ['ffhq_64376','ffhq_62644']:
+            raise ValueError('Unexpected CPU pilot design')
+        expected = 22
+    elif cpu_pilot:
+        if report['groups'] != list(range(10)) or [r['name'] for r in report['records']] != ['ffhq_64376','ffhq_62644']:
+            raise ValueError('Unexpected CPU age-group pilot design')
+        expected = 30
     if not (run/'DONE').exists(): raise ValueError('GPU run incomplete')
-    if len(report['records']) != 8 or len(report['outputs']) != 96: raise ValueError('Incomplete design')
+    if len(report['records']) != cases or len(report['outputs']) != expected: raise ValueError('Incomplete design')
     frozen = json.loads((run/'frozen-verification.json').read_text())
     repeat = json.loads((run/'repeatability.json').read_text())
     if not frozen['equal'] or not repeat['raw_pixels_equal']: raise ValueError('State/repetition check failed')
@@ -74,15 +87,19 @@ def main():
         summary[route+'/'+condition] = dict(cases=len(items),identity=mean(r['source_cosine'] for r in items),
             independent_age=mean(ages[r['native']] for r in items),missing_sface=sum(not r['detected'] for r in items),
             missing_age=sum(ages[r['native']] is None for r in items),reconstruction_l1=mean(r['reconstruction_l1'] for r in items),
+            age_change_from_source=mean(ages[r['native']]-sources[r['name']]
+                for r in items if ages[r['native']] is not None and sources[r['name']] is not None),
             age_change_from_reconstruction=mean(ages[r['native']]-ages[reconstruction[r['name'],route]['native']]
-                for r in items if ages[r['native']] is not None and ages[reconstruction[r['name'],route]['native']] is not None),
+                for r in items if (r['name'],route) in reconstruction and ages[r['native']] is not None and ages[reconstruction[r['name'],route]['native']] is not None),
             identity_change_from_reconstruction=mean(r['source_cosine']-reconstruction[r['name'],route]['source_cosine']
-                for r in items if r['source_cosine'] is not None and reconstruction[r['name'],route]['source_cosine'] is not None))
+                for r in items if (r['name'],route) in reconstruction and r['source_cosine'] is not None and reconstruction[r['name'],route]['source_cosine'] is not None))
     write_json(run/'summary.json',dict(groups=summary,independent_ages=ages,source_ages=sources,
         promotion=False,visual_review_pending=True,targets_not_calibrated=True,
-        note='Fixed strength scan, not chronological-age accuracy. Eight inspected development cases only.'))
-    write_json(run/'artifact-validation.json',dict(raw=96,color=96,native_size=[1024,1024],all_decodable=True,
-        raw_sha256_verified=True,model_frozen=True,repeatable=True,same_aligned_input_pixels=True))
+        note=f'Fixed condition scan, not chronological-age accuracy. {cases} inspected development cases only.',cpu_pilot=cpu_pilot,
+        device=json.loads((run/'device.json').read_text())))
+    write_json(run/'artifact-validation.json',dict(raw=expected,color=expected,native_size=[1024,1024],all_decodable=True,
+        raw_sha256_verified=True,model_frozen=True,repeatable=True,same_aligned_reference=True,
+        same_aligned_input_pixels=args.profile == 'styleganex'))
     gallery = run/'gallery'; gallery.mkdir(exist_ok=False); cache_assets = {}
     def asset(path):
         if str(path) in cache_assets: return cache_assets[str(path)]
@@ -104,12 +121,24 @@ def main():
         for item in report['outputs']:
             if item['name'] != row['name']: continue
             case['outputs'].append(dict(route=item['route'],condition=item['condition'],scale=item['scale'],
+                group=item.get('group'),
                 age=ages[item['native']],identity=item['source_cosine'],raw=asset(run/'evaluation'/item['native']),
                 color=asset(run/'evaluation'/item['preserved'])))
         cases.append(case)
-    data = dict(cases=cases,scales=report['scales'])
-    (gallery/'index.html').write_text(PAGE.replace('__DATA__',json.dumps(data,ensure_ascii=False).replace('<','\\u003c')))
-    print('STYLEGANEX_CPU_AND_GALLERY_READY',json.dumps(summary),flush=True)
+    data = dict(cases=cases,scales=report.get('scales',report.get('groups')))
+    template = PAGE
+    if args.profile == 'sfe':
+        template = (Path(__file__).with_name('sfe_review.html')).read_text()
+        if cpu_pilot:
+            template = template.replace('固定8张开发图','固定2张亚洲男女开发图（CPU小样本，未占GPU）').replace('8张已看过的开发图','2张已看过的开发图')
+    elif args.profile == 'agetrans':
+        template = (Path(__file__).with_name('agetrans_review.html')).read_text()
+        if cpu_pilot:
+            template = template.replace('固定8张开发图','固定2张亚洲男女开发图（CPU小样本，未占GPU）').replace('8张已看过的开发图','2张已看过的开发图')
+        elif profile == 'official_agetrans_cpu_full':
+            template = template.replace('固定8张开发图','固定8张开发图（CPU执行，未占GPU）')
+    (gallery/'index.html').write_text(template.replace('__DATA__',json.dumps(data,ensure_ascii=False).replace('<','\\u003c')))
+    print(args.profile.upper()+'_CPU_AND_GALLERY_READY',json.dumps(summary),flush=True)
 
 
 if __name__ == '__main__': main()

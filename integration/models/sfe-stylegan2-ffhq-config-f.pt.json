@@ -1,0 +1,11 @@
+{
+  "name": "stylegan2-ffhq-config-f.pt",
+  "bytes": 381462551,
+  "sha256": "bae494ef77e32a9cd1792a81a3c167692a0e64f6bcd8b06592ff42917e2ed46e",
+  "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+  "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+  "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/stylegan2-ffhq-config-f.pt",
+  "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+  "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+  "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+}

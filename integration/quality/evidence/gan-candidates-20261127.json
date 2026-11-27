@@ -1,0 +1,728 @@
+{
+  "date": "2026-11-27",
+  "branch": "dev/mobei-gan-portable-20261116",
+  "training": false,
+  "live_model_changed": false,
+  "max_concurrent_gpu": 1,
+  "new_holdout_consumed": 0,
+  "experiments": {
+    "sfe": {
+      "run_dir": "deployment/training-runs/sfe-20261127-110920",
+      "receipt": {
+        "job_id": "j-1795778635-867943",
+        "name": "face-age-sfe-20261127-110920",
+        "run_dir": "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261127-110920",
+        "gpus": 1
+      },
+      "terminal": {
+        "JobId": "j-1795778635-867943",
+        "Phase": "Succeeded",
+        "Message": "RJob succeeded"
+      },
+      "device": {
+        "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+        "torch": "2.6.0+cu124",
+        "cuda": "12.4",
+        "gpu": "NVIDIA H200",
+        "device_count": 1,
+        "memory_bytes": 150393585664
+      },
+      "artifact": {
+        "raw": 152,
+        "color": 152,
+        "native_size": [
+          1024,
+          1024
+        ],
+        "all_decodable": true,
+        "raw_sha256_verified": true,
+        "model_frozen": true,
+        "repeatable": true,
+        "same_aligned_reference": true,
+        "same_aligned_input_pixels": false
+      },
+      "browser": {
+        "profile": "sfe",
+        "url": "http://127.0.0.1:65512/age-sfe-review/",
+        "status": 200,
+        "cases": 8,
+        "conditions": 7,
+        "all_conditions_switch": true,
+        "all_cases_switch": true,
+        "sam_age_switch": true,
+        "color_switch": true,
+        "native_crops": true,
+        "native_download": [
+          1024,
+          1024
+        ],
+        "mobile_width": 390,
+        "overflow": false,
+        "errors": []
+      },
+      "frozen": {
+        "before": "2619f54247d5235e05869c31030951a11789b7ebc448d69a13c4a34b63d5a7d7",
+        "after": "2619f54247d5235e05869c31030951a11789b7ebc448d69a13c4a34b63d5a7d7",
+        "equal": true
+      },
+      "repeatability": {
+        "case": "ffhq_64376",
+        "scale": 5.0,
+        "raw_pixels_equal": true
+      },
+      "model_specs": [
+        [
+          {
+            "name": "e4e_ffhq_encode.pt",
+            "bytes": 1201649680,
+            "sha256": "2ace1d9a8c05c10a399bcd500b8dda118f759ff1aac89dbdab7435f2136a0999",
+            "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+            "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+            "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/e4e_ffhq_encode.pt"
+          },
+          {
+            "name": "sfe_editor_light.pt",
+            "bytes": 649325957,
+            "sha256": "ced3e79813ec6ff1418404576cc43e3c92849ab124ec87cd72be42dcb25311ea",
+            "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+            "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+            "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/sfe_editor_light.pt"
+          },
+          {
+            "name": "stylegan2-ffhq-config-f.pt",
+            "bytes": 381462551,
+            "sha256": "bae494ef77e32a9cd1792a81a3c167692a0e64f6bcd8b06592ff42917e2ed46e",
+            "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+            "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+            "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/stylegan2-ffhq-config-f.pt"
+          }
+        ]
+      ],
+      "groups": {
+        "sam_baseline/same": {
+          "cases": 8,
+          "identity": 0.8538442477583885,
+          "independent_age": 45.32754850387573,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": 15.615262866020203,
+          "age_change_from_source": -3.775615930557251,
+          "age_change_from_reconstruction": 0.0,
+          "identity_change_from_reconstruction": 0.0
+        },
+        "sam_baseline/20": {
+          "cases": 8,
+          "identity": 0.8207802474498749,
+          "independent_age": 33.20786762237549,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": -15.895296812057495,
+          "age_change_from_reconstruction": -12.119680881500244,
+          "identity_change_from_reconstruction": -0.03306400030851364
+        },
+        "sam_baseline/40": {
+          "cases": 8,
+          "identity": 0.8338335826992989,
+          "independent_age": 42.39900040626526,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": -6.704164028167725,
+          "age_change_from_reconstruction": -2.9285480976104736,
+          "identity_change_from_reconstruction": -0.02001066505908966
+        },
+        "sam_baseline/60": {
+          "cases": 8,
+          "identity": 0.8269695788621902,
+          "independent_age": 53.217369079589844,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": 4.11420464515686,
+          "age_change_from_reconstruction": 7.889820575714111,
+          "identity_change_from_reconstruction": -0.026874668896198273
+        },
+        "sam_baseline/75": {
+          "cases": 8,
+          "identity": 0.8138646110892296,
+          "independent_age": 60.103028297424316,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": 10.999863862991333,
+          "age_change_from_reconstruction": 14.775479793548584,
+          "identity_change_from_reconstruction": -0.039979636669158936
+        },
+        "sfe_age/scale_-10": {
+          "cases": 8,
+          "identity": 0.4858662001788616,
+          "independent_age": 3.4285945892333984,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": -45.674569845199585,
+          "age_change_from_reconstruction": -44.40660524368286,
+          "identity_change_from_reconstruction": -0.49762755259871483
+        },
+        "e4e_age/scale_-10": {
+          "cases": 8,
+          "identity": 0.2866374831646681,
+          "independent_age": 3.1428112983703613,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": -45.96035313606262,
+          "age_change_from_reconstruction": -40.156296253204346,
+          "identity_change_from_reconstruction": -0.38803876377642155
+        },
+        "sfe_age/scale_-5": {
+          "cases": 8,
+          "identity": 0.7602258771657944,
+          "independent_age": 27.480555534362793,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": -21.62260890007019,
+          "age_change_from_reconstruction": -20.354644298553467,
+          "identity_change_from_reconstruction": -0.22326787561178207
+        },
+        "e4e_age/scale_-5": {
+          "cases": 8,
+          "identity": 0.47914911434054375,
+          "independent_age": 12.1492338180542,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": -36.953930616378784,
+          "age_change_from_reconstruction": -31.149873733520508,
+          "identity_change_from_reconstruction": -0.19552713260054588
+        },
+        "sfe_age/scale_0": {
+          "cases": 8,
+          "identity": 0.9834937527775764,
+          "independent_age": 47.83519983291626,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": 6.120842933654785,
+          "age_change_from_source": -1.2679646015167236,
+          "age_change_from_reconstruction": 0.0,
+          "identity_change_from_reconstruction": 0.0
+        },
+        "e4e_age/scale_0": {
+          "cases": 8,
+          "identity": 0.6746762469410896,
+          "independent_age": 43.29910755157471,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": 21.581678827603657,
+          "age_change_from_source": -5.804056882858276,
+          "age_change_from_reconstruction": 0.0,
+          "identity_change_from_reconstruction": 0.0
+        },
+        "sfe_age/scale_2.5": {
+          "cases": 8,
+          "identity": 0.9246458113193512,
+          "independent_age": 52.40425181388855,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": 3.3010873794555664,
+          "age_change_from_reconstruction": 4.56905198097229,
+          "identity_change_from_reconstruction": -0.05884794145822525
+        },
+        "e4e_age/scale_2.5": {
+          "cases": 8,
+          "identity": 0.6174398958683014,
+          "independent_age": 51.61359620094299,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": 2.5104317665100098,
+          "age_change_from_reconstruction": 8.314488649368286,
+          "identity_change_from_reconstruction": -0.05723635107278824
+        },
+        "sfe_age/scale_5": {
+          "cases": 8,
+          "identity": 0.7544089034199715,
+          "independent_age": 58.15043592453003,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": 9.047271490097046,
+          "age_change_from_reconstruction": 10.31523609161377,
+          "identity_change_from_reconstruction": -0.22908484935760498
+        },
+        "e4e_age/scale_5": {
+          "cases": 8,
+          "identity": 0.5054909512400627,
+          "independent_age": 59.13528299331665,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": 10.032118558883667,
+          "age_change_from_reconstruction": 15.836175441741943,
+          "identity_change_from_reconstruction": -0.16918529570102692
+        },
+        "sfe_age/scale_7.5": {
+          "cases": 8,
+          "identity": 0.6134175360202789,
+          "independent_age": 65.81772375106812,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": 16.714559316635132,
+          "age_change_from_reconstruction": 17.982523918151855,
+          "identity_change_from_reconstruction": -0.3700762167572975
+        },
+        "e4e_age/scale_7.5": {
+          "cases": 8,
+          "identity": 0.41464800760149956,
+          "independent_age": 65.16433811187744,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": 16.061173677444458,
+          "age_change_from_reconstruction": 21.865230560302734,
+          "identity_change_from_reconstruction": -0.2600282393395901
+        },
+        "sfe_age/scale_10": {
+          "cases": 8,
+          "identity": 0.5112069882452488,
+          "independent_age": 71.54883575439453,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": 22.445671319961548,
+          "age_change_from_reconstruction": 23.71363592147827,
+          "identity_change_from_reconstruction": -0.47228676453232765
+        },
+        "e4e_age/scale_10": {
+          "cases": 8,
+          "identity": 0.3463127724826336,
+          "independent_age": 70.21139335632324,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": 21.10822892189026,
+          "age_change_from_reconstruction": 26.912285804748535,
+          "identity_change_from_reconstruction": -0.32836347445845604
+        }
+      },
+      "visual_review": {
+        "full_face_cases": [
+          "ffhq_64376",
+          "ffhq_62644",
+          "ffhq_61908",
+          "ffhq_64919",
+          "ffhq_67140",
+          "ffhq_68335"
+        ],
+        "native_crop_cases": [
+          "ffhq_60764",
+          "ffhq_65817"
+        ],
+        "findings": [
+          "Strong source reconstruction.",
+          "Age direction adds spectacles, changes hair/hat/moustache and sometimes teeth.",
+          "Same age entanglement visible in e4e control; not attributable only to feature editor.",
+          "No promotion; strong-edit identity degrades substantially."
+        ],
+        "blind": false
+      },
+      "source_ages": {
+        "ffhq_64376": 24.617202758789062,
+        "ffhq_61908": 31.332361221313477,
+        "ffhq_62644": 24.25365447998047,
+        "ffhq_64919": 49.32725143432617,
+        "ffhq_65817": 27.923721313476562,
+        "ffhq_67140": 81.6224594116211,
+        "ffhq_60764": 68.67528533935547,
+        "ffhq_68335": 85.07337951660156
+      },
+      "total_worker_seconds": 107.61546608433127,
+      "cold_seconds": 6.447001680731773,
+      "cuda_peak_allocated_bytes": 3799558656,
+      "mean_infer_seconds": 0.12028932435038898,
+      "hashes": {
+        "experiment.json": "c4c73f12e78a0f3628bf7936e24d1c9fd667dedf35291e263287099858e56f2e",
+        "selection.json": "c7bf2fbbee2ab088bb58f38563e914de446a11e3e61b84eeb8caf409398ebdd2",
+        "evaluation/report.json": "b31d993ba30ca74f3f3b3449429b0a6326038db73d4426383c1374527beaa76f",
+        "summary.json": "6abfc2fdb460a8d01f3624aaf766e6f0618f873362ca84761e46ce7dc4a2de2a",
+        "artifact-validation.json": "2d8022a98aeaf30ce7fa7b896b78b71a371daab05748373c6d5a6eebb2656fd9",
+        "browser-validation.json": "7a9af1ec10f2435b25aa52ff039dd1bb8513084b46adc7f3cb98736d23a3122d",
+        "device.json": "a3f5a18833dd51eb46fc7fcc16ee632363632d824f7b3d0b04c3016fd4c5e8bf",
+        "receipt.json": "c16a41ec1a107ce6e15ae98bc21137458a2f3a2070c686d388309027b96bc0ab",
+        "worker.log": "3824d8dec1e08d29e344d65afc0342899099eea8d690c739a2f3b892194559f2",
+        "repeatability.json": "e587a63ee8e218ce62fd54b791e79c6756d26c5ad2b41aa9bdf9dd132b4357e5",
+        "frozen-verification.json": "0ce4ca28c18e818da94b5e18c4a1f110d727a42c1a1652bffbb42d5bc68af24d",
+        "checkpoint-info.json": "6beaff27c38347c1647c7c9b3edec8f28b724d14c27d96f4421f10aeec2532dd"
+      },
+      "promotion": false,
+      "operator_checks": {
+        "reference": "Pinned SFE native filter",
+        "checks": [
+          {
+            "up": 1,
+            "down": 1,
+            "pad": [
+              1,
+              1
+            ],
+            "max_abs_error": 0.0
+          },
+          {
+            "up": 2,
+            "down": 1,
+            "pad": [
+              2,
+              1
+            ],
+            "max_abs_error": 0.0
+          },
+          {
+            "up": 1,
+            "down": 2,
+            "pad": [
+              1,
+              2
+            ],
+            "max_abs_error": 0.0
+          },
+          {
+            "up": 2,
+            "down": 1,
+            "pad": [
+              -1,
+              2
+            ],
+            "max_abs_error": 0.0
+          }
+        ]
+      },
+      "source_parity": {
+        "upstream_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+        "checks": [
+          {
+            "method": "forward",
+            "official_ast_equal": true,
+            "ast_sha256": "2da3c1ece424d719d5d6514c18b4dcc95408bb675caabb058607e1bbeba78369"
+          },
+          {
+            "method": "_run_on_batch",
+            "official_ast_equal": true,
+            "ast_sha256": "05dd1820c8d6fcc766425857e38ea0c4ed8d1cc953fed51b3e0247232ebfee4a"
+          },
+          {
+            "method": "_run_editing_on_batch",
+            "official_ast_equal": true,
+            "ast_sha256": "3d78499a22b53a77f28a019308faaff24c21e5ded4a25db5fc7ace34a8734327"
+          }
+        ]
+      }
+    },
+    "agetrans": {
+      "run_dir": "deployment/training-runs/agetrans-cpu-20261127-113329",
+      "receipt": {
+        "job_id": "j-1795779259-932262",
+        "name": "face-age-agetrans-cpu-20261127-113329",
+        "run_dir": "/root/face-age-transformation-course-project/deployment/training-runs/agetrans-cpu-20261127-113329",
+        "gpus": 0
+      },
+      "terminal": {
+        "JobId": "j-1795779259-932262",
+        "Phase": "Succeeded",
+        "Message": "RJob succeeded"
+      },
+      "device": {
+        "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+        "torch": "2.6.0+cu124",
+        "cuda": "12.4",
+        "gpu": null,
+        "device_count": 0,
+        "memory_bytes": 0
+      },
+      "artifact": {
+        "raw": 120,
+        "color": 120,
+        "native_size": [
+          1024,
+          1024
+        ],
+        "all_decodable": true,
+        "raw_sha256_verified": true,
+        "model_frozen": true,
+        "repeatable": true,
+        "same_aligned_reference": true,
+        "same_aligned_input_pixels": false
+      },
+      "browser": {
+        "profile": "agetrans",
+        "url": "http://127.0.0.1:65512/age-agetrans-review/",
+        "status": 200,
+        "cases": 8,
+        "conditions": 10,
+        "all_conditions_switch": true,
+        "all_cases_switch": true,
+        "sam_age_switch": true,
+        "color_switch": true,
+        "native_crops": true,
+        "native_download": [
+          1024,
+          1024
+        ],
+        "mobile_width": 390,
+        "overflow": false,
+        "errors": []
+      },
+      "frozen": {
+        "before": "24ecae3dbcba82cebc3776d558e6b8834c17b2c4c595215dd8a90f266d5cca27",
+        "after": "24ecae3dbcba82cebc3776d558e6b8834c17b2c4c595215dd8a90f266d5cca27",
+        "equal": true
+      },
+      "repeatability": {
+        "case": "ffhq_64376",
+        "group": 9,
+        "raw_pixels_equal": true
+      },
+      "model_specs": [
+        {
+          "name": "ffhq_10group_910k.pt",
+          "bytes": 1287079078,
+          "sha256": "4da9b623f4879d1d1ed614c1fa834dfc8205b8cbc9ec3ac5bf0730dfa361f9ef",
+          "code_commit": "5d1f8354d903f8858ea9da639c0eac80180cfde2",
+          "local_path": "deployment/gan-models/ffhq_10group_910k.pt",
+          "source": "https://drive.google.com/file/d/1a3GXTGjch9rl-_JRiIfM5cbM1jCPpQHY/view",
+          "hash_source": "Local complete SHA256; publisher digest unavailable. Range size and full file size verified, model strict load required.",
+          "license": "No separate code/model license found; CAF dataset license is not asserted to cover model."
+        }
+      ],
+      "groups": {
+        "sam_baseline/same": {
+          "cases": 8,
+          "identity": 0.8538442477583885,
+          "independent_age": 45.32754850387573,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": -3.775615930557251,
+          "age_change_from_reconstruction": 0.0,
+          "identity_change_from_reconstruction": 0.0
+        },
+        "sam_baseline/20": {
+          "cases": 8,
+          "identity": 0.8207802474498749,
+          "independent_age": 33.20786762237549,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": -15.895296812057495,
+          "age_change_from_reconstruction": -12.119680881500244,
+          "identity_change_from_reconstruction": -0.03306400030851364
+        },
+        "sam_baseline/40": {
+          "cases": 8,
+          "identity": 0.8338335826992989,
+          "independent_age": 42.39900040626526,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": -6.704164028167725,
+          "age_change_from_reconstruction": -2.9285480976104736,
+          "identity_change_from_reconstruction": -0.02001066505908966
+        },
+        "sam_baseline/60": {
+          "cases": 8,
+          "identity": 0.8269695788621902,
+          "independent_age": 53.217369079589844,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": 4.11420464515686,
+          "age_change_from_reconstruction": 7.889820575714111,
+          "identity_change_from_reconstruction": -0.026874668896198273
+        },
+        "sam_baseline/75": {
+          "cases": 8,
+          "identity": 0.8138646110892296,
+          "independent_age": 60.103028297424316,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": 10.999863862991333,
+          "age_change_from_reconstruction": 14.775479793548584,
+          "identity_change_from_reconstruction": -0.039979636669158936
+        },
+        "agetrans/group_0": {
+          "cases": 8,
+          "identity": 0.5598274655640125,
+          "independent_age": 2.8465709686279297,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": -46.256593465805054,
+          "age_change_from_reconstruction": null,
+          "identity_change_from_reconstruction": null
+        },
+        "agetrans/group_1": {
+          "cases": 8,
+          "identity": 0.6485387198626995,
+          "independent_age": 7.075083255767822,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": -42.02808117866516,
+          "age_change_from_reconstruction": null,
+          "identity_change_from_reconstruction": null
+        },
+        "agetrans/group_2": {
+          "cases": 8,
+          "identity": 0.6999724507331848,
+          "independent_age": 10.914473533630371,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": -38.18869090080261,
+          "age_change_from_reconstruction": null,
+          "identity_change_from_reconstruction": null
+        },
+        "agetrans/group_3": {
+          "cases": 8,
+          "identity": 0.7125699296593666,
+          "independent_age": 16.008816719055176,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": -33.09434771537781,
+          "age_change_from_reconstruction": null,
+          "identity_change_from_reconstruction": null
+        },
+        "agetrans/group_4": {
+          "cases": 8,
+          "identity": 0.7322835102677345,
+          "independent_age": 25.7180757522583,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": -23.385088682174683,
+          "age_change_from_reconstruction": null,
+          "identity_change_from_reconstruction": null
+        },
+        "agetrans/group_5": {
+          "cases": 8,
+          "identity": 0.7697742804884911,
+          "independent_age": 27.659510850906372,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": -21.44365358352661,
+          "age_change_from_reconstruction": null,
+          "identity_change_from_reconstruction": null
+        },
+        "agetrans/group_6": {
+          "cases": 8,
+          "identity": 0.7904330044984818,
+          "independent_age": 38.57389259338379,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": -10.529271841049194,
+          "age_change_from_reconstruction": null,
+          "identity_change_from_reconstruction": null
+        },
+        "agetrans/group_7": {
+          "cases": 8,
+          "identity": 0.7760637030005455,
+          "independent_age": 47.08770132064819,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": -2.01546311378479,
+          "age_change_from_reconstruction": null,
+          "identity_change_from_reconstruction": null
+        },
+        "agetrans/group_8": {
+          "cases": 8,
+          "identity": 0.7728971466422081,
+          "independent_age": 58.72710132598877,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": 9.623936891555786,
+          "age_change_from_reconstruction": null,
+          "identity_change_from_reconstruction": null
+        },
+        "agetrans/group_9": {
+          "cases": 8,
+          "identity": 0.7420550659298897,
+          "independent_age": 69.58965921401978,
+          "missing_sface": 0,
+          "missing_age": 0,
+          "reconstruction_l1": null,
+          "age_change_from_source": 20.486494779586792,
+          "age_change_from_reconstruction": null,
+          "identity_change_from_reconstruction": null
+        }
+      },
+      "visual_review": {
+        "full_face_cases": [
+          "ffhq_64376",
+          "ffhq_61908",
+          "ffhq_62644",
+          "ffhq_64919",
+          "ffhq_67140",
+          "ffhq_68335"
+        ],
+        "native_crop_cases": [
+          "ffhq_61908"
+        ],
+        "blind": false,
+        "findings": [
+          "Group-dependent aging visible without ubiquitous added spectacles.",
+          "Native eye, hair, skin detail and teeth remain softer than source; some teeth/eye repainting.",
+          "No claim of identity or texture superiority over SAM; no automatic promotion."
+        ]
+      },
+      "source_ages": {
+        "ffhq_64376": 24.617202758789062,
+        "ffhq_61908": 31.332361221313477,
+        "ffhq_62644": 24.25365447998047,
+        "ffhq_64919": 49.32725143432617,
+        "ffhq_65817": 27.923721313476562,
+        "ffhq_67140": 81.6224594116211,
+        "ffhq_60764": 68.67528533935547,
+        "ffhq_68335": 85.07337951660156
+      },
+      "total_worker_seconds": 320.74342219159007,
+      "cold_seconds": 7.713609782978892,
+      "cuda_peak_allocated_bytes": 0,
+      "mean_infer_seconds": 3.1698127364274113,
+      "hashes": {
+        "experiment.json": "fbbc1db360dbebe3a16bbbb38fd271fc622b317d7c224ff4d21fdc6551be8000",
+        "selection.json": "c7bf2fbbee2ab088bb58f38563e914de446a11e3e61b84eeb8caf409398ebdd2",
+        "evaluation/report.json": "40af68569b8c7f1d34b6cc571452742ea38dca80d8433c0f07a4604d2d3c1b4f",
+        "summary.json": "56e494e20202717400b1805419d03f32064385bc9c384fdad836da6b6ce845c2",
+        "artifact-validation.json": "2a2d57492c1973429845131e22a176ea754b1864fa20baf850c807fccb90815b",
+        "browser-validation.json": "e23376e46a7ffbaff6042d2af2be38f94fd7b4880ae60b8eac81c490bc41995a",
+        "device.json": "8e868c543acf381dc949a6daf46fe3e0c803406d0e6af79c23d8cdd79dda80a5",
+        "receipt.json": "4d20fa773f5486e34d0d7af589b46402a02a0c25823157b0f575098bdd3c58f5",
+        "worker.log": "8817d412e2ba176189011102488cc508a3eb78df41cb8823fc714b5e9e08aee1",
+        "repeatability.json": "645a0e187239721806dc8ba0859f2061851547ab3d6f1e5bfe9c0811b936378a",
+        "frozen-verification.json": "99e55572413ddb1bf85b0a61999e9cebcd1f4fb7dfd64b2214772c1d091dc172",
+        "checkpoint-info.json": "c1df989ef7df3a137677c6855a7db906152bf0278b35a2c467335730d37ea8b5"
+      },
+      "promotion": false
+    }
+  },
+  "failure_record": {
+    "run_dir": "deployment/training-runs/agetrans-cpu-20261127-113152",
+    "job_id": "j-1795779171-374459",
+    "reason": "Upstream fixed noise4x4 inconsistent with16x16 conditional synthesis start; restored official random-noise path with fixed seed."
+  },
+  "limitations": [
+    "8 inspected FFHQ development portraits, possible pretrained overlap, not blind population study.",
+    "Candidate input preprocessing differs from SAM; only SFE-vs-e4e control shares exact inference input and generator.",
+    "AgeTransGAN publisher SHA256 unavailable; local complete digest and strict model load verified.",
+    "Native texture/identity at strong aging still unresolved; no automatic serving promotion."
+  ]
+}
