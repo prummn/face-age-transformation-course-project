@@ -2,6 +2,7 @@
 import argparse
 from collections import defaultdict
 import json
+import os
 from pathlib import Path
 import statistics
 
@@ -25,10 +26,16 @@ def main():
     scores = {}; outputs = []
     for run, report, summary in zip(sources, reports, summaries):
         for row in report['records']:
-            (output/'evaluation'/row['name']).symlink_to(run/'evaluation'/row['name'], target_is_directory=True)
+            folder = output/'evaluation'/row['name']; folder.mkdir()
+            # Keep gallery assets physically inside evaluation, as required by
+            # its containment check. Hard links reuse existing PNG bytes; a
+            # directory symlink would resolve outside the merged run.
+            os.link(run/'evaluation'/row['name']/'reference.png', folder/'reference.png')
         for row in report['outputs']:
             if sha256(run/'evaluation'/row['native']) != row['sha256']:
                 raise ValueError('Output changed since scoring')
+            for field in ['native', 'preserved']:
+                os.link(run/'evaluation'/row[field], output/'evaluation'/row[field])
         scores.update(summary['independent_ages']); outputs += report['outputs']
     if len(outputs) != 380 or len(scores) != 380: raise ValueError('Incomplete combined design')
     report = dict(records=records, routes=reports[0]['routes'], outputs=outputs,

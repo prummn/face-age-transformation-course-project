@@ -1,0 +1,539 @@
+{
+  "description": "Fixed six-case diagnostic plus disjoint29-case development confirmation; no fresh holdout consumption; no network training.",
+  "branch": "dev/mobei-gan-portable-20261116",
+  "confirmation_code_commit": "13a57a0b1bd4d9d2304fa118826343821770f434",
+  "jobs": [
+    {
+      "run": "identity-budget-20261127-015949",
+      "job_id": "j-1795744878-890306",
+      "phase": "Succeeded",
+      "gpus": 1
+    },
+    {
+      "run": "identity-budget-20261127-021450",
+      "job_id": "j-1795745741-856251",
+      "phase": "Succeeded",
+      "gpus": 1
+    }
+  ],
+  "device": {
+    "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+    "torch": "2.6.0+cu124",
+    "cuda": "12.4",
+    "gpu": "NVIDIA H200",
+    "device_count": 1,
+    "memory_bytes": 150393585664
+  },
+  "confirmation_timing": {
+    "worker_start_utc": "2026-11-27T02:15:48Z",
+    "worker_end_utc": "2026-11-27T02:47:24Z",
+    "worker_seconds": 1896,
+    "fit_seconds_sum": 1456.979215677362,
+    "fit_seconds_mean": 50.240662609564204,
+    "torch_peak_allocated_bytes": 7287532032
+  },
+  "groups": {
+    "diagnostic6": {
+      "accepted_baseline": {
+        "cases": 6,
+        "high_age_identity": 0.8247558027505875,
+        "high_age_error": 14.429814656575521,
+        "mean_age75": 58.88447570800781,
+        "age60to75_span": 7.3899586995442705,
+        "weak60to75": 2,
+        "age20to75_span": 24.80316734313965,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity_drop_over02": 0
+      },
+      "warm_soft_budget": {
+        "cases": 6,
+        "high_age_identity": 0.8070616026719412,
+        "high_age_error": 11.795502026875814,
+        "mean_age75": 62.38331858317057,
+        "age60to75_span": 10.232460657755533,
+        "weak60to75": 1,
+        "age20to75_span": 28.30201021830241,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity_drop_over02": 5
+      },
+      "hard_identity_budget": {
+        "cases": 6,
+        "high_age_identity": 0.819368451833725,
+        "high_age_error": 12.87313969930013,
+        "mean_age75": 61.44151306152344,
+        "age60to75_span": 9.22417958577474,
+        "weak60to75": 2,
+        "age20to75_span": 27.360204696655273,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity_drop_over02": 1
+      }
+    },
+    "pooled": {
+      "accepted_baseline": {
+        "cases": 35,
+        "high_age_identity": 0.807421692780086,
+        "high_age_error": 13.462010138375419,
+        "mean_age75": 60.500239671979635,
+        "age60to75_span": 5.235093579973493,
+        "weak60to75": 20,
+        "age20to75_span": 26.563664627075195,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity_drop_over02": 0
+      },
+      "warm_soft_budget": {
+        "cases": 6,
+        "high_age_identity": 0.8070616026719412,
+        "high_age_error": 11.795502026875814,
+        "mean_age75": 62.38331858317057,
+        "age60to75_span": 10.232460657755533,
+        "weak60to75": 1,
+        "age20to75_span": 28.30201021830241,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity_drop_over02": 5
+      },
+      "hard_identity_budget": {
+        "cases": 35,
+        "high_age_identity": 0.800788130078997,
+        "high_age_error": 12.688870348249162,
+        "mean_age75": 61.80776770455497,
+        "age60to75_span": 5.844203404017857,
+        "weak60to75": 17,
+        "age20to75_span": 27.87119265965053,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity_drop_over02": 10
+      }
+    },
+    "cohort:new-hd-holdout": {
+      "accepted_baseline": {
+        "cases": 17,
+        "high_age_identity": 0.8157814460642198,
+        "high_age_error": 13.265016667983112,
+        "mean_age75": 61.77580889533548,
+        "age60to75_span": 5.319965586942785,
+        "weak60to75": 10,
+        "age20to75_span": 24.272692063275507,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity_drop_over02": 0
+      },
+      "warm_soft_budget": {
+        "cases": 4,
+        "high_age_identity": 0.7935151532292366,
+        "high_age_error": 11.193134784698486,
+        "mean_age75": 63.61729621887207,
+        "age60to75_span": 12.65392780303955,
+        "weak60to75": 0,
+        "age20to75_span": 31.518198013305664,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity_drop_over02": 5
+      },
+      "hard_identity_budget": {
+        "cases": 17,
+        "high_age_identity": 0.8082151360371533,
+        "high_age_error": 12.111513250014362,
+        "mean_age75": 63.27903276331284,
+        "age60to75_span": 6.121197868795956,
+        "weak60to75": 9,
+        "age20to75_span": 25.77591593125287,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity_drop_over02": 5
+      }
+    },
+    "publisher_Asian": {
+      "accepted_baseline": {
+        "cases": 24,
+        "high_age_identity": 0.7879529421528181,
+        "high_age_error": 14.94933819770813,
+        "mean_age75": 57.683724880218506,
+        "age60to75_span": 5.966936270395915,
+        "weak60to75": 12,
+        "age20to75_span": 29.202121178309124,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity_drop_over02": 0
+      },
+      "warm_soft_budget": {
+        "cases": 4,
+        "high_age_identity": 0.7837913036346436,
+        "high_age_error": 11.674564838409424,
+        "mean_age75": 63.03138732910156,
+        "age60to75_span": 11.691067695617676,
+        "weak60to75": 1,
+        "age20to75_span": 31.188720703125,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity_drop_over02": 4
+      },
+      "hard_identity_budget": {
+        "cases": 24,
+        "high_age_identity": 0.7812620550394058,
+        "high_age_error": 14.14296293258667,
+        "mean_age75": 59.04927762349447,
+        "age60to75_span": 6.342841784159343,
+        "weak60to75": 10,
+        "age20to75_span": 30.567673921585083,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity_drop_over02": 7
+      }
+    },
+    "cohort:regional-ffhq": {
+      "accepted_baseline": {
+        "cases": 1,
+        "high_age_identity": 0.8056576251983643,
+        "high_age_error": 24.722925186157227,
+        "mean_age75": 45.82678985595703,
+        "age60to75_span": 6.099430084228516,
+        "weak60to75": 0,
+        "age20to75_span": 18.449810028076172,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity_drop_over02": 0
+      },
+      "warm_soft_budget": {
+        "cases": 1,
+        "high_age_identity": 0.798014223575592,
+        "high_age_error": 20.806407928466797,
+        "mean_age75": 49.777183532714844,
+        "age60to75_span": 6.167182922363281,
+        "weak60to75": 0,
+        "age20to75_span": 22.400203704833984,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity_drop_over02": 0
+      },
+      "hard_identity_budget": {
+        "cases": 1,
+        "high_age_identity": 0.7973832190036774,
+        "high_age_error": 21.69162940979004,
+        "mean_age75": 51.24985122680664,
+        "age60to75_span": 10.88296127319336,
+        "weak60to75": 0,
+        "age20to75_span": 23.87287139892578,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity_drop_over02": 0
+      }
+    },
+    "cohort:annotated-ffhq": {
+      "accepted_baseline": {
+        "cases": 11,
+        "high_age_identity": 0.8229309184984728,
+        "high_age_error": 13.71982834555886,
+        "mean_age75": 57.09863073175604,
+        "age60to75_span": 4.827075958251953,
+        "weak60to75": 7,
+        "age20to75_span": 27.13529534773393,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity_drop_over02": 0
+      },
+      "warm_soft_budget": {
+        "cases": 1,
+        "high_age_identity": 0.8702947795391083,
+        "high_age_error": 5.194065093994141,
+        "mean_age75": 70.05354309082031,
+        "age60to75_span": 4.611869812011719,
+        "weak60to75": 1,
+        "age20to75_span": 21.339065551757812,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity_drop_over02": 0
+      },
+      "hard_identity_budget": {
+        "cases": 11,
+        "high_age_identity": 0.8169621391729875,
+        "high_age_error": 13.01878530328924,
+        "mean_age75": 58.23173835060813,
+        "age60to75_span": 4.5370261452414775,
+        "weak60to75": 6,
+        "age20to75_span": 28.268402966586027,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity_drop_over02": 3
+      }
+    },
+    "confirmation29": {
+      "accepted_baseline": {
+        "cases": 29,
+        "high_age_identity": 0.8038353251999822,
+        "high_age_error": 13.261774720816776,
+        "mean_age75": 60.834535664525525,
+        "age60to75_span": 4.789259417303677,
+        "weak60to75": 18,
+        "age20to75_span": 26.92790544444117,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity_drop_over02": 0
+      },
+      "hard_identity_budget": {
+        "cases": 29,
+        "high_age_identity": 0.7969439255780187,
+        "high_age_error": 12.650745654928274,
+        "mean_age75": 61.883544527251146,
+        "age60to75_span": 5.14489798710264,
+        "weak60to75": 15,
+        "age20to75_span": 27.97691430716679,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity_drop_over02": 9
+      }
+    },
+    "cohort:new_appa_asian": {
+      "accepted_baseline": {
+        "cases": 6,
+        "high_age_identity": 0.7555961559216181,
+        "high_age_error": 11.670672416687012,
+        "mean_age75": 65.56798489888509,
+        "age60to75_span": 5.598599116007487,
+        "weak60to75": 3,
+        "age20to75_span": 33.35907300313314,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity_drop_over02": 0
+      },
+      "hard_identity_budget": {
+        "cases": 6,
+        "high_age_identity": 0.7506600817044576,
+        "high_age_error": 12.219411532084147,
+        "mean_age75": 65.95488993326823,
+        "age60to75_span": 6.6160844167073565,
+        "weak60to75": 2,
+        "age20to75_span": 33.745978037516274,
+        "missing_faces": 0,
+        "independent_missing": 0,
+        "identity_drop_over02": 2
+      }
+    }
+  },
+  "checks": {
+    "diagnostic6": {
+      "high_age_identity": true,
+      "high_age_error": true,
+      "high_age_span": true,
+      "relative_span": true,
+      "detection": true,
+      "independent_detection": true
+    },
+    "confirmation29": {
+      "high_age_identity": true,
+      "high_age_error": false,
+      "high_age_span": true,
+      "relative_span": true,
+      "detection": true,
+      "independent_detection": true
+    }
+  },
+  "artifacts": {
+    "identity-budget-20261127-015949": {
+      "raw": 90,
+      "color": 90,
+      "all_decodable": true,
+      "native_size": [
+        1024,
+        1024
+      ],
+      "raw_sha256_verified": true,
+      "protected_raw_and_color_conditions": 54,
+      "all_models_unchanged": true,
+      "repeatable": true,
+      "hard_float_and_png_budget": true
+    },
+    "identity-budget-20261127-021450": {
+      "raw": 290,
+      "color": 290,
+      "all_decodable": true,
+      "native_size": [
+        1024,
+        1024
+      ],
+      "raw_sha256_verified": true,
+      "protected_raw_and_color_conditions": 176,
+      "all_models_unchanged": true,
+      "repeatable": true,
+      "hard_float_and_png_budget": true
+    }
+  },
+  "baseline_reproduction": {
+    "identity-budget-20261127-015949": {
+      "pngs": 30,
+      "exact": true
+    },
+    "identity-budget-20261127-021450": {
+      "pngs": 145,
+      "exact": true
+    }
+  },
+  "quantization_diagnostics": [
+    {
+      "name": "ffhq_61580",
+      "best_step": 0,
+      "nonzero_snapshots": 18,
+      "png_feasible": 0,
+      "closest_worst_png_margin": -2.288818359375e-05
+    },
+    {
+      "name": "appa_new_006765",
+      "best_step": 0,
+      "nonzero_snapshots": 18,
+      "png_feasible": 0,
+      "closest_worst_png_margin": -0.0001487135887145996
+    },
+    {
+      "name": "appa_new_007161",
+      "best_step": 0,
+      "nonzero_snapshots": 18,
+      "png_feasible": 0,
+      "closest_worst_png_margin": -7.957220077514648e-05
+    },
+    {
+      "name": "ffhq_61690",
+      "best_step": 0,
+      "nonzero_snapshots": 18,
+      "png_feasible": 0,
+      "closest_worst_png_margin": -4.786252975463867e-05
+    },
+    {
+      "name": "ffhq_60148",
+      "best_step": 0,
+      "nonzero_snapshots": 18,
+      "png_feasible": 0,
+      "closest_worst_png_margin": -1.806020736694336e-05
+    },
+    {
+      "name": "ffhq_62840",
+      "best_step": 0,
+      "nonzero_snapshots": 18,
+      "png_feasible": 0,
+      "closest_worst_png_margin": -0.00010478496551513672
+    },
+    {
+      "name": "ffhq_62688",
+      "best_step": 0,
+      "nonzero_snapshots": 18,
+      "png_feasible": 0,
+      "closest_worst_png_margin": -0.00011515617370605469
+    },
+    {
+      "name": "ffhq_64985",
+      "best_step": 0,
+      "nonzero_snapshots": 18,
+      "png_feasible": 0,
+      "closest_worst_png_margin": -6.604194641113281e-05
+    }
+  ],
+  "source_reports": {
+    "deployment/training-runs/identity-budget-20261127-015949/evaluation/report.json": "5b6f11c3fa4b28d78834592ac89953150f6384faa2f2a31a8405e63cb655964d",
+    "deployment/training-runs/identity-budget-20261127-015949/experiment.json": "2fe09839473a128fa20c3c6be1564a6ca33bfe7bd5b3b80f43b255dabaf64564",
+    "deployment/training-runs/identity-budget-20261127-015949/frozen-verification.json": "b7487c3246f612e3a5935620fa97d20cd6956029abc8908c75fcb73e8a33892d",
+    "deployment/training-runs/identity-budget-20261127-021450/evaluation/report.json": "91be8a6880fb11bcc233310f195f76242fa1a34443c1813a7b3a90419a9146ec",
+    "deployment/training-runs/identity-budget-20261127-021450/experiment.json": "59f7806f975d5bc42c16107753e324acfb6f53d53d6051c859c4fc288e124a8f",
+    "deployment/training-runs/identity-budget-20261127-021450/frozen-verification.json": "b7487c3246f612e3a5935620fa97d20cd6956029abc8908c75fcb73e8a33892d"
+  },
+  "common_frozen_fingerprint": "267297181a851423836e430074a02f849f20c19402063d3880828a8ff665cd4b",
+  "raw_pngs_total": 380,
+  "preserved_pngs_total": 380,
+  "protected_raw_and_color_conditions": 230,
+  "independent_age_model": {
+    "model_source": "https://huggingface.co/Sam-Apostel/mivolo-v2-age-onnx/tree/8eb4cd8f5dd4bd28df2c9a43b24bc54d6d139d36",
+    "model_sha256": "2db5e05be33b3f120518a86f29a4a65eb0a01c2967219b8787a7dead9b796951"
+  },
+  "decision": {
+    "promotion": false,
+    "reason": "Fixed confirmation29 high-age independent appearance-error improvement0.611years below the predeclared1year gate.",
+    "fresh_holdout_consumed": false,
+    "default_model_changed": false,
+    "gallery_note": "六张三路线诊断＋其余29张固定确认，非独立盲测。确认组高龄外观误差13.26→12.65，仅改善0.61岁，未过事前1岁门槛；高龄SFace0.8038→0.7969。候选不接入上传应用，原有皮肤／眼嘴缺陷未解决。软身份惩罚只跑六张，请勿与35张均值混比。same／20／40及同源目标逐文件不变；原始模型与保色均可查看。"
+  },
+  "visual_review": {
+    "blind": false,
+    "all_diagnostic_full_faces": 6,
+    "confirmation_selected_cases": [
+      "ffhq_60148",
+      "appa_new_006975",
+      "ffhq_69847",
+      "ffhq_68335",
+      "ffhq_61908"
+    ],
+    "finding": "No confirmed severe new artifact in inspected hard-budget outputs; existing texture, glasses, teeth and source-detail defects persist. No demonstrated texture improvement."
+  },
+  "live_api": {
+    "job_id": "j-1795747711-339860",
+    "quality": "original_delta",
+    "stable_numerics": true,
+    "max_running_duration": "1h",
+    "report": "deployment/runs/20261127-024830/stable-api-validation/report.json",
+    "report_sha256": "c5aab6ec8997c0677ff7eff01cafe6d79d27ea41c9720ece85fee20cb57f7e73",
+    "passed": true,
+    "source_reference_age": 25,
+    "repeats": [
+      {
+        "prepare_seconds": 0.5321837440133095,
+        "request_seconds": 18.178175453096628,
+        "model_seconds": 17.191
+      },
+      {
+        "prepare_seconds": 0.49400869803503156,
+        "request_seconds": 17.543697497341782,
+        "model_seconds": 16.634
+      }
+    ],
+    "other_targets": [
+      {
+        "condition": "same",
+        "request_seconds": 0.8266186877153814,
+        "model_seconds": 0.038
+      },
+      {
+        "condition": "20",
+        "request_seconds": 9.755512399133295,
+        "model_seconds": 8.959
+      },
+      {
+        "condition": "40",
+        "request_seconds": 9.779334445949644,
+        "model_seconds": 8.975
+      },
+      {
+        "condition": "60",
+        "request_seconds": 9.838402202818543,
+        "model_seconds": 8.977
+      }
+    ],
+    "raw_png_exact": true,
+    "preserved_png_exact": true,
+    "post_delete_status": 410,
+    "warmup_seconds": 11.9,
+    "active_project_gpu_jobs_at_verification": 1
+  },
+  "fresh41_used_for_GAN": false,
+  "default_model_changed": false,
+  "network_weights_changed": false,
+  "browser_validation": {
+    "url": "http://127.0.0.1:65512/age-identity-budget-review/",
+    "status": 200,
+    "desktop": true,
+    "photo_switch": true,
+    "age_switch": true,
+    "color_switch": true,
+    "native_crops": true,
+    "source_equals_target_anchor": true,
+    "download_size": [
+      1024,
+      1024
+    ],
+    "mobile_width": 390,
+    "overflow": false,
+    "errors": [],
+    "cases": 35,
+    "output_rows": 380
+  }
+}

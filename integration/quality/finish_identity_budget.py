@@ -123,7 +123,7 @@ def main():
         all_models_unchanged=True, repeatable=True, hard_float_and_png_budget=True))
     write_json(run / 'summary.json', dict(groups=groups, checks=checks, all_numeric_checks_pass=all(checks.values()),
         independent_ages=scores, visual_review_pending=True, promotion=False,
-        note='Six inspected development cases; proxy budgets do not guarantee human identity/naturalness.'))
+        note=f"{experiment['cases']} development cases; proxy budgets do not guarantee human identity/naturalness."))
     print('IDENTITY_BUDGET_CPU_COMPLETE', json.dumps(groups), flush=True)
 
 
