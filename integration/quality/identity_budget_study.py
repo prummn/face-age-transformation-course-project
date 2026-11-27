@@ -30,9 +30,12 @@ def validate(run):
             raise ValueError('Frozen input changed: ' + name)
 
 
-def prepare():
+def prepare(scope='pilot'):
     selection = json.loads((PARENT / 'selection.json').read_text())
-    rows = [next(r for r in selection if r['name'] == name) for name in CASES]
+    rows = ([next(r for r in selection if r['name'] == name) for name in CASES] if scope == 'pilot'
+            else [r for r in selection if r['name'] not in CASES])
+    routes = ROUTES if scope == 'pilot' else ['accepted_baseline', 'hard_identity_budget']
+    if len(rows) != (6 if scope == 'pilot' else 29): raise ValueError('Unexpected fixed split')
     run = ROOT / 'deployment/training-runs' / ('identity-budget-' + datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S'))
     (run / 'source').mkdir(parents=True, exist_ok=False)
     for name in ['identity_budget_study.py', 'run_identity_budget.sh', 'deterministic_quality_ops.py', 'probe_inversion.py']:
@@ -52,9 +55,9 @@ def prepare():
             raise ValueError('Model hash mismatch')
         frozen[str(path)] = spec['sha256']
     write_json(run / 'experiment.json', dict(
-        profile='explicit_age_hard_identity_budget_pilot', parent_run=str(PARENT), cases=len(rows),
+        profile='explicit_age_hard_identity_budget', scope=scope, parent_run=str(PARENT), cases=len(rows),
         code_commit=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
-        routes=ROUTES, diagnostic_cases=CASES, targets=[60, 75], steps=180, seed=20261127,
+        routes=routes, diagnostic_cases=CASES, targets=[60, 75], steps=180, seed=20261127,
         frozen_inputs=frozen,
         recipe=dict(initialization='Accepted baseline high-age codes, same source anchor and original SAM direction',
                     variable='First8 W+ layers only', learning_rate=.012, lr_final_ratio=.2,
@@ -69,8 +72,8 @@ def prepare():
                       mean_high_age_error_improvement_min=1., high_age60to75_must_not_shrink=True,
                       detection_must_not_drop=True, native_visual_review_required=True,
                       same_young_exact=True, no_automatic_promotion=True),
-        resources=dict(gpu=1, cpu=4, memory='48Gi', max_running='30m'),
-        caveats=['Six previously inspected development cases, not a blind test.',
+        resources=dict(gpu=1, cpu=4, memory='48Gi', max_running='30m' if scope == 'pilot' else '45m'),
+        caveats=['Previously inspected development cases, not a blind test.',
                  'ArcFace budget is a proxy constraint, not a guarantee of human identity/naturalness.',
                  'SFace and MiVOLO are evaluation only; do not optimize/select steps with them.',
                  'Age targets unchanged; no80/90 calibration; no fresh reserve consumed.',
@@ -81,6 +84,7 @@ def prepare():
 
 def submit(run):
     validate(run)
+    experiment = json.loads((run / 'experiment.json').read_text())
     if (run / 'receipt.json').exists():
         raise ValueError('Already submitted')
     sys.path.insert(0, str(ROOT / 'integration'))
@@ -95,7 +99,7 @@ def submit(run):
         Priority='3', UsePrivateMachine=False, AutoDeleteDuration='168h',
         TaskSpecs={'study': dict(Command=['bash', str(run / 'source/run_identity_budget.sh'), str(ROOT), str(run)],
             Env={}, Image=IMAGE, Replicas=1, CPU='4', Memory='48Gi', GPU='1', Internet=False,
-            MaxRunningDuration='30m', MaxWaitDuration='10m', RestartPolicy='Never',
+            MaxRunningDuration=experiment['resources']['max_running'], MaxWaitDuration='10m', RestartPolicy='Never',
             MountGPFS='gpfs://gpfs2/haobinzhang:/root')})
     write_json(run / 'request.json', payload)
     try:
@@ -115,6 +119,7 @@ def submit(run):
 
 def worker(run):
     validate(run)
+    experiment = json.loads((run / 'experiment.json').read_text())
     import cv2
     import numpy as np
     from PIL import Image
@@ -271,7 +276,7 @@ def worker(run):
         with torch.no_grad(): images = decode(accepted)
         for label, y in zip(['same', '20', '40', '60', '75'], images):
             if digest_image(native(y)) != old[row['name'], label]: raise ValueError('Baseline not reproduced')
-    write_json(run / 'baseline-preflight.json', dict(cases=CASES, pngs=len(rows)*5, exact=True))
+    write_json(run / 'baseline-preflight.json', dict(cases=[r['name'] for r in rows], pngs=len(rows)*5, exact=True))
     print('IDENTITY_BUDGET_BASELINE_OK', flush=True)
     first = rows[0]; _, x, raw, accepted = load(first)
     repeat_codes, repeat_meta = refine(first, x, raw, accepted, hard=True)
@@ -290,14 +295,18 @@ def worker(run):
         value = recognizer.feature(recognizer.alignCrop(bgr, max(faces, key=lambda face: face[2]*face[3]))).ravel()
         return value/(np.linalg.norm(value)+1e-12)
     out = run / 'evaluation'; out.mkdir(exist_ok=False)
-    report = dict(records=rows, routes=ROUTES, outputs=[], timings=[], model_weights_frozen=True,
+    report = dict(records=rows, routes=experiment['routes'], outputs=[], timings=[], model_weights_frozen=True,
                   default_model_changed=False, review_title='执行身份预算的年龄编辑对照')
     for row in rows:
         rgb, x, raw, accepted = load(row); folder = out / row['name']; folder.mkdir()
         Image.fromarray(rgb).save(folder / 'reference.png'); own = feature(rgb)
-        soft, soft_meta = refine(row, x, raw, accepted, hard=False)
+        variants = [('accepted_baseline', None, None)]
+        if 'warm_soft_budget' in experiment['routes']:
+            soft, soft_meta = refine(row, x, raw, accepted, hard=False)
+            variants.append(('warm_soft_budget', soft, soft_meta))
         hard, hard_meta = (repeat_codes, repeat_meta) if row['name'] == first['name'] else refine(row, x, raw, accepted, hard=True)
-        for route, high_codes, meta in [('accepted_baseline', None, None), ('warm_soft_budget', soft, soft_meta), ('hard_identity_budget', hard, hard_meta)]:
+        variants.append(('hard_identity_budget', hard, hard_meta))
+        for route, high_codes, meta in variants:
             code = accepted.clone()
             if high_codes is not None: code[3:] = high_codes
             with torch.no_grad(): images = decode(code)
@@ -327,8 +336,9 @@ def worker(run):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('action', choices=['prepare', 'submit', 'worker']); parser.add_argument('run', type=Path, nargs='?')
+    parser.add_argument('--scope', choices=['pilot', 'confirmation29'], default='pilot')
     args = parser.parse_args()
-    if args.action == 'prepare': prepare()
+    if args.action == 'prepare': prepare(args.scope)
     elif args.run is None: parser.error('run required')
     elif args.action == 'submit': submit(args.run.resolve())
     else: worker(args.run.resolve())
