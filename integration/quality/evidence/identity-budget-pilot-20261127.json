@@ -1,0 +1,4547 @@
+{
+  "run": "identity-budget-20261127-015949",
+  "code_commit": "713fcb9f2760198319df4e65bf855d583d5ab00c",
+  "job": {
+    "id": "j-1795744878-890306",
+    "phase": "Succeeded",
+    "gpus": 1
+  },
+  "device": {
+    "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+    "torch": "2.6.0+cu124",
+    "cuda": "12.4",
+    "gpu": "NVIDIA H200",
+    "device_count": 1,
+    "memory_bytes": 150393585664
+  },
+  "experiment": {
+    "profile": "explicit_age_hard_identity_budget_pilot",
+    "parent_run": "/root/face-age-transformation-course-project/deployment/training-runs/original-delta-20261124-160055",
+    "cases": 6,
+    "code_commit": "713fcb9f2760198319df4e65bf855d583d5ab00c",
+    "routes": [
+      "accepted_baseline",
+      "warm_soft_budget",
+      "hard_identity_budget"
+    ],
+    "diagnostic_cases": [
+      "ffhq_64376",
+      "ffhq_62644",
+      "ffhq_64919",
+      "ffhq_65817",
+      "ffhq_67140",
+      "ffhq_60764"
+    ],
+    "targets": [
+      60,
+      75
+    ],
+    "steps": 180,
+    "seed": 20261127,
+    "frozen_inputs": {
+      "/root/face-age-transformation-course-project/deployment/training-runs/identity-budget-20261127-015949/source/probe_inversion.py": "febc5153b69994b5ba50ac7b7dc5ec721aeaddf5d430da8fdb6324c925d69d47",
+      "/root/face-age-transformation-course-project/deployment/training-runs/identity-budget-20261127-015949/source/deterministic_quality_ops.py": "88f73b2e012a5519766ffb30f5035ebe4ebbf3f7a6126325a94ab6540375d07b",
+      "/root/face-age-transformation-course-project/deployment/training-runs/identity-budget-20261127-015949/source/identity_budget_study.py": "5deabb872ba0e564d5fb8789ad408ff178a349e8ce72e761aa6495a3f7dd9bdc",
+      "/root/face-age-transformation-course-project/deployment/training-runs/identity-budget-20261127-015949/source/source_color.py": "1759c7a0a5fa842fa84af46e35ed0d72457b224c661f74de62495f0f026e3c54",
+      "/root/face-age-transformation-course-project/deployment/training-runs/identity-budget-20261127-015949/source/run_identity_budget.sh": "65a4c9a3cbd4368f7dc552b13823619f00414a4dbc01f8a07d466a42a25fb743",
+      "/root/face-age-transformation-course-project/deployment/training-runs/identity-budget-20261127-015949/selection.json": "2ee895f8f791af3c0d76c0b9c98e646f9f97e8190a6a830a4da89025191e89be",
+      "/root/face-age-transformation-course-project/deployment/training-runs/original-delta-20261124-160055/evaluation/report.json": "64075601832cddce544f6fbdb8ce8238f85b00ffb51c4b4ca6850a161141c2a7",
+      "/root/face-age-transformation-course-project/integration/ascend/src/sam_npu.py": "51264f0e77503ae540cb75cac7f6d6013674378779ef4304d8c8280b30ec60bd",
+      "/root/face-age-transformation-course-project/integration/ascend/src/sam_losses.py": "36df4c801e9f24d70962d83b43b942936f608e7eeb65f2785038108b5e3b4a32",
+      "/root/face-age-transformation-course-project/integration/ascend/src/faceattr.py": "aa053a7cbc67030f14905e1328fe825f4daa57c3de3994c28a4173637ca51375",
+      "/root/face-age-transformation-course-project/deployment/gan-research/face_recognition_sface_2021dec.onnx": "0ba9fbfa01b5270c96627c4ef784da859931e02f04419c829e83484087c34e79",
+      "/root/face-age-transformation-course-project/deployment/training-runs/original-delta-20261124-160055/evaluation/ffhq_64376/reference.png": "481aab21dd8d7a6f394b9f57c57b2bbeb1f9d4f74a35619a81e117c23632ac4b",
+      "/root/face-age-transformation-course-project/deployment/training-runs/original-delta-20261124-160055/evaluation/ffhq_64376/original_delta_codes.pt": "57e477e32eab3a97bf156f17b0fa1db2e599f9b059d39792dfea63845383141c",
+      "/root/face-age-transformation-course-project/deployment/training-runs/original-delta-20261124-160055/evaluation/ffhq_64376/original_delta_constrained_codes.pt": "fce3ccc903d0ca11d1c687484dc7af09c8e586cf79b1e33cbd9f79ec74316dc0",
+      "/root/face-age-transformation-course-project/deployment/training-runs/original-delta-20261124-160055/evaluation/ffhq_62644/reference.png": "515967b15f41a0aabc098a9081734bca3456c2aeb333bb416f9a4080b13ba709",
+      "/root/face-age-transformation-course-project/deployment/training-runs/original-delta-20261124-160055/evaluation/ffhq_62644/original_delta_codes.pt": "4dc8c1c39d13e4e7dfa5961bc5edf2d4d8acd02995c9e55d824eec161608ef3a",
+      "/root/face-age-transformation-course-project/deployment/training-runs/original-delta-20261124-160055/evaluation/ffhq_62644/original_delta_constrained_codes.pt": "dbaf723eec678a93e847b9131eee4273a24d270c3d4a39d440a253d24d0360fa",
+      "/root/face-age-transformation-course-project/deployment/training-runs/original-delta-20261124-160055/evaluation/ffhq_64919/reference.png": "6d0580d7afb3a377a550a3c12d898b3a9b77f9385dbc9b339f794c588c596210",
+      "/root/face-age-transformation-course-project/deployment/training-runs/original-delta-20261124-160055/evaluation/ffhq_64919/original_delta_codes.pt": "9b3939042077e75d45c4ca69c3496b735cd1014772034b895c50f4f14183d889",
+      "/root/face-age-transformation-course-project/deployment/training-runs/original-delta-20261124-160055/evaluation/ffhq_64919/original_delta_constrained_codes.pt": "9312dfd4a6aa9235e3d279ae2fb95e39850260672f1275c1f6e883bcf1890eea",
+      "/root/face-age-transformation-course-project/deployment/training-runs/original-delta-20261124-160055/evaluation/ffhq_65817/reference.png": "640a40190c00ea001e6a375732e9eb089e8a2afc0b2124d13e8cb8fcdcbf6dfa",
+      "/root/face-age-transformation-course-project/deployment/training-runs/original-delta-20261124-160055/evaluation/ffhq_65817/original_delta_codes.pt": "419924c469590bbb365a5f28292e0a743daab65fb81bb15142cf7eccfa57ed16",
+      "/root/face-age-transformation-course-project/deployment/training-runs/original-delta-20261124-160055/evaluation/ffhq_65817/original_delta_constrained_codes.pt": "6348dfac9fcc62dad93190b0167009f98124250f7c179bc4b3f48c04eae826b8",
+      "/root/face-age-transformation-course-project/deployment/training-runs/original-delta-20261124-160055/evaluation/ffhq_67140/reference.png": "6c3e7d3bb3da9adcf36d684c573228870771674d996b4bc3b09184b72dce76ab",
+      "/root/face-age-transformation-course-project/deployment/training-runs/original-delta-20261124-160055/evaluation/ffhq_67140/original_delta_codes.pt": "b73aab3b0c941600b0db19e8ab330f4668b08db8be2da3d06d48c2a994e5600e",
+      "/root/face-age-transformation-course-project/deployment/training-runs/original-delta-20261124-160055/evaluation/ffhq_67140/original_delta_constrained_codes.pt": "03c914d04532461ebfe83e136723ee9465707508038c8b4e353500a96510a5b2",
+      "/root/face-age-transformation-course-project/deployment/training-runs/original-delta-20261124-160055/evaluation/ffhq_60764/reference.png": "481eacfa34bb430ab7655beef6bd73bab36e6006efada05543611816b45dcf18",
+      "/root/face-age-transformation-course-project/deployment/training-runs/original-delta-20261124-160055/evaluation/ffhq_60764/original_delta_codes.pt": "444a07c50a2337150edb2e6419613007cba84538089a6e018a78f600479c25e9",
+      "/root/face-age-transformation-course-project/deployment/training-runs/original-delta-20261124-160055/evaluation/ffhq_60764/original_delta_constrained_codes.pt": "050ba530d2078e2c72e4662f267db8e4b66e226e85fc1283de2e54c7d3ee04d8",
+      "/root/face-age-transformation-course-project/deployment/model-files/face-age/out/ft_l1/encoder_step1000.pt": "7c34f52aefd06a13828c24254584dfa01321d669e58ca13780ceb60b3250f3f0",
+      "/root/face-age-transformation-course-project/deployment/model-files/face-age/models/sam/sam_ffhq_aging.pt": "6fbd6085e2e6001f51f6dee896ae5ba7bd6c3fab5c06fadba75f2a12188ba143",
+      "/root/face-age-transformation-course-project/deployment/model-files/face-age/models/faceattr/convnext_t_fairface.pt": "fa5045966c9033df842096c8143885ad43ac8af23e4cdc2cc529743940e48fd3",
+      "/root/face-age-transformation-course-project/deployment/model-files/face-age/models/irse50/model_ir_se50.pth": "a035c768259b98ab1ce0e646312f48b9e1e218197a0f80ac6765e88f8b6ddf28",
+      "/root/face-age-transformation-course-project/deployment/model-files/face-age/models/yunet/face_detection_yunet_2023mar.onnx": "8f2383e4dd3cfbb4553ea8718107fc0423210dc964f9f4280604804ed2552fa4",
+      "/root/face-age-transformation-course-project/deployment/model-files/face-age/torch_cache/hub/checkpoints/alexnet-owt-7be5be79.pth": "7be5be791159472b1fbf3c69796f7cb30dca7ad8466c2df70058c37116cdee02"
+    },
+    "recipe": {
+      "initialization": "Accepted baseline high-age codes, same source anchor and original SAM direction",
+      "variable": "First8 W+ layers only",
+      "learning_rate": 0.012,
+      "lr_final_ratio": 0.2,
+      "identity_hinge": 0.8,
+      "arcface_budget": 0.01,
+      "age_KL": 0.5,
+      "order": 0.25,
+      "order_interval_years": 7.5,
+      "lpips": 0.6,
+      "trust": 0.05,
+      "color": 0.1,
+      "checkpoint": "Every10 steps plus step0; lowest full batch objective; quantized native check",
+      "hard_update": "Project Adam proposal onto linearized per-target ArcFace budget, then nonlinear backtracking",
+      "backtracking": [
+        1,
+        0.5,
+        0.25,
+        0.125,
+        0.0625,
+        0.03125,
+        0.015625,
+        0.0078125
+      ],
+      "hard_acceptance": "Each target float ArcFace >= baseline_float-.01; otherwise retain previous code",
+      "hard_output": "Both float and quantized PNG ArcFace budgets must pass; fallback to baseline if necessary"
+    },
+    "criteria": {
+      "high_age_identity_drop_max": 0.02,
+      "relative_age_span_min": 0.9,
+      "mean_high_age_error_improvement_min": 1.0,
+      "high_age60to75_must_not_shrink": true,
+      "detection_must_not_drop": true,
+      "native_visual_review_required": true,
+      "same_young_exact": true,
+      "no_automatic_promotion": true
+    },
+    "resources": {
+      "gpu": 1,
+      "cpu": 4,
+      "memory": "48Gi",
+      "max_running": "30m"
+    },
+    "caveats": [
+      "Six previously inspected development cases, not a blind test.",
+      "ArcFace budget is a proxy constraint, not a guarantee of human identity/naturalness.",
+      "SFace and MiVOLO are evaluation only; do not optimize/select steps with them.",
+      "Age targets unchanged; no80/90 calibration; no fresh reserve consumed.",
+      "A failed development gate stops larger confirmation.",
+      "Both arms change initialization relative to the previous raw-start study; compare matched arms."
+    ]
+  },
+  "groups": {
+    "accepted_baseline": {
+      "cases": 6,
+      "high_age_identity": 0.8247558027505875,
+      "high_age_error": 14.429814656575521,
+      "mean_age75": 58.88447570800781,
+      "age60to75_span": 7.3899586995442705,
+      "weak60to75": 2,
+      "age20to75_span": 24.80316734313965,
+      "missing_faces": 0,
+      "independent_missing": 0,
+      "identity_drop_over02": 0,
+      "age_error_improved": 0,
+      "pairs": [
+        {
+          "name": "ffhq_64376",
+          "condition": "60",
+          "identity_delta": 0.0,
+          "age_error_delta": 0.0
+        },
+        {
+          "name": "ffhq_64376",
+          "condition": "75",
+          "identity_delta": 0.0,
+          "age_error_delta": 0.0
+        },
+        {
+          "name": "ffhq_62644",
+          "condition": "60",
+          "identity_delta": 0.0,
+          "age_error_delta": 0.0
+        },
+        {
+          "name": "ffhq_62644",
+          "condition": "75",
+          "identity_delta": 0.0,
+          "age_error_delta": 0.0
+        },
+        {
+          "name": "ffhq_64919",
+          "condition": "60",
+          "identity_delta": 0.0,
+          "age_error_delta": 0.0
+        },
+        {
+          "name": "ffhq_64919",
+          "condition": "75",
+          "identity_delta": 0.0,
+          "age_error_delta": 0.0
+        },
+        {
+          "name": "ffhq_65817",
+          "condition": "60",
+          "identity_delta": 0.0,
+          "age_error_delta": 0.0
+        },
+        {
+          "name": "ffhq_65817",
+          "condition": "75",
+          "identity_delta": 0.0,
+          "age_error_delta": 0.0
+        },
+        {
+          "name": "ffhq_67140",
+          "condition": "60",
+          "identity_delta": 0.0,
+          "age_error_delta": 0.0
+        },
+        {
+          "name": "ffhq_67140",
+          "condition": "75",
+          "identity_delta": 0.0,
+          "age_error_delta": 0.0
+        },
+        {
+          "name": "ffhq_60764",
+          "condition": "60",
+          "identity_delta": 0.0,
+          "age_error_delta": 0.0
+        },
+        {
+          "name": "ffhq_60764",
+          "condition": "75",
+          "identity_delta": 0.0,
+          "age_error_delta": 0.0
+        }
+      ]
+    },
+    "warm_soft_budget": {
+      "cases": 6,
+      "high_age_identity": 0.8070616026719412,
+      "high_age_error": 11.795502026875814,
+      "mean_age75": 62.38331858317057,
+      "age60to75_span": 10.232460657755533,
+      "weak60to75": 1,
+      "age20to75_span": 28.30201021830241,
+      "missing_faces": 0,
+      "independent_missing": 0,
+      "identity_drop_over02": 5,
+      "age_error_improved": 11,
+      "pairs": [
+        {
+          "name": "ffhq_64376",
+          "condition": "60",
+          "identity_delta": -0.02457648515701294,
+          "age_error_delta": -2.2121124267578125
+        },
+        {
+          "name": "ffhq_64376",
+          "condition": "75",
+          "identity_delta": -0.03643453121185303,
+          "age_error_delta": -5.030723571777344
+        },
+        {
+          "name": "ffhq_62644",
+          "condition": "60",
+          "identity_delta": -0.028807461261749268,
+          "age_error_delta": -0.4295196533203125
+        },
+        {
+          "name": "ffhq_62644",
+          "condition": "75",
+          "identity_delta": -0.012913286685943604,
+          "age_error_delta": -5.382179260253906
+        },
+        {
+          "name": "ffhq_64919",
+          "condition": "60",
+          "identity_delta": -0.007841885089874268,
+          "age_error_delta": -0.7540969848632812
+        },
+        {
+          "name": "ffhq_64919",
+          "condition": "75",
+          "identity_delta": -0.023076534271240234,
+          "age_error_delta": -2.5729904174804688
+        },
+        {
+          "name": "ffhq_65817",
+          "condition": "60",
+          "identity_delta": -0.01709812879562378,
+          "age_error_delta": -3.882640838623047
+        },
+        {
+          "name": "ffhq_65817",
+          "condition": "75",
+          "identity_delta": 0.0018113255500793457,
+          "age_error_delta": -3.9503936767578125
+        },
+        {
+          "name": "ffhq_67140",
+          "condition": "60",
+          "identity_delta": -0.02323251962661743,
+          "age_error_delta": -3.856536865234375
+        },
+        {
+          "name": "ffhq_67140",
+          "condition": "75",
+          "identity_delta": -0.008210301399230957,
+          "age_error_delta": -2.2538986206054688
+        },
+        {
+          "name": "ffhq_60764",
+          "condition": "60",
+          "identity_delta": -0.01884472370147705,
+          "age_error_delta": 0.5162124633789062
+        },
+        {
+          "name": "ffhq_60764",
+          "condition": "75",
+          "identity_delta": -0.01310586929321289,
+          "age_error_delta": -1.8028717041015625
+        }
+      ]
+    },
+    "hard_identity_budget": {
+      "cases": 6,
+      "high_age_identity": 0.819368451833725,
+      "high_age_error": 12.87313969930013,
+      "mean_age75": 61.44151306152344,
+      "age60to75_span": 9.22417958577474,
+      "weak60to75": 2,
+      "age20to75_span": 27.360204696655273,
+      "missing_faces": 0,
+      "independent_missing": 0,
+      "identity_drop_over02": 1,
+      "age_error_improved": 9,
+      "pairs": [
+        {
+          "name": "ffhq_64376",
+          "condition": "60",
+          "identity_delta": -0.024659276008605957,
+          "age_error_delta": -1.7145729064941406
+        },
+        {
+          "name": "ffhq_64376",
+          "condition": "75",
+          "identity_delta": -0.00427931547164917,
+          "age_error_delta": -1.2822456359863281
+        },
+        {
+          "name": "ffhq_62644",
+          "condition": "60",
+          "identity_delta": -0.006642818450927734,
+          "age_error_delta": -0.2966270446777344
+        },
+        {
+          "name": "ffhq_62644",
+          "condition": "75",
+          "identity_delta": 0.0065937042236328125,
+          "age_error_delta": -5.350715637207031
+        },
+        {
+          "name": "ffhq_64919",
+          "condition": "60",
+          "identity_delta": 0.0014318227767944336,
+          "age_error_delta": -1.1866569519042969
+        },
+        {
+          "name": "ffhq_64919",
+          "condition": "75",
+          "identity_delta": -0.006443500518798828,
+          "age_error_delta": -2.6016616821289062
+        },
+        {
+          "name": "ffhq_65817",
+          "condition": "60",
+          "identity_delta": -0.00655287504196167,
+          "age_error_delta": -0.6395301818847656
+        },
+        {
+          "name": "ffhq_65817",
+          "condition": "75",
+          "identity_delta": -0.00999593734741211,
+          "age_error_delta": -5.423061370849609
+        },
+        {
+          "name": "ffhq_67140",
+          "condition": "60",
+          "identity_delta": 0.0,
+          "age_error_delta": 0.0
+        },
+        {
+          "name": "ffhq_67140",
+          "condition": "75",
+          "identity_delta": 0.0,
+          "age_error_delta": 0.0
+        },
+        {
+          "name": "ffhq_60764",
+          "condition": "60",
+          "identity_delta": -0.009206175804138184,
+          "age_error_delta": 0.49951171875
+        },
+        {
+          "name": "ffhq_60764",
+          "condition": "75",
+          "identity_delta": -0.004893839359283447,
+          "age_error_delta": -0.684539794921875
+        }
+      ]
+    }
+  },
+  "checks": {
+    "high_age_identity": true,
+    "high_age_error": true,
+    "high_age_span": true,
+    "relative_span": true,
+    "detection": true,
+    "independent_detection": true
+  },
+  "artifact_validation": {
+    "raw": 90,
+    "color": 90,
+    "all_decodable": true,
+    "native_size": [
+      1024,
+      1024
+    ],
+    "raw_sha256_verified": true,
+    "protected_raw_and_color_conditions": 54,
+    "all_models_unchanged": true,
+    "repeatable": true,
+    "hard_float_and_png_budget": true
+  },
+  "frozen_verification": {
+    "before": "267297181a851423836e430074a02f849f20c19402063d3880828a8ff665cd4b",
+    "after": "267297181a851423836e430074a02f849f20c19402063d3880828a8ff665cd4b",
+    "equal": true
+  },
+  "repeatability": {
+    "target_codes_equal": true,
+    "seconds": [
+      50.64057490811683,
+      50.137272923020646
+    ],
+    "best_steps": [
+      170,
+      170
+    ]
+  },
+  "timings": [
+    {
+      "name": "ffhq_64376",
+      "arm": "warm_soft_budget",
+      "seconds": 15.246472122846171,
+      "best_step": 180,
+      "initial_loss": 0.24856314063072205,
+      "final_loss": 0.03964987397193909,
+      "float_floor": [
+        0.9727482795715332,
+        0.9542851448059082
+      ],
+      "png_floor": [
+        0.9723760485649109,
+        0.9541077613830566
+      ],
+      "final_arcface": [
+        0.9730442762374878,
+        0.9547396898269653
+      ],
+      "final_png_arcface": [
+        0.9723477363586426,
+        0.9550198912620544
+      ],
+      "final_shared_age": [
+        59.23487091064453,
+        74.12456512451172
+      ],
+      "projected_proposals": 0,
+      "rejected_target_steps": 0,
+      "accepted_backtrack_count": 0,
+      "trace": [
+        {
+          "step": 10,
+          "loss": 0.11279261857271194,
+          "arcface": [
+            0.9520015716552734,
+            0.8931790590286255
+          ],
+          "quantized_arcface": [
+            0.9518476128578186,
+            0.8927386403083801
+          ],
+          "shared_age": [
+            57.21527862548828,
+            73.51895141601562
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 20,
+          "loss": 0.07744169235229492,
+          "arcface": [
+            0.966118335723877,
+            0.9288389086723328
+          ],
+          "quantized_arcface": [
+            0.9656585454940796,
+            0.9292268753051758
+          ],
+          "shared_age": [
+            58.03302001953125,
+            73.61217498779297
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 30,
+          "loss": 0.06299726665019989,
+          "arcface": [
+            0.9726884961128235,
+            0.9446127414703369
+          ],
+          "quantized_arcface": [
+            0.9721564650535583,
+            0.9443666934967041
+          ],
+          "shared_age": [
+            58.48201370239258,
+            73.50944519042969
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 40,
+          "loss": 0.05328018218278885,
+          "arcface": [
+            0.9726899862289429,
+            0.9547335505485535
+          ],
+          "quantized_arcface": [
+            0.972241997718811,
+            0.9544339776039124
+          ],
+          "shared_age": [
+            58.67658233642578,
+            73.68682861328125
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 50,
+          "loss": 0.04966730624437332,
+          "arcface": [
+            0.9729383587837219,
+            0.9549708366394043
+          ],
+          "quantized_arcface": [
+            0.9723716974258423,
+            0.9549077749252319
+          ],
+          "shared_age": [
+            58.91276168823242,
+            73.80658721923828
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 60,
+          "loss": 0.04746592789888382,
+          "arcface": [
+            0.9730820059776306,
+            0.9547417163848877
+          ],
+          "quantized_arcface": [
+            0.9723332524299622,
+            0.9546799659729004
+          ],
+          "shared_age": [
+            58.9615592956543,
+            73.86797332763672
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 70,
+          "loss": 0.045994359999895096,
+          "arcface": [
+            0.9736979007720947,
+            0.953822135925293
+          ],
+          "quantized_arcface": [
+            0.9730156660079956,
+            0.9536911249160767
+          ],
+          "shared_age": [
+            58.93772888183594,
+            73.94214630126953
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 80,
+          "loss": 0.0446268655359745,
+          "arcface": [
+            0.9734153747558594,
+            0.9541541337966919
+          ],
+          "quantized_arcface": [
+            0.972790002822876,
+            0.9541162252426147
+          ],
+          "shared_age": [
+            59.07552719116211,
+            73.97211456298828
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 90,
+          "loss": 0.04365988075733185,
+          "arcface": [
+            0.9731956720352173,
+            0.954764723777771
+          ],
+          "quantized_arcface": [
+            0.9725103378295898,
+            0.9547685980796814
+          ],
+          "shared_age": [
+            59.06395721435547,
+            73.99406433105469
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 100,
+          "loss": 0.04308191314339638,
+          "arcface": [
+            0.9738492965698242,
+            0.955329179763794
+          ],
+          "quantized_arcface": [
+            0.9730285406112671,
+            0.9554933905601501
+          ],
+          "shared_age": [
+            59.08390426635742,
+            74.01431274414062
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 110,
+          "loss": 0.042228057980537415,
+          "arcface": [
+            0.9730508923530579,
+            0.9547266364097595
+          ],
+          "quantized_arcface": [
+            0.9723377227783203,
+            0.9547076225280762
+          ],
+          "shared_age": [
+            59.12104415893555,
+            74.04207611083984
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 120,
+          "loss": 0.041697509586811066,
+          "arcface": [
+            0.9725837707519531,
+            0.95472651720047
+          ],
+          "quantized_arcface": [
+            0.9718382954597473,
+            0.9547613859176636
+          ],
+          "shared_age": [
+            59.1624755859375,
+            74.06025695800781
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 130,
+          "loss": 0.041207388043403625,
+          "arcface": [
+            0.9730888605117798,
+            0.9547206163406372
+          ],
+          "quantized_arcface": [
+            0.9723808169364929,
+            0.9546684622764587
+          ],
+          "shared_age": [
+            59.20135498046875,
+            74.07816314697266
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 140,
+          "loss": 0.040827300399541855,
+          "arcface": [
+            0.9733350276947021,
+            0.9546912908554077
+          ],
+          "quantized_arcface": [
+            0.9725525379180908,
+            0.954506516456604
+          ],
+          "shared_age": [
+            59.224945068359375,
+            74.08968353271484
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 150,
+          "loss": 0.04046420007944107,
+          "arcface": [
+            0.9732861518859863,
+            0.954803466796875
+          ],
+          "quantized_arcface": [
+            0.9725872278213501,
+            0.9548075199127197
+          ],
+          "shared_age": [
+            59.20941925048828,
+            74.10022735595703
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 160,
+          "loss": 0.040108874440193176,
+          "arcface": [
+            0.9729499816894531,
+            0.9545465111732483
+          ],
+          "quantized_arcface": [
+            0.9721758365631104,
+            0.9544343948364258
+          ],
+          "shared_age": [
+            59.19764709472656,
+            74.11091613769531
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 170,
+          "loss": 0.039862260222435,
+          "arcface": [
+            0.9728304147720337,
+            0.9548167586326599
+          ],
+          "quantized_arcface": [
+            0.9720790982246399,
+            0.9549182057380676
+          ],
+          "shared_age": [
+            59.245361328125,
+            74.11886596679688
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 180,
+          "loss": 0.03964987397193909,
+          "arcface": [
+            0.9730442762374878,
+            0.9547396898269653
+          ],
+          "quantized_arcface": [
+            0.9723477363586426,
+            0.9550198912620544
+          ],
+          "shared_age": [
+            59.23487091064453,
+            74.12456512451172
+          ],
+          "hard_feasible": false
+        }
+      ]
+    },
+    {
+      "name": "ffhq_64376",
+      "arm": "hard_identity_budget",
+      "seconds": 50.64057490811683,
+      "best_step": 170,
+      "initial_loss": 0.24856314063072205,
+      "final_loss": 0.0768946185708046,
+      "float_floor": [
+        0.9727482795715332,
+        0.9542851448059082
+      ],
+      "png_floor": [
+        0.9723760485649109,
+        0.9541077613830566
+      ],
+      "final_arcface": [
+        0.9727489948272705,
+        0.9542886018753052
+      ],
+      "final_png_arcface": [
+        0.9724665880203247,
+        0.9541448354721069
+      ],
+      "final_shared_age": [
+        57.304012298583984,
+        72.76453399658203
+      ],
+      "projected_proposals": 358,
+      "rejected_target_steps": 320,
+      "accepted_backtrack_count": 152,
+      "trace": [
+        {
+          "step": 10,
+          "loss": 0.08074472844600677,
+          "arcface": [
+            0.972748339176178,
+            0.954299807548523
+          ],
+          "quantized_arcface": [
+            0.9725547432899475,
+            0.9541393518447876
+          ],
+          "shared_age": [
+            56.859947204589844,
+            72.63814544677734
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 20,
+          "loss": 0.07939140498638153,
+          "arcface": [
+            0.9727663993835449,
+            0.954300045967102
+          ],
+          "quantized_arcface": [
+            0.9724771976470947,
+            0.9541471004486084
+          ],
+          "shared_age": [
+            57.075469970703125,
+            72.66334533691406
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 30,
+          "loss": 0.07938601076602936,
+          "arcface": [
+            0.9727663993835449,
+            0.9542931318283081
+          ],
+          "quantized_arcface": [
+            0.9724771976470947,
+            0.9541338682174683
+          ],
+          "shared_age": [
+            57.075469970703125,
+            72.66307830810547
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 40,
+          "loss": 0.07773083448410034,
+          "arcface": [
+            0.9727488160133362,
+            0.9542893767356873
+          ],
+          "quantized_arcface": [
+            0.9723227024078369,
+            0.954235315322876
+          ],
+          "shared_age": [
+            57.26142120361328,
+            72.7389907836914
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 50,
+          "loss": 0.0770220085978508,
+          "arcface": [
+            0.972748875617981,
+            0.954293429851532
+          ],
+          "quantized_arcface": [
+            0.9723970890045166,
+            0.9541664123535156
+          ],
+          "shared_age": [
+            57.301658630371094,
+            72.76205444335938
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 60,
+          "loss": 0.07693105936050415,
+          "arcface": [
+            0.9727489948272705,
+            0.954293429851532
+          ],
+          "quantized_arcface": [
+            0.9724665880203247,
+            0.9541664123535156
+          ],
+          "shared_age": [
+            57.304012298583984,
+            72.76205444335938
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 70,
+          "loss": 0.07693105936050415,
+          "arcface": [
+            0.9727489948272705,
+            0.954293429851532
+          ],
+          "quantized_arcface": [
+            0.9724665880203247,
+            0.9541664123535156
+          ],
+          "shared_age": [
+            57.304012298583984,
+            72.76205444335938
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 80,
+          "loss": 0.07693105936050415,
+          "arcface": [
+            0.9727489948272705,
+            0.954293429851532
+          ],
+          "quantized_arcface": [
+            0.9724665880203247,
+            0.9541664123535156
+          ],
+          "shared_age": [
+            57.304012298583984,
+            72.76205444335938
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 90,
+          "loss": 0.07694561034440994,
+          "arcface": [
+            0.9727489948272705,
+            0.9542855024337769
+          ],
+          "quantized_arcface": [
+            0.9724665880203247,
+            0.9541481137275696
+          ],
+          "shared_age": [
+            57.304012298583984,
+            72.7601547241211
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 100,
+          "loss": 0.07694561034440994,
+          "arcface": [
+            0.9727489948272705,
+            0.9542855024337769
+          ],
+          "quantized_arcface": [
+            0.9724665880203247,
+            0.9541481137275696
+          ],
+          "shared_age": [
+            57.304012298583984,
+            72.7601547241211
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 110,
+          "loss": 0.07694561034440994,
+          "arcface": [
+            0.9727489948272705,
+            0.9542855024337769
+          ],
+          "quantized_arcface": [
+            0.9724665880203247,
+            0.9541481137275696
+          ],
+          "shared_age": [
+            57.304012298583984,
+            72.7601547241211
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 120,
+          "loss": 0.07694561034440994,
+          "arcface": [
+            0.9727489948272705,
+            0.9542855024337769
+          ],
+          "quantized_arcface": [
+            0.9724665880203247,
+            0.9541481137275696
+          ],
+          "shared_age": [
+            57.304012298583984,
+            72.7601547241211
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 130,
+          "loss": 0.07690367847681046,
+          "arcface": [
+            0.9727489948272705,
+            0.9542982578277588
+          ],
+          "quantized_arcface": [
+            0.9724665880203247,
+            0.954195499420166
+          ],
+          "shared_age": [
+            57.304012298583984,
+            72.76435852050781
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 140,
+          "loss": 0.07690367847681046,
+          "arcface": [
+            0.9727489948272705,
+            0.9542982578277588
+          ],
+          "quantized_arcface": [
+            0.9724665880203247,
+            0.954195499420166
+          ],
+          "shared_age": [
+            57.304012298583984,
+            72.76435852050781
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 150,
+          "loss": 0.07690367847681046,
+          "arcface": [
+            0.9727489948272705,
+            0.9542982578277588
+          ],
+          "quantized_arcface": [
+            0.9724665880203247,
+            0.954195499420166
+          ],
+          "shared_age": [
+            57.304012298583984,
+            72.76435852050781
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 160,
+          "loss": 0.07690367847681046,
+          "arcface": [
+            0.9727489948272705,
+            0.9542982578277588
+          ],
+          "quantized_arcface": [
+            0.9724665880203247,
+            0.954195499420166
+          ],
+          "shared_age": [
+            57.304012298583984,
+            72.76435852050781
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 170,
+          "loss": 0.0768946185708046,
+          "arcface": [
+            0.9727489948272705,
+            0.9542886018753052
+          ],
+          "quantized_arcface": [
+            0.9724665880203247,
+            0.9541448354721069
+          ],
+          "shared_age": [
+            57.304012298583984,
+            72.76453399658203
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 180,
+          "loss": 0.0768946185708046,
+          "arcface": [
+            0.9727489948272705,
+            0.9542886018753052
+          ],
+          "quantized_arcface": [
+            0.9724665880203247,
+            0.9541448354721069
+          ],
+          "shared_age": [
+            57.304012298583984,
+            72.76453399658203
+          ],
+          "hard_feasible": true
+        }
+      ]
+    },
+    {
+      "name": "ffhq_62644",
+      "arm": "warm_soft_budget",
+      "seconds": 15.346480804029852,
+      "best_step": 180,
+      "initial_loss": 0.24912476539611816,
+      "final_loss": 0.0452493354678154,
+      "float_floor": [
+        0.9508330821990967,
+        0.9089944362640381
+      ],
+      "png_floor": [
+        0.9506716728210449,
+        0.9086798429489136
+      ],
+      "final_arcface": [
+        0.9507269859313965,
+        0.9095296859741211
+      ],
+      "final_png_arcface": [
+        0.9508649110794067,
+        0.9093222618103027
+      ],
+      "final_shared_age": [
+        59.41341018676758,
+        74.27528381347656
+      ],
+      "projected_proposals": 0,
+      "rejected_target_steps": 0,
+      "accepted_backtrack_count": 0,
+      "trace": [
+        {
+          "step": 10,
+          "loss": 0.11230263113975525,
+          "arcface": [
+            0.9449498653411865,
+            0.8295397758483887
+          ],
+          "quantized_arcface": [
+            0.9449307918548584,
+            0.8296881914138794
+          ],
+          "shared_age": [
+            58.44430923461914,
+            73.70589447021484
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 20,
+          "loss": 0.08774256706237793,
+          "arcface": [
+            0.9504387378692627,
+            0.8723869919776917
+          ],
+          "quantized_arcface": [
+            0.9507531523704529,
+            0.8723001480102539
+          ],
+          "shared_age": [
+            58.687705993652344,
+            73.66841125488281
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 30,
+          "loss": 0.07024800032377243,
+          "arcface": [
+            0.9509335160255432,
+            0.8981727361679077
+          ],
+          "quantized_arcface": [
+            0.9510071277618408,
+            0.8976216316223145
+          ],
+          "shared_age": [
+            59.15166091918945,
+            73.69805908203125
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 40,
+          "loss": 0.06158803030848503,
+          "arcface": [
+            0.9512125849723816,
+            0.9099941253662109
+          ],
+          "quantized_arcface": [
+            0.9514050483703613,
+            0.9095076322555542
+          ],
+          "shared_age": [
+            59.19178771972656,
+            73.80033874511719
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 50,
+          "loss": 0.05704032629728317,
+          "arcface": [
+            0.9512925148010254,
+            0.9096466898918152
+          ],
+          "quantized_arcface": [
+            0.9514305591583252,
+            0.9093141555786133
+          ],
+          "shared_age": [
+            59.238426208496094,
+            73.93583679199219
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 60,
+          "loss": 0.05436118319630623,
+          "arcface": [
+            0.9510344862937927,
+            0.9098989963531494
+          ],
+          "quantized_arcface": [
+            0.9511007070541382,
+            0.9097232818603516
+          ],
+          "shared_age": [
+            59.2550163269043,
+            74.0017318725586
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 70,
+          "loss": 0.0527513287961483,
+          "arcface": [
+            0.9515529870986938,
+            0.9106779098510742
+          ],
+          "quantized_arcface": [
+            0.9517199993133545,
+            0.9104575514793396
+          ],
+          "shared_age": [
+            59.23771667480469,
+            74.050048828125
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 80,
+          "loss": 0.05149724334478378,
+          "arcface": [
+            0.9512690305709839,
+            0.909889817237854
+          ],
+          "quantized_arcface": [
+            0.9511634111404419,
+            0.9097079038619995
+          ],
+          "shared_age": [
+            59.169151306152344,
+            74.0887680053711
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 90,
+          "loss": 0.05058399587869644,
+          "arcface": [
+            0.9519103765487671,
+            0.9084627628326416
+          ],
+          "quantized_arcface": [
+            0.9519389867782593,
+            0.9079524278640747
+          ],
+          "shared_age": [
+            59.30027770996094,
+            74.12593841552734
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 100,
+          "loss": 0.049486108124256134,
+          "arcface": [
+            0.951935887336731,
+            0.9098881483078003
+          ],
+          "quantized_arcface": [
+            0.9518635272979736,
+            0.9093612432479858
+          ],
+          "shared_age": [
+            59.40139389038086,
+            74.15087127685547
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 110,
+          "loss": 0.048709653317928314,
+          "arcface": [
+            0.9518800973892212,
+            0.9104318618774414
+          ],
+          "quantized_arcface": [
+            0.9519252777099609,
+            0.9101560115814209
+          ],
+          "shared_age": [
+            59.4196662902832,
+            74.17818450927734
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 120,
+          "loss": 0.04788036271929741,
+          "arcface": [
+            0.9511352777481079,
+            0.9105871319770813
+          ],
+          "quantized_arcface": [
+            0.9511876106262207,
+            0.9105380773544312
+          ],
+          "shared_age": [
+            59.328365325927734,
+            74.19441223144531
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 130,
+          "loss": 0.047294408082962036,
+          "arcface": [
+            0.9513934850692749,
+            0.9105972051620483
+          ],
+          "quantized_arcface": [
+            0.9515025019645691,
+            0.9105265140533447
+          ],
+          "shared_age": [
+            59.29369354248047,
+            74.21356964111328
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 140,
+          "loss": 0.04669769108295441,
+          "arcface": [
+            0.9507284760475159,
+            0.9106224179267883
+          ],
+          "quantized_arcface": [
+            0.9509029388427734,
+            0.9101861119270325
+          ],
+          "shared_age": [
+            59.398502349853516,
+            74.2322769165039
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 150,
+          "loss": 0.04625564068555832,
+          "arcface": [
+            0.9507429599761963,
+            0.9103978872299194
+          ],
+          "quantized_arcface": [
+            0.9508630037307739,
+            0.9100496172904968
+          ],
+          "shared_age": [
+            59.42837142944336,
+            74.24308776855469
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 160,
+          "loss": 0.045824505388736725,
+          "arcface": [
+            0.95108962059021,
+            0.9100844860076904
+          ],
+          "quantized_arcface": [
+            0.951366126537323,
+            0.909857451915741
+          ],
+          "shared_age": [
+            59.43058776855469,
+            74.25865173339844
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 170,
+          "loss": 0.04555163159966469,
+          "arcface": [
+            0.951047420501709,
+            0.9102177023887634
+          ],
+          "quantized_arcface": [
+            0.9512795209884644,
+            0.909995436668396
+          ],
+          "shared_age": [
+            59.453208923339844,
+            74.26335906982422
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 180,
+          "loss": 0.0452493354678154,
+          "arcface": [
+            0.9507269859313965,
+            0.9095296859741211
+          ],
+          "quantized_arcface": [
+            0.9508649110794067,
+            0.9093222618103027
+          ],
+          "shared_age": [
+            59.41341018676758,
+            74.27528381347656
+          ],
+          "hard_feasible": false
+        }
+      ]
+    },
+    {
+      "name": "ffhq_62644",
+      "arm": "hard_identity_budget",
+      "seconds": 50.642313671065494,
+      "best_step": 160,
+      "initial_loss": 0.24912476539611816,
+      "final_loss": 0.10637281090021133,
+      "float_floor": [
+        0.9508330821990967,
+        0.9089944362640381
+      ],
+      "png_floor": [
+        0.9506716728210449,
+        0.9086798429489136
+      ],
+      "final_arcface": [
+        0.9508401155471802,
+        0.909005880355835
+      ],
+      "final_png_arcface": [
+        0.9509528875350952,
+        0.9088109731674194
+      ],
+      "final_shared_age": [
+        58.09785842895508,
+        70.72030639648438
+      ],
+      "projected_proposals": 357,
+      "rejected_target_steps": 308,
+      "accepted_backtrack_count": 214,
+      "trace": [
+        {
+          "step": 10,
+          "loss": 0.130794957280159,
+          "arcface": [
+            0.9508469700813293,
+            0.9089986085891724
+          ],
+          "quantized_arcface": [
+            0.9511257410049438,
+            0.9083855152130127
+          ],
+          "shared_age": [
+            59.07196807861328,
+            70.20702362060547
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 20,
+          "loss": 0.11596792191267014,
+          "arcface": [
+            0.9508407115936279,
+            0.9089996814727783
+          ],
+          "quantized_arcface": [
+            0.9510762691497803,
+            0.9085910320281982
+          ],
+          "shared_age": [
+            57.39446258544922,
+            70.43915557861328
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 30,
+          "loss": 0.11305075138807297,
+          "arcface": [
+            0.9508450031280518,
+            0.9089957475662231
+          ],
+          "quantized_arcface": [
+            0.9508333206176758,
+            0.9085872173309326
+          ],
+          "shared_age": [
+            57.97529983520508,
+            70.4643325805664
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 40,
+          "loss": 0.11255231499671936,
+          "arcface": [
+            0.9508413672447205,
+            0.9089957475662231
+          ],
+          "quantized_arcface": [
+            0.9508953094482422,
+            0.9085872173309326
+          ],
+          "shared_age": [
+            58.05556869506836,
+            70.4643325805664
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 50,
+          "loss": 0.11115054786205292,
+          "arcface": [
+            0.9508370161056519,
+            0.9089957475662231
+          ],
+          "quantized_arcface": [
+            0.9508001804351807,
+            0.9085872173309326
+          ],
+          "shared_age": [
+            58.110076904296875,
+            70.4643325805664
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 60,
+          "loss": 0.11115054786205292,
+          "arcface": [
+            0.9508370161056519,
+            0.9089957475662231
+          ],
+          "quantized_arcface": [
+            0.9508001804351807,
+            0.9085872173309326
+          ],
+          "shared_age": [
+            58.110076904296875,
+            70.4643325805664
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 70,
+          "loss": 0.10968265682458878,
+          "arcface": [
+            0.9508358240127563,
+            0.9090038537979126
+          ],
+          "quantized_arcface": [
+            0.9508212804794312,
+            0.9087413549423218
+          ],
+          "shared_age": [
+            58.094913482666016,
+            70.53711700439453
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 80,
+          "loss": 0.10764918476343155,
+          "arcface": [
+            0.9508358240127563,
+            0.9090051651000977
+          ],
+          "quantized_arcface": [
+            0.9508212804794312,
+            0.9088436365127563
+          ],
+          "shared_age": [
+            58.094913482666016,
+            70.64640808105469
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 90,
+          "loss": 0.10764918476343155,
+          "arcface": [
+            0.9508358240127563,
+            0.9090051651000977
+          ],
+          "quantized_arcface": [
+            0.9508212804794312,
+            0.9088436365127563
+          ],
+          "shared_age": [
+            58.094913482666016,
+            70.64640808105469
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 100,
+          "loss": 0.10764918476343155,
+          "arcface": [
+            0.9508358240127563,
+            0.9090051651000977
+          ],
+          "quantized_arcface": [
+            0.9508212804794312,
+            0.9088436365127563
+          ],
+          "shared_age": [
+            58.094913482666016,
+            70.64640808105469
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 110,
+          "loss": 0.10764918476343155,
+          "arcface": [
+            0.9508358240127563,
+            0.9090051651000977
+          ],
+          "quantized_arcface": [
+            0.9508212804794312,
+            0.9088436365127563
+          ],
+          "shared_age": [
+            58.094913482666016,
+            70.64640808105469
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 120,
+          "loss": 0.10674329102039337,
+          "arcface": [
+            0.9508358240127563,
+            0.9090062975883484
+          ],
+          "quantized_arcface": [
+            0.9508212804794312,
+            0.9087504148483276
+          ],
+          "shared_age": [
+            58.094913482666016,
+            70.70063781738281
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 130,
+          "loss": 0.10674329102039337,
+          "arcface": [
+            0.9508358240127563,
+            0.9090062975883484
+          ],
+          "quantized_arcface": [
+            0.9508212804794312,
+            0.9087504148483276
+          ],
+          "shared_age": [
+            58.094913482666016,
+            70.70063781738281
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 140,
+          "loss": 0.10668520629405975,
+          "arcface": [
+            0.9508495330810547,
+            0.9090062975883484
+          ],
+          "quantized_arcface": [
+            0.9508731961250305,
+            0.9087504148483276
+          ],
+          "shared_age": [
+            58.08064270019531,
+            70.70063781738281
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 150,
+          "loss": 0.10666203498840332,
+          "arcface": [
+            0.9508401155471802,
+            0.9090062975883484
+          ],
+          "quantized_arcface": [
+            0.9509528875350952,
+            0.9087504148483276
+          ],
+          "shared_age": [
+            58.09785842895508,
+            70.70063781738281
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 160,
+          "loss": 0.10637281090021133,
+          "arcface": [
+            0.9508401155471802,
+            0.909005880355835
+          ],
+          "quantized_arcface": [
+            0.9509528875350952,
+            0.9088109731674194
+          ],
+          "shared_age": [
+            58.09785842895508,
+            70.72030639648438
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 170,
+          "loss": 0.10637281090021133,
+          "arcface": [
+            0.9508401155471802,
+            0.909005880355835
+          ],
+          "quantized_arcface": [
+            0.9509528875350952,
+            0.9088109731674194
+          ],
+          "shared_age": [
+            58.09785842895508,
+            70.72030639648438
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 180,
+          "loss": 0.10620353370904922,
+          "arcface": [
+            0.9508352875709534,
+            0.9090009927749634
+          ],
+          "quantized_arcface": [
+            0.9509790539741516,
+            0.9086602926254272
+          ],
+          "shared_age": [
+            58.09516143798828,
+            70.73030090332031
+          ],
+          "hard_feasible": false
+        }
+      ]
+    },
+    {
+      "name": "ffhq_64919",
+      "arm": "warm_soft_budget",
+      "seconds": 15.222207310143858,
+      "best_step": 180,
+      "initial_loss": 0.5185413956642151,
+      "final_loss": 0.030277375131845474,
+      "float_floor": [
+        0.985999345779419,
+        0.9760761260986328
+      ],
+      "png_floor": [
+        0.9859838485717773,
+        0.9760011434555054
+      ],
+      "final_arcface": [
+        0.9861291646957397,
+        0.9761699438095093
+      ],
+      "final_png_arcface": [
+        0.9860935211181641,
+        0.9761955738067627
+      ],
+      "final_shared_age": [
+        59.28666687011719,
+        74.13619995117188
+      ],
+      "projected_proposals": 0,
+      "rejected_target_steps": 0,
+      "accepted_backtrack_count": 0,
+      "trace": [
+        {
+          "step": 10,
+          "loss": 0.12094981223344803,
+          "arcface": [
+            0.977523148059845,
+            0.8806642293930054
+          ],
+          "quantized_arcface": [
+            0.9775388240814209,
+            0.880987823009491
+          ],
+          "shared_age": [
+            58.05799865722656,
+            73.31901550292969
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 20,
+          "loss": 0.09050314128398895,
+          "arcface": [
+            0.9830300211906433,
+            0.9138128757476807
+          ],
+          "quantized_arcface": [
+            0.9830389022827148,
+            0.9139475226402283
+          ],
+          "shared_age": [
+            58.72719955444336,
+            73.76675415039062
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 30,
+          "loss": 0.07054092735052109,
+          "arcface": [
+            0.9857516288757324,
+            0.9470176696777344
+          ],
+          "quantized_arcface": [
+            0.9857145547866821,
+            0.9469414949417114
+          ],
+          "shared_age": [
+            59.07851028442383,
+            73.37405395507812
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 40,
+          "loss": 0.0575302429497242,
+          "arcface": [
+            0.9863061308860779,
+            0.9586135149002075
+          ],
+          "quantized_arcface": [
+            0.9863642454147339,
+            0.9585601687431335
+          ],
+          "shared_age": [
+            59.05131530761719,
+            73.4715576171875
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 50,
+          "loss": 0.04971299320459366,
+          "arcface": [
+            0.9860092401504517,
+            0.9639827013015747
+          ],
+          "quantized_arcface": [
+            0.9860751628875732,
+            0.9639227390289307
+          ],
+          "shared_age": [
+            59.04460144042969,
+            73.65849304199219
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 60,
+          "loss": 0.04502362757921219,
+          "arcface": [
+            0.9865959882736206,
+            0.9680622220039368
+          ],
+          "quantized_arcface": [
+            0.9865753650665283,
+            0.968002438545227
+          ],
+          "shared_age": [
+            59.120635986328125,
+            73.67217254638672
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 70,
+          "loss": 0.04171371832489967,
+          "arcface": [
+            0.9866260290145874,
+            0.9703354835510254
+          ],
+          "quantized_arcface": [
+            0.9866045713424683,
+            0.9702779054641724
+          ],
+          "shared_age": [
+            59.1259651184082,
+            73.75067901611328
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 80,
+          "loss": 0.039137911051511765,
+          "arcface": [
+            0.985970675945282,
+            0.971741795539856
+          ],
+          "quantized_arcface": [
+            0.9859176874160767,
+            0.9717181921005249
+          ],
+          "shared_age": [
+            59.188438415527344,
+            73.80722045898438
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 90,
+          "loss": 0.037133701145648956,
+          "arcface": [
+            0.9864681959152222,
+            0.9733337163925171
+          ],
+          "quantized_arcface": [
+            0.9864890575408936,
+            0.9732396602630615
+          ],
+          "shared_age": [
+            59.171573638916016,
+            73.8616714477539
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 100,
+          "loss": 0.03546370565891266,
+          "arcface": [
+            0.9859058260917664,
+            0.9747124910354614
+          ],
+          "quantized_arcface": [
+            0.9857938885688782,
+            0.9746417999267578
+          ],
+          "shared_age": [
+            59.210880279541016,
+            73.90843963623047
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 110,
+          "loss": 0.03412780910730362,
+          "arcface": [
+            0.9862985610961914,
+            0.9760024547576904
+          ],
+          "quantized_arcface": [
+            0.986334502696991,
+            0.9759364724159241
+          ],
+          "shared_age": [
+            59.217132568359375,
+            73.93692779541016
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 120,
+          "loss": 0.03310401365160942,
+          "arcface": [
+            0.9860488772392273,
+            0.9760217666625977
+          ],
+          "quantized_arcface": [
+            0.9861171245574951,
+            0.975974977016449
+          ],
+          "shared_age": [
+            59.22394943237305,
+            73.9956283569336
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 130,
+          "loss": 0.03237844258546829,
+          "arcface": [
+            0.9864559173583984,
+            0.9760979413986206
+          ],
+          "quantized_arcface": [
+            0.986530065536499,
+            0.9760985374450684
+          ],
+          "shared_age": [
+            59.24216079711914,
+            74.03240203857422
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 140,
+          "loss": 0.03178466111421585,
+          "arcface": [
+            0.9867410659790039,
+            0.9761478900909424
+          ],
+          "quantized_arcface": [
+            0.9868177175521851,
+            0.9762775301933289
+          ],
+          "shared_age": [
+            59.261173248291016,
+            74.06312561035156
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 150,
+          "loss": 0.031251341104507446,
+          "arcface": [
+            0.9858983755111694,
+            0.976055383682251
+          ],
+          "quantized_arcface": [
+            0.985944926738739,
+            0.9761097431182861
+          ],
+          "shared_age": [
+            59.274845123291016,
+            74.09114837646484
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 160,
+          "loss": 0.03084627538919449,
+          "arcface": [
+            0.9862045049667358,
+            0.9760841131210327
+          ],
+          "quantized_arcface": [
+            0.986168384552002,
+            0.9760830402374268
+          ],
+          "shared_age": [
+            59.28071212768555,
+            74.10985565185547
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 170,
+          "loss": 0.03053266555070877,
+          "arcface": [
+            0.9860787987709045,
+            0.9759871959686279
+          ],
+          "quantized_arcface": [
+            0.9860875606536865,
+            0.9759590029716492
+          ],
+          "shared_age": [
+            59.281646728515625,
+            74.12895202636719
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 180,
+          "loss": 0.030277375131845474,
+          "arcface": [
+            0.9861291646957397,
+            0.9761699438095093
+          ],
+          "quantized_arcface": [
+            0.9860935211181641,
+            0.9761955738067627
+          ],
+          "shared_age": [
+            59.28666687011719,
+            74.13619995117188
+          ],
+          "hard_feasible": true
+        }
+      ]
+    },
+    {
+      "name": "ffhq_64919",
+      "arm": "hard_identity_budget",
+      "seconds": 49.71420394582674,
+      "best_step": 180,
+      "initial_loss": 0.5185413956642151,
+      "final_loss": 0.10685494542121887,
+      "float_floor": [
+        0.985999345779419,
+        0.9760761260986328
+      ],
+      "png_floor": [
+        0.9859838485717773,
+        0.9760011434555054
+      ],
+      "final_arcface": [
+        0.9860075116157532,
+        0.9760770797729492
+      ],
+      "final_png_arcface": [
+        0.9860466718673706,
+        0.976097822189331
+      ],
+      "final_shared_age": [
+        58.355567932128906,
+        69.29890441894531
+      ],
+      "projected_proposals": 341,
+      "rejected_target_steps": 281,
+      "accepted_backtrack_count": 281,
+      "trace": [
+        {
+          "step": 10,
+          "loss": 0.14888939261436462,
+          "arcface": [
+            0.9860103130340576,
+            0.9760768413543701
+          ],
+          "quantized_arcface": [
+            0.9860159754753113,
+            0.976091206073761
+          ],
+          "shared_age": [
+            58.68648910522461,
+            67.85421752929688
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 20,
+          "loss": 0.13723085820674896,
+          "arcface": [
+            0.9860094785690308,
+            0.9760777950286865
+          ],
+          "quantized_arcface": [
+            0.9859904050827026,
+            0.9760314226150513
+          ],
+          "shared_age": [
+            57.633358001708984,
+            68.16905975341797
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 30,
+          "loss": 0.13381579518318176,
+          "arcface": [
+            0.986007571220398,
+            0.9760771989822388
+          ],
+          "quantized_arcface": [
+            0.986035943031311,
+            0.9759944081306458
+          ],
+          "shared_age": [
+            57.89946365356445,
+            68.22393035888672
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 40,
+          "loss": 0.12999942898750305,
+          "arcface": [
+            0.9860055446624756,
+            0.9760792255401611
+          ],
+          "quantized_arcface": [
+            0.9859971404075623,
+            0.976076602935791
+          ],
+          "shared_age": [
+            58.42215347290039,
+            68.25603485107422
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 50,
+          "loss": 0.11927822977304459,
+          "arcface": [
+            0.9860000610351562,
+            0.9760768413543701
+          ],
+          "quantized_arcface": [
+            0.986108660697937,
+            0.9761005640029907
+          ],
+          "shared_age": [
+            58.54108428955078,
+            68.69957733154297
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 60,
+          "loss": 0.11663486808538437,
+          "arcface": [
+            0.9860012531280518,
+            0.9760777950286865
+          ],
+          "quantized_arcface": [
+            0.9860546588897705,
+            0.9760503768920898
+          ],
+          "shared_age": [
+            58.41878128051758,
+            68.8055191040039
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 70,
+          "loss": 0.11515825241804123,
+          "arcface": [
+            0.9860012531280518,
+            0.9760802984237671
+          ],
+          "quantized_arcface": [
+            0.9860546588897705,
+            0.9760782718658447
+          ],
+          "shared_age": [
+            58.41878128051758,
+            68.88427734375
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 80,
+          "loss": 0.11151245981454849,
+          "arcface": [
+            0.9860012531280518,
+            0.9760786294937134
+          ],
+          "quantized_arcface": [
+            0.9860546588897705,
+            0.9761444926261902
+          ],
+          "shared_age": [
+            58.41878128051758,
+            69.07704162597656
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 90,
+          "loss": 0.11151245981454849,
+          "arcface": [
+            0.9860012531280518,
+            0.9760786294937134
+          ],
+          "quantized_arcface": [
+            0.9860546588897705,
+            0.9761444926261902
+          ],
+          "shared_age": [
+            58.41878128051758,
+            69.07704162597656
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 100,
+          "loss": 0.10877402126789093,
+          "arcface": [
+            0.9860012531280518,
+            0.9760808944702148
+          ],
+          "quantized_arcface": [
+            0.9860546588897705,
+            0.9760949015617371
+          ],
+          "shared_age": [
+            58.41878128051758,
+            69.23835754394531
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 110,
+          "loss": 0.10877402126789093,
+          "arcface": [
+            0.9860012531280518,
+            0.9760808944702148
+          ],
+          "quantized_arcface": [
+            0.9860546588897705,
+            0.9760949015617371
+          ],
+          "shared_age": [
+            58.41878128051758,
+            69.23835754394531
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 120,
+          "loss": 0.10872690379619598,
+          "arcface": [
+            0.986003041267395,
+            0.9760808944702148
+          ],
+          "quantized_arcface": [
+            0.9861028790473938,
+            0.9760949015617371
+          ],
+          "shared_age": [
+            58.409584045410156,
+            69.23835754394531
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 130,
+          "loss": 0.10843513160943985,
+          "arcface": [
+            0.9859995245933533,
+            0.9760808944702148
+          ],
+          "quantized_arcface": [
+            0.9860298037528992,
+            0.9760949015617371
+          ],
+          "shared_age": [
+            58.372169494628906,
+            69.23835754394531
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 140,
+          "loss": 0.1084287092089653,
+          "arcface": [
+            0.9859998822212219,
+            0.9760808944702148
+          ],
+          "quantized_arcface": [
+            0.9860386848449707,
+            0.9760949015617371
+          ],
+          "shared_age": [
+            58.376373291015625,
+            69.23835754394531
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 150,
+          "loss": 0.10840369015932083,
+          "arcface": [
+            0.9860029816627502,
+            0.9760808944702148
+          ],
+          "quantized_arcface": [
+            0.9859946370124817,
+            0.9760949015617371
+          ],
+          "shared_age": [
+            58.37487030029297,
+            69.23835754394531
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 160,
+          "loss": 0.10833407938480377,
+          "arcface": [
+            0.9860097169876099,
+            0.9760808944702148
+          ],
+          "quantized_arcface": [
+            0.9859902858734131,
+            0.9760949015617371
+          ],
+          "shared_age": [
+            58.36656188964844,
+            69.23835754394531
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 170,
+          "loss": 0.10833407938480377,
+          "arcface": [
+            0.9860097169876099,
+            0.9760808944702148
+          ],
+          "quantized_arcface": [
+            0.9859902858734131,
+            0.9760949015617371
+          ],
+          "shared_age": [
+            58.36656188964844,
+            69.23835754394531
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 180,
+          "loss": 0.10685494542121887,
+          "arcface": [
+            0.9860075116157532,
+            0.9760770797729492
+          ],
+          "quantized_arcface": [
+            0.9860466718673706,
+            0.976097822189331
+          ],
+          "shared_age": [
+            58.355567932128906,
+            69.29890441894531
+          ],
+          "hard_feasible": true
+        }
+      ]
+    },
+    {
+      "name": "ffhq_65817",
+      "arm": "warm_soft_budget",
+      "seconds": 15.259940505959094,
+      "best_step": 180,
+      "initial_loss": 0.935538113117218,
+      "final_loss": 0.053894493728876114,
+      "float_floor": [
+        0.9624924659729004,
+        0.9552468061447144
+      ],
+      "png_floor": [
+        0.9624921679496765,
+        0.9552391767501831
+      ],
+      "final_arcface": [
+        0.9625424742698669,
+        0.955317497253418
+      ],
+      "final_png_arcface": [
+        0.9625378847122192,
+        0.9552426338195801
+      ],
+      "final_shared_age": [
+        59.52613830566406,
+        74.62296295166016
+      ],
+      "projected_proposals": 0,
+      "rejected_target_steps": 0,
+      "accepted_backtrack_count": 0,
+      "trace": [
+        {
+          "step": 10,
+          "loss": 0.18228331208229065,
+          "arcface": [
+            0.8655900955200195,
+            0.891478419303894
+          ],
+          "quantized_arcface": [
+            0.8651078343391418,
+            0.8916563987731934
+          ],
+          "shared_age": [
+            56.174564361572266,
+            73.7975845336914
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 20,
+          "loss": 0.12892445921897888,
+          "arcface": [
+            0.9086337089538574,
+            0.919623851776123
+          ],
+          "quantized_arcface": [
+            0.9086768627166748,
+            0.9193345308303833
+          ],
+          "shared_age": [
+            58.448909759521484,
+            73.96389770507812
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 30,
+          "loss": 0.10160975158214569,
+          "arcface": [
+            0.9291368722915649,
+            0.9388831853866577
+          ],
+          "quantized_arcface": [
+            0.9293509721755981,
+            0.9389232993125916
+          ],
+          "shared_age": [
+            58.63697052001953,
+            74.11550903320312
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 40,
+          "loss": 0.08751068264245987,
+          "arcface": [
+            0.9413771629333496,
+            0.9462732076644897
+          ],
+          "quantized_arcface": [
+            0.9412654638290405,
+            0.9460465908050537
+          ],
+          "shared_age": [
+            58.861942291259766,
+            74.26422119140625
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 50,
+          "loss": 0.07718983292579651,
+          "arcface": [
+            0.9503742456436157,
+            0.951062798500061
+          ],
+          "quantized_arcface": [
+            0.9504551291465759,
+            0.9510764479637146
+          ],
+          "shared_age": [
+            59.08329391479492,
+            74.36546325683594
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 60,
+          "loss": 0.07011960446834564,
+          "arcface": [
+            0.9562634229660034,
+            0.9548487663269043
+          ],
+          "quantized_arcface": [
+            0.9561973214149475,
+            0.9548075199127197
+          ],
+          "shared_age": [
+            59.22084045410156,
+            74.4024658203125
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 70,
+          "loss": 0.06563996523618698,
+          "arcface": [
+            0.9602431058883667,
+            0.9552303552627563
+          ],
+          "quantized_arcface": [
+            0.9602468013763428,
+            0.9552885293960571
+          ],
+          "shared_age": [
+            59.287113189697266,
+            74.46157836914062
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 80,
+          "loss": 0.06263075768947601,
+          "arcface": [
+            0.9627453088760376,
+            0.9551867246627808
+          ],
+          "quantized_arcface": [
+            0.9627805948257446,
+            0.9552626609802246
+          ],
+          "shared_age": [
+            59.38763427734375,
+            74.49433135986328
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 90,
+          "loss": 0.06064770370721817,
+          "arcface": [
+            0.9625059366226196,
+            0.9552578926086426
+          ],
+          "quantized_arcface": [
+            0.9623743295669556,
+            0.9553514122962952
+          ],
+          "shared_age": [
+            59.471710205078125,
+            74.53164672851562
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 100,
+          "loss": 0.05922403186559677,
+          "arcface": [
+            0.9623503684997559,
+            0.9553093910217285
+          ],
+          "quantized_arcface": [
+            0.9621767401695251,
+            0.955420970916748
+          ],
+          "shared_age": [
+            59.441978454589844,
+            74.55248260498047
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 110,
+          "loss": 0.05812666192650795,
+          "arcface": [
+            0.9623991250991821,
+            0.9551553726196289
+          ],
+          "quantized_arcface": [
+            0.9624084830284119,
+            0.9551418423652649
+          ],
+          "shared_age": [
+            59.480464935302734,
+            74.56611633300781
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 120,
+          "loss": 0.0571402944624424,
+          "arcface": [
+            0.9626083970069885,
+            0.9553240537643433
+          ],
+          "quantized_arcface": [
+            0.9625412225723267,
+            0.9553177952766418
+          ],
+          "shared_age": [
+            59.57118225097656,
+            74.5777816772461
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 130,
+          "loss": 0.056314826011657715,
+          "arcface": [
+            0.9624118804931641,
+            0.9552811980247498
+          ],
+          "quantized_arcface": [
+            0.9624704122543335,
+            0.9552531242370605
+          ],
+          "shared_age": [
+            59.503902435302734,
+            74.58769989013672
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 140,
+          "loss": 0.05568031221628189,
+          "arcface": [
+            0.9626739621162415,
+            0.9552009105682373
+          ],
+          "quantized_arcface": [
+            0.9625701308250427,
+            0.9551265835762024
+          ],
+          "shared_age": [
+            59.45212936401367,
+            74.5975570678711
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 150,
+          "loss": 0.05509345978498459,
+          "arcface": [
+            0.9624115824699402,
+            0.9551498889923096
+          ],
+          "quantized_arcface": [
+            0.9624298810958862,
+            0.9550426602363586
+          ],
+          "shared_age": [
+            59.54019546508789,
+            74.60688018798828
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 160,
+          "loss": 0.054578833281993866,
+          "arcface": [
+            0.9625813961029053,
+            0.9552018642425537
+          ],
+          "quantized_arcface": [
+            0.9625406265258789,
+            0.9551758766174316
+          ],
+          "shared_age": [
+            59.54941940307617,
+            74.61275482177734
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 170,
+          "loss": 0.054193779826164246,
+          "arcface": [
+            0.9625120162963867,
+            0.9552773237228394
+          ],
+          "quantized_arcface": [
+            0.9624518156051636,
+            0.9552001953125
+          ],
+          "shared_age": [
+            59.55401611328125,
+            74.61892700195312
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 180,
+          "loss": 0.053894493728876114,
+          "arcface": [
+            0.9625424742698669,
+            0.955317497253418
+          ],
+          "quantized_arcface": [
+            0.9625378847122192,
+            0.9552426338195801
+          ],
+          "shared_age": [
+            59.52613830566406,
+            74.62296295166016
+          ],
+          "hard_feasible": true
+        }
+      ]
+    },
+    {
+      "name": "ffhq_65817",
+      "arm": "hard_identity_budget",
+      "seconds": 50.20062124892138,
+      "best_step": 50,
+      "initial_loss": 0.935538113117218,
+      "final_loss": 0.2833377718925476,
+      "float_floor": [
+        0.9624924659729004,
+        0.9552468061447144
+      ],
+      "png_floor": [
+        0.9624921679496765,
+        0.9552391767501831
+      ],
+      "final_arcface": [
+        0.9625207185745239,
+        0.9552533626556396
+      ],
+      "final_png_arcface": [
+        0.9625320434570312,
+        0.9552432298660278
+      ],
+      "final_shared_age": [
+        50.266807556152344,
+        72.29328918457031
+      ],
+      "projected_proposals": 357,
+      "rejected_target_steps": 291,
+      "accepted_backtrack_count": 289,
+      "trace": [
+        {
+          "step": 10,
+          "loss": 0.35411494970321655,
+          "arcface": [
+            0.9625107049942017,
+            0.9552522897720337
+          ],
+          "quantized_arcface": [
+            0.9625163674354553,
+            0.9553418159484863
+          ],
+          "shared_age": [
+            50.525177001953125,
+            70.9926986694336
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 20,
+          "loss": 0.33976489305496216,
+          "arcface": [
+            0.9625030159950256,
+            0.9552619457244873
+          ],
+          "quantized_arcface": [
+            0.9625415802001953,
+            0.9554697275161743
+          ],
+          "shared_age": [
+            50.52043914794922,
+            71.79403686523438
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 30,
+          "loss": 0.33976489305496216,
+          "arcface": [
+            0.9625030159950256,
+            0.9552619457244873
+          ],
+          "quantized_arcface": [
+            0.9625415802001953,
+            0.9554697275161743
+          ],
+          "shared_age": [
+            50.52043914794922,
+            71.79403686523438
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 40,
+          "loss": 0.33698397874832153,
+          "arcface": [
+            0.9625017642974854,
+            0.9552522897720337
+          ],
+          "quantized_arcface": [
+            0.9625049829483032,
+            0.9554293751716614
+          ],
+          "shared_age": [
+            50.511837005615234,
+            71.95543670654297
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 50,
+          "loss": 0.2833377718925476,
+          "arcface": [
+            0.9625207185745239,
+            0.9552533626556396
+          ],
+          "quantized_arcface": [
+            0.9625320434570312,
+            0.9552432298660278
+          ],
+          "shared_age": [
+            50.266807556152344,
+            72.29328918457031
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 60,
+          "loss": 0.2538507878780365,
+          "arcface": [
+            0.9624947905540466,
+            0.9552492499351501
+          ],
+          "quantized_arcface": [
+            0.9625431299209595,
+            0.9550639986991882
+          ],
+          "shared_age": [
+            50.67158508300781,
+            72.61724853515625
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 70,
+          "loss": 0.25374674797058105,
+          "arcface": [
+            0.9624947905540466,
+            0.9552476406097412
+          ],
+          "quantized_arcface": [
+            0.9625431299209595,
+            0.9550471305847168
+          ],
+          "shared_age": [
+            50.67158508300781,
+            72.62557983398438
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 80,
+          "loss": 0.2533057630062103,
+          "arcface": [
+            0.9624947905540466,
+            0.9552509784698486
+          ],
+          "quantized_arcface": [
+            0.9625431299209595,
+            0.9550275802612305
+          ],
+          "shared_age": [
+            50.67158508300781,
+            72.66734313964844
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 90,
+          "loss": 0.2533057630062103,
+          "arcface": [
+            0.9624947905540466,
+            0.9552509784698486
+          ],
+          "quantized_arcface": [
+            0.9625431299209595,
+            0.9550275802612305
+          ],
+          "shared_age": [
+            50.67158508300781,
+            72.66734313964844
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 100,
+          "loss": 0.2531919479370117,
+          "arcface": [
+            0.9624947905540466,
+            0.9552522897720337
+          ],
+          "quantized_arcface": [
+            0.9625431299209595,
+            0.9550412893295288
+          ],
+          "shared_age": [
+            50.67158508300781,
+            72.67793273925781
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 110,
+          "loss": 0.2531471252441406,
+          "arcface": [
+            0.9624947905540466,
+            0.9552472829818726
+          ],
+          "quantized_arcface": [
+            0.9625431299209595,
+            0.9549945592880249
+          ],
+          "shared_age": [
+            50.67158508300781,
+            72.67839050292969
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 120,
+          "loss": 0.2531471252441406,
+          "arcface": [
+            0.9624947905540466,
+            0.9552472829818726
+          ],
+          "quantized_arcface": [
+            0.9625431299209595,
+            0.9549945592880249
+          ],
+          "shared_age": [
+            50.67158508300781,
+            72.67839050292969
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 130,
+          "loss": 0.25264355540275574,
+          "arcface": [
+            0.9625186324119568,
+            0.9552583694458008
+          ],
+          "quantized_arcface": [
+            0.9625753164291382,
+            0.9550151824951172
+          ],
+          "shared_age": [
+            50.68342208862305,
+            72.68646240234375
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 140,
+          "loss": 0.25264355540275574,
+          "arcface": [
+            0.9625186324119568,
+            0.9552583694458008
+          ],
+          "quantized_arcface": [
+            0.9625753164291382,
+            0.9550151824951172
+          ],
+          "shared_age": [
+            50.68342208862305,
+            72.68646240234375
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 150,
+          "loss": 0.25264355540275574,
+          "arcface": [
+            0.9625186324119568,
+            0.9552583694458008
+          ],
+          "quantized_arcface": [
+            0.9625753164291382,
+            0.9550151824951172
+          ],
+          "shared_age": [
+            50.68342208862305,
+            72.68646240234375
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 160,
+          "loss": 0.25264355540275574,
+          "arcface": [
+            0.9625186324119568,
+            0.9552583694458008
+          ],
+          "quantized_arcface": [
+            0.9625753164291382,
+            0.9550151824951172
+          ],
+          "shared_age": [
+            50.68342208862305,
+            72.68646240234375
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 170,
+          "loss": 0.25264355540275574,
+          "arcface": [
+            0.9625186324119568,
+            0.9552583694458008
+          ],
+          "quantized_arcface": [
+            0.9625753164291382,
+            0.9550151824951172
+          ],
+          "shared_age": [
+            50.68342208862305,
+            72.68646240234375
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 180,
+          "loss": 0.25264355540275574,
+          "arcface": [
+            0.9625186324119568,
+            0.9552583694458008
+          ],
+          "quantized_arcface": [
+            0.9625753164291382,
+            0.9550151824951172
+          ],
+          "shared_age": [
+            50.68342208862305,
+            72.68646240234375
+          ],
+          "hard_feasible": false
+        }
+      ]
+    },
+    {
+      "name": "ffhq_67140",
+      "arm": "warm_soft_budget",
+      "seconds": 15.250395423034206,
+      "best_step": 180,
+      "initial_loss": 0.48310205340385437,
+      "final_loss": 0.03445703908801079,
+      "float_floor": [
+        0.9853867292404175,
+        0.9871596693992615
+      ],
+      "png_floor": [
+        0.985360860824585,
+        0.9871282577514648
+      ],
+      "final_arcface": [
+        0.9853941202163696,
+        0.9870865345001221
+      ],
+      "final_png_arcface": [
+        0.9852927327156067,
+        0.9869974851608276
+      ],
+      "final_shared_age": [
+        58.63933563232422,
+        73.85444641113281
+      ],
+      "projected_proposals": 0,
+      "rejected_target_steps": 0,
+      "accepted_backtrack_count": 0,
+      "trace": [
+        {
+          "step": 10,
+          "loss": 0.12962262332439423,
+          "arcface": [
+            0.905421257019043,
+            0.9798661470413208
+          ],
+          "quantized_arcface": [
+            0.9055685997009277,
+            0.9797236919403076
+          ],
+          "shared_age": [
+            57.14741897583008,
+            73.22919464111328
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 20,
+          "loss": 0.08918552100658417,
+          "arcface": [
+            0.9466807842254639,
+            0.9876604080200195
+          ],
+          "quantized_arcface": [
+            0.9467896223068237,
+            0.9876798391342163
+          ],
+          "shared_age": [
+            57.280029296875,
+            73.33633422851562
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 30,
+          "loss": 0.07478252798318863,
+          "arcface": [
+            0.96588134765625,
+            0.9883928894996643
+          ],
+          "quantized_arcface": [
+            0.965900719165802,
+            0.9883072972297668
+          ],
+          "shared_age": [
+            57.06758499145508,
+            73.4028549194336
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 40,
+          "loss": 0.06353296339511871,
+          "arcface": [
+            0.974376916885376,
+            0.9876710772514343
+          ],
+          "quantized_arcface": [
+            0.9743188619613647,
+            0.9876115918159485
+          ],
+          "shared_age": [
+            57.717864990234375,
+            73.4264907836914
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 50,
+          "loss": 0.054863788187503815,
+          "arcface": [
+            0.979412317276001,
+            0.9876317977905273
+          ],
+          "quantized_arcface": [
+            0.9795060753822327,
+            0.987548291683197
+          ],
+          "shared_age": [
+            57.79446792602539,
+            73.47439575195312
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 60,
+          "loss": 0.04956909641623497,
+          "arcface": [
+            0.9815587401390076,
+            0.9877126216888428
+          ],
+          "quantized_arcface": [
+            0.9816045761108398,
+            0.9876489639282227
+          ],
+          "shared_age": [
+            57.8629150390625,
+            73.55987548828125
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 70,
+          "loss": 0.04551117494702339,
+          "arcface": [
+            0.9840425848960876,
+            0.9873620271682739
+          ],
+          "quantized_arcface": [
+            0.9840709567070007,
+            0.9872974157333374
+          ],
+          "shared_age": [
+            57.94757080078125,
+            73.62893676757812
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 80,
+          "loss": 0.042360853403806686,
+          "arcface": [
+            0.9852931499481201,
+            0.9874786138534546
+          ],
+          "quantized_arcface": [
+            0.985309898853302,
+            0.9874662160873413
+          ],
+          "shared_age": [
+            58.10603332519531,
+            73.6794662475586
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 90,
+          "loss": 0.040432535111904144,
+          "arcface": [
+            0.9853338003158569,
+            0.987457275390625
+          ],
+          "quantized_arcface": [
+            0.9853515625,
+            0.9873955249786377
+          ],
+          "shared_age": [
+            58.343048095703125,
+            73.71382141113281
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 100,
+          "loss": 0.039141278713941574,
+          "arcface": [
+            0.9854526519775391,
+            0.9874535799026489
+          ],
+          "quantized_arcface": [
+            0.9854153394699097,
+            0.9873539209365845
+          ],
+          "shared_age": [
+            58.35797119140625,
+            73.73982238769531
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 110,
+          "loss": 0.0381283201277256,
+          "arcface": [
+            0.985338568687439,
+            0.9872841835021973
+          ],
+          "quantized_arcface": [
+            0.9853018522262573,
+            0.9871511459350586
+          ],
+          "shared_age": [
+            58.444149017333984,
+            73.75971984863281
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 120,
+          "loss": 0.03729919344186783,
+          "arcface": [
+            0.9854385852813721,
+            0.9872362017631531
+          ],
+          "quantized_arcface": [
+            0.9854676127433777,
+            0.9871494174003601
+          ],
+          "shared_age": [
+            58.44092559814453,
+            73.77960205078125
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 130,
+          "loss": 0.036561015993356705,
+          "arcface": [
+            0.985464870929718,
+            0.9871374368667603
+          ],
+          "quantized_arcface": [
+            0.9855308532714844,
+            0.9870665669441223
+          ],
+          "shared_age": [
+            58.525299072265625,
+            73.7973861694336
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 140,
+          "loss": 0.03599444031715393,
+          "arcface": [
+            0.9854076504707336,
+            0.9870361089706421
+          ],
+          "quantized_arcface": [
+            0.9854137897491455,
+            0.9870083928108215
+          ],
+          "shared_age": [
+            58.52751922607422,
+            73.81451416015625
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 150,
+          "loss": 0.03550338000059128,
+          "arcface": [
+            0.9853819608688354,
+            0.9870137572288513
+          ],
+          "quantized_arcface": [
+            0.9853382706642151,
+            0.9869664907455444
+          ],
+          "shared_age": [
+            58.58709716796875,
+            73.82730865478516
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 160,
+          "loss": 0.03507932275533676,
+          "arcface": [
+            0.9854065179824829,
+            0.9870433211326599
+          ],
+          "quantized_arcface": [
+            0.9853781461715698,
+            0.9870208501815796
+          ],
+          "shared_age": [
+            58.589630126953125,
+            73.83846282958984
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 170,
+          "loss": 0.03471312299370766,
+          "arcface": [
+            0.9854100942611694,
+            0.9872851371765137
+          ],
+          "quantized_arcface": [
+            0.9853276014328003,
+            0.9872686862945557
+          ],
+          "shared_age": [
+            58.60860824584961,
+            73.84646606445312
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 180,
+          "loss": 0.03445703908801079,
+          "arcface": [
+            0.9853941202163696,
+            0.9870865345001221
+          ],
+          "quantized_arcface": [
+            0.9852927327156067,
+            0.9869974851608276
+          ],
+          "shared_age": [
+            58.63933563232422,
+            73.85444641113281
+          ],
+          "hard_feasible": false
+        }
+      ]
+    },
+    {
+      "name": "ffhq_67140",
+      "arm": "hard_identity_budget",
+      "seconds": 50.331639860989526,
+      "best_step": 0,
+      "initial_loss": 0.48310205340385437,
+      "final_loss": 0.48310205340385437,
+      "float_floor": [
+        0.9853867292404175,
+        0.9871596693992615
+      ],
+      "png_floor": [
+        0.985360860824585,
+        0.9871282577514648
+      ],
+      "final_arcface": [
+        0.9953867197036743,
+        0.9971596598625183
+      ],
+      "final_png_arcface": [
+        0.9953608512878418,
+        0.9971282482147217
+      ],
+      "final_shared_age": [
+        63.19728469848633,
+        69.53221130371094
+      ],
+      "projected_proposals": 357,
+      "rejected_target_steps": 321,
+      "accepted_backtrack_count": 143,
+      "trace": [
+        {
+          "step": 10,
+          "loss": 0.15745329856872559,
+          "arcface": [
+            0.9853896498680115,
+            0.9871639013290405
+          ],
+          "quantized_arcface": [
+            0.9854006767272949,
+            0.9870507717132568
+          ],
+          "shared_age": [
+            60.446441650390625,
+            72.66803741455078
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 20,
+          "loss": 0.14775249361991882,
+          "arcface": [
+            0.985386848449707,
+            0.9871615171432495
+          ],
+          "quantized_arcface": [
+            0.9853777885437012,
+            0.987000048160553
+          ],
+          "shared_age": [
+            60.244834899902344,
+            72.82525634765625
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 30,
+          "loss": 0.1470670998096466,
+          "arcface": [
+            0.9853886365890503,
+            0.9871613383293152
+          ],
+          "quantized_arcface": [
+            0.985372006893158,
+            0.987031102180481
+          ],
+          "shared_age": [
+            60.24263381958008,
+            72.8530502319336
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 40,
+          "loss": 0.14702342450618744,
+          "arcface": [
+            0.9853886365890503,
+            0.9871631860733032
+          ],
+          "quantized_arcface": [
+            0.985372006893158,
+            0.9870450496673584
+          ],
+          "shared_age": [
+            60.24263381958008,
+            72.85678100585938
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 50,
+          "loss": 0.14702342450618744,
+          "arcface": [
+            0.9853886365890503,
+            0.9871631860733032
+          ],
+          "quantized_arcface": [
+            0.985372006893158,
+            0.9870450496673584
+          ],
+          "shared_age": [
+            60.24263381958008,
+            72.85678100585938
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 60,
+          "loss": 0.14700017869472504,
+          "arcface": [
+            0.9853886365890503,
+            0.9871615767478943
+          ],
+          "quantized_arcface": [
+            0.985372006893158,
+            0.9870150685310364
+          ],
+          "shared_age": [
+            60.24263381958008,
+            72.85926055908203
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 70,
+          "loss": 0.14700017869472504,
+          "arcface": [
+            0.9853886365890503,
+            0.9871615767478943
+          ],
+          "quantized_arcface": [
+            0.985372006893158,
+            0.9870150685310364
+          ],
+          "shared_age": [
+            60.24263381958008,
+            72.85926055908203
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 80,
+          "loss": 0.14700017869472504,
+          "arcface": [
+            0.9853886365890503,
+            0.9871615767478943
+          ],
+          "quantized_arcface": [
+            0.985372006893158,
+            0.9870150685310364
+          ],
+          "shared_age": [
+            60.24263381958008,
+            72.85926055908203
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 90,
+          "loss": 0.14662162959575653,
+          "arcface": [
+            0.9853883981704712,
+            0.9871646761894226
+          ],
+          "quantized_arcface": [
+            0.9853956699371338,
+            0.987045168876648
+          ],
+          "shared_age": [
+            60.234100341796875,
+            72.86104583740234
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 100,
+          "loss": 0.14662162959575653,
+          "arcface": [
+            0.9853883981704712,
+            0.9871646761894226
+          ],
+          "quantized_arcface": [
+            0.9853956699371338,
+            0.987045168876648
+          ],
+          "shared_age": [
+            60.234100341796875,
+            72.86104583740234
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 110,
+          "loss": 0.14662162959575653,
+          "arcface": [
+            0.9853883981704712,
+            0.9871646761894226
+          ],
+          "quantized_arcface": [
+            0.9853956699371338,
+            0.987045168876648
+          ],
+          "shared_age": [
+            60.234100341796875,
+            72.86104583740234
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 120,
+          "loss": 0.14339157938957214,
+          "arcface": [
+            0.9853879809379578,
+            0.9871646761894226
+          ],
+          "quantized_arcface": [
+            0.985389232635498,
+            0.987045168876648
+          ],
+          "shared_age": [
+            60.15977096557617,
+            72.86104583740234
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 130,
+          "loss": 0.14339157938957214,
+          "arcface": [
+            0.9853879809379578,
+            0.9871646761894226
+          ],
+          "quantized_arcface": [
+            0.985389232635498,
+            0.987045168876648
+          ],
+          "shared_age": [
+            60.15977096557617,
+            72.86104583740234
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 140,
+          "loss": 0.14275360107421875,
+          "arcface": [
+            0.9853886365890503,
+            0.9871646761894226
+          ],
+          "quantized_arcface": [
+            0.9853622317314148,
+            0.987045168876648
+          ],
+          "shared_age": [
+            60.14364242553711,
+            72.86104583740234
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 150,
+          "loss": 0.1425681859254837,
+          "arcface": [
+            0.9853878617286682,
+            0.9871646761894226
+          ],
+          "quantized_arcface": [
+            0.9853517413139343,
+            0.987045168876648
+          ],
+          "shared_age": [
+            60.14165115356445,
+            72.86104583740234
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 160,
+          "loss": 0.1425681859254837,
+          "arcface": [
+            0.9853878617286682,
+            0.9871646761894226
+          ],
+          "quantized_arcface": [
+            0.9853517413139343,
+            0.987045168876648
+          ],
+          "shared_age": [
+            60.14165115356445,
+            72.86104583740234
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 170,
+          "loss": 0.13892953097820282,
+          "arcface": [
+            0.9853883385658264,
+            0.9871646761894226
+          ],
+          "quantized_arcface": [
+            0.985291600227356,
+            0.987045168876648
+          ],
+          "shared_age": [
+            60.050601959228516,
+            72.86104583740234
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 180,
+          "loss": 0.1384943127632141,
+          "arcface": [
+            0.9853911399841309,
+            0.9871646761894226
+          ],
+          "quantized_arcface": [
+            0.9853063821792603,
+            0.987045168876648
+          ],
+          "shared_age": [
+            60.040313720703125,
+            72.86104583740234
+          ],
+          "hard_feasible": false
+        }
+      ]
+    },
+    {
+      "name": "ffhq_60764",
+      "arm": "warm_soft_budget",
+      "seconds": 15.333990861894563,
+      "best_step": 180,
+      "initial_loss": 0.5468600392341614,
+      "final_loss": 0.029568752273917198,
+      "float_floor": [
+        0.9875186681747437,
+        0.983808159828186
+      ],
+      "png_floor": [
+        0.9874381422996521,
+        0.9838236570358276
+      ],
+      "final_arcface": [
+        0.9875046014785767,
+        0.9838423728942871
+      ],
+      "final_png_arcface": [
+        0.9871050715446472,
+        0.9838307499885559
+      ],
+      "final_shared_age": [
+        58.69002914428711,
+        74.25604248046875
+      ],
+      "projected_proposals": 0,
+      "rejected_target_steps": 0,
+      "accepted_backtrack_count": 0,
+      "trace": [
+        {
+          "step": 10,
+          "loss": 0.10790586471557617,
+          "arcface": [
+            0.9811350107192993,
+            0.9194818735122681
+          ],
+          "quantized_arcface": [
+            0.9814327955245972,
+            0.919347882270813
+          ],
+          "shared_age": [
+            57.4345588684082,
+            73.60260772705078
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 20,
+          "loss": 0.0885101854801178,
+          "arcface": [
+            0.9867002964019775,
+            0.9434375762939453
+          ],
+          "quantized_arcface": [
+            0.9864842295646667,
+            0.9433234930038452
+          ],
+          "shared_age": [
+            57.73820114135742,
+            73.52151489257812
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 30,
+          "loss": 0.06902807950973511,
+          "arcface": [
+            0.9892057776451111,
+            0.9627222418785095
+          ],
+          "quantized_arcface": [
+            0.9890017509460449,
+            0.9627028703689575
+          ],
+          "shared_age": [
+            57.934059143066406,
+            73.7996826171875
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 40,
+          "loss": 0.05458981543779373,
+          "arcface": [
+            0.9876790046691895,
+            0.9740293622016907
+          ],
+          "quantized_arcface": [
+            0.9873210191726685,
+            0.9739952683448792
+          ],
+          "shared_age": [
+            57.992820739746094,
+            73.90462493896484
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 50,
+          "loss": 0.04602254182100296,
+          "arcface": [
+            0.9874497652053833,
+            0.9797182083129883
+          ],
+          "quantized_arcface": [
+            0.987027645111084,
+            0.9796732068061829
+          ],
+          "shared_age": [
+            58.16419219970703,
+            73.96368408203125
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 60,
+          "loss": 0.04092612862586975,
+          "arcface": [
+            0.9888401627540588,
+            0.9826755523681641
+          ],
+          "quantized_arcface": [
+            0.9882968664169312,
+            0.9826301336288452
+          ],
+          "shared_age": [
+            58.13480758666992,
+            73.98151397705078
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 70,
+          "loss": 0.03781750798225403,
+          "arcface": [
+            0.9885081052780151,
+            0.9837650060653687
+          ],
+          "quantized_arcface": [
+            0.987900972366333,
+            0.9836701154708862
+          ],
+          "shared_age": [
+            58.25322341918945,
+            73.99156951904297
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 80,
+          "loss": 0.03589526563882828,
+          "arcface": [
+            0.9873829483985901,
+            0.9836283326148987
+          ],
+          "quantized_arcface": [
+            0.9869037866592407,
+            0.9836146831512451
+          ],
+          "shared_age": [
+            58.40190505981445,
+            74.05345153808594
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 90,
+          "loss": 0.03441839665174484,
+          "arcface": [
+            0.9877010583877563,
+            0.9839218854904175
+          ],
+          "quantized_arcface": [
+            0.9872700572013855,
+            0.9838654398918152
+          ],
+          "shared_age": [
+            58.41266632080078,
+            74.10391998291016
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 100,
+          "loss": 0.0333058163523674,
+          "arcface": [
+            0.9876358509063721,
+            0.9838263988494873
+          ],
+          "quantized_arcface": [
+            0.9871505498886108,
+            0.9836772084236145
+          ],
+          "shared_age": [
+            58.502532958984375,
+            74.13819122314453
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 110,
+          "loss": 0.03250129520893097,
+          "arcface": [
+            0.9875891804695129,
+            0.9840523600578308
+          ],
+          "quantized_arcface": [
+            0.9869524836540222,
+            0.9840123653411865
+          ],
+          "shared_age": [
+            58.51209259033203,
+            74.16622924804688
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 120,
+          "loss": 0.03182847052812576,
+          "arcface": [
+            0.9877268671989441,
+            0.9840096235275269
+          ],
+          "quantized_arcface": [
+            0.9872822165489197,
+            0.9839287996292114
+          ],
+          "shared_age": [
+            58.55559158325195,
+            74.19033813476562
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 130,
+          "loss": 0.03126368299126625,
+          "arcface": [
+            0.987949013710022,
+            0.9839422702789307
+          ],
+          "quantized_arcface": [
+            0.9874837398529053,
+            0.9839091897010803
+          ],
+          "shared_age": [
+            58.579410552978516,
+            74.20576477050781
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 140,
+          "loss": 0.030798211693763733,
+          "arcface": [
+            0.9878772497177124,
+            0.9838792681694031
+          ],
+          "quantized_arcface": [
+            0.9873008131980896,
+            0.9838117957115173
+          ],
+          "shared_age": [
+            58.61411666870117,
+            74.22039794921875
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 150,
+          "loss": 0.030412834137678146,
+          "arcface": [
+            0.9878709316253662,
+            0.9839774370193481
+          ],
+          "quantized_arcface": [
+            0.9874314069747925,
+            0.9839448928833008
+          ],
+          "shared_age": [
+            58.62187576293945,
+            74.23091888427734
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 160,
+          "loss": 0.030067725107073784,
+          "arcface": [
+            0.9877687096595764,
+            0.9837972521781921
+          ],
+          "quantized_arcface": [
+            0.9873904585838318,
+            0.9837571382522583
+          ],
+          "shared_age": [
+            58.652198791503906,
+            74.24124908447266
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 170,
+          "loss": 0.029793336987495422,
+          "arcface": [
+            0.9876073002815247,
+            0.9838696122169495
+          ],
+          "quantized_arcface": [
+            0.9872314929962158,
+            0.9838275909423828
+          ],
+          "shared_age": [
+            58.669586181640625,
+            74.24949645996094
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 180,
+          "loss": 0.029568752273917198,
+          "arcface": [
+            0.9875046014785767,
+            0.9838423728942871
+          ],
+          "quantized_arcface": [
+            0.9871050715446472,
+            0.9838307499885559
+          ],
+          "shared_age": [
+            58.69002914428711,
+            74.25604248046875
+          ],
+          "hard_feasible": false
+        }
+      ]
+    },
+    {
+      "name": "ffhq_60764",
+      "arm": "hard_identity_budget",
+      "seconds": 50.25896373181604,
+      "best_step": 160,
+      "initial_loss": 0.5468600392341614,
+      "final_loss": 0.08281634002923965,
+      "float_floor": [
+        0.9875186681747437,
+        0.983808159828186
+      ],
+      "png_floor": [
+        0.9874381422996521,
+        0.9838236570358276
+      ],
+      "final_arcface": [
+        0.987522542476654,
+        0.9838109612464905
+      ],
+      "final_png_arcface": [
+        0.9876981973648071,
+        0.9839149713516235
+      ],
+      "final_shared_age": [
+        57.815773010253906,
+        70.90814971923828
+      ],
+      "projected_proposals": 348,
+      "rejected_target_steps": 289,
+      "accepted_backtrack_count": 251,
+      "trace": [
+        {
+          "step": 10,
+          "loss": 0.10345377027988434,
+          "arcface": [
+            0.9875224232673645,
+            0.9838191270828247
+          ],
+          "quantized_arcface": [
+            0.9874833822250366,
+            0.9838663339614868
+          ],
+          "shared_age": [
+            56.16219711303711,
+            70.65350341796875
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 20,
+          "loss": 0.0979938805103302,
+          "arcface": [
+            0.9875256419181824,
+            0.9838109612464905
+          ],
+          "quantized_arcface": [
+            0.9873688817024231,
+            0.983860433101654
+          ],
+          "shared_age": [
+            56.80998992919922,
+            70.74800872802734
+          ],
+          "hard_feasible": false
+        },
+        {
+          "step": 30,
+          "loss": 0.09248600900173187,
+          "arcface": [
+            0.9875378012657166,
+            0.9838109612464905
+          ],
+          "quantized_arcface": [
+            0.9876830577850342,
+            0.983860433101654
+          ],
+          "shared_age": [
+            57.27246856689453,
+            70.74800872802734
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 40,
+          "loss": 0.08721408247947693,
+          "arcface": [
+            0.9875194430351257,
+            0.9838087558746338
+          ],
+          "quantized_arcface": [
+            0.9878531098365784,
+            0.9839115738868713
+          ],
+          "shared_age": [
+            57.474422454833984,
+            70.89501953125
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 50,
+          "loss": 0.08673486858606339,
+          "arcface": [
+            0.9875248074531555,
+            0.9838087558746338
+          ],
+          "quantized_arcface": [
+            0.987883448600769,
+            0.9839115738868713
+          ],
+          "shared_age": [
+            57.567752838134766,
+            70.89501953125
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 60,
+          "loss": 0.08651092648506165,
+          "arcface": [
+            0.9875231981277466,
+            0.9838087558746338
+          ],
+          "quantized_arcface": [
+            0.9878600835800171,
+            0.9839115738868713
+          ],
+          "shared_age": [
+            57.60725021362305,
+            70.89501953125
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 70,
+          "loss": 0.08597775548696518,
+          "arcface": [
+            0.9875186681747437,
+            0.9838087558746338
+          ],
+          "quantized_arcface": [
+            0.9878385663032532,
+            0.9839115738868713
+          ],
+          "shared_age": [
+            57.66759490966797,
+            70.89501953125
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 80,
+          "loss": 0.0840107798576355,
+          "arcface": [
+            0.987537682056427,
+            0.9838087558746338
+          ],
+          "quantized_arcface": [
+            0.987739086151123,
+            0.9839115738868713
+          ],
+          "shared_age": [
+            57.797576904296875,
+            70.89501953125
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 90,
+          "loss": 0.08335144817829132,
+          "arcface": [
+            0.9875200390815735,
+            0.9838087558746338
+          ],
+          "quantized_arcface": [
+            0.9877278804779053,
+            0.9839115738868713
+          ],
+          "shared_age": [
+            57.66448974609375,
+            70.89501953125
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 100,
+          "loss": 0.08333830535411835,
+          "arcface": [
+            0.9875196218490601,
+            0.9838087558746338
+          ],
+          "quantized_arcface": [
+            0.9876977801322937,
+            0.9839115738868713
+          ],
+          "shared_age": [
+            57.66475296020508,
+            70.89501953125
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 110,
+          "loss": 0.08333830535411835,
+          "arcface": [
+            0.9875196218490601,
+            0.9838087558746338
+          ],
+          "quantized_arcface": [
+            0.9876977801322937,
+            0.9839115738868713
+          ],
+          "shared_age": [
+            57.66475296020508,
+            70.89501953125
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 120,
+          "loss": 0.08333830535411835,
+          "arcface": [
+            0.9875196218490601,
+            0.9838087558746338
+          ],
+          "quantized_arcface": [
+            0.9876977801322937,
+            0.9839115738868713
+          ],
+          "shared_age": [
+            57.66475296020508,
+            70.89501953125
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 130,
+          "loss": 0.08331908285617828,
+          "arcface": [
+            0.9875195026397705,
+            0.9838087558746338
+          ],
+          "quantized_arcface": [
+            0.9877271056175232,
+            0.9839115738868713
+          ],
+          "shared_age": [
+            57.67497253417969,
+            70.89501953125
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 140,
+          "loss": 0.08331908285617828,
+          "arcface": [
+            0.9875195026397705,
+            0.9838087558746338
+          ],
+          "quantized_arcface": [
+            0.9877271056175232,
+            0.9839115738868713
+          ],
+          "shared_age": [
+            57.67497253417969,
+            70.89501953125
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 150,
+          "loss": 0.08302315324544907,
+          "arcface": [
+            0.987522542476654,
+            0.9838087558746338
+          ],
+          "quantized_arcface": [
+            0.9876981973648071,
+            0.9839115738868713
+          ],
+          "shared_age": [
+            57.815773010253906,
+            70.89501953125
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 160,
+          "loss": 0.08281634002923965,
+          "arcface": [
+            0.987522542476654,
+            0.9838109612464905
+          ],
+          "quantized_arcface": [
+            0.9876981973648071,
+            0.9839149713516235
+          ],
+          "shared_age": [
+            57.815773010253906,
+            70.90814971923828
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 170,
+          "loss": 0.08281634002923965,
+          "arcface": [
+            0.987522542476654,
+            0.9838109612464905
+          ],
+          "quantized_arcface": [
+            0.9876981973648071,
+            0.9839149713516235
+          ],
+          "shared_age": [
+            57.815773010253906,
+            70.90814971923828
+          ],
+          "hard_feasible": true
+        },
+        {
+          "step": 180,
+          "loss": 0.08281634002923965,
+          "arcface": [
+            0.987522542476654,
+            0.9838109612464905
+          ],
+          "quantized_arcface": [
+            0.9876981973648071,
+            0.9839149713516235
+          ],
+          "shared_age": [
+            57.815773010253906,
+            70.90814971923828
+          ],
+          "hard_feasible": true
+        }
+      ]
+    }
+  ],
+  "fit_seconds": 393.44780439464375,
+  "cuda_peak_bytes": 7287605760,
+  "manual_review": {
+    "method": "One visible-route reviewer; full faces and native eye/cheek crops, not blinded.",
+    "cases": [
+      "ffhq_64376",
+      "ffhq_62644",
+      "ffhq_64919",
+      "ffhq_65817",
+      "ffhq_67140",
+      "ffhq_60764"
+    ],
+    "findings": [
+      "No confirmed new severe artifacts in sampled hard-vs-baseline output; aging changes modest.",
+      "Existing etched skin, smooth reconstruction and eye/mouth defects remain.",
+      "67140 selects step0; constrained optimization has not repaired lost source detail."
+    ],
+    "no_obvious_new_severe_artifact_in_sample": true,
+    "texture_improvement_confirmed": false
+  },
+  "browser_validation": {
+    "url": "http://127.0.0.1:65512/age-identity-budget-review/",
+    "status": 200,
+    "desktop": true,
+    "photo_switch": true,
+    "age_switch": true,
+    "color_switch": true,
+    "native_crops": true,
+    "source_equals_target_anchor": null,
+    "download_size": [
+      1024,
+      1024
+    ],
+    "mobile_width": 390,
+    "overflow": false,
+    "errors": []
+  },
+  "promotion": false,
+  "development_confirmation_allowed": true,
+  "reports_sha256": {
+    "deployment/training-runs/identity-budget-20261127-015949/evaluation/report.json": "5b6f11c3fa4b28d78834592ac89953150f6384faa2f2a31a8405e63cb655964d",
+    "deployment/training-runs/identity-budget-20261127-015949/summary.json": "fe10b71900be30f2b0bd0cd1055e6e22014b538984def16be867ad666b68b2e2",
+    "deployment/training-runs/identity-budget-20261127-015949/decision.json": "d4b0d05e1c13f61b5f90f535cf00405cc1e455144ab848649fbf547426c80e29",
+    "deployment/training-runs/identity-budget-20261127-015949/artifact-validation.json": "6957aa564bfbb745e7bb0226ce5f45489e343482e5503094d9c408cd3535e18a"
+  }
+}

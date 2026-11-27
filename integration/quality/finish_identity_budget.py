@@ -43,7 +43,7 @@ def main():
         return value
     score_file = run / 'independent-age.json'
     scores = json.loads(score_file.read_text())['ages'] if score_file.exists() else {}
-    deadline = time.monotonic()+40*60; count = -1
+    deadline = time.monotonic()+60*60; count = -1
     while True:
         final = run / 'evaluation/report.json'; path = final if final.exists() else run / 'evaluation/report.partial.json'
         if not path.exists():
