@@ -4,6 +4,8 @@
 
 **同学先看：[莫贝研究进展与接手指南](integration/研究进展与同学接手.md)**：做了什么、哪些改善有效／未通过、当前基线、高清效果与一键下载。新增[研究资源Release](https://github.com/prummn/face-age-transformation-course-project/releases/tag/research-mobei-2026-11-17)按需提供高清演示、固定数据、研究检查点和数值记录；默认看效果无需GPU。
 
+**本机运行 Codex、远端用仪电 GPU**：见[SSH与GPU任务操作交接](integration/本机Codex连接仪电GPU操作交接.md)，含可直接交给本机 Codex 的提示词、`ssh yicloud`、单卡任务提交/日志/停止及浏览器转发。复用服务器现有资产，不需要在服务器启动 Codex。
+
 11月26日已完成[冻结生成器的W+残差／高龄局部GAN对照](integration/quality/20261126_Wplus残差与高龄局部对抗.md)：单卡、两臂各2,000步、35图开发回归，1,050张原始／保色1024PNG，未见可确认纹理收益，不晋升；结果页`/age-latent-editor-review/`。另完成[补充数据来源与IMDB-WIKI元数据／像素试采](integration/quality/20261126_补充年龄数据集来源核查.md)：1,077条发布高龄大脸框仅是候选，抽取7张裁剪图实际脸区仅187–253像素，0张新增入训。亚洲高龄高清缺口仍未补足。
 
 同日完成[展示与实拍输入链路核对](integration/quality/20261126_展示与实拍输入链路核对.md)：修正选脸裁剪过紧、摄像头分辨率请求、原生脸部像素提示和镜子原生下载；复用一张运行中的卡完成浏览器真实推理与1024下载验证，不训练或换权重。同图对照`/age-input-review/`；`/hd-demo.html`是旧 `constrained` 留档，近期35图实验与当前研究预览使用 `original_delta`，不可混同。输入覆盖改善不代表高龄纹理问题已解决。
