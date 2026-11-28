@@ -1,0 +1,39 @@
+{
+  "name": "projected-e4e-minus12",
+  "version": "2026-11-28",
+  "status": "preferred_research_recipe",
+  "reason": "User selected the fixed -12 high-aging eyeglass correction as the direction to continue. Smooth onset preserves zero and younger edits; no age boost by default.",
+  "production_default": false,
+  "training": false,
+  "encoder": "e4e_ffhq_encode.pt",
+  "generator": "stylegan2-ffhq-config-f.pt",
+  "weight_manifests": [
+    "sfe-e4e_ffhq_encode.pt.json",
+    "sfe-stylegan2-ffhq-config-f.pt.json"
+  ],
+  "upstream_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+  "age_direction": "editings/interfacegan_directions/age.pt",
+  "eyeglasses_boundary": "editings/bound/Eyeglasses_boundary.npy",
+  "direction": "Repeat age direction across 18 W+ layers, subtract projection onto eyeglasses boundary, restore original age direction norm.",
+  "schedule": {
+    "t": "clip(strength / 7.5, 0, 1)",
+    "gate": "t*t*(3-2*t)",
+    "eyeglasses_offset": "-12*gate",
+    "aging_strength_boost": 0,
+    "latent": "source_e4e_wplus + strength/2*projected_age_direction + eyeglasses_offset*eyeglasses_boundary"
+  },
+  "randomize_noise": false,
+  "native_output": [1024, 1024],
+  "source_glasses_detection": false,
+  "per_image_route_selection": false,
+  "color_preservation": "Optional postprocessing only; raw outputs remain available.",
+  "limitations": [
+    "Strength is not a numerical target age.",
+    "No guarantee of complete eyeglass removal on all portraits; original glasses may change.",
+    "Identity, white hair, beard and hats can still drift.",
+    "Positive aging-strength compensation can reintroduce glasses; not enabled by default.",
+    "Previously inspected development photos, not independent population validation."
+  ],
+  "recipe_source": "../quality/e4e_no_glasses_schedule.py:schedule",
+  "report": "../quality/20261128_e4e负12连续老化与年龄补偿.md"
+}

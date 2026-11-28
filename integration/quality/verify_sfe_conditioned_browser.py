@@ -7,10 +7,12 @@ import subprocess
 from playwright.sync_api import sync_playwright
 
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('url');p.add_argument('run',type=Path);a=p.parse_args()
+if not (a.run/'gallery/index.html').is_file():
+    raise ValueError('Finish gallery generation before browser validation')
 report=json.loads((a.run/'evaluation/report.json').read_text())
-dense=json.loads((a.run/'experiment.json').read_text())['profile'] in ['official_sfe_dense_younger','official_sfe_glasses_projected','e4e_source_eyeglass_channels','e4e_eyeglass_correction_sweep']
+dense=json.loads((a.run/'experiment.json').read_text())['profile'] in ['official_sfe_dense_younger','official_sfe_glasses_projected','e4e_source_eyeglass_channels','e4e_eyeglass_correction_sweep','e4e_no_glasses_schedule']
 projection=json.loads((a.run/'experiment.json').read_text())['profile']=='official_sfe_glasses_projected'
-attribute=json.loads((a.run/'experiment.json').read_text())['profile'] in ['e4e_source_eyeglass_channels','e4e_eyeglass_correction_sweep']
+attribute=json.loads((a.run/'experiment.json').read_text())['profile'] in ['e4e_source_eyeglass_channels','e4e_eyeglass_correction_sweep','e4e_no_glasses_schedule']
 count=len(report['routes'])+1 if attribute else (3 if dense and not projection else 4)
 with sync_playwright() as pw:
     browser=pw.chromium.launch(executable_path='/tmp/face-age-chrome/chrome',args=['--no-sandbox','--disable-dev-shm-usage'])
