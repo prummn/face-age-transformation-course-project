@@ -1,0 +1,2664 @@
+{
+  "date": "2026-11-28",
+  "branch": "dev/mobei-gan-portable-20261116",
+  "source_parent_commit": "93f6c61",
+  "note": "Development mechanism studies, not independent generalization or production promotion. Apparent-age estimates are not chronological ages.",
+  "runs": {
+    "sfe-cpu-20261128-011831": {
+      "run": "deployment/training-runs/sfe-cpu-20261128-011831",
+      "receipt": {
+        "job_id": "j-1795828744-963814",
+        "name": "face-age-sfe-cpu-20261128-011831",
+        "run_dir": "/root/face-age-transformation-course-project/deployment/training-runs/sfe-cpu-20261128-011831",
+        "gpus": 0
+      },
+      "device": {
+        "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+        "torch": "2.6.0+cu124",
+        "cuda": "12.4",
+        "gpu": null,
+        "device_count": 0,
+        "memory_bytes": 0
+      },
+      "experiment_sha256": "3d1789532c5c3c841a14474dc00e141ce6a1fdc2d96a7cfdd8ba245d134402c7",
+      "selection_sha256": "f8baa8cb6b6d4e16f9f1c995d9cef260529a9d121171c163427890c55412a3ea",
+      "model_specs": [
+        {
+          "name": "e4e_ffhq_encode.pt",
+          "bytes": 1201649680,
+          "sha256": "2ace1d9a8c05c10a399bcd500b8dda118f759ff1aac89dbdab7435f2136a0999",
+          "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+          "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+          "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/e4e_ffhq_encode.pt",
+          "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+          "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+          "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+        },
+        {
+          "name": "sfe_editor_light.pt",
+          "bytes": 649325957,
+          "sha256": "ced3e79813ec6ff1418404576cc43e3c92849ab124ec87cd72be42dcb25311ea",
+          "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+          "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+          "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/sfe_editor_light.pt",
+          "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+          "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+          "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+        },
+        {
+          "name": "stylegan2-ffhq-config-f.pt",
+          "bytes": 381462551,
+          "sha256": "bae494ef77e32a9cd1792a81a3c167692a0e64f6bcd8b06592ff42917e2ed46e",
+          "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+          "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+          "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/stylegan2-ffhq-config-f.pt",
+          "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+          "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+          "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+        }
+      ],
+      "profile": "official_sfe_dense_younger",
+      "adapter_mode": null,
+      "source_commit": "93f6c619ad3fbb8d8df66302467962215ebc6c36",
+      "source_snapshot_sha256": {
+        "source/probe_inversion.py": "febc5153b69994b5ba50ac7b7dc5ec721aeaddf5d430da8fdb6324c925d69d47",
+        "source/sfe_study.py": "dc71b0cc75558003a04cead80d5165b826aa7ee0a743ebc4f298289645b2cfb8",
+        "source/source_color.py": "1759c7a0a5fa842fa84af46e35ed0d72457b224c661f74de62495f0f026e3c54",
+        "source/run_sfe.sh": "3f34cd0e7df33a1888fb40560fd5f1ed542aabefbae0f0eb33c5d26a23f25f38"
+      },
+      "report_sha256": "a4f6fb13354180381cfd83dddf030a0f58c803c3af5b86df2f67cf791e5ccd10",
+      "worker_seconds": 188.4843960404396,
+      "summary": {
+        "groups": {
+          "sfe_age/scale_-5": {
+            "cases": 3,
+            "identity": 0.8216744860013326,
+            "independent_age": 41.940329233805336,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-5": {
+            "cases": 3,
+            "identity": 0.5068257649739584,
+            "independent_age": 12.711467742919922,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-4.5": {
+            "cases": 3,
+            "identity": 0.8518383502960205,
+            "independent_age": 49.61865234375,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-4.5": {
+            "cases": 3,
+            "identity": 0.5330196420351664,
+            "independent_age": 22.216463724772137,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-4": {
+            "cases": 3,
+            "identity": 0.8870378732681274,
+            "independent_age": 64.61097971598308,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-4": {
+            "cases": 3,
+            "identity": 0.5739566882451376,
+            "independent_age": 26.784069061279297,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-3.5": {
+            "cases": 3,
+            "identity": 0.914086639881134,
+            "independent_age": 67.11021550496419,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-3.5": {
+            "cases": 3,
+            "identity": 0.6055180033047994,
+            "independent_age": 31.429136912027996,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-3": {
+            "cases": 3,
+            "identity": 0.9352877537409464,
+            "independent_age": 69.41034189860027,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-3": {
+            "cases": 3,
+            "identity": 0.6267379323641459,
+            "independent_age": 44.16655349731445,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-2.5": {
+            "cases": 3,
+            "identity": 0.951316754023234,
+            "independent_age": 71.51238759358723,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-2.5": {
+            "cases": 3,
+            "identity": 0.6466009020805359,
+            "independent_age": 51.09164555867513,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-2": {
+            "cases": 3,
+            "identity": 0.9643148382504781,
+            "independent_age": 72.84434000651042,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-2": {
+            "cases": 3,
+            "identity": 0.6611326932907104,
+            "independent_age": 54.22204335530599,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-1.5": {
+            "cases": 3,
+            "identity": 0.973578135172526,
+            "independent_age": 73.97908528645833,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-1.5": {
+            "cases": 3,
+            "identity": 0.6688980857531229,
+            "independent_age": 57.17622629801432,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-1": {
+            "cases": 3,
+            "identity": 0.9821123282114664,
+            "independent_age": 75.1005121866862,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-1": {
+            "cases": 3,
+            "identity": 0.6644622286160787,
+            "independent_age": 59.44275029500326,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-0.5": {
+            "cases": 3,
+            "identity": 0.9864545067151388,
+            "independent_age": 75.90550486246745,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-0.5": {
+            "cases": 3,
+            "identity": 0.6661519209543864,
+            "independent_age": 61.959051767985024,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_0": {
+            "cases": 3,
+            "identity": 0.9880877534548441,
+            "independent_age": 76.71734364827473,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_0": {
+            "cases": 3,
+            "identity": 0.6693102717399597,
+            "independent_age": 64.14781951904297,
+            "target_proxy_mae": null,
+            "missing": 0
+          }
+        },
+        "aggregate": {
+          "sfe_age": {
+            "identity": 0.9323444926377499,
+            "span20to75": null,
+            "nonmonotonic_pairs": 0,
+            "target_proxy_mae": null,
+            "older_younger_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age": {
+            "identity": 0.6202376484870911,
+            "span20to75": null,
+            "nonmonotonic_pairs": 0,
+            "target_proxy_mae": null,
+            "older_younger_proxy_mae": null,
+            "missing": 0
+          }
+        },
+        "source_ages": {
+          "ffhq_67140": 81.6224594116211,
+          "ffhq_60764": 68.67528533935547,
+          "ffhq_68335": 85.07337951660156
+        },
+        "independent_ages": {
+          "ffhq_67140/sam_same.png": 69.69834899902344,
+          "ffhq_67140/sam_20.png": 49.740203857421875,
+          "ffhq_67140/sam_40.png": 54.57042694091797,
+          "ffhq_67140/sam_60.png": 67.7904052734375,
+          "ffhq_67140/sam_75.png": 70.14328002929688,
+          "ffhq_67140/sfe_age_scale_-5.png": 4.558628082275391,
+          "ffhq_67140/e4e_age_scale_-5.png": 4.467342376708984,
+          "ffhq_67140/sfe_age_scale_-4.5.png": 22.880474090576172,
+          "ffhq_67140/e4e_age_scale_-4.5.png": 5.142333984375,
+          "ffhq_67140/sfe_age_scale_-4.png": 63.06547546386719,
+          "ffhq_67140/e4e_age_scale_-4.png": 6.195365905761719,
+          "ffhq_67140/sfe_age_scale_-3.5.png": 66.68689727783203,
+          "ffhq_67140/e4e_age_scale_-3.5.png": 8.608779907226562,
+          "ffhq_67140/sfe_age_scale_-3.png": 69.10602569580078,
+          "ffhq_67140/e4e_age_scale_-3.png": 41.69587707519531,
+          "ffhq_67140/sfe_age_scale_-2.5.png": 71.12604522705078,
+          "ffhq_67140/e4e_age_scale_-2.5.png": 53.1413459777832,
+          "ffhq_67140/sfe_age_scale_-2.png": 73.31600189208984,
+          "ffhq_67140/e4e_age_scale_-2.png": 57.61879348754883,
+          "ffhq_67140/sfe_age_scale_-1.5.png": 75.21131134033203,
+          "ffhq_67140/e4e_age_scale_-1.5.png": 60.80316162109375,
+          "ffhq_67140/sfe_age_scale_-1.png": 76.89202117919922,
+          "ffhq_67140/e4e_age_scale_-1.png": 62.88138961791992,
+          "ffhq_67140/sfe_age_scale_-0.5.png": 78.6584243774414,
+          "ffhq_67140/e4e_age_scale_-0.5.png": 64.80378723144531,
+          "ffhq_67140/sfe_age_scale_0.png": 79.86272430419922,
+          "ffhq_67140/e4e_age_scale_0.png": 66.84297943115234,
+          "ffhq_60764/sam_same.png": 64.34661102294922,
+          "ffhq_60764/sam_20.png": 48.7144775390625,
+          "ffhq_60764/sam_40.png": 57.04399108886719,
+          "ffhq_60764/sam_60.png": 64.92546081542969,
+          "ffhq_60764/sam_75.png": 68.25067138671875,
+          "ffhq_60764/sfe_age_scale_-5.png": 54.32478332519531,
+          "ffhq_60764/e4e_age_scale_-5.png": 15.159599304199219,
+          "ffhq_60764/sfe_age_scale_-4.5.png": 56.918582916259766,
+          "ffhq_60764/e4e_age_scale_-4.5.png": 37.08055877685547,
+          "ffhq_60764/sfe_age_scale_-4.png": 59.53021240234375,
+          "ffhq_60764/e4e_age_scale_-4.png": 43.7185173034668,
+          "ffhq_60764/sfe_age_scale_-3.5.png": 61.10147476196289,
+          "ffhq_60764/e4e_age_scale_-3.5.png": 48.475040435791016,
+          "ffhq_60764/sfe_age_scale_-3.png": 62.67698669433594,
+          "ffhq_60764/e4e_age_scale_-3.png": 53.488059997558594,
+          "ffhq_60764/sfe_age_scale_-2.5.png": 63.469512939453125,
+          "ffhq_60764/e4e_age_scale_-2.5.png": 56.37712860107422,
+          "ffhq_60764/sfe_age_scale_-2.png": 64.46283721923828,
+          "ffhq_60764/e4e_age_scale_-2.png": 58.842830657958984,
+          "ffhq_60764/sfe_age_scale_-1.5.png": 65.06204223632812,
+          "ffhq_60764/e4e_age_scale_-1.5.png": 60.77747344970703,
+          "ffhq_60764/sfe_age_scale_-1.png": 65.70951080322266,
+          "ffhq_60764/e4e_age_scale_-1.png": 62.347923278808594,
+          "ffhq_60764/sfe_age_scale_-0.5.png": 66.31737518310547,
+          "ffhq_60764/e4e_age_scale_-0.5.png": 63.55818557739258,
+          "ffhq_60764/sfe_age_scale_0.png": 66.8853759765625,
+          "ffhq_60764/e4e_age_scale_0.png": 65.0868911743164,
+          "ffhq_68335/sam_same.png": 76.96302795410156,
+          "ffhq_68335/sam_20.png": 36.90724563598633,
+          "ffhq_68335/sam_40.png": 53.61955261230469,
+          "ffhq_68335/sam_60.png": 71.82075500488281,
+          "ffhq_68335/sam_75.png": 78.95037841796875,
+          "ffhq_68335/sfe_age_scale_-5.png": 66.93757629394531,
+          "ffhq_68335/e4e_age_scale_-5.png": 18.507461547851562,
+          "ffhq_68335/sfe_age_scale_-4.5.png": 69.05690002441406,
+          "ffhq_68335/e4e_age_scale_-4.5.png": 24.426498413085938,
+          "ffhq_68335/sfe_age_scale_-4.png": 71.23725128173828,
+          "ffhq_68335/e4e_age_scale_-4.png": 30.438323974609375,
+          "ffhq_68335/sfe_age_scale_-3.5.png": 73.54227447509766,
+          "ffhq_68335/e4e_age_scale_-3.5.png": 37.203590393066406,
+          "ffhq_68335/sfe_age_scale_-3.png": 76.44801330566406,
+          "ffhq_68335/e4e_age_scale_-3.png": 37.31572341918945,
+          "ffhq_68335/sfe_age_scale_-2.5.png": 79.94160461425781,
+          "ffhq_68335/e4e_age_scale_-2.5.png": 43.75646209716797,
+          "ffhq_68335/sfe_age_scale_-2.png": 80.75418090820312,
+          "ffhq_68335/e4e_age_scale_-2.png": 46.204505920410156,
+          "ffhq_68335/sfe_age_scale_-1.5.png": 81.66390228271484,
+          "ffhq_68335/e4e_age_scale_-1.5.png": 49.94804382324219,
+          "ffhq_68335/sfe_age_scale_-1.png": 82.70000457763672,
+          "ffhq_68335/e4e_age_scale_-1.png": 53.09893798828125,
+          "ffhq_68335/sfe_age_scale_-0.5.png": 82.74071502685547,
+          "ffhq_68335/e4e_age_scale_-0.5.png": 57.51518249511719,
+          "ffhq_68335/sfe_age_scale_0.png": 83.4039306640625,
+          "ffhq_68335/e4e_age_scale_0.png": 60.513587951660156
+        },
+        "promotion": false,
+        "visual_review_pending": true,
+        "targets_not_calibrated": true
+      },
+      "artifacts": {
+        "raw": 81,
+        "color": 81,
+        "size": [
+          1024,
+          1024
+        ],
+        "all_decodable": true,
+        "raw_hashes_verified": true
+      },
+      "browser": {
+        "url": "http://127.0.0.1:65512/age-sfe-dense-review/",
+        "status": 200,
+        "cases": 3,
+        "conditions": 11,
+        "all_conditions_switch": true,
+        "all_cases_switch": true,
+        "color_switch": true,
+        "native_crop": true,
+        "download": [
+          1024,
+          1024
+        ],
+        "mobile_width": 390,
+        "errors": []
+      },
+      "frozen": {
+        "before": "2619f54247d5235e05869c31030951a11789b7ebc448d69a13c4a34b63d5a7d7",
+        "after": "2619f54247d5235e05869c31030951a11789b7ebc448d69a13c4a34b63d5a7d7",
+        "equal": true
+      },
+      "training": null,
+      "checkpoints": {}
+    },
+    "sfe-conditioned-20261128-012222": {
+      "run": "deployment/training-runs/sfe-conditioned-20261128-012222",
+      "receipt": {
+        "job_id": "j-1795829052-498685",
+        "name": "face-age-sfe-conditioned-20261128-012222",
+        "run_dir": "/root/face-age-transformation-course-project/deployment/training-runs/sfe-conditioned-20261128-012222",
+        "gpus": 1
+      },
+      "device": {
+        "torch": "2.6.0+cu124",
+        "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+        "cuda": "12.4",
+        "gpu": "NVIDIA H200",
+        "device_count": 1,
+        "peak_bytes": 4849417216
+      },
+      "experiment_sha256": "2064f81bf10c14a03645d53387c78a384c106795e979305254278b20dbb18999",
+      "selection_sha256": "c7bf2fbbee2ab088bb58f38563e914de446a11e3e61b84eeb8caf409398ebdd2",
+      "model_specs": [
+        {
+          "name": "e4e_ffhq_encode.pt",
+          "bytes": 1201649680,
+          "sha256": "2ace1d9a8c05c10a399bcd500b8dda118f759ff1aac89dbdab7435f2136a0999",
+          "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+          "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+          "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/e4e_ffhq_encode.pt",
+          "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+          "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+          "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+        },
+        {
+          "name": "sfe_editor_light.pt",
+          "bytes": 649325957,
+          "sha256": "ced3e79813ec6ff1418404576cc43e3c92849ab124ec87cd72be42dcb25311ea",
+          "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+          "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+          "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/sfe_editor_light.pt",
+          "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+          "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+          "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+        },
+        {
+          "name": "stylegan2-ffhq-config-f.pt",
+          "bytes": 381462551,
+          "sha256": "bae494ef77e32a9cd1792a81a3c167692a0e64f6bcd8b06592ff42917e2ed46e",
+          "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+          "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+          "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/stylegan2-ffhq-config-f.pt",
+          "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+          "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+          "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+        }
+      ],
+      "profile": "source_target_sfe_paired_protection",
+      "adapter_mode": null,
+      "source_commit": "93f6c619ad3fbb8d8df66302467962215ebc6c36",
+      "source_snapshot_sha256": {
+        "source/probe_inversion.py": "febc5153b69994b5ba50ac7b7dc5ec721aeaddf5d430da8fdb6324c925d69d47",
+        "source/sfe_study.py": "dc71b0cc75558003a04cead80d5165b826aa7ee0a743ebc4f298289645b2cfb8",
+        "source/sfe_conditioned_study.py": "c710e6b9bf7d3881a9f4228013cab9c0e248a7c6827c18016d640870f4cd13c5",
+        "source/source_color.py": "1759c7a0a5fa842fa84af46e35ed0d72457b224c661f74de62495f0f026e3c54",
+        "source/run_sfe_conditioned.sh": "7f78a37218bfd653edf92ae1da71aa2e955019533d4d02ad256c2a1145e8ade3"
+      },
+      "report_sha256": "33205cdfa98cabfb73300ad71ab9e7aeb42e53f0c5c04594fde60c9572189048",
+      "worker_seconds": 184.43630523607135,
+      "summary": {
+        "groups": {
+          "fixed_mapping/same": {
+            "cases": 8,
+            "identity": 0.9837078899145126,
+            "independent_age": 47.858426094055176,
+            "target_proxy_mae": 6.297056198120117,
+            "missing": 0
+          },
+          "fixed_mapping/20": {
+            "cases": 8,
+            "identity": 0.9222041293978691,
+            "independent_age": 34.22060966491699,
+            "target_proxy_mae": 18.06612777709961,
+            "missing": 0
+          },
+          "fixed_mapping/30": {
+            "cases": 8,
+            "identity": 0.9448900446295738,
+            "independent_age": 42.287046909332275,
+            "target_proxy_mae": 15.888209819793701,
+            "missing": 0
+          },
+          "fixed_mapping/40": {
+            "cases": 8,
+            "identity": 0.9550976380705833,
+            "independent_age": 46.17114496231079,
+            "target_proxy_mae": 18.072736263275146,
+            "missing": 0
+          },
+          "fixed_mapping/50": {
+            "cases": 8,
+            "identity": 0.9537418782711029,
+            "independent_age": 48.92820763587952,
+            "target_proxy_mae": 18.551902532577515,
+            "missing": 0
+          },
+          "fixed_mapping/60": {
+            "cases": 8,
+            "identity": 0.9274791330099106,
+            "independent_age": 50.984758615493774,
+            "target_proxy_mae": 20.557069540023804,
+            "missing": 0
+          },
+          "fixed_mapping/75": {
+            "cases": 8,
+            "identity": 0.870148777961731,
+            "independent_age": 56.602843284606934,
+            "target_proxy_mae": 21.879658699035645,
+            "missing": 0
+          },
+          "age_id_editor/same": {
+            "cases": 8,
+            "identity": 0.9837078899145126,
+            "independent_age": 47.858426094055176,
+            "target_proxy_mae": 6.297056198120117,
+            "missing": 0
+          },
+          "age_id_editor/20": {
+            "cases": 8,
+            "identity": 0.8988648653030396,
+            "independent_age": 35.884578227996826,
+            "target_proxy_mae": 19.826778888702393,
+            "missing": 0
+          },
+          "age_id_editor/30": {
+            "cases": 8,
+            "identity": 0.9300399720668793,
+            "independent_age": 39.54397916793823,
+            "target_proxy_mae": 17.86205530166626,
+            "missing": 0
+          },
+          "age_id_editor/40": {
+            "cases": 8,
+            "identity": 0.9399335086345673,
+            "independent_age": 50.55906271934509,
+            "target_proxy_mae": 19.984076738357544,
+            "missing": 0
+          },
+          "age_id_editor/50": {
+            "cases": 8,
+            "identity": 0.9103631898760796,
+            "independent_age": 54.15392255783081,
+            "target_proxy_mae": 16.878031253814697,
+            "missing": 0
+          },
+          "age_id_editor/60": {
+            "cases": 8,
+            "identity": 0.8416005373001099,
+            "independent_age": 59.91090440750122,
+            "target_proxy_mae": 13.195031642913818,
+            "missing": 0
+          },
+          "age_id_editor/75": {
+            "cases": 8,
+            "identity": 0.7324640601873398,
+            "independent_age": 69.7375602722168,
+            "target_proxy_mae": 9.95589828491211,
+            "missing": 0
+          },
+          "protected_editor/same": {
+            "cases": 8,
+            "identity": 0.9837078899145126,
+            "independent_age": 47.858426094055176,
+            "target_proxy_mae": 6.297056198120117,
+            "missing": 0
+          },
+          "protected_editor/20": {
+            "cases": 8,
+            "identity": 0.8947556242346764,
+            "independent_age": 33.91230821609497,
+            "target_proxy_mae": 17.914717197418213,
+            "missing": 0
+          },
+          "protected_editor/30": {
+            "cases": 8,
+            "identity": 0.9251836389303207,
+            "independent_age": 37.095776081085205,
+            "target_proxy_mae": 16.725905895233154,
+            "missing": 0
+          },
+          "protected_editor/40": {
+            "cases": 8,
+            "identity": 0.9416338354349136,
+            "independent_age": 48.236279010772705,
+            "target_proxy_mae": 18.470545291900635,
+            "missing": 0
+          },
+          "protected_editor/50": {
+            "cases": 8,
+            "identity": 0.933061845600605,
+            "independent_age": 52.746986627578735,
+            "target_proxy_mae": 17.324186086654663,
+            "missing": 0
+          },
+          "protected_editor/60": {
+            "cases": 8,
+            "identity": 0.8630785942077637,
+            "independent_age": 57.07118320465088,
+            "target_proxy_mae": 15.927067756652832,
+            "missing": 0
+          },
+          "protected_editor/75": {
+            "cases": 8,
+            "identity": 0.773073323071003,
+            "independent_age": 65.82053899765015,
+            "target_proxy_mae": 13.718536853790283,
+            "missing": 0
+          }
+        },
+        "aggregate": {
+          "fixed_mapping": {
+            "identity": 0.9289269335567951,
+            "span20to75": 22.38223361968994,
+            "nonmonotonic_pairs": 0,
+            "target_proxy_mae": 18.83595077196757,
+            "older_younger_proxy_mae": 33.22407489352756,
+            "missing": 0
+          },
+          "age_id_editor": {
+            "identity": 0.8755443555613359,
+            "span20to75": 33.85298204421997,
+            "nonmonotonic_pairs": 5,
+            "target_proxy_mae": 16.283645351727802,
+            "older_younger_proxy_mae": 37.76022423638238,
+            "missing": 0
+          },
+          "protected_editor": {
+            "identity": 0.8884644769132137,
+            "span20to75": 31.908230781555176,
+            "nonmonotonic_pairs": 3,
+            "target_proxy_mae": 16.68015984694163,
+            "older_younger_proxy_mae": 34.15048260158963,
+            "missing": 0
+          }
+        },
+        "source_ages": {
+          "ffhq_64376": 24.617202758789062,
+          "ffhq_61908": 31.332361221313477,
+          "ffhq_62644": 24.25365447998047,
+          "ffhq_64919": 49.32725143432617,
+          "ffhq_65817": 27.923721313476562,
+          "ffhq_67140": 81.6224594116211,
+          "ffhq_60764": 68.67528533935547,
+          "ffhq_68335": 85.07337951660156
+        },
+        "independent_ages": {
+          "ffhq_64376/fixed_mapping_same.png": 23.53476333618164,
+          "ffhq_64376/fixed_mapping_20.png": 22.76962661743164,
+          "ffhq_64376/fixed_mapping_30.png": 23.763469696044922,
+          "ffhq_64376/fixed_mapping_40.png": 25.863510131835938,
+          "ffhq_64376/fixed_mapping_50.png": 29.06566619873047,
+          "ffhq_64376/fixed_mapping_60.png": 31.644779205322266,
+          "ffhq_64376/fixed_mapping_75.png": 40.02056884765625,
+          "ffhq_64376/age_id_editor_same.png": 23.53476333618164,
+          "ffhq_64376/age_id_editor_20.png": 22.784305572509766,
+          "ffhq_64376/age_id_editor_30.png": 23.833595275878906,
+          "ffhq_64376/age_id_editor_40.png": 26.73033905029297,
+          "ffhq_64376/age_id_editor_50.png": 32.64183807373047,
+          "ffhq_64376/age_id_editor_60.png": 35.46258544921875,
+          "ffhq_64376/age_id_editor_75.png": 42.92658233642578,
+          "ffhq_64376/protected_editor_same.png": 23.53476333618164,
+          "ffhq_64376/protected_editor_20.png": 22.838520050048828,
+          "ffhq_64376/protected_editor_30.png": 23.79025650024414,
+          "ffhq_64376/protected_editor_40.png": 25.90386199951172,
+          "ffhq_64376/protected_editor_50.png": 29.642473220825195,
+          "ffhq_64376/protected_editor_60.png": 32.807777404785156,
+          "ffhq_64376/protected_editor_75.png": 37.75762176513672,
+          "ffhq_61908/fixed_mapping_same.png": 29.263141632080078,
+          "ffhq_61908/fixed_mapping_20.png": 27.460514068603516,
+          "ffhq_61908/fixed_mapping_30.png": 28.833763122558594,
+          "ffhq_61908/fixed_mapping_40.png": 30.468196868896484,
+          "ffhq_61908/fixed_mapping_50.png": 33.29316711425781,
+          "ffhq_61908/fixed_mapping_60.png": 37.076419830322266,
+          "ffhq_61908/fixed_mapping_75.png": 44.71955108642578,
+          "ffhq_61908/age_id_editor_same.png": 29.263141632080078,
+          "ffhq_61908/age_id_editor_20.png": 30.218902587890625,
+          "ffhq_61908/age_id_editor_30.png": 28.924442291259766,
+          "ffhq_61908/age_id_editor_40.png": 32.45100784301758,
+          "ffhq_61908/age_id_editor_50.png": 40.27709197998047,
+          "ffhq_61908/age_id_editor_60.png": 47.053466796875,
+          "ffhq_61908/age_id_editor_75.png": 66.44039154052734,
+          "ffhq_61908/protected_editor_same.png": 29.263141632080078,
+          "ffhq_61908/protected_editor_20.png": 29.454795837402344,
+          "ffhq_61908/protected_editor_30.png": 29.202804565429688,
+          "ffhq_61908/protected_editor_40.png": 32.0966796875,
+          "ffhq_61908/protected_editor_50.png": 38.709716796875,
+          "ffhq_61908/protected_editor_60.png": 47.35989761352539,
+          "ffhq_61908/protected_editor_75.png": 52.44837188720703,
+          "ffhq_62644/fixed_mapping_same.png": 24.22887420654297,
+          "ffhq_62644/fixed_mapping_20.png": 24.247249603271484,
+          "ffhq_62644/fixed_mapping_30.png": 24.967208862304688,
+          "ffhq_62644/fixed_mapping_40.png": 26.984699249267578,
+          "ffhq_62644/fixed_mapping_50.png": 31.148733139038086,
+          "ffhq_62644/fixed_mapping_60.png": 31.842226028442383,
+          "ffhq_62644/fixed_mapping_75.png": 41.06086349487305,
+          "ffhq_62644/age_id_editor_same.png": 24.22887420654297,
+          "ffhq_62644/age_id_editor_20.png": 24.275039672851562,
+          "ffhq_62644/age_id_editor_30.png": 25.727867126464844,
+          "ffhq_62644/age_id_editor_40.png": 32.75461196899414,
+          "ffhq_62644/age_id_editor_50.png": 43.1925048828125,
+          "ffhq_62644/age_id_editor_60.png": 59.760982513427734,
+          "ffhq_62644/age_id_editor_75.png": 70.401611328125,
+          "ffhq_62644/protected_editor_same.png": 24.22887420654297,
+          "ffhq_62644/protected_editor_20.png": 24.230037689208984,
+          "ffhq_62644/protected_editor_30.png": 25.625751495361328,
+          "ffhq_62644/protected_editor_40.png": 31.022579193115234,
+          "ffhq_62644/protected_editor_50.png": 42.11146545410156,
+          "ffhq_62644/protected_editor_60.png": 50.12803649902344,
+          "ffhq_62644/protected_editor_75.png": 67.0472183227539,
+          "ffhq_64919/fixed_mapping_same.png": 47.87101745605469,
+          "ffhq_64919/fixed_mapping_20.png": 37.979820251464844,
+          "ffhq_64919/fixed_mapping_30.png": 41.080780029296875,
+          "ffhq_64919/fixed_mapping_40.png": 44.49604797363281,
+          "ffhq_64919/fixed_mapping_50.png": 47.50469970703125,
+          "ffhq_64919/fixed_mapping_60.png": 49.4725341796875,
+          "ffhq_64919/fixed_mapping_75.png": 55.449337005615234,
+          "ffhq_64919/age_id_editor_same.png": 47.87101745605469,
+          "ffhq_64919/age_id_editor_20.png": 41.683868408203125,
+          "ffhq_64919/age_id_editor_30.png": 46.85442352294922,
+          "ffhq_64919/age_id_editor_40.png": 47.492740631103516,
+          "ffhq_64919/age_id_editor_50.png": 47.71198272705078,
+          "ffhq_64919/age_id_editor_60.png": 53.581565856933594,
+          "ffhq_64919/age_id_editor_75.png": 71.36139678955078,
+          "ffhq_64919/protected_editor_same.png": 47.87101745605469,
+          "ffhq_64919/protected_editor_20.png": 39.72269058227539,
+          "ffhq_64919/protected_editor_30.png": 43.90562438964844,
+          "ffhq_64919/protected_editor_40.png": 46.154842376708984,
+          "ffhq_64919/protected_editor_50.png": 47.756492614746094,
+          "ffhq_64919/protected_editor_60.png": 52.9649543762207,
+          "ffhq_64919/protected_editor_75.png": 67.99935150146484,
+          "ffhq_65817/fixed_mapping_same.png": 27.783218383789062,
+          "ffhq_65817/fixed_mapping_20.png": 27.154861450195312,
+          "ffhq_65817/fixed_mapping_30.png": 28.030906677246094,
+          "ffhq_65817/fixed_mapping_40.png": 29.077228546142578,
+          "ffhq_65817/fixed_mapping_50.png": 30.49295425415039,
+          "ffhq_65817/fixed_mapping_60.png": 31.67479705810547,
+          "ffhq_65817/fixed_mapping_75.png": 37.51923370361328,
+          "ffhq_65817/age_id_editor_same.png": 27.783218383789062,
+          "ffhq_65817/age_id_editor_20.png": 27.174968719482422,
+          "ffhq_65817/age_id_editor_30.png": 28.15713119506836,
+          "ffhq_65817/age_id_editor_40.png": 30.363985061645508,
+          "ffhq_65817/age_id_editor_50.png": 35.280147552490234,
+          "ffhq_65817/age_id_editor_60.png": 51.00489044189453,
+          "ffhq_65817/age_id_editor_75.png": 62.996665954589844,
+          "ffhq_65817/protected_editor_same.png": 27.783218383789062,
+          "ffhq_65817/protected_editor_20.png": 26.981220245361328,
+          "ffhq_65817/protected_editor_30.png": 28.070980072021484,
+          "ffhq_65817/protected_editor_40.png": 30.039813995361328,
+          "ffhq_65817/protected_editor_50.png": 33.47105407714844,
+          "ffhq_65817/protected_editor_60.png": 41.3157958984375,
+          "ffhq_65817/protected_editor_75.png": 58.15544509887695,
+          "ffhq_67140/fixed_mapping_same.png": 79.87220764160156,
+          "ffhq_67140/fixed_mapping_20.png": 4.617927551269531,
+          "ffhq_67140/fixed_mapping_30.png": 55.6676139831543,
+          "ffhq_67140/fixed_mapping_40.png": 67.76323699951172,
+          "ffhq_67140/fixed_mapping_50.png": 72.04542541503906,
+          "ffhq_67140/fixed_mapping_60.png": 75.94756317138672,
+          "ffhq_67140/fixed_mapping_75.png": 80.31570434570312,
+          "ffhq_67140/age_id_editor_same.png": 79.87220764160156,
+          "ffhq_67140/age_id_editor_20.png": 4.231197357177734,
+          "ffhq_67140/age_id_editor_30.png": 10.084659576416016,
+          "ffhq_67140/age_id_editor_40.png": 80.98113250732422,
+          "ffhq_67140/age_id_editor_50.png": 81.38016510009766,
+          "ffhq_67140/age_id_editor_60.png": 80.29554748535156,
+          "ffhq_67140/age_id_editor_75.png": 80.39447021484375,
+          "ffhq_67140/protected_editor_same.png": 79.87220764160156,
+          "ffhq_67140/protected_editor_20.png": 3.9903640747070312,
+          "ffhq_67140/protected_editor_30.png": 4.7896881103515625,
+          "ffhq_67140/protected_editor_40.png": 70.5135726928711,
+          "ffhq_67140/protected_editor_50.png": 78.42078399658203,
+          "ffhq_67140/protected_editor_60.png": 80.31863403320312,
+          "ffhq_67140/protected_editor_75.png": 80.76520538330078,
+          "ffhq_60764/fixed_mapping_same.png": 66.88024139404297,
+          "ffhq_60764/fixed_mapping_20.png": 60.63998794555664,
+          "ffhq_60764/fixed_mapping_30.png": 63.306034088134766,
+          "ffhq_60764/fixed_mapping_40.png": 64.7956314086914,
+          "ffhq_60764/fixed_mapping_50.png": 66.18147277832031,
+          "ffhq_60764/fixed_mapping_60.png": 67.61943817138672,
+          "ffhq_60764/fixed_mapping_75.png": 70.12318420410156,
+          "ffhq_60764/age_id_editor_same.png": 66.88024139404297,
+          "ffhq_60764/age_id_editor_20.png": 65.32217407226562,
+          "ffhq_60764/age_id_editor_30.png": 68.57512664794922,
+          "ffhq_60764/age_id_editor_40.png": 68.72314453125,
+          "ffhq_60764/age_id_editor_50.png": 68.08285522460938,
+          "ffhq_60764/age_id_editor_60.png": 68.27893829345703,
+          "ffhq_60764/age_id_editor_75.png": 77.37088012695312,
+          "ffhq_60764/protected_editor_same.png": 66.88024139404297,
+          "ffhq_60764/protected_editor_20.png": 61.3911247253418,
+          "ffhq_60764/protected_editor_30.png": 66.61688232421875,
+          "ffhq_60764/protected_editor_40.png": 68.76151275634766,
+          "ffhq_60764/protected_editor_50.png": 67.82142639160156,
+          "ffhq_60764/protected_editor_60.png": 68.12976837158203,
+          "ffhq_60764/protected_editor_75.png": 76.77433013916016,
+          "ffhq_68335/fixed_mapping_same.png": 83.43394470214844,
+          "ffhq_68335/fixed_mapping_20.png": 68.89488983154297,
+          "ffhq_68335/fixed_mapping_30.png": 72.64659881591797,
+          "ffhq_68335/fixed_mapping_40.png": 79.92060852050781,
+          "ffhq_68335/fixed_mapping_50.png": 81.69354248046875,
+          "ffhq_68335/fixed_mapping_60.png": 82.60031127929688,
+          "ffhq_68335/fixed_mapping_75.png": 83.61430358886719,
+          "ffhq_68335/age_id_editor_same.png": 83.43394470214844,
+          "ffhq_68335/age_id_editor_20.png": 71.38616943359375,
+          "ffhq_68335/age_id_editor_30.png": 84.19458770751953,
+          "ffhq_68335/age_id_editor_40.png": 84.97554016113281,
+          "ffhq_68335/age_id_editor_50.png": 84.664794921875,
+          "ffhq_68335/age_id_editor_60.png": 83.84925842285156,
+          "ffhq_68335/age_id_editor_75.png": 86.00848388671875,
+          "ffhq_68335/protected_editor_same.png": 83.43394470214844,
+          "ffhq_68335/protected_editor_20.png": 62.68971252441406,
+          "ffhq_68335/protected_editor_30.png": 74.76422119140625,
+          "ffhq_68335/protected_editor_40.png": 81.39736938476562,
+          "ffhq_68335/protected_editor_50.png": 84.04248046875,
+          "ffhq_68335/protected_editor_60.png": 83.54460144042969,
+          "ffhq_68335/protected_editor_75.png": 85.61676788330078
+        },
+        "promotion": false,
+        "visual_review_pending": true,
+        "targets_not_calibrated": true
+      },
+      "artifacts": {
+        "raw": 168,
+        "color": 168,
+        "size": [
+          1024,
+          1024
+        ],
+        "all_decodable": true,
+        "raw_hashes_verified": true
+      },
+      "browser": {
+        "url": "http://127.0.0.1:65512/age-sfe-feature-review/",
+        "status": 200,
+        "cases": 8,
+        "conditions": 7,
+        "all_conditions_switch": true,
+        "all_cases_switch": true,
+        "color_switch": true,
+        "native_crop": true,
+        "download": [
+          1024,
+          1024
+        ],
+        "mobile_width": 390,
+        "errors": []
+      },
+      "frozen": {
+        "before": "75db11c5adb198c50ec6d75426260c132117bf4de113c6d5a2a1b61bdc5c9b1e",
+        "after": "75db11c5adb198c50ec6d75426260c132117bf4de113c6d5a2a1b61bdc5c9b1e",
+        "equal": true
+      },
+      "training": {
+        "age_id_editor": {
+          "steps": 400,
+          "seconds": 19.75572045519948,
+          "unique_sources": 115
+        },
+        "protected_editor": {
+          "steps": 400,
+          "seconds": 19.25926338508725,
+          "unique_sources": 115
+        }
+      },
+      "checkpoints": {
+        "protected_editor.pt": {
+          "bytes": 5225334,
+          "sha256": "b97601a8cae215e2038e4da5cdc89d9d6232b713c8c01787464808f2c7b2035f",
+          "published": false
+        },
+        "age_id_editor.pt": {
+          "bytes": 5225292,
+          "sha256": "9034bdf82fc42fd807dedd2f98ccbf6b5d13e593aff769f9acdfef327ce62345",
+          "published": false
+        }
+      },
+      "decision": {
+        "age_id_editor": {
+          "mean_identity_drop": 0.0533825779954592,
+          "worst_identity_drop": 0.28964924812316895,
+          "individual_drop_gt_002": 22,
+          "age_proxy_mae_gain": 2.552305420239769,
+          "span_ratio": 1.5124934633172207,
+          "promoted": false
+        },
+        "protected_editor": {
+          "mean_identity_drop": 0.04046245664358139,
+          "worst_identity_drop": 0.2263636589050293,
+          "individual_drop_gt_002": 20,
+          "age_proxy_mae_gain": 2.15579092502594,
+          "span_ratio": 1.4256052958666776,
+          "promoted": false
+        }
+      },
+      "same-age-preflight": {
+        "raw_pixels_equal": true,
+        "zero_strength": true,
+        "shape": [
+          1,
+          3,
+          1024,
+          1024
+        ]
+      },
+      "train": {
+        "manifest_sha256": "a3118f76fb5d138e77dc3610295a8941105748fcc406a4272efac3cb171db12c",
+        "sources": 120,
+        "age_bins": {
+          "[20, 29]": 24,
+          "[30, 39]": 24,
+          "[40, 49]": 24,
+          "[50, 69]": 24,
+          "[70, 120]": 24
+        },
+        "demographics": {
+          "Asian": 64,
+          "None": 56
+        }
+      }
+    },
+    "sfe-strength-conditioned-20261128-012737": {
+      "run": "deployment/training-runs/sfe-strength-conditioned-20261128-012737",
+      "receipt": {
+        "job_id": "j-1795829320-100050",
+        "name": "face-age-sfe-strength-conditioned-20261128-012737",
+        "run_dir": "/root/face-age-transformation-course-project/deployment/training-runs/sfe-strength-conditioned-20261128-012737",
+        "gpus": 1
+      },
+      "device": {
+        "torch": "2.6.0+cu124",
+        "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+        "cuda": "12.4",
+        "gpu": "NVIDIA H200",
+        "device_count": 1,
+        "peak_bytes": 4848566272
+      },
+      "experiment_sha256": "cd82b7c82e0d588a3963a9d96db865bc9e53c80c3a06790e8cbb826be5485998",
+      "selection_sha256": "c7bf2fbbee2ab088bb58f38563e914de446a11e3e61b84eeb8caf409398ebdd2",
+      "model_specs": [
+        {
+          "name": "e4e_ffhq_encode.pt",
+          "bytes": 1201649680,
+          "sha256": "2ace1d9a8c05c10a399bcd500b8dda118f759ff1aac89dbdab7435f2136a0999",
+          "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+          "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+          "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/e4e_ffhq_encode.pt",
+          "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+          "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+          "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+        },
+        {
+          "name": "sfe_editor_light.pt",
+          "bytes": 649325957,
+          "sha256": "ced3e79813ec6ff1418404576cc43e3c92849ab124ec87cd72be42dcb25311ea",
+          "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+          "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+          "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/sfe_editor_light.pt",
+          "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+          "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+          "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+        },
+        {
+          "name": "stylegan2-ffhq-config-f.pt",
+          "bytes": 381462551,
+          "sha256": "bae494ef77e32a9cd1792a81a3c167692a0e64f6bcd8b06592ff42917e2ed46e",
+          "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+          "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+          "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/stylegan2-ffhq-config-f.pt",
+          "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+          "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+          "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+        }
+      ],
+      "profile": "source_target_sfe_paired_protection",
+      "adapter_mode": "strength",
+      "source_commit": "93f6c619ad3fbb8d8df66302467962215ebc6c36",
+      "source_snapshot_sha256": {
+        "source/probe_inversion.py": "febc5153b69994b5ba50ac7b7dc5ec721aeaddf5d430da8fdb6324c925d69d47",
+        "source/sfe_study.py": "dc71b0cc75558003a04cead80d5165b826aa7ee0a743ebc4f298289645b2cfb8",
+        "source/sfe_conditioned_study.py": "b52b381e83f6a7fc1dc5e2416d1dee4c2b81d068316070b93019d40fad30768c",
+        "source/source_color.py": "1759c7a0a5fa842fa84af46e35ed0d72457b224c661f74de62495f0f026e3c54",
+        "source/run_sfe_conditioned.sh": "7f78a37218bfd653edf92ae1da71aa2e955019533d4d02ad256c2a1145e8ade3"
+      },
+      "report_sha256": "3b76b629343564a5aa607749d447f32b30e875c88e29d1d7cb33b517c6be41f7",
+      "worker_seconds": 185.00378088094294,
+      "summary": {
+        "groups": {
+          "fixed_mapping/same": {
+            "cases": 8,
+            "identity": 0.9837078899145126,
+            "independent_age": 47.858426094055176,
+            "target_proxy_mae": 6.297056198120117,
+            "missing": 0
+          },
+          "fixed_mapping/20": {
+            "cases": 8,
+            "identity": 0.9222041293978691,
+            "independent_age": 34.22060966491699,
+            "target_proxy_mae": 18.06612777709961,
+            "missing": 0
+          },
+          "fixed_mapping/30": {
+            "cases": 8,
+            "identity": 0.9448900446295738,
+            "independent_age": 42.287046909332275,
+            "target_proxy_mae": 15.888209819793701,
+            "missing": 0
+          },
+          "fixed_mapping/40": {
+            "cases": 8,
+            "identity": 0.9550976380705833,
+            "independent_age": 46.17114496231079,
+            "target_proxy_mae": 18.072736263275146,
+            "missing": 0
+          },
+          "fixed_mapping/50": {
+            "cases": 8,
+            "identity": 0.9537418782711029,
+            "independent_age": 48.92820763587952,
+            "target_proxy_mae": 18.551902532577515,
+            "missing": 0
+          },
+          "fixed_mapping/60": {
+            "cases": 8,
+            "identity": 0.9274791330099106,
+            "independent_age": 50.984758615493774,
+            "target_proxy_mae": 20.557069540023804,
+            "missing": 0
+          },
+          "fixed_mapping/75": {
+            "cases": 8,
+            "identity": 0.870148777961731,
+            "independent_age": 56.602843284606934,
+            "target_proxy_mae": 21.879658699035645,
+            "missing": 0
+          },
+          "age_id_editor/same": {
+            "cases": 8,
+            "identity": 0.9837078899145126,
+            "independent_age": 47.858426094055176,
+            "target_proxy_mae": 6.297056198120117,
+            "missing": 0
+          },
+          "age_id_editor/20": {
+            "cases": 8,
+            "identity": 0.9122765362262726,
+            "independent_age": 33.371535301208496,
+            "target_proxy_mae": 17.217053413391113,
+            "missing": 0
+          },
+          "age_id_editor/30": {
+            "cases": 8,
+            "identity": 0.9334230124950409,
+            "independent_age": 35.46729898452759,
+            "target_proxy_mae": 15.193156719207764,
+            "missing": 0
+          },
+          "age_id_editor/40": {
+            "cases": 8,
+            "identity": 0.9505095779895782,
+            "independent_age": 44.990445613861084,
+            "target_proxy_mae": 17.51199960708618,
+            "missing": 0
+          },
+          "age_id_editor/50": {
+            "cases": 8,
+            "identity": 0.9561404213309288,
+            "independent_age": 48.20777916908264,
+            "target_proxy_mae": 18.65585684776306,
+            "missing": 0
+          },
+          "age_id_editor/60": {
+            "cases": 8,
+            "identity": 0.9369696900248528,
+            "independent_age": 50.48446702957153,
+            "target_proxy_mae": 20.909366130828857,
+            "missing": 0
+          },
+          "age_id_editor/75": {
+            "cases": 8,
+            "identity": 0.8854317218065262,
+            "independent_age": 55.59245586395264,
+            "target_proxy_mae": 22.955790519714355,
+            "missing": 0
+          },
+          "protected_editor/same": {
+            "cases": 8,
+            "identity": 0.9837078899145126,
+            "independent_age": 47.858426094055176,
+            "target_proxy_mae": 6.297056198120117,
+            "missing": 0
+          },
+          "protected_editor/20": {
+            "cases": 8,
+            "identity": 0.9035426154732704,
+            "independent_age": 32.86399507522583,
+            "target_proxy_mae": 16.709513187408447,
+            "missing": 0
+          },
+          "protected_editor/30": {
+            "cases": 8,
+            "identity": 0.9280887544155121,
+            "independent_age": 34.92536687850952,
+            "target_proxy_mae": 14.89032506942749,
+            "missing": 0
+          },
+          "protected_editor/40": {
+            "cases": 8,
+            "identity": 0.9471651092171669,
+            "independent_age": 43.97137928009033,
+            "target_proxy_mae": 16.852216720581055,
+            "missing": 0
+          },
+          "protected_editor/50": {
+            "cases": 8,
+            "identity": 0.9583263769745827,
+            "independent_age": 47.50952124595642,
+            "target_proxy_mae": 19.08668541908264,
+            "missing": 0
+          },
+          "protected_editor/60": {
+            "cases": 8,
+            "identity": 0.9547068029642105,
+            "independent_age": 50.12722730636597,
+            "target_proxy_mae": 21.14453935623169,
+            "missing": 0
+          },
+          "protected_editor/75": {
+            "cases": 8,
+            "identity": 0.9062158390879631,
+            "independent_age": 53.6814751625061,
+            "target_proxy_mae": 24.801991939544678,
+            "missing": 0
+          }
+        },
+        "aggregate": {
+          "fixed_mapping": {
+            "identity": 0.9289269335567951,
+            "span20to75": 22.38223361968994,
+            "nonmonotonic_pairs": 0,
+            "target_proxy_mae": 18.83595077196757,
+            "older_younger_proxy_mae": 33.22407489352756,
+            "missing": 0
+          },
+          "age_id_editor": {
+            "identity": 0.9291251599788666,
+            "span20to75": 22.22092056274414,
+            "nonmonotonic_pairs": 0,
+            "target_proxy_mae": 18.74053720633189,
+            "older_younger_proxy_mae": 31.527625189887154,
+            "missing": 0
+          },
+          "protected_editor": {
+            "identity": 0.9330075830221176,
+            "span20to75": 20.817480087280273,
+            "nonmonotonic_pairs": 0,
+            "target_proxy_mae": 18.914211948712666,
+            "older_younger_proxy_mae": 30.441688961452908,
+            "missing": 0
+          }
+        },
+        "source_ages": {
+          "ffhq_64376": 24.617202758789062,
+          "ffhq_61908": 31.332361221313477,
+          "ffhq_62644": 24.25365447998047,
+          "ffhq_64919": 49.32725143432617,
+          "ffhq_65817": 27.923721313476562,
+          "ffhq_67140": 81.6224594116211,
+          "ffhq_60764": 68.67528533935547,
+          "ffhq_68335": 85.07337951660156
+        },
+        "independent_ages": {
+          "ffhq_64376/fixed_mapping_same.png": 23.53476333618164,
+          "ffhq_64376/fixed_mapping_20.png": 22.76962661743164,
+          "ffhq_64376/fixed_mapping_30.png": 23.763469696044922,
+          "ffhq_64376/fixed_mapping_40.png": 25.863510131835938,
+          "ffhq_64376/fixed_mapping_50.png": 29.06566619873047,
+          "ffhq_64376/fixed_mapping_60.png": 31.644779205322266,
+          "ffhq_64376/fixed_mapping_75.png": 40.02056884765625,
+          "ffhq_64376/age_id_editor_same.png": 23.53476333618164,
+          "ffhq_64376/age_id_editor_20.png": 22.86477279663086,
+          "ffhq_64376/age_id_editor_30.png": 23.76556396484375,
+          "ffhq_64376/age_id_editor_40.png": 24.29525375366211,
+          "ffhq_64376/age_id_editor_50.png": 28.437129974365234,
+          "ffhq_64376/age_id_editor_60.png": 30.333436965942383,
+          "ffhq_64376/age_id_editor_75.png": 38.55760955810547,
+          "ffhq_64376/protected_editor_same.png": 23.53476333618164,
+          "ffhq_64376/protected_editor_20.png": 22.825572967529297,
+          "ffhq_64376/protected_editor_30.png": 23.70197296142578,
+          "ffhq_64376/protected_editor_40.png": 24.115631103515625,
+          "ffhq_64376/protected_editor_50.png": 26.928874969482422,
+          "ffhq_64376/protected_editor_60.png": 29.815351486206055,
+          "ffhq_64376/protected_editor_75.png": 35.2735481262207,
+          "ffhq_61908/fixed_mapping_same.png": 29.263141632080078,
+          "ffhq_61908/fixed_mapping_20.png": 27.460514068603516,
+          "ffhq_61908/fixed_mapping_30.png": 28.833763122558594,
+          "ffhq_61908/fixed_mapping_40.png": 30.468196868896484,
+          "ffhq_61908/fixed_mapping_50.png": 33.29316711425781,
+          "ffhq_61908/fixed_mapping_60.png": 37.076419830322266,
+          "ffhq_61908/fixed_mapping_75.png": 44.71955108642578,
+          "ffhq_61908/age_id_editor_same.png": 29.263141632080078,
+          "ffhq_61908/age_id_editor_20.png": 27.00351333618164,
+          "ffhq_61908/age_id_editor_30.png": 28.904590606689453,
+          "ffhq_61908/age_id_editor_40.png": 30.369552612304688,
+          "ffhq_61908/age_id_editor_50.png": 32.52329635620117,
+          "ffhq_61908/age_id_editor_60.png": 36.010581970214844,
+          "ffhq_61908/age_id_editor_75.png": 43.282615661621094,
+          "ffhq_61908/protected_editor_same.png": 29.263141632080078,
+          "ffhq_61908/protected_editor_20.png": 26.727466583251953,
+          "ffhq_61908/protected_editor_30.png": 29.050525665283203,
+          "ffhq_61908/protected_editor_40.png": 30.008159637451172,
+          "ffhq_61908/protected_editor_50.png": 32.409732818603516,
+          "ffhq_61908/protected_editor_60.png": 34.436676025390625,
+          "ffhq_61908/protected_editor_75.png": 39.84971618652344,
+          "ffhq_62644/fixed_mapping_same.png": 24.22887420654297,
+          "ffhq_62644/fixed_mapping_20.png": 24.247249603271484,
+          "ffhq_62644/fixed_mapping_30.png": 24.967208862304688,
+          "ffhq_62644/fixed_mapping_40.png": 26.984699249267578,
+          "ffhq_62644/fixed_mapping_50.png": 31.148733139038086,
+          "ffhq_62644/fixed_mapping_60.png": 31.842226028442383,
+          "ffhq_62644/fixed_mapping_75.png": 41.06086349487305,
+          "ffhq_62644/age_id_editor_same.png": 24.22887420654297,
+          "ffhq_62644/age_id_editor_20.png": 24.24358367919922,
+          "ffhq_62644/age_id_editor_30.png": 25.001319885253906,
+          "ffhq_62644/age_id_editor_40.png": 26.38870620727539,
+          "ffhq_62644/age_id_editor_50.png": 29.640960693359375,
+          "ffhq_62644/age_id_editor_60.png": 31.33442497253418,
+          "ffhq_62644/age_id_editor_75.png": 39.1048583984375,
+          "ffhq_62644/protected_editor_same.png": 24.22887420654297,
+          "ffhq_62644/protected_editor_20.png": 24.253097534179688,
+          "ffhq_62644/protected_editor_30.png": 24.806339263916016,
+          "ffhq_62644/protected_editor_40.png": 25.64301300048828,
+          "ffhq_62644/protected_editor_50.png": 27.502330780029297,
+          "ffhq_62644/protected_editor_60.png": 31.948436737060547,
+          "ffhq_62644/protected_editor_75.png": 35.02574920654297,
+          "ffhq_64919/fixed_mapping_same.png": 47.87101745605469,
+          "ffhq_64919/fixed_mapping_20.png": 37.979820251464844,
+          "ffhq_64919/fixed_mapping_30.png": 41.080780029296875,
+          "ffhq_64919/fixed_mapping_40.png": 44.49604797363281,
+          "ffhq_64919/fixed_mapping_50.png": 47.50469970703125,
+          "ffhq_64919/fixed_mapping_60.png": 49.4725341796875,
+          "ffhq_64919/fixed_mapping_75.png": 55.449337005615234,
+          "ffhq_64919/age_id_editor_same.png": 47.87101745605469,
+          "ffhq_64919/age_id_editor_20.png": 35.94342803955078,
+          "ffhq_64919/age_id_editor_30.png": 40.017417907714844,
+          "ffhq_64919/age_id_editor_40.png": 43.91614532470703,
+          "ffhq_64919/age_id_editor_50.png": 47.55977249145508,
+          "ffhq_64919/age_id_editor_60.png": 49.039512634277344,
+          "ffhq_64919/age_id_editor_75.png": 54.592872619628906,
+          "ffhq_64919/protected_editor_same.png": 47.87101745605469,
+          "ffhq_64919/protected_editor_20.png": 34.22229766845703,
+          "ffhq_64919/protected_editor_30.png": 39.104461669921875,
+          "ffhq_64919/protected_editor_40.png": 43.385841369628906,
+          "ffhq_64919/protected_editor_50.png": 47.40463638305664,
+          "ffhq_64919/protected_editor_60.png": 48.743934631347656,
+          "ffhq_64919/protected_editor_75.png": 53.01137924194336,
+          "ffhq_65817/fixed_mapping_same.png": 27.783218383789062,
+          "ffhq_65817/fixed_mapping_20.png": 27.154861450195312,
+          "ffhq_65817/fixed_mapping_30.png": 28.030906677246094,
+          "ffhq_65817/fixed_mapping_40.png": 29.077228546142578,
+          "ffhq_65817/fixed_mapping_50.png": 30.49295425415039,
+          "ffhq_65817/fixed_mapping_60.png": 31.67479705810547,
+          "ffhq_65817/fixed_mapping_75.png": 37.51923370361328,
+          "ffhq_65817/age_id_editor_same.png": 27.783218383789062,
+          "ffhq_65817/age_id_editor_20.png": 27.201309204101562,
+          "ffhq_65817/age_id_editor_30.png": 27.975860595703125,
+          "ffhq_65817/age_id_editor_40.png": 28.860271453857422,
+          "ffhq_65817/age_id_editor_50.png": 30.04652976989746,
+          "ffhq_65817/age_id_editor_60.png": 31.582447052001953,
+          "ffhq_65817/age_id_editor_75.png": 35.764869689941406,
+          "ffhq_65817/protected_editor_same.png": 27.783218383789062,
+          "ffhq_65817/protected_editor_20.png": 27.12139129638672,
+          "ffhq_65817/protected_editor_30.png": 27.963401794433594,
+          "ffhq_65817/protected_editor_40.png": 28.70984649658203,
+          "ffhq_65817/protected_editor_50.png": 29.445768356323242,
+          "ffhq_65817/protected_editor_60.png": 30.986352920532227,
+          "ffhq_65817/protected_editor_75.png": 33.064273834228516,
+          "ffhq_67140/fixed_mapping_same.png": 79.87220764160156,
+          "ffhq_67140/fixed_mapping_20.png": 4.617927551269531,
+          "ffhq_67140/fixed_mapping_30.png": 55.6676139831543,
+          "ffhq_67140/fixed_mapping_40.png": 67.76323699951172,
+          "ffhq_67140/fixed_mapping_50.png": 72.04542541503906,
+          "ffhq_67140/fixed_mapping_60.png": 75.94756317138672,
+          "ffhq_67140/fixed_mapping_75.png": 80.31570434570312,
+          "ffhq_67140/age_id_editor_same.png": 79.87220764160156,
+          "ffhq_67140/age_id_editor_20.png": 4.617927551269531,
+          "ffhq_67140/age_id_editor_30.png": 5.4492340087890625,
+          "ffhq_67140/age_id_editor_40.png": 65.03921508789062,
+          "ffhq_67140/age_id_editor_50.png": 70.5789794921875,
+          "ffhq_67140/age_id_editor_60.png": 75.4527816772461,
+          "ffhq_67140/age_id_editor_75.png": 80.62224578857422,
+          "ffhq_67140/protected_editor_same.png": 79.87220764160156,
+          "ffhq_67140/protected_editor_20.png": 4.617927551269531,
+          "ffhq_67140/protected_editor_30.png": 4.617927551269531,
+          "ffhq_67140/protected_editor_40.png": 61.17829513549805,
+          "ffhq_67140/protected_editor_50.png": 69.97865295410156,
+          "ffhq_67140/protected_editor_60.png": 75.03490447998047,
+          "ffhq_67140/protected_editor_75.png": 80.33258056640625,
+          "ffhq_60764/fixed_mapping_same.png": 66.88024139404297,
+          "ffhq_60764/fixed_mapping_20.png": 60.63998794555664,
+          "ffhq_60764/fixed_mapping_30.png": 63.306034088134766,
+          "ffhq_60764/fixed_mapping_40.png": 64.7956314086914,
+          "ffhq_60764/fixed_mapping_50.png": 66.18147277832031,
+          "ffhq_60764/fixed_mapping_60.png": 67.61943817138672,
+          "ffhq_60764/fixed_mapping_75.png": 70.12318420410156,
+          "ffhq_60764/age_id_editor_same.png": 66.88024139404297,
+          "ffhq_60764/age_id_editor_20.png": 58.15220642089844,
+          "ffhq_60764/age_id_editor_30.png": 62.369384765625,
+          "ffhq_60764/age_id_editor_40.png": 64.53661346435547,
+          "ffhq_60764/age_id_editor_50.png": 66.08648681640625,
+          "ffhq_60764/age_id_editor_60.png": 67.53824615478516,
+          "ffhq_60764/age_id_editor_75.png": 69.24383544921875,
+          "ffhq_60764/protected_editor_same.png": 66.88024139404297,
+          "ffhq_60764/protected_editor_20.png": 56.198665618896484,
+          "ffhq_60764/protected_editor_30.png": 61.43978500366211,
+          "ffhq_60764/protected_editor_40.png": 64.44073486328125,
+          "ffhq_60764/protected_editor_50.png": 65.95988464355469,
+          "ffhq_60764/protected_editor_60.png": 67.49385833740234,
+          "ffhq_60764/protected_editor_75.png": 69.29326629638672,
+          "ffhq_68335/fixed_mapping_same.png": 83.43394470214844,
+          "ffhq_68335/fixed_mapping_20.png": 68.89488983154297,
+          "ffhq_68335/fixed_mapping_30.png": 72.64659881591797,
+          "ffhq_68335/fixed_mapping_40.png": 79.92060852050781,
+          "ffhq_68335/fixed_mapping_50.png": 81.69354248046875,
+          "ffhq_68335/fixed_mapping_60.png": 82.60031127929688,
+          "ffhq_68335/fixed_mapping_75.png": 83.61430358886719,
+          "ffhq_68335/age_id_editor_same.png": 83.43394470214844,
+          "ffhq_68335/age_id_editor_20.png": 66.94554138183594,
+          "ffhq_68335/age_id_editor_30.png": 70.25502014160156,
+          "ffhq_68335/age_id_editor_40.png": 76.51780700683594,
+          "ffhq_68335/age_id_editor_50.png": 80.78907775878906,
+          "ffhq_68335/age_id_editor_60.png": 82.58430480957031,
+          "ffhq_68335/age_id_editor_75.png": 83.57073974609375,
+          "ffhq_68335/protected_editor_same.png": 83.43394470214844,
+          "ffhq_68335/protected_editor_20.png": 66.94554138183594,
+          "ffhq_68335/protected_editor_30.png": 68.71852111816406,
+          "ffhq_68335/protected_editor_40.png": 74.28951263427734,
+          "ffhq_68335/protected_editor_50.png": 80.4462890625,
+          "ffhq_68335/protected_editor_60.png": 82.55830383300781,
+          "ffhq_68335/protected_editor_75.png": 83.60128784179688
+        },
+        "promotion": false,
+        "visual_review_pending": true,
+        "targets_not_calibrated": true
+      },
+      "artifacts": {
+        "raw": 168,
+        "color": 168,
+        "size": [
+          1024,
+          1024
+        ],
+        "all_decodable": true,
+        "raw_hashes_verified": true
+      },
+      "browser": {
+        "url": "http://127.0.0.1:65512/age-sfe-conditioned-review/",
+        "status": 200,
+        "cases": 8,
+        "conditions": 7,
+        "all_conditions_switch": true,
+        "all_cases_switch": true,
+        "color_switch": true,
+        "native_crop": true,
+        "download": [
+          1024,
+          1024
+        ],
+        "mobile_width": 390,
+        "errors": []
+      },
+      "frozen": {
+        "before": "75db11c5adb198c50ec6d75426260c132117bf4de113c6d5a2a1b61bdc5c9b1e",
+        "after": "75db11c5adb198c50ec6d75426260c132117bf4de113c6d5a2a1b61bdc5c9b1e",
+        "equal": true
+      },
+      "training": {
+        "age_id_editor": {
+          "steps": 400,
+          "seconds": 19.51248437911272,
+          "unique_sources": 115
+        },
+        "protected_editor": {
+          "steps": 400,
+          "seconds": 19.24384720250964,
+          "unique_sources": 115
+        }
+      },
+      "checkpoints": {
+        "protected_editor.pt": {
+          "bytes": 5225654,
+          "sha256": "33c6c1d25016742f9fa59d26c351fdf8f34d32bcff6c8a88c88fbc3b522509e7",
+          "published": false
+        },
+        "age_id_editor.pt": {
+          "bytes": 5225612,
+          "sha256": "ce1729e0381182d09f576a79e9a9d42db4ac3f0d1f35d59c642e863b55521efe",
+          "published": false
+        }
+      },
+      "decision": {
+        "age_id_editor": {
+          "mean_identity_drop": -0.0001982264220714569,
+          "worst_identity_drop": 0.05052661895751953,
+          "individual_drop_gt_002": 5,
+          "age_proxy_mae_gain": 0.09541356563568115,
+          "span_ratio": 0.9927928079169055,
+          "promoted": false
+        },
+        "protected_editor": {
+          "mean_identity_drop": -0.0040806494653224945,
+          "worst_identity_drop": 0.07052028179168701,
+          "individual_drop_gt_002": 7,
+          "age_proxy_mae_gain": -0.07826117674509447,
+          "span_ratio": 0.9300894826228097,
+          "promoted": false
+        }
+      },
+      "same-age-preflight": {
+        "raw_pixels_equal": true,
+        "zero_strength": true,
+        "shape": [
+          1,
+          3,
+          1024,
+          1024
+        ]
+      },
+      "paired-baseline-verification": {
+        "fixed_mapping_outputs": 56,
+        "raw_sha256_equal": true
+      },
+      "train": {
+        "manifest_sha256": "a3118f76fb5d138e77dc3610295a8941105748fcc406a4272efac3cb171db12c",
+        "sources": 120,
+        "age_bins": {
+          "[20, 29]": 24,
+          "[30, 39]": 24,
+          "[40, 49]": 24,
+          "[50, 69]": 24,
+          "[70, 120]": 24
+        },
+        "demographics": {
+          "Asian": 64,
+          "None": 56
+        }
+      }
+    },
+    "sfe-20261128-013310": {
+      "run": "deployment/training-runs/sfe-20261128-013310",
+      "receipt": {
+        "job_id": "j-1795829651-789797",
+        "name": "face-age-sfe-20261128-013310",
+        "run_dir": "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310",
+        "gpus": 1
+      },
+      "device": {
+        "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+        "torch": "2.6.0+cu124",
+        "cuda": "12.4",
+        "gpu": "NVIDIA H200",
+        "device_count": 1,
+        "memory_bytes": 150393585664
+      },
+      "experiment_sha256": "2d28d0f2695cf6f5e8b59f838d622679521358eb54452763667bd256d9cc08a5",
+      "selection_sha256": "c7bf2fbbee2ab088bb58f38563e914de446a11e3e61b84eeb8caf409398ebdd2",
+      "model_specs": [
+        {
+          "name": "e4e_ffhq_encode.pt",
+          "bytes": 1201649680,
+          "sha256": "2ace1d9a8c05c10a399bcd500b8dda118f759ff1aac89dbdab7435f2136a0999",
+          "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+          "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+          "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/e4e_ffhq_encode.pt",
+          "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+          "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+          "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+        },
+        {
+          "name": "sfe_editor_light.pt",
+          "bytes": 649325957,
+          "sha256": "ced3e79813ec6ff1418404576cc43e3c92849ab124ec87cd72be42dcb25311ea",
+          "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+          "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+          "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/sfe_editor_light.pt",
+          "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+          "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+          "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+        },
+        {
+          "name": "stylegan2-ffhq-config-f.pt",
+          "bytes": 381462551,
+          "sha256": "bae494ef77e32a9cd1792a81a3c167692a0e64f6bcd8b06592ff42917e2ed46e",
+          "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+          "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+          "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/stylegan2-ffhq-config-f.pt",
+          "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+          "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+          "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+        }
+      ],
+      "profile": "official_sfe_glasses_projected",
+      "adapter_mode": null,
+      "source_commit": "93f6c619ad3fbb8d8df66302467962215ebc6c36",
+      "source_snapshot_sha256": {
+        "source/probe_inversion.py": "febc5153b69994b5ba50ac7b7dc5ec721aeaddf5d430da8fdb6324c925d69d47",
+        "source/sfe_study.py": "fb99ea0953eedf4eb64e31c634812079a3e660d3f6894608a9128941b471648c",
+        "source/source_color.py": "1759c7a0a5fa842fa84af46e35ed0d72457b224c661f74de62495f0f026e3c54",
+        "source/run_sfe.sh": "3f34cd0e7df33a1888fb40560fd5f1ed542aabefbae0f0eb33c5d26a23f25f38"
+      },
+      "report_sha256": "cfa219b2ad7584997a0bf2c20bee34a70e9fa7752ba58ba90368a6cb241ec2a7",
+      "worker_seconds": 106.63604548759758,
+      "summary": {
+        "groups": {
+          "sfe_age/scale_-10": {
+            "cases": 8,
+            "identity": 0.4872594326734543,
+            "independent_age": 3.452016830444336,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-10": {
+            "cases": 8,
+            "identity": 0.2877273950725794,
+            "independent_age": 3.148543357849121,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-5": {
+            "cases": 8,
+            "identity": 0.7634137570858002,
+            "independent_age": 27.778139352798462,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-5": {
+            "cases": 8,
+            "identity": 0.4846280738711357,
+            "independent_age": 12.21927261352539,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_0": {
+            "cases": 8,
+            "identity": 0.9834937527775764,
+            "independent_age": 47.83519983291626,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_0": {
+            "cases": 8,
+            "identity": 0.6746762469410896,
+            "independent_age": 43.29910755157471,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_2.5": {
+            "cases": 8,
+            "identity": 0.9295531362295151,
+            "independent_age": 52.25835156440735,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_2.5": {
+            "cases": 8,
+            "identity": 0.6244467943906784,
+            "independent_age": 51.5126531124115,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_5": {
+            "cases": 8,
+            "identity": 0.767845630645752,
+            "independent_age": 58.12873077392578,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_5": {
+            "cases": 8,
+            "identity": 0.5233742669224739,
+            "independent_age": 58.97138261795044,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_7.5": {
+            "cases": 8,
+            "identity": 0.6306848004460335,
+            "independent_age": 65.55274820327759,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_7.5": {
+            "cases": 8,
+            "identity": 0.424404788762331,
+            "independent_age": 65.08694791793823,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_10": {
+            "cases": 8,
+            "identity": 0.5328893475234509,
+            "independent_age": 71.26498794555664,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_10": {
+            "cases": 8,
+            "identity": 0.3506539650261402,
+            "independent_age": 70.24367570877075,
+            "target_proxy_mae": null,
+            "missing": 0
+          }
+        },
+        "aggregate": {
+          "sfe_age": {
+            "identity": 0.7278771224830832,
+            "span20to75": null,
+            "nonmonotonic_pairs": 0,
+            "target_proxy_mae": null,
+            "older_younger_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age": {
+            "identity": 0.4814159329980612,
+            "span20to75": null,
+            "nonmonotonic_pairs": 0,
+            "target_proxy_mae": null,
+            "older_younger_proxy_mae": null,
+            "missing": 0
+          }
+        },
+        "source_ages": {
+          "ffhq_64376": 24.617202758789062,
+          "ffhq_61908": 31.332361221313477,
+          "ffhq_62644": 24.25365447998047,
+          "ffhq_64919": 49.32725143432617,
+          "ffhq_65817": 27.923721313476562,
+          "ffhq_67140": 81.6224594116211,
+          "ffhq_60764": 68.67528533935547,
+          "ffhq_68335": 85.07337951660156
+        },
+        "independent_ages": {
+          "ffhq_64376/sam_same.png": 23.846996307373047,
+          "ffhq_64376/sam_20.png": 21.22130584716797,
+          "ffhq_64376/sam_40.png": 31.12483787536621,
+          "ffhq_64376/sam_60.png": 41.651641845703125,
+          "ffhq_64376/sam_75.png": 54.01823043823242,
+          "ffhq_64376/sfe_age_scale_-10.png": 3.958660125732422,
+          "ffhq_64376/e4e_age_scale_-10.png": 3.4639625549316406,
+          "ffhq_64376/sfe_age_scale_-5.png": 16.260517120361328,
+          "ffhq_64376/e4e_age_scale_-5.png": 7.571239471435547,
+          "ffhq_64376/sfe_age_scale_0.png": 23.507736206054688,
+          "ffhq_64376/e4e_age_scale_0.png": 23.379596710205078,
+          "ffhq_64376/sfe_age_scale_2.5.png": 29.63982582092285,
+          "ffhq_64376/e4e_age_scale_2.5.png": 32.547183990478516,
+          "ffhq_64376/sfe_age_scale_5.png": 40.050445556640625,
+          "ffhq_64376/e4e_age_scale_5.png": 44.33268737792969,
+          "ffhq_64376/sfe_age_scale_7.5.png": 53.35235595703125,
+          "ffhq_64376/e4e_age_scale_7.5.png": 55.00068664550781,
+          "ffhq_64376/sfe_age_scale_10.png": 63.86732864379883,
+          "ffhq_64376/e4e_age_scale_10.png": 64.27365112304688,
+          "ffhq_61908/sam_same.png": 27.92546844482422,
+          "ffhq_61908/sam_20.png": 24.267845153808594,
+          "ffhq_61908/sam_40.png": 33.90321350097656,
+          "ffhq_61908/sam_60.png": 44.95109558105469,
+          "ffhq_61908/sam_75.png": 48.566993713378906,
+          "ffhq_61908/sfe_age_scale_-10.png": 5.696132659912109,
+          "ffhq_61908/e4e_age_scale_-10.png": 4.531520843505859,
+          "ffhq_61908/sfe_age_scale_-5.png": 16.797508239746094,
+          "ffhq_61908/e4e_age_scale_-5.png": 10.361461639404297,
+          "ffhq_61908/sfe_age_scale_0.png": 29.26428985595703,
+          "ffhq_61908/e4e_age_scale_0.png": 31.924442291259766,
+          "ffhq_61908/sfe_age_scale_2.5.png": 36.03484344482422,
+          "ffhq_61908/e4e_age_scale_2.5.png": 42.693138122558594,
+          "ffhq_61908/sfe_age_scale_5.png": 48.71927261352539,
+          "ffhq_61908/e4e_age_scale_5.png": 51.07002258300781,
+          "ffhq_61908/sfe_age_scale_7.5.png": 54.87318801879883,
+          "ffhq_61908/e4e_age_scale_7.5.png": 59.14179611206055,
+          "ffhq_61908/sfe_age_scale_10.png": 60.54975509643555,
+          "ffhq_61908/e4e_age_scale_10.png": 67.72105407714844,
+          "ffhq_62644/sam_same.png": 25.08966064453125,
+          "ffhq_62644/sam_20.png": 25.199359893798828,
+          "ffhq_62644/sam_40.png": 32.04154968261719,
+          "ffhq_62644/sam_60.png": 42.716190338134766,
+          "ffhq_62644/sam_75.png": 57.50015640258789,
+          "ffhq_62644/sfe_age_scale_-10.png": 4.173801422119141,
+          "ffhq_62644/e4e_age_scale_-10.png": 3.6748809814453125,
+          "ffhq_62644/sfe_age_scale_-5.png": 12.497936248779297,
+          "ffhq_62644/e4e_age_scale_-5.png": 9.256935119628906,
+          "ffhq_62644/sfe_age_scale_0.png": 24.252307891845703,
+          "ffhq_62644/e4e_age_scale_0.png": 26.15041732788086,
+          "ffhq_62644/sfe_age_scale_2.5.png": 28.133392333984375,
+          "ffhq_62644/e4e_age_scale_2.5.png": 36.20048141479492,
+          "ffhq_62644/sfe_age_scale_5.png": 36.1074333190918,
+          "ffhq_62644/e4e_age_scale_5.png": 43.168704986572266,
+          "ffhq_62644/sfe_age_scale_7.5.png": 51.67301559448242,
+          "ffhq_62644/e4e_age_scale_7.5.png": 53.29793930053711,
+          "ffhq_62644/sfe_age_scale_10.png": 64.80651092529297,
+          "ffhq_62644/e4e_age_scale_10.png": 61.76259994506836,
+          "ffhq_64919/sam_same.png": 45.81854248046875,
+          "ffhq_64919/sam_20.png": 32.23552322387695,
+          "ffhq_64919/sam_40.png": 44.347076416015625,
+          "ffhq_64919/sam_60.png": 52.156044006347656,
+          "ffhq_64919/sam_75.png": 57.567726135253906,
+          "ffhq_64919/sfe_age_scale_-10.png": 2.3496627807617188,
+          "ffhq_64919/e4e_age_scale_-10.png": 3.6742935180664062,
+          "ffhq_64919/sfe_age_scale_-5.png": 29.129907608032227,
+          "ffhq_64919/e4e_age_scale_-5.png": 12.740825653076172,
+          "ffhq_64919/sfe_age_scale_0.png": 47.88010787963867,
+          "ffhq_64919/e4e_age_scale_0.png": 43.89594650268555,
+          "ffhq_64919/sfe_age_scale_2.5.png": 55.726097106933594,
+          "ffhq_64919/e4e_age_scale_2.5.png": 55.077003479003906,
+          "ffhq_64919/sfe_age_scale_5.png": 62.01102828979492,
+          "ffhq_64919/e4e_age_scale_5.png": 65.38679504394531,
+          "ffhq_64919/sfe_age_scale_7.5.png": 67.4085464477539,
+          "ffhq_64919/e4e_age_scale_7.5.png": 68.08228302001953,
+          "ffhq_64919/sfe_age_scale_10.png": 71.8349838256836,
+          "ffhq_64919/e4e_age_scale_10.png": 72.74861907958984,
+          "ffhq_65817/sam_same.png": 28.931732177734375,
+          "ffhq_65817/sam_20.png": 27.37697982788086,
+          "ffhq_65817/sam_40.png": 32.54135513305664,
+          "ffhq_65817/sam_60.png": 39.727359771728516,
+          "ffhq_65817/sam_75.png": 45.82678985595703,
+          "ffhq_65817/sfe_age_scale_-10.png": 3.7379417419433594,
+          "ffhq_65817/e4e_age_scale_-10.png": 3.5829086303710938,
+          "ffhq_65817/sfe_age_scale_-5.png": 20.791790008544922,
+          "ffhq_65817/e4e_age_scale_-5.png": 18.693565368652344,
+          "ffhq_65817/sfe_age_scale_0.png": 27.62514877319336,
+          "ffhq_65817/e4e_age_scale_0.png": 28.597278594970703,
+          "ffhq_65817/sfe_age_scale_2.5.png": 30.7130126953125,
+          "ffhq_65817/e4e_age_scale_2.5.png": 31.561681747436523,
+          "ffhq_65817/sfe_age_scale_5.png": 37.53165817260742,
+          "ffhq_65817/e4e_age_scale_5.png": 39.011756896972656,
+          "ffhq_65817/sfe_age_scale_7.5.png": 49.89779281616211,
+          "ffhq_65817/e4e_age_scale_7.5.png": 50.80606460571289,
+          "ffhq_65817/sfe_age_scale_10.png": 57.76811981201172,
+          "ffhq_65817/e4e_age_scale_10.png": 57.062225341796875,
+          "ffhq_67140/sam_same.png": 69.69834899902344,
+          "ffhq_67140/sam_20.png": 49.740203857421875,
+          "ffhq_67140/sam_40.png": 54.57042694091797,
+          "ffhq_67140/sam_60.png": 67.7904052734375,
+          "ffhq_67140/sam_75.png": 70.14328002929688,
+          "ffhq_67140/sfe_age_scale_-10.png": 1.2265625,
+          "ffhq_67140/e4e_age_scale_-10.png": 1.7625961303710938,
+          "ffhq_67140/sfe_age_scale_-5.png": 4.8865203857421875,
+          "ffhq_67140/e4e_age_scale_-5.png": 4.611991882324219,
+          "ffhq_67140/sfe_age_scale_0.png": 79.86280822753906,
+          "ffhq_67140/e4e_age_scale_0.png": 66.84276580810547,
+          "ffhq_67140/sfe_age_scale_2.5.png": 81.20538330078125,
+          "ffhq_67140/e4e_age_scale_2.5.png": 73.10559844970703,
+          "ffhq_67140/sfe_age_scale_5.png": 83.9632339477539,
+          "ffhq_67140/e4e_age_scale_5.png": 78.228515625,
+          "ffhq_67140/sfe_age_scale_7.5.png": 87.40969848632812,
+          "ffhq_67140/e4e_age_scale_7.5.png": 81.10237884521484,
+          "ffhq_67140/sfe_age_scale_10.png": 89.86383056640625,
+          "ffhq_67140/e4e_age_scale_10.png": 82.8065185546875,
+          "ffhq_60764/sam_same.png": 64.34661102294922,
+          "ffhq_60764/sam_20.png": 48.7144775390625,
+          "ffhq_60764/sam_40.png": 57.04399108886719,
+          "ffhq_60764/sam_60.png": 64.92546081542969,
+          "ffhq_60764/sam_75.png": 68.25067138671875,
+          "ffhq_60764/sfe_age_scale_-10.png": 3.256427764892578,
+          "ffhq_60764/e4e_age_scale_-10.png": 2.5813980102539062,
+          "ffhq_60764/sfe_age_scale_-5.png": 54.47721481323242,
+          "ffhq_60764/e4e_age_scale_-5.png": 16.744251251220703,
+          "ffhq_60764/sfe_age_scale_0.png": 66.88534545898438,
+          "ffhq_60764/e4e_age_scale_0.png": 65.08773040771484,
+          "ffhq_60764/sfe_age_scale_2.5.png": 71.26934814453125,
+          "ffhq_60764/e4e_age_scale_2.5.png": 71.33045959472656,
+          "ffhq_60764/sfe_age_scale_5.png": 72.21568298339844,
+          "ffhq_60764/e4e_age_scale_5.png": 74.10110473632812,
+          "ffhq_60764/sfe_age_scale_7.5.png": 76.29335021972656,
+          "ffhq_60764/e4e_age_scale_7.5.png": 76.44247436523438,
+          "ffhq_60764/sfe_age_scale_10.png": 78.76631164550781,
+          "ffhq_60764/e4e_age_scale_10.png": 79.808837890625,
+          "ffhq_68335/sam_same.png": 76.96302795410156,
+          "ffhq_68335/sam_20.png": 36.90724563598633,
+          "ffhq_68335/sam_40.png": 53.61955261230469,
+          "ffhq_68335/sam_60.png": 71.82075500488281,
+          "ffhq_68335/sam_75.png": 78.95037841796875,
+          "ffhq_68335/sfe_age_scale_-10.png": 3.2169456481933594,
+          "ffhq_68335/e4e_age_scale_-10.png": 1.9167861938476562,
+          "ffhq_68335/sfe_age_scale_-5.png": 67.38372039794922,
+          "ffhq_68335/e4e_age_scale_-5.png": 17.773910522460938,
+          "ffhq_68335/sfe_age_scale_0.png": 83.40385437011719,
+          "ffhq_68335/e4e_age_scale_0.png": 60.51468276977539,
+          "ffhq_68335/sfe_age_scale_2.5.png": 85.34490966796875,
+          "ffhq_68335/e4e_age_scale_2.5.png": 69.58567810058594,
+          "ffhq_68335/sfe_age_scale_5.png": 84.43109130859375,
+          "ffhq_68335/e4e_age_scale_5.png": 76.47147369384766,
+          "ffhq_68335/sfe_age_scale_7.5.png": 83.5140380859375,
+          "ffhq_68335/e4e_age_scale_7.5.png": 76.82196044921875,
+          "ffhq_68335/sfe_age_scale_10.png": 82.6630630493164,
+          "ffhq_68335/e4e_age_scale_10.png": 75.76589965820312
+        },
+        "original_groups": {
+          "sfe_age/scale_-10": {
+            "cases": 8,
+            "identity": 0.4858662001788616,
+            "independent_age": 3.4285945892333984,
+            "missing_sface": 0,
+            "missing_age": 0,
+            "reconstruction_l1": null,
+            "age_change_from_source": -45.674569845199585,
+            "age_change_from_reconstruction": -44.40660524368286,
+            "identity_change_from_reconstruction": -0.49762755259871483
+          },
+          "sfe_age/scale_-5": {
+            "cases": 8,
+            "identity": 0.7602258771657944,
+            "independent_age": 27.480555534362793,
+            "missing_sface": 0,
+            "missing_age": 0,
+            "reconstruction_l1": null,
+            "age_change_from_source": -21.62260890007019,
+            "age_change_from_reconstruction": -20.354644298553467,
+            "identity_change_from_reconstruction": -0.22326787561178207
+          },
+          "sfe_age/scale_0": {
+            "cases": 8,
+            "identity": 0.9834937527775764,
+            "independent_age": 47.83519983291626,
+            "missing_sface": 0,
+            "missing_age": 0,
+            "reconstruction_l1": 6.120842933654785,
+            "age_change_from_source": -1.2679646015167236,
+            "age_change_from_reconstruction": 0.0,
+            "identity_change_from_reconstruction": 0.0
+          },
+          "sfe_age/scale_2.5": {
+            "cases": 8,
+            "identity": 0.9246458113193512,
+            "independent_age": 52.40425181388855,
+            "missing_sface": 0,
+            "missing_age": 0,
+            "reconstruction_l1": null,
+            "age_change_from_source": 3.3010873794555664,
+            "age_change_from_reconstruction": 4.56905198097229,
+            "identity_change_from_reconstruction": -0.05884794145822525
+          },
+          "sfe_age/scale_5": {
+            "cases": 8,
+            "identity": 0.7544089034199715,
+            "independent_age": 58.15043592453003,
+            "missing_sface": 0,
+            "missing_age": 0,
+            "reconstruction_l1": null,
+            "age_change_from_source": 9.047271490097046,
+            "age_change_from_reconstruction": 10.31523609161377,
+            "identity_change_from_reconstruction": -0.22908484935760498
+          },
+          "sfe_age/scale_7.5": {
+            "cases": 8,
+            "identity": 0.6134175360202789,
+            "independent_age": 65.81772375106812,
+            "missing_sface": 0,
+            "missing_age": 0,
+            "reconstruction_l1": null,
+            "age_change_from_source": 16.714559316635132,
+            "age_change_from_reconstruction": 17.982523918151855,
+            "identity_change_from_reconstruction": -0.3700762167572975
+          },
+          "sfe_age/scale_10": {
+            "cases": 8,
+            "identity": 0.5112069882452488,
+            "independent_age": 71.54883575439453,
+            "missing_sface": 0,
+            "missing_age": 0,
+            "reconstruction_l1": null,
+            "age_change_from_source": 22.445671319961548,
+            "age_change_from_reconstruction": 23.71363592147827,
+            "identity_change_from_reconstruction": -0.47228676453232765
+          }
+        },
+        "promotion": false,
+        "visual_review_pending": true,
+        "targets_not_calibrated": true
+      },
+      "artifacts": {
+        "raw": 152,
+        "color": 152,
+        "size": [
+          1024,
+          1024
+        ],
+        "all_decodable": true,
+        "raw_hashes_verified": true
+      },
+      "browser": {
+        "url": "http://127.0.0.1:65512/age-sfe-glasses-review/",
+        "status": 200,
+        "cases": 8,
+        "conditions": 7,
+        "all_conditions_switch": true,
+        "all_cases_switch": true,
+        "color_switch": true,
+        "native_crop": true,
+        "download": [
+          1024,
+          1024
+        ],
+        "mobile_width": 390,
+        "errors": []
+      },
+      "frozen": {
+        "before": "1954247285ae9fba47131adc84631540ce87460a00a16d5353654a7d7c43132f",
+        "after": "1954247285ae9fba47131adc84631540ce87460a00a16d5353654a7d7c43132f",
+        "equal": true
+      },
+      "training": null,
+      "checkpoints": {},
+      "direction-projection": {
+        "original_cosine": 0.06573155522346497,
+        "projected_cosine": 7.463504481108885e-09,
+        "original_norm": 4.242640972137451,
+        "projected_norm": 4.242640495300293,
+        "norm_restored": true,
+        "source": "Pinned official SFE editings/bound/Eyeglasses_boundary.npy; W+ linear projection, no per-image fitting",
+        "limitation": "Linear orthogonality does not guarantee semantic independence or matched achieved aging."
+      },
+      "original-zero-verification": {
+        "equal": true,
+        "count": 16
+      }
+    },
+    "sfe-cpu-20261128-013640": {
+      "run": "deployment/training-runs/sfe-cpu-20261128-013640",
+      "receipt": {
+        "job_id": "j-1795829842-677483",
+        "name": "face-age-sfe-cpu-20261128-013640",
+        "run_dir": "/root/face-age-transformation-course-project/deployment/training-runs/sfe-cpu-20261128-013640",
+        "gpus": 0
+      },
+      "device": {
+        "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+        "torch": "2.6.0+cu124",
+        "cuda": "12.4",
+        "gpu": null,
+        "device_count": 0,
+        "memory_bytes": 0
+      },
+      "experiment_sha256": "12c85b725e3e0143e8952bd3fb8c7fcb096934b8183f366e95938a5af9b79014",
+      "selection_sha256": "f8baa8cb6b6d4e16f9f1c995d9cef260529a9d121171c163427890c55412a3ea",
+      "model_specs": [
+        {
+          "name": "e4e_ffhq_encode.pt",
+          "bytes": 1201649680,
+          "sha256": "2ace1d9a8c05c10a399bcd500b8dda118f759ff1aac89dbdab7435f2136a0999",
+          "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+          "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+          "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/e4e_ffhq_encode.pt",
+          "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+          "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+          "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+        },
+        {
+          "name": "sfe_editor_light.pt",
+          "bytes": 649325957,
+          "sha256": "ced3e79813ec6ff1418404576cc43e3c92849ab124ec87cd72be42dcb25311ea",
+          "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+          "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+          "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/sfe_editor_light.pt",
+          "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+          "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+          "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+        },
+        {
+          "name": "stylegan2-ffhq-config-f.pt",
+          "bytes": 381462551,
+          "sha256": "bae494ef77e32a9cd1792a81a3c167692a0e64f6bcd8b06592ff42917e2ed46e",
+          "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+          "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+          "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/stylegan2-ffhq-config-f.pt",
+          "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+          "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+          "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+        }
+      ],
+      "profile": "official_sfe_dense_younger",
+      "adapter_mode": null,
+      "source_commit": "93f6c619ad3fbb8d8df66302467962215ebc6c36",
+      "source_snapshot_sha256": {
+        "source/probe_inversion.py": "febc5153b69994b5ba50ac7b7dc5ec721aeaddf5d430da8fdb6324c925d69d47",
+        "source/sfe_study.py": "500d2a1ee7099c5d4ceaff765102d8b0df14c15609d14457c46350a328feff9e",
+        "source/source_color.py": "1759c7a0a5fa842fa84af46e35ed0d72457b224c661f74de62495f0f026e3c54",
+        "source/run_sfe.sh": "3f34cd0e7df33a1888fb40560fd5f1ed542aabefbae0f0eb33c5d26a23f25f38"
+      },
+      "report_sha256": "3d05bb566b710d93f7e73113afed1e0650b8d5c2ca9961e31356e422df794fa1",
+      "worker_seconds": 358.76232845149934,
+      "summary": {
+        "groups": {
+          "sfe_age/scale_-10": {
+            "cases": 3,
+            "identity": 0.5730682810147604,
+            "independent_age": 2.5867932637532554,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-10": {
+            "cases": 3,
+            "identity": 0.35282422105471295,
+            "independent_age": 2.1516634623209634,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-9.5": {
+            "cases": 3,
+            "identity": 0.5862045884132385,
+            "independent_age": 2.7446365356445312,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-9.5": {
+            "cases": 3,
+            "identity": 0.36182822783788043,
+            "independent_age": 2.3723462422688804,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-9": {
+            "cases": 3,
+            "identity": 0.5997452537218729,
+            "independent_age": 3.2459589640299478,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-9": {
+            "cases": 3,
+            "identity": 0.37074864904085797,
+            "independent_age": 2.6934216817220054,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-8.5": {
+            "cases": 3,
+            "identity": 0.6220556298891703,
+            "independent_age": 3.7845052083333335,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-8.5": {
+            "cases": 3,
+            "identity": 0.3998890519142151,
+            "independent_age": 3.245386759440104,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-8": {
+            "cases": 3,
+            "identity": 0.6437423427899679,
+            "independent_age": 4.793259938557942,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-8": {
+            "cases": 3,
+            "identity": 0.4054459532101949,
+            "independent_age": 3.5670674641927085,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-7.5": {
+            "cases": 3,
+            "identity": 0.6633747816085815,
+            "independent_age": 5.862620035807292,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-7.5": {
+            "cases": 3,
+            "identity": 0.419605016708374,
+            "independent_age": 4.315539042154948,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-7": {
+            "cases": 3,
+            "identity": 0.6926419138908386,
+            "independent_age": 7.413871765136719,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-7": {
+            "cases": 3,
+            "identity": 0.4329465428988139,
+            "independent_age": 5.22012201944987,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-6.5": {
+            "cases": 3,
+            "identity": 0.7176050742467245,
+            "independent_age": 21.39776865641276,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-6.5": {
+            "cases": 3,
+            "identity": 0.45233216881752014,
+            "independent_age": 6.305379231770833,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-6": {
+            "cases": 3,
+            "identity": 0.7510871092478434,
+            "independent_age": 34.224981943766274,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-6": {
+            "cases": 3,
+            "identity": 0.46960075696309406,
+            "independent_age": 7.592291514078776,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-5.5": {
+            "cases": 3,
+            "identity": 0.7859567999839783,
+            "independent_age": 38.78906758626302,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-5.5": {
+            "cases": 3,
+            "identity": 0.4886500835418701,
+            "independent_age": 9.113346099853516,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-5": {
+            "cases": 3,
+            "identity": 0.8216744860013326,
+            "independent_age": 41.940329233805336,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-5": {
+            "cases": 3,
+            "identity": 0.5068257649739584,
+            "independent_age": 12.711467742919922,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-4.5": {
+            "cases": 3,
+            "identity": 0.8518383502960205,
+            "independent_age": 49.61865234375,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-4.5": {
+            "cases": 3,
+            "identity": 0.5330196420351664,
+            "independent_age": 22.216463724772137,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-4": {
+            "cases": 3,
+            "identity": 0.8870378732681274,
+            "independent_age": 64.61097971598308,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-4": {
+            "cases": 3,
+            "identity": 0.5739566882451376,
+            "independent_age": 26.784069061279297,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-3.5": {
+            "cases": 3,
+            "identity": 0.914086639881134,
+            "independent_age": 67.11021550496419,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-3.5": {
+            "cases": 3,
+            "identity": 0.6055180033047994,
+            "independent_age": 31.429136912027996,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-3": {
+            "cases": 3,
+            "identity": 0.9352877537409464,
+            "independent_age": 69.41034189860027,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-3": {
+            "cases": 3,
+            "identity": 0.6267379323641459,
+            "independent_age": 44.16655349731445,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-2.5": {
+            "cases": 3,
+            "identity": 0.951316754023234,
+            "independent_age": 71.51238759358723,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-2.5": {
+            "cases": 3,
+            "identity": 0.6466009020805359,
+            "independent_age": 51.09164555867513,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-2": {
+            "cases": 3,
+            "identity": 0.9643148382504781,
+            "independent_age": 72.84434000651042,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-2": {
+            "cases": 3,
+            "identity": 0.6611326932907104,
+            "independent_age": 54.22204335530599,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-1.5": {
+            "cases": 3,
+            "identity": 0.973578135172526,
+            "independent_age": 73.97908528645833,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-1.5": {
+            "cases": 3,
+            "identity": 0.6688980857531229,
+            "independent_age": 57.17622629801432,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-1": {
+            "cases": 3,
+            "identity": 0.9821123282114664,
+            "independent_age": 75.1005121866862,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-1": {
+            "cases": 3,
+            "identity": 0.6644622286160787,
+            "independent_age": 59.44275029500326,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_-0.5": {
+            "cases": 3,
+            "identity": 0.9864545067151388,
+            "independent_age": 75.90550486246745,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_-0.5": {
+            "cases": 3,
+            "identity": 0.6661519209543864,
+            "independent_age": 61.959051767985024,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "sfe_age/scale_0": {
+            "cases": 3,
+            "identity": 0.9880877534548441,
+            "independent_age": 76.71734364827473,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age/scale_0": {
+            "cases": 3,
+            "identity": 0.6693102717399597,
+            "independent_age": 64.14781951904297,
+            "target_proxy_mae": null,
+            "missing": 0
+          }
+        },
+        "aggregate": {
+          "sfe_age": {
+            "identity": 0.8043462473248678,
+            "span20to75": null,
+            "nonmonotonic_pairs": 0,
+            "target_proxy_mae": null,
+            "older_younger_proxy_mae": null,
+            "missing": 0
+          },
+          "e4e_age": {
+            "identity": 0.5226897526355017,
+            "span20to75": null,
+            "nonmonotonic_pairs": 0,
+            "target_proxy_mae": null,
+            "older_younger_proxy_mae": null,
+            "missing": 0
+          }
+        },
+        "source_ages": {
+          "ffhq_67140": 81.6224594116211,
+          "ffhq_60764": 68.67528533935547,
+          "ffhq_68335": 85.07337951660156
+        },
+        "independent_ages": {
+          "ffhq_67140/sam_same.png": 69.69834899902344,
+          "ffhq_67140/sam_20.png": 49.740203857421875,
+          "ffhq_67140/sam_40.png": 54.57042694091797,
+          "ffhq_67140/sam_60.png": 67.7904052734375,
+          "ffhq_67140/sam_75.png": 70.14328002929688,
+          "ffhq_67140/sfe_age_scale_-5.png": 4.558628082275391,
+          "ffhq_67140/e4e_age_scale_-5.png": 4.467342376708984,
+          "ffhq_67140/sfe_age_scale_-4.5.png": 22.880474090576172,
+          "ffhq_67140/e4e_age_scale_-4.5.png": 5.142333984375,
+          "ffhq_67140/sfe_age_scale_-4.png": 63.06547546386719,
+          "ffhq_67140/e4e_age_scale_-4.png": 6.195365905761719,
+          "ffhq_67140/sfe_age_scale_-3.5.png": 66.68689727783203,
+          "ffhq_67140/e4e_age_scale_-3.5.png": 8.608779907226562,
+          "ffhq_67140/sfe_age_scale_-3.png": 69.10602569580078,
+          "ffhq_67140/e4e_age_scale_-3.png": 41.69587707519531,
+          "ffhq_67140/sfe_age_scale_-2.5.png": 71.12604522705078,
+          "ffhq_67140/e4e_age_scale_-2.5.png": 53.1413459777832,
+          "ffhq_67140/sfe_age_scale_-2.png": 73.31600189208984,
+          "ffhq_67140/e4e_age_scale_-2.png": 57.61879348754883,
+          "ffhq_67140/sfe_age_scale_-1.5.png": 75.21131134033203,
+          "ffhq_67140/e4e_age_scale_-1.5.png": 60.80316162109375,
+          "ffhq_67140/sfe_age_scale_-1.png": 76.89202117919922,
+          "ffhq_67140/e4e_age_scale_-1.png": 62.88138961791992,
+          "ffhq_67140/sfe_age_scale_-0.5.png": 78.6584243774414,
+          "ffhq_67140/e4e_age_scale_-0.5.png": 64.80378723144531,
+          "ffhq_67140/sfe_age_scale_0.png": 79.86272430419922,
+          "ffhq_67140/e4e_age_scale_0.png": 66.84297943115234,
+          "ffhq_60764/sam_same.png": 64.34661102294922,
+          "ffhq_60764/sam_20.png": 48.7144775390625,
+          "ffhq_60764/sam_40.png": 57.04399108886719,
+          "ffhq_60764/sam_60.png": 64.92546081542969,
+          "ffhq_60764/sam_75.png": 68.25067138671875,
+          "ffhq_60764/sfe_age_scale_-5.png": 54.32478332519531,
+          "ffhq_60764/e4e_age_scale_-5.png": 15.159599304199219,
+          "ffhq_60764/sfe_age_scale_-4.5.png": 56.918582916259766,
+          "ffhq_60764/e4e_age_scale_-4.5.png": 37.08055877685547,
+          "ffhq_60764/sfe_age_scale_-4.png": 59.53021240234375,
+          "ffhq_60764/e4e_age_scale_-4.png": 43.7185173034668,
+          "ffhq_60764/sfe_age_scale_-3.5.png": 61.10147476196289,
+          "ffhq_60764/e4e_age_scale_-3.5.png": 48.475040435791016,
+          "ffhq_60764/sfe_age_scale_-3.png": 62.67698669433594,
+          "ffhq_60764/e4e_age_scale_-3.png": 53.488059997558594,
+          "ffhq_60764/sfe_age_scale_-2.5.png": 63.469512939453125,
+          "ffhq_60764/e4e_age_scale_-2.5.png": 56.37712860107422,
+          "ffhq_60764/sfe_age_scale_-2.png": 64.46283721923828,
+          "ffhq_60764/e4e_age_scale_-2.png": 58.842830657958984,
+          "ffhq_60764/sfe_age_scale_-1.5.png": 65.06204223632812,
+          "ffhq_60764/e4e_age_scale_-1.5.png": 60.77747344970703,
+          "ffhq_60764/sfe_age_scale_-1.png": 65.70951080322266,
+          "ffhq_60764/e4e_age_scale_-1.png": 62.347923278808594,
+          "ffhq_60764/sfe_age_scale_-0.5.png": 66.31737518310547,
+          "ffhq_60764/e4e_age_scale_-0.5.png": 63.55818557739258,
+          "ffhq_60764/sfe_age_scale_0.png": 66.8853759765625,
+          "ffhq_60764/e4e_age_scale_0.png": 65.0868911743164,
+          "ffhq_68335/sam_same.png": 76.96302795410156,
+          "ffhq_68335/sam_20.png": 36.90724563598633,
+          "ffhq_68335/sam_40.png": 53.61955261230469,
+          "ffhq_68335/sam_60.png": 71.82075500488281,
+          "ffhq_68335/sam_75.png": 78.95037841796875,
+          "ffhq_68335/sfe_age_scale_-5.png": 66.93757629394531,
+          "ffhq_68335/e4e_age_scale_-5.png": 18.507461547851562,
+          "ffhq_68335/sfe_age_scale_-4.5.png": 69.05690002441406,
+          "ffhq_68335/e4e_age_scale_-4.5.png": 24.426498413085938,
+          "ffhq_68335/sfe_age_scale_-4.png": 71.23725128173828,
+          "ffhq_68335/e4e_age_scale_-4.png": 30.438323974609375,
+          "ffhq_68335/sfe_age_scale_-3.5.png": 73.54227447509766,
+          "ffhq_68335/e4e_age_scale_-3.5.png": 37.203590393066406,
+          "ffhq_68335/sfe_age_scale_-3.png": 76.44801330566406,
+          "ffhq_68335/e4e_age_scale_-3.png": 37.31572341918945,
+          "ffhq_68335/sfe_age_scale_-2.5.png": 79.94160461425781,
+          "ffhq_68335/e4e_age_scale_-2.5.png": 43.75646209716797,
+          "ffhq_68335/sfe_age_scale_-2.png": 80.75418090820312,
+          "ffhq_68335/e4e_age_scale_-2.png": 46.204505920410156,
+          "ffhq_68335/sfe_age_scale_-1.5.png": 81.66390228271484,
+          "ffhq_68335/e4e_age_scale_-1.5.png": 49.94804382324219,
+          "ffhq_68335/sfe_age_scale_-1.png": 82.70000457763672,
+          "ffhq_68335/e4e_age_scale_-1.png": 53.09893798828125,
+          "ffhq_68335/sfe_age_scale_-0.5.png": 82.74071502685547,
+          "ffhq_68335/e4e_age_scale_-0.5.png": 57.51518249511719,
+          "ffhq_68335/sfe_age_scale_0.png": 83.4039306640625,
+          "ffhq_68335/e4e_age_scale_0.png": 60.513587951660156,
+          "ffhq_67140/sfe_age_scale_-10.png": 1.2638130187988281,
+          "ffhq_67140/e4e_age_scale_-10.png": 1.7578086853027344,
+          "ffhq_67140/sfe_age_scale_-9.5.png": 1.2949676513671875,
+          "ffhq_67140/e4e_age_scale_-9.5.png": 2.066425323486328,
+          "ffhq_67140/sfe_age_scale_-9.png": 1.5753631591796875,
+          "ffhq_67140/e4e_age_scale_-9.png": 2.2092628479003906,
+          "ffhq_67140/sfe_age_scale_-8.5.png": 1.7228164672851562,
+          "ffhq_67140/e4e_age_scale_-8.5.png": 2.3538970947265625,
+          "ffhq_67140/sfe_age_scale_-8.png": 2.064117431640625,
+          "ffhq_67140/e4e_age_scale_-8.png": 2.644817352294922,
+          "ffhq_67140/sfe_age_scale_-7.5.png": 2.122283935546875,
+          "ffhq_67140/e4e_age_scale_-7.5.png": 2.8938865661621094,
+          "ffhq_67140/sfe_age_scale_-7.png": 2.264392852783203,
+          "ffhq_67140/e4e_age_scale_-7.png": 3.1254653930664062,
+          "ffhq_67140/sfe_age_scale_-6.5.png": 2.510417938232422,
+          "ffhq_67140/e4e_age_scale_-6.5.png": 3.4346389770507812,
+          "ffhq_67140/sfe_age_scale_-6.png": 2.693805694580078,
+          "ffhq_67140/e4e_age_scale_-6.png": 3.7159500122070312,
+          "ffhq_67140/sfe_age_scale_-5.5.png": 3.2789764404296875,
+          "ffhq_67140/e4e_age_scale_-5.5.png": 3.9705963134765625,
+          "ffhq_60764/sfe_age_scale_-10.png": 3.3624000549316406,
+          "ffhq_60764/e4e_age_scale_-10.png": 2.5573577880859375,
+          "ffhq_60764/sfe_age_scale_-9.5.png": 3.578968048095703,
+          "ffhq_60764/e4e_age_scale_-9.5.png": 2.8368682861328125,
+          "ffhq_60764/sfe_age_scale_-9.png": 4.141139984130859,
+          "ffhq_60764/e4e_age_scale_-9.png": 3.365802764892578,
+          "ffhq_60764/sfe_age_scale_-8.5.png": 4.735668182373047,
+          "ffhq_60764/e4e_age_scale_-8.5.png": 3.9959793090820312,
+          "ffhq_60764/sfe_age_scale_-8.png": 5.712192535400391,
+          "ffhq_60764/e4e_age_scale_-8.png": 4.2599639892578125,
+          "ffhq_60764/sfe_age_scale_-7.5.png": 7.176502227783203,
+          "ffhq_60764/e4e_age_scale_-7.5.png": 4.967254638671875,
+          "ffhq_60764/sfe_age_scale_-7.png": 8.904197692871094,
+          "ffhq_60764/e4e_age_scale_-7.png": 5.9904937744140625,
+          "ffhq_60764/sfe_age_scale_-6.5.png": 19.43271255493164,
+          "ffhq_60764/e4e_age_scale_-6.5.png": 7.358921051025391,
+          "ffhq_60764/sfe_age_scale_-6.png": 43.517333984375,
+          "ffhq_60764/e4e_age_scale_-6.png": 8.903175354003906,
+          "ffhq_60764/sfe_age_scale_-5.5.png": 50.82073211669922,
+          "ffhq_60764/e4e_age_scale_-5.5.png": 10.740303039550781,
+          "ffhq_68335/sfe_age_scale_-10.png": 3.134166717529297,
+          "ffhq_68335/e4e_age_scale_-10.png": 2.1398239135742188,
+          "ffhq_68335/sfe_age_scale_-9.5.png": 3.359973907470703,
+          "ffhq_68335/e4e_age_scale_-9.5.png": 2.2137451171875,
+          "ffhq_68335/sfe_age_scale_-9.png": 4.021373748779297,
+          "ffhq_68335/e4e_age_scale_-9.png": 2.505199432373047,
+          "ffhq_68335/sfe_age_scale_-8.5.png": 4.895030975341797,
+          "ffhq_68335/e4e_age_scale_-8.5.png": 3.3862838745117188,
+          "ffhq_68335/sfe_age_scale_-8.png": 6.6034698486328125,
+          "ffhq_68335/e4e_age_scale_-8.png": 3.7964210510253906,
+          "ffhq_68335/sfe_age_scale_-7.5.png": 8.289073944091797,
+          "ffhq_68335/e4e_age_scale_-7.5.png": 5.085475921630859,
+          "ffhq_68335/sfe_age_scale_-7.png": 11.07302474975586,
+          "ffhq_68335/e4e_age_scale_-7.png": 6.544406890869141,
+          "ffhq_68335/sfe_age_scale_-6.5.png": 42.25017547607422,
+          "ffhq_68335/e4e_age_scale_-6.5.png": 8.122577667236328,
+          "ffhq_68335/sfe_age_scale_-6.png": 56.46380615234375,
+          "ffhq_68335/e4e_age_scale_-6.png": 10.15774917602539,
+          "ffhq_68335/sfe_age_scale_-5.5.png": 62.267494201660156,
+          "ffhq_68335/e4e_age_scale_-5.5.png": 12.629138946533203
+        },
+        "original_groups": {},
+        "promotion": false,
+        "visual_review_pending": true,
+        "targets_not_calibrated": true
+      },
+      "artifacts": {
+        "raw": 141,
+        "color": 141,
+        "size": [
+          1024,
+          1024
+        ],
+        "all_decodable": true,
+        "raw_hashes_verified": true
+      },
+      "browser": {
+        "url": "http://127.0.0.1:65512/age-sfe-dense-review/",
+        "status": 200,
+        "cases": 3,
+        "conditions": 21,
+        "all_conditions_switch": true,
+        "all_cases_switch": true,
+        "color_switch": true,
+        "native_crop": true,
+        "download": [
+          1024,
+          1024
+        ],
+        "mobile_width": 390,
+        "errors": []
+      },
+      "frozen": {
+        "before": "2619f54247d5235e05869c31030951a11789b7ebc448d69a13c4a34b63d5a7d7",
+        "after": "2619f54247d5235e05869c31030951a11789b7ebc448d69a13c4a34b63d5a7d7",
+        "equal": true
+      },
+      "training": null,
+      "checkpoints": {},
+      "age-reuse": {
+        "source": "/root/face-age-transformation-course-project/deployment/training-runs/sfe-cpu-20261128-011831",
+        "items": [
+          "ffhq_67140/sam_same.png",
+          "ffhq_67140/sam_20.png",
+          "ffhq_67140/sam_40.png",
+          "ffhq_67140/sam_60.png",
+          "ffhq_67140/sam_75.png",
+          "ffhq_67140/sfe_age_scale_-5.png",
+          "ffhq_67140/e4e_age_scale_-5.png",
+          "ffhq_67140/sfe_age_scale_-4.5.png",
+          "ffhq_67140/e4e_age_scale_-4.5.png",
+          "ffhq_67140/sfe_age_scale_-4.png",
+          "ffhq_67140/e4e_age_scale_-4.png",
+          "ffhq_67140/sfe_age_scale_-3.5.png",
+          "ffhq_67140/e4e_age_scale_-3.5.png",
+          "ffhq_67140/sfe_age_scale_-3.png",
+          "ffhq_67140/e4e_age_scale_-3.png",
+          "ffhq_67140/sfe_age_scale_-2.5.png",
+          "ffhq_67140/e4e_age_scale_-2.5.png",
+          "ffhq_67140/sfe_age_scale_-2.png",
+          "ffhq_67140/e4e_age_scale_-2.png",
+          "ffhq_67140/sfe_age_scale_-1.5.png",
+          "ffhq_67140/e4e_age_scale_-1.5.png",
+          "ffhq_67140/sfe_age_scale_-1.png",
+          "ffhq_67140/e4e_age_scale_-1.png",
+          "ffhq_67140/sfe_age_scale_-0.5.png",
+          "ffhq_67140/e4e_age_scale_-0.5.png",
+          "ffhq_67140/sfe_age_scale_0.png",
+          "ffhq_67140/e4e_age_scale_0.png",
+          "ffhq_60764/sam_same.png",
+          "ffhq_60764/sam_20.png",
+          "ffhq_60764/sam_40.png",
+          "ffhq_60764/sam_60.png",
+          "ffhq_60764/sam_75.png",
+          "ffhq_60764/sfe_age_scale_-5.png",
+          "ffhq_60764/e4e_age_scale_-5.png",
+          "ffhq_60764/sfe_age_scale_-4.5.png",
+          "ffhq_60764/e4e_age_scale_-4.5.png",
+          "ffhq_60764/sfe_age_scale_-4.png",
+          "ffhq_60764/e4e_age_scale_-4.png",
+          "ffhq_60764/sfe_age_scale_-3.5.png",
+          "ffhq_60764/e4e_age_scale_-3.5.png",
+          "ffhq_60764/sfe_age_scale_-3.png",
+          "ffhq_60764/e4e_age_scale_-3.png",
+          "ffhq_60764/sfe_age_scale_-2.5.png",
+          "ffhq_60764/e4e_age_scale_-2.5.png",
+          "ffhq_60764/sfe_age_scale_-2.png",
+          "ffhq_60764/e4e_age_scale_-2.png",
+          "ffhq_60764/sfe_age_scale_-1.5.png",
+          "ffhq_60764/e4e_age_scale_-1.5.png",
+          "ffhq_60764/sfe_age_scale_-1.png",
+          "ffhq_60764/e4e_age_scale_-1.png",
+          "ffhq_60764/sfe_age_scale_-0.5.png",
+          "ffhq_60764/e4e_age_scale_-0.5.png",
+          "ffhq_60764/sfe_age_scale_0.png",
+          "ffhq_60764/e4e_age_scale_0.png",
+          "ffhq_68335/sam_same.png",
+          "ffhq_68335/sam_20.png",
+          "ffhq_68335/sam_40.png",
+          "ffhq_68335/sam_60.png",
+          "ffhq_68335/sam_75.png",
+          "ffhq_68335/sfe_age_scale_-5.png",
+          "ffhq_68335/e4e_age_scale_-5.png",
+          "ffhq_68335/sfe_age_scale_-4.5.png",
+          "ffhq_68335/e4e_age_scale_-4.5.png",
+          "ffhq_68335/sfe_age_scale_-4.png",
+          "ffhq_68335/e4e_age_scale_-4.png",
+          "ffhq_68335/sfe_age_scale_-3.5.png",
+          "ffhq_68335/e4e_age_scale_-3.5.png",
+          "ffhq_68335/sfe_age_scale_-3.png",
+          "ffhq_68335/e4e_age_scale_-3.png",
+          "ffhq_68335/sfe_age_scale_-2.5.png",
+          "ffhq_68335/e4e_age_scale_-2.5.png",
+          "ffhq_68335/sfe_age_scale_-2.png",
+          "ffhq_68335/e4e_age_scale_-2.png",
+          "ffhq_68335/sfe_age_scale_-1.5.png",
+          "ffhq_68335/e4e_age_scale_-1.5.png",
+          "ffhq_68335/sfe_age_scale_-1.png",
+          "ffhq_68335/e4e_age_scale_-1.png",
+          "ffhq_68335/sfe_age_scale_-0.5.png",
+          "ffhq_68335/e4e_age_scale_-0.5.png",
+          "ffhq_68335/sfe_age_scale_0.png",
+          "ffhq_68335/e4e_age_scale_0.png"
+        ],
+        "count": 81,
+        "source_age_json_sha256": "a5ae6bf8b56261738dd1010643979f1f72164d0984fab0e7cfbd99f4d4f9901f",
+        "same_native_sha256": true,
+        "model_sha256": "2db5e05be33b3f120518a86f29a4a65eb0a01c2967219b8787a7dead9b796951"
+      }
+    }
+  },
+  "job_status": {
+    "jobs": [
+      {
+        "run": "sfe-cpu-20261128-011831",
+        "job_id": "j-1795828744-963814",
+        "gpus": 0,
+        "phase": "Succeeded"
+      },
+      {
+        "run": "sfe-conditioned-20261128-012222",
+        "job_id": "j-1795829052-498685",
+        "gpus": 1,
+        "phase": "Succeeded"
+      },
+      {
+        "run": "sfe-strength-conditioned-20261128-012737",
+        "job_id": "j-1795829320-100050",
+        "gpus": 1,
+        "phase": "Succeeded"
+      },
+      {
+        "run": "sfe-20261128-013310",
+        "job_id": "j-1795829651-789797",
+        "gpus": 1,
+        "phase": "Succeeded"
+      },
+      {
+        "run": "sfe-cpu-20261128-013640",
+        "job_id": "j-1795829842-677483",
+        "gpus": 0,
+        "phase": "Succeeded"
+      }
+    ],
+    "active": []
+  },
+  "raw_outputs": 710,
+  "color_outputs": 710,
+  "promoted": false,
+  "published_examples": {
+    "sfe-training-ablation-20261128.jpg": {
+      "sha256": "587b85dab97ae99d8af88853d86ff4cda559c20b912eb9dd88fd2997275f26e4",
+      "bytes": 186642,
+      "transformed": true,
+      "credits": [
+        {
+          "name": "ffhq_64376",
+          "source": {
+            "photo_url": "https://www.flickr.com/photos/koreanwonders/36345325941/",
+            "photo_title": "20170715_113832__KRW0375_FullKR",
+            "author": "KRWonders",
+            "country": "",
+            "license": "Attribution License",
+            "license_url": "https://creativecommons.org/licenses/by/2.0/",
+            "date_uploaded": "2017-08-10",
+            "date_crawled": "2018-10-10"
+          }
+        },
+        {
+          "name": "ffhq_61908",
+          "source": {
+            "photo_url": "https://www.flickr.com/photos/sherwood411/12394588574/",
+            "photo_title": "Photoshot Meetup",
+            "author": "Sherwood411",
+            "country": "Canada",
+            "license": "Attribution-NonCommercial License",
+            "license_url": "https://creativecommons.org/licenses/by-nc/2.0/",
+            "date_uploaded": "2014-02-08",
+            "date_crawled": "2018-10-10"
+          }
+        }
+      ]
+    },
+    "sfe-glasses-projection-20261128.jpg": {
+      "sha256": "d5154c7fd3edb1dff5d9d5789eed30b55d7c07a6772533c441620425b51c4c51",
+      "bytes": 182197,
+      "transformed": true,
+      "credits": [
+        {
+          "name": "ffhq_64376",
+          "source": {
+            "photo_url": "https://www.flickr.com/photos/koreanwonders/36345325941/",
+            "photo_title": "20170715_113832__KRW0375_FullKR",
+            "author": "KRWonders",
+            "country": "",
+            "license": "Attribution License",
+            "license_url": "https://creativecommons.org/licenses/by/2.0/",
+            "date_uploaded": "2017-08-10",
+            "date_crawled": "2018-10-10"
+          }
+        },
+        {
+          "name": "ffhq_61908",
+          "source": {
+            "photo_url": "https://www.flickr.com/photos/sherwood411/12394588574/",
+            "photo_title": "Photoshot Meetup",
+            "author": "Sherwood411",
+            "country": "Canada",
+            "license": "Attribution-NonCommercial License",
+            "license_url": "https://creativecommons.org/licenses/by-nc/2.0/",
+            "date_uploaded": "2014-02-08",
+            "date_crawled": "2018-10-10"
+          }
+        }
+      ]
+    }
+  }
+}

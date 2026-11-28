@@ -28,7 +28,9 @@ def method(path, cls, name):
     return '\n'.join(source.splitlines()[member.lineno-1:member.end_lineno])+'\n'
 
 
-def prepare(cpu_pilot=False):
+def prepare(cpu_pilot=False, dense_younger=False, glasses_projection=False):
+    if glasses_projection and (cpu_pilot or dense_younger):
+        raise ValueError('The fixed projection protocol uses8 cases/7 strengths/1GPU; omit CPU and dense flags')
     upstream = ROOT/'deployment/StyleFeatureEditor'
     if subprocess.check_output(['git','rev-parse','HEAD'],cwd=upstream,text=True).strip() != REV:
         raise ValueError('Wrong upstream revision')
@@ -45,6 +47,8 @@ def prepare(cpu_pilot=False):
     shutil.copy2(upstream/'LICENSE',runtime/'LICENSE')
     shutil.copy2(ROOT/'deployment/StyleGANEX/LICENSE.md',runtime/'STYLEGANEX_LICENSE.md')
     shutil.copy2(upstream/'editings/interfacegan_directions/age.pt',runtime/'age.pt')
+    if glasses_projection:
+        shutil.copy2(upstream/'editings/bound/Eyeglasses_boundary.npy',runtime/'eyeglasses.npy')
     enc = runtime/'models/psp/encoders/psp_encoders.py'
     s = enc.read_text(); line = '        resnet50.load_state_dict(torch.load(opts.arcface_model_path))\n'
     if s.count(line) != 1: raise ValueError('ArcFace initialization adaptation mismatch')
@@ -108,15 +112,16 @@ class EditingOnly:
     if len(specs) != 3: raise ValueError('Expected exactly three inference checkpoints')
     write_json(run/'model-specs.json',specs)
     rows = {r['name']:r for r in json.loads((PARENT/'selection.json').read_text())}
-    selected = ['ffhq_64376','ffhq_62644'] if cpu_pilot else NAMES
-    scales = [0.,5.,10.] if cpu_pilot else SCALES
+    selected = ['ffhq_67140','ffhq_60764','ffhq_68335'] if dense_younger else (['ffhq_64376','ffhq_62644'] if cpu_pilot else NAMES)
+    scales = [i/2 for i in range(-20,1)] if dense_younger else ([0.,5.,10.] if cpu_pilot else SCALES)
     write_json(run/'selection.json',[rows[name] for name in selected])
     frozen = {str(p):sha256(p) for folder in [run/'source',runtime] for p in folder.rglob('*') if p.is_file()}
     for p in [run/'model-specs.json',run/'selection.json',PARENT/'evaluation/report.json']:
         frozen[str(p)] = sha256(p)
     for name in selected:
         p = PARENT/'evaluation'/name/'reference.png'; frozen[str(p)] = sha256(p)
-    write_json(run/'experiment.json',dict(profile='official_sfe_cpu_pilot' if cpu_pilot else 'official_sfe_age_pilot',upstream_commit=REV,
+    write_json(run/'experiment.json',dict(profile='official_sfe_glasses_projected' if glasses_projection else ('official_sfe_dense_younger' if dense_younger else ('official_sfe_cpu_pilot' if cpu_pilot else 'official_sfe_age_pilot')),upstream_commit=REV,
+        glasses_projection=glasses_projection,
         code_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),
         scales=scales,cases=len(selected),gpu=0 if cpu_pilot else 1,device='cpu' if cpu_pilot else 'cuda:0',training=False,frozen_inputs=frozen,targets_not_calibrated=True,
         preprocessing='Same saved native1024 FFHQ reference. Official forward bilinear-downsamples to256, unlike SAM area-aligned256 input.',
@@ -130,6 +135,7 @@ class EditingOnly:
                   'Inspect achieved aging with identity/skin; never infer chronological-age accuracy from strength.',
                   'No automatic live-model replacement.']))
     print('PREPARED',run,flush=True)
+    return run
 
 
 def validate(run):
@@ -210,6 +216,17 @@ def worker(run):
     tick = time.monotonic()
     model = InferenceOnly(weights['sfe_editor_light.pt'],weights['e4e_ffhq_encode.pt'],weights['stylegan2-ffhq-config-f.pt'],device=device)
     direction = torch.load(run/'upstream/age.pt',map_location='cpu',weights_only=False).to(device)
+    if exp.get('glasses_projection'):
+        age=direction.reshape(1,1,512).expand(1,18,512).clone()
+        glasses=torch.from_numpy(np.load(run/'upstream/eyeglasses.npy',allow_pickle=False)).reshape(1,18,512).to(device)
+        before_cos=float((age*glasses).sum()/(age.norm()*glasses.norm()))
+        projected=age-(age*glasses).sum()/glasses.square().sum()*glasses
+        direction=projected*(age.norm()/projected.norm())
+        write_json(run/'direction-projection.json',dict(original_cosine=before_cos,
+            projected_cosine=float((direction*glasses).sum()/(direction.norm()*glasses.norm())),
+            original_norm=float(age.norm()),projected_norm=float(direction.norm()),norm_restored=True,
+            source='Pinned official SFE editings/bound/Eyeglasses_boundary.npy; W+ linear projection, no per-image fitting',
+            limitation='Linear orthogonality does not guarantee semantic independence or matched achieved aging.'))
     if direction.shape not in [(1,512),(512,),(1,18,512)] or not torch.isfinite(direction).all():
         raise ValueError('Unexpected interfaceGAN direction')
     runner = EditingOnly(model,direction)
@@ -288,7 +305,7 @@ def worker(run):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('action',choices=['prepare','submit','worker']);p.add_argument('run',type=Path,nargs='?');p.add_argument('--cpu-pilot',action='store_true');a=p.parse_args()
-    if a.action=='prepare':prepare(a.cpu_pilot)
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('action',choices=['prepare','submit','worker']);p.add_argument('run',type=Path,nargs='?');p.add_argument('--cpu-pilot',action='store_true');p.add_argument('--dense-younger',action='store_true');p.add_argument('--glasses-projection',action='store_true');a=p.parse_args()
+    if a.action=='prepare':prepare(a.cpu_pilot,a.dense_younger,a.glasses_projection)
     elif a.run is None:p.error('run required')
     else:globals()[a.action](a.run.resolve())
