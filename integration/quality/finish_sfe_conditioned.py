@@ -11,7 +11,7 @@ from check_independent_age import MODEL_SHA256,MODEL_SOURCE,MEAN,STD
 ROOT=Path(__file__).resolve().parents[2]
 PAGE=r'''<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>年龄编辑机制对照</title>
 <style>body{font:16px/1.6 system-ui;background:#eef1ed;color:#24342c;margin:20px}main{max-width:1600px;margin:auto}.controls{display:flex;gap:14px;flex-wrap:wrap}label{display:grid}select{padding:8px;font:inherit}#grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:20px}figure{margin:0;background:white;padding:10px}img{width:100%;aspect-ratio:1;object-fit:contain}small{display:block}a{color:#246044}#trajectory{overflow:auto;white-space:pre;font:14px/1.7 monospace}#note{padding:14px;background:#dce6d8}@media(max-width:600px){body{margin:10px}#grid{grid-template-columns:1fr}}</style>
-<main><h1>年龄编辑机制对照</h1><p id="note"></p><a href="/age-sfe-review/">官方 SFE 旧对照</a> · <a href="/age-sfe-dense-review/">高龄年轻化密集扫描</a> · <a href="/age-sfe-conditioned-review/">条件训练对照</a>
+<main><h1>年龄编辑机制对照</h1><p id="note"></p><a href="/age-sfe-review/">官方 SFE 旧对照</a> · <a href="/age-sfe-dense-review/">高龄年轻化密集扫描</a> · <a href="/age-sfe-conditioned-review/">条件训练对照</a> · <a href="/age-e4e-glasses-review/">原照眼镜通道保留</a> · <a href="/age-e4e-glasses-sweep/">高龄眼镜修正扫描</a>
 <div class="controls"><label>照片<select id="subject"></select></label><label id="condition-label">条件<select id="condition"></select></label><label>颜色<select id="color"><option value="raw">原始模型</option><option value="color">原照保色</option></select></label><label>区域<select id="region"><option value="full">全脸</option><option value="eye">原生眼周</option><option value="cheek">原生脸颊</option></select></label></div>
 <div id="grid"></div><p id="credit"></p><p>全轨迹（独立外观估龄；不是照片真实年龄或未来容貌）</p><div id="trajectory"></div><small>保色是可选后处理。全脸缩至512显示，局部直接裁自原生1024。所有条件与失败样例保留，未替换上传应用；这些开发图已看过，不是独立盲评。</small></main>
 <script id="data" type="application/json">__DATA__</script><script>
@@ -29,10 +29,12 @@ def main():
     p.add_argument('--original-sfe',type=Path,default=ROOT/'deployment/training-runs/sfe-20261127-110920')
     a=p.parse_args();run=a.run.resolve()
     exp=json.loads((run/'experiment.json').read_text());dense=exp['profile']=='official_sfe_dense_younger'
-    projection=exp['profile']=='official_sfe_glasses_projected';scanned=dense or projection
+    projection=exp['profile']=='official_sfe_glasses_projected'
+    sweep=exp['profile']=='e4e_eyeglass_correction_sweep'
+    attribute=exp['profile'] in ['e4e_source_eyeglass_channels','e4e_eyeglass_correction_sweep'];scanned=dense or projection or attribute
     if not (run/'DONE').exists():raise ValueError('Incomplete worker')
     report=json.loads((run/'evaluation/report.json').read_text());records=report['records']
-    expected=3*(5+2*len(exp['scales'])) if dense else (152 if projection else 168)
+    expected=3*(5+2*len(exp['scales'])) if dense else (8*len(exp['routes'])*len(exp['scales']) if attribute else (152 if projection else 168))
     if dense and exp['scales'] not in [[i/2 for i in range(-10,1)],[i/2 for i in range(-20,1)]]:
         raise ValueError('Unexpected dense scan protocol')
     if len(report['outputs'])!=expected or len(records)!=(3 if dense else 8):raise ValueError('Incomplete conditions')
@@ -57,6 +59,15 @@ def main():
         if not np.isfinite(result):raise ValueError('Non-finite independent age')
         return result
     agepath=run/'independent-age.json';ages=json.loads(agepath.read_text())['ages'] if agepath.exists() else {}
+    if attribute:
+        prior=Path(exp['parent_run']);prior_age=json.loads((prior/'independent-age.json').read_text())
+        prior_outputs={(o['name'],o['scale']):o for o in json.loads((prior/'evaluation/report.json').read_text())['outputs'] if o['route']=='e4e_age'}
+        if prior_age['model_sha256']!=MODEL_SHA256:raise ValueError('Parent age model differs')
+        for o in report['outputs']:
+            if o['route']!='projected_e4e':continue
+            old=prior_outputs[o['name'],o['scale']]
+            if old['sha256']!=o['sha256']:raise ValueError('Reused e4e baseline differs')
+            ages[o['native']]=prior_age['ages'][old['native']]
     if a.reuse_age:
         prior=json.loads((a.reuse_age/'independent-age.json').read_text())
         if prior['model_sha256']!=MODEL_SHA256:raise ValueError('Reused age model differs')
@@ -80,7 +91,7 @@ def main():
             write_json(agepath,dict(ages=ages,model_sha256=MODEL_SHA256,model_source=MODEL_SOURCE));print('SCORED',i+1,flush=True)
     write_json(agepath,dict(ages=ages,model_sha256=MODEL_SHA256,model_source=MODEL_SOURCE))
     sources={r['name']:predict(run/'evaluation'/r['name']/'reference.png') for r in records}
-    routes=['sfe_age','e4e_age'] if scanned else report['routes']
+    routes=report['routes'] if attribute or not scanned else ['sfe_age','e4e_age']
     outputs=[o for o in report['outputs'] if o['route'] in routes]
     if not scanned:
         for record in records:
@@ -107,6 +118,24 @@ def main():
             target_proxy_mae=mean(abs(ages[o['native']]-o['target']) for o in rows if ages[o['native']] is not None) if not scanned else None,
             older_younger_proxy_mae=mean(abs(ages[o['native']]-o['target']) for o in old if ages[o['native']] is not None),
             missing=sum(ages[o['native']] is None or not o['detected'] for o in rows))
+    if attribute:
+        baseline={(o['name'],o['condition']):o for o in outputs if o['route']=='projected_e4e'}
+        comparisons={}
+        for route in routes[1:]:
+            values=[o for o in outputs if o['route']==route and o['scale']>0]
+            changes=[ages[o['native']]-ages[baseline[o['name'],o['condition']]['native']] for o in values
+                if ages[o['native']] is not None and ages[baseline[o['name'],o['condition']]['native']] is not None]
+            differences=[o['source_cosine']-baseline[o['name'],o['condition']]['source_cosine'] for o in values
+                if o['source_cosine'] is not None and baseline[o['name'],o['condition']]['source_cosine'] is not None]
+            ratios=[]
+            for record in records:
+                if sweep:continue
+                n=record['name'];ours=ages[lookup[n,route,'scale_10']['native']]-ages[lookup[n,route,'scale_0']['native']]
+                original=ages[lookup[n,'projected_e4e','scale_10']['native']]-ages[lookup[n,'projected_e4e','scale_0']['native']]
+                if original>1:ratios.append(ours/original)
+            comparisons[route]=dict(age_change=mean(changes),mean_abs_age_change=mean(abs(v) for v in changes),identity_change=mean(differences),
+                identity_worst_change=min(differences),identity_drop_gt002=sum(v<-.02 for v in differences),age_span_ratio=mean(ratios))
+        write_json(run/'attribute-comparisons.json',comparisons)
     original=a.original_sfe.resolve()
     original_outputs=[];original_ages={};original_groups={}
     if projection:
@@ -151,12 +180,12 @@ def main():
                 case['outputs'].append(dict(route='official_sfe',condition=o['condition'],scale=o['scale'],age=original_ages[o['native']],identity=o['source_cosine'],
                     raw=asset(original/'evaluation'/o['native']),color=asset(original/'evaluation'/o['preserved'])))
         cases.append(case)
-    data=dict(dense=dense,cases=cases,routes=['official_sfe']+routes if projection else routes,default_condition='scale_-3' if dense else ('scale_5' if projection else '40'),
-        labels=dict(official_sfe='原版 SFE 年龄方向',sfe_age='去眼镜耦合 SFE' if projection else '官方 SFE',e4e_age='去耦合 e4e' if projection else '官方 e4e 方向对照',fixed_mapping='未训练的源龄差值映射',age_id_editor='目标年龄＋身份训练',protected_editor='增加眼周与属性保留约束'),
+    data=dict(dense=dense,cases=cases,routes=['official_sfe']+routes if projection else routes,default_condition='scale_-3' if dense else ('scale_10' if attribute else ('scale_5' if projection else '40')),
+        labels=dict(boundary_minus4='W+眼镜方向 −4',boundary_minus8='W+眼镜方向 −8',boundary_minus12='W+眼镜方向 −12',style_minus1='眼镜StyleSpace通道 −3',style_minus2='眼镜StyleSpace通道 −6',style_minus3='眼镜StyleSpace通道 −9',projected_e4e='去耦合 e4e 基线',source_channels_50='眼镜通道保留原照50%',source_channels_100='眼镜通道保留原照100%',official_sfe='原版 SFE 年龄方向',sfe_age='去眼镜耦合 SFE' if projection else '官方 SFE',e4e_age='去耦合 e4e' if projection else '官方 e4e 方向对照',fixed_mapping='未训练的源龄差值映射',age_id_editor='目标年龄＋身份训练',protected_editor='增加眼周与属性保留约束'),
         conditions=['scale_'+format(s,'g') for s in report['scales']] if scanned else ['same']+[str(t) for t in exp['targets']],
         note=f"3张高龄开发图，强度{exp['scales'][0]:g}至0每0.5一步；强度不是目标年龄。用于检查此前粗扫描是否跳过中青年阶段。" if dense else
-             ('8张开发图，将原年龄W+方向正交于官方眼镜边界并恢复原范数；固定7强度，不按人调参。正交不保证语义解耦，须同时检查实际老化、身份和原生图。' if projection else
-              f"{exp['train']}个训练身份组，两组各{exp['steps_per_arm']}步，相同初始化和采样。"+('关闭W+和空间自由修正，仅学习条件强度。' if exp.get('adapter_mode')=='strength' else '包含W+和空间修正，已发现高龄纹理伪影，作为失败对照保留。')+'增加保留约束能否抑制无端眼镜需要逐图确认；目标条件未完成年龄校准。'))
+             ('高龄强度7.5/10，固定扫描负向眼镜W+属性偏移和StyleSpace通道偏移，每张图生成所有条件。65817原照戴眼镜，用于检查误删风险；这是未经选择的诊断扫描，不是已上线的自动去眼镜功能，不等于数值年龄。' if sweep else ('在已去耦合e4e上，只将官方4个眼镜StyleSpace通道保留为原照反演值的50%或100%。8张已看过的开发图，65817原照戴眼镜；强度0/5/7.5/10固定，无逐人搜索、去眼镜滤镜或像素拼贴，未接入上传应用。' if attribute else ('8张开发图，将原年龄W+方向正交于官方眼镜边界并恢复原范数；固定7强度，不按人调参。正交不保证语义解耦，须同时检查实际老化、身份和原生图。' if projection else
+              f"{exp['train']}个训练身份组，两组各{exp['steps_per_arm']}步，相同初始化和采样。"+('关闭W+和空间自由修正，仅学习条件强度。' if exp.get('adapter_mode')=='strength' else '包含W+和空间修正，已发现高龄纹理伪影，作为失败对照保留。')+'增加保留约束能否抑制无端眼镜需要逐图确认；目标条件未完成年龄校准。'))))
     (gallery/'index.html').write_text(PAGE.replace('__DATA__',json.dumps(data,ensure_ascii=False).replace('<',chr(92)+'u003c')))
     print('FINISHED',json.dumps(aggregate,ensure_ascii=False),flush=True)
 

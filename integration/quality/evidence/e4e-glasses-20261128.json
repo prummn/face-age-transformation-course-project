@@ -1,0 +1,3065 @@
+{
+  "date": "2026-11-28",
+  "branch": "dev/mobei-gan-portable-20261116",
+  "source_parent_commit": "183e3796ad8d433cdfe8673fa4bd046d3154c1b0",
+  "note": "Frozen e4e/StyleGAN2 inference, no SFE spatial injection or SAM. Fixed previously inspected development portraits, not independent population evaluation. Apparent-age scores are not chronological age. All routes retained.",
+  "promoted": false,
+  "training": false,
+  "runs": {
+    "e4e-glasses-20261128-074348": {
+      "run": "deployment/training-runs/e4e-glasses-20261128-074348",
+      "receipt": {
+        "job_id": "j-1795851887-32604",
+        "name": "face-age-e4e-glasses-20261128-074348",
+        "run_dir": "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348",
+        "gpus": 1
+      },
+      "profile": "e4e_source_eyeglass_channels",
+      "scales": [
+        0.0,
+        5.0,
+        7.5,
+        10.0
+      ],
+      "routes": [
+        "projected_e4e",
+        "source_channels_50",
+        "source_channels_100"
+      ],
+      "upstream_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+      "source_commit": "183e3796ad8d433cdfe8673fa4bd046d3154c1b0",
+      "experiment_sha256": "67eb275378761b550e42f9aaf2d867f7630728c0f26480b364d61777a8484058",
+      "selection_sha256": "c7bf2fbbee2ab088bb58f38563e914de446a11e3e61b84eeb8caf409398ebdd2",
+      "frozen_inputs": {
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/source/probe_inversion.py": "febc5153b69994b5ba50ac7b7dc5ec721aeaddf5d430da8fdb6324c925d69d47",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/source/sfe_study.py": "e3f660aa246c3f16f1323dc32539e441a17d96200842aac18661f4e2c3e34ffc",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/source/e4e_glasses_study.py": "5df957d9c1c7a73910b218f4e7aa5937a86004913425810b2d168b4435f35e3f",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/source/source_color.py": "1759c7a0a5fa842fa84af46e35ed0d72457b224c661f74de62495f0f026e3c54",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/eyeglasses.npy": "227c8edae45f8cf06a0578e8422ef2dc59de6fb741d55280746a63fd40d2936c",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/reference_filter.py": "c2cad790d29a6ed4e18913186195ec6fb4246633b6f05d22b6bbd0625efb2ade",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/LICENSE": "8e56d0978e2f499d0b7f2741f452c8cc94658cb530dcb6916e6e90b13629e43d",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/STYLEGANEX_LICENSE.md": "c5cdad6be69f31800b6e6c1a19869f2cad0eebaa3cfb12f1f20acb8e063ab77d",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/inference_only.py": "3336321812758018637827367b17e41a26c4c49199c13680be4074dda37d37c0",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/official_latent_editor.txt": "48832e493cc5b5be3f7f406392237a4824cf101be58af3026f664819dddf14ca",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/official_model_utils.txt": "115a7e2367e894457d4563b326caf2f7139122faecab86f78da0144aaf442765",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/stylespace.py": "749714e0fa798c6cf2308352ea18dbe98931c497c487d2b5e19be40d923aa503",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/age.pt": "50074516b1629707d89b5e43d6b8abd1792212fa3b961a87a11323d6a5222ae0",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/models/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/models/psp/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/models/psp/stylegan2/model.py": "937e9e6620f32e922f9b1115b3b7d4799eeae275f5b94f52a99f353143d55881",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/models/psp/stylegan2/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/models/psp/encoders/model_irse.py": "6c3445d4bd9596b074a6259cf122e786edaa67710a199ee294d885e9ba0f23ba",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/models/psp/encoders/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/models/psp/encoders/psp_encoders.py": "fafebaff1cc617495bdcfeea1868095c2ed038bcb822482b5e18b233c0476640",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/models/psp/encoders/feature_resnet.py": "c44517629b0777b194841df88ac9512f823790ffcb16cf8865b1caf5ea00c876",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/models/psp/encoders/helpers.py": "11668dc8e7fe500668a511bdaefc22d788efdc912b15b1a3ee5ee5ff933764e6",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/models/psp/stylegan2/op/upfirdn2d_kernel.cu": "b1dd3b18c7732cbbe8f0a23f1e62ea6cc657366d45bb884d16b8e744239d3e26",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/models/psp/stylegan2/op/upfirdn2d.py": "01a8fdd3a615ce2504e34ba5d7005c31b08bfe7367a5fc5ea6cfd4cb62426acf",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/models/psp/stylegan2/op/__init__.py": "d3bdebb6b1ea35ab8e7dd14af32919f11ae630ab9154d4c84f839397b98b2bf6",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/models/psp/stylegan2/op/fused_act.py": "58f52e84832f96aab487d63daa295c010113cbda59149912f9a2b2f1b1e43e7b",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/models/psp/stylegan2/op/fused_bias_act.cpp": "7a71b629f1c0e5ff1076410082d318390b56dad1ec8455501bd6fa15869351d8",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/models/psp/stylegan2/op/upfirdn2d.cpp": "3893aa4137b1e565e74997d72f49cbdf2860ed12a435f142e119c653224c8a88",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/upstream/models/psp/stylegan2/op/fused_bias_act_kernel.cu": "bd58d9c2eaf85aa1e12cb8bd6d6ee14e19d13303d2e8eae9a0e25efeb4441cad",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/selection.json": "c7bf2fbbee2ab088bb58f38563e914de446a11e3e61b84eeb8caf409398ebdd2",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/model-specs.json": "ec719ddaec6775bfeeecfd9571727ecfc08c5c838ad9299bc55bce19bf1e112b",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/report.json": "cfa219b2ad7584997a0bf2c20bee34a70e9fa7752ba58ba90368a6cb241ec2a7",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/independent-age.json": "531fb29281c5b5a0ebda150435e94ccd6f9d3888359ea703fc1683b70731ece2",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_64376/reference.png": "481aab21dd8d7a6f394b9f57c57b2bbeb1f9d4f74a35619a81e117c23632ac4b",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_61908/reference.png": "fc0f9a94113f96eea82fba07dbb05a49038dd3b98ea705d7ceb7e92bc360196e",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_62644/reference.png": "515967b15f41a0aabc098a9081734bca3456c2aeb333bb416f9a4080b13ba709",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_64919/reference.png": "6d0580d7afb3a377a550a3c12d898b3a9b77f9385dbc9b339f794c588c596210",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_65817/reference.png": "640a40190c00ea001e6a375732e9eb089e8a2afc0b2124d13e8cb8fcdcbf6dfa",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_67140/reference.png": "6c3e7d3bb3da9adcf36d684c573228870771674d996b4bc3b09184b72dce76ab",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_60764/reference.png": "481eacfa34bb430ab7655beef6bd73bab36e6006efada05543611816b45dcf18",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_68335/reference.png": "f22172802e0d5a8c04f4069cf10d22d6b149b1b90ee2301bee1e4ec0839e9ed1",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_64376/e4e_age_scale_0.png": "a4d44700a31045700c4fe17d782c51447f3e5f3bcd85ff7e7baad6ae742752e2",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_64376/e4e_age_scale_5.png": "8bd8a9a4236d589864805ea502eacbd04df53cf9db3dfce204da71ec7014f5ad",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_64376/e4e_age_scale_7.5.png": "a1be714805c2bbd00b56828035866d7b47be961fccbab4c334b2915207c3a2cd",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_64376/e4e_age_scale_10.png": "4577162bd45a6fad507501e163ceec19e6802b56e719de030dc995c455df639b",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_61908/e4e_age_scale_0.png": "6532350328f8222aa002a466fec9b9eaacc2c98a0fb1ef78a074c81ef32893e5",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_61908/e4e_age_scale_5.png": "0a2e60c54dbbcdd0dea388ad61c213373ba32bb95898a0229e2be76c64166263",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_61908/e4e_age_scale_7.5.png": "8bfa7dbecc5594d7a12c3b663d89cd4cb91c59a0904d001748659a43457c65ef",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_61908/e4e_age_scale_10.png": "17b1066a73d05c2eaab96d456180899548a21043d1247b08d77528a9f508a40b",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_62644/e4e_age_scale_0.png": "9fead4ed27a5b177a6085fb378a1f806d438783aa9d3a30913b5b0ac4016fcb9",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_62644/e4e_age_scale_5.png": "abec297314f2373c2fe29a606596ece699b524c0307f56192341d6750e8f7d60",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_62644/e4e_age_scale_7.5.png": "36d6f5bbdc1887ba156ee2639a83abb07346718dc66aa76c52173f8fce01daa7",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_62644/e4e_age_scale_10.png": "649d6f964a9dfdc3302e05157ac2c90ea407f3341823d6518d627e9cd562dff5",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_64919/e4e_age_scale_0.png": "fb193a9a5e5b08b6d7ef8382bd3bc3ceceacbb0108ef3dd92fd6f28b851b1ccc",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_64919/e4e_age_scale_5.png": "bfe455018eef3ea1238420ccdf6cfa4b43371fb2b7446ba6b9b3ca412fdef937",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_64919/e4e_age_scale_7.5.png": "774ac2f579724882a68ff4054de6a56e85d67e567ed52a8c0e80aac51ae44f31",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_64919/e4e_age_scale_10.png": "35d309bcc0279a486b01379191b6826fccc6a47feb06a5645a86c92a2341b619",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_65817/e4e_age_scale_0.png": "33d98b24f9cfd52634c296d5e80140790c56f895fdfaef21392a81c47492c741",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_65817/e4e_age_scale_5.png": "be043d12bb7faf7fe8ef99ec1509f3ea568b91a7dd81d995afd4a69954b98249",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_65817/e4e_age_scale_7.5.png": "65993b75a1ac2914591030baaee6f59091dbd5166ac9ceb5ca877628b2cdacc0",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_65817/e4e_age_scale_10.png": "b8e4c84e0106216e98b37e632ff235e18884d22c0e54d18138c1be2e9398df4e",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_67140/e4e_age_scale_0.png": "71c78f2d006e73228b5f24152a628c33bcca78651fbbfadb19820b59ba048312",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_67140/e4e_age_scale_5.png": "14b08b210417129d61b1fb03d836e7a8c8832caa9f0171f6b66dafc634254966",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_67140/e4e_age_scale_7.5.png": "1445c0b9b1ec2898eac0cbb22e415119f51f67406eec0630a168b52ecaa860d3",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_67140/e4e_age_scale_10.png": "753501b317b0e814966816c2b42a45e7a96305481fdfa4cc3632934fcc7f826d",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_60764/e4e_age_scale_0.png": "2bcedae3ce3b3ac511f119de663d2f6e6800c1fca72aff4c3a04927c16af0b0a",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_60764/e4e_age_scale_5.png": "60c63718c4cf4b5d8ddd6e20815ef17cbacd436ff6e1bc494bd88c962b38a23e",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_60764/e4e_age_scale_7.5.png": "5c713377c210b52ba7f595f1e058082d8a2cfba04603129f8901f97e819f533b",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_60764/e4e_age_scale_10.png": "5cadfeadc304468f1fcce533d36c8f9cf6afac14cf9c1bda83439c460972cad7",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_68335/e4e_age_scale_0.png": "a6f094ade94e103fe1e4f20ca597b4e0597208b34d4bac183d2db9c3b1c732c1",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_68335/e4e_age_scale_5.png": "f709082ee4495c261b6a29698fddd57bef516a2634958d22a7a351b49253136b",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_68335/e4e_age_scale_7.5.png": "0941a821d32f1b515b9f1c99780458fc915d7c08db5e41a20b366e25e92bbc9a",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_68335/e4e_age_scale_10.png": "6be2146b224eaa9b175822dc14b09d14110b6074cc305d158407887713c874ab",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074348/source/run_sfe.sh": "dfba84a717119a340463f020a544f775a66f696355f92e6732950011e547922f"
+      },
+      "model_specs": [
+        {
+          "name": "e4e_ffhq_encode.pt",
+          "bytes": 1201649680,
+          "sha256": "2ace1d9a8c05c10a399bcd500b8dda118f759ff1aac89dbdab7435f2136a0999",
+          "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+          "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+          "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/e4e_ffhq_encode.pt",
+          "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+          "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+          "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+        },
+        {
+          "name": "sfe_editor_light.pt",
+          "bytes": 649325957,
+          "sha256": "ced3e79813ec6ff1418404576cc43e3c92849ab124ec87cd72be42dcb25311ea",
+          "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+          "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+          "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/sfe_editor_light.pt",
+          "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+          "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+          "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+        },
+        {
+          "name": "stylegan2-ffhq-config-f.pt",
+          "bytes": 381462551,
+          "sha256": "bae494ef77e32a9cd1792a81a3c167692a0e64f6bcd8b06592ff42917e2ed46e",
+          "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+          "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+          "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/stylegan2-ffhq-config-f.pt",
+          "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+          "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+          "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+        }
+      ],
+      "worker_seconds": 73.07484594546258,
+      "device": {
+        "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+        "torch": "2.6.0+cu124",
+        "cuda": "12.4",
+        "gpu": "NVIDIA H200",
+        "device_count": 1,
+        "peak_bytes": 2683320832
+      },
+      "inference_timing": {
+        "correction_calls": 64,
+        "mean_seconds": 0.037916982400929555,
+        "min_seconds": 0.03767215460538864,
+        "max_seconds": 0.03844659961760044,
+        "note": "Correction decoder-only timing after inversion, excludes PNG/color/SFace/queue/container setup. Reused baseline has no new inference timing."
+      },
+      "report_sha256": "9ffb0c7699a68d101afc78014bcba624a8631eb23997e1f36b5daf16c02496bc",
+      "summary": {
+        "groups": {
+          "projected_e4e/scale_0": {
+            "cases": 8,
+            "identity": 0.6746762469410896,
+            "independent_age": 43.29910755157471,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "source_channels_50/scale_0": {
+            "cases": 8,
+            "identity": 0.6746762469410896,
+            "independent_age": 43.29910755157471,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "source_channels_100/scale_0": {
+            "cases": 8,
+            "identity": 0.6746762469410896,
+            "independent_age": 43.29910755157471,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "projected_e4e/scale_5": {
+            "cases": 8,
+            "identity": 0.5233742669224739,
+            "independent_age": 58.97138261795044,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "source_channels_50/scale_5": {
+            "cases": 8,
+            "identity": 0.5298409909009933,
+            "independent_age": 58.776917457580566,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "source_channels_100/scale_5": {
+            "cases": 8,
+            "identity": 0.5347397811710835,
+            "independent_age": 59.0413498878479,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "projected_e4e/scale_7.5": {
+            "cases": 8,
+            "identity": 0.424404788762331,
+            "independent_age": 65.08694791793823,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "source_channels_50/scale_7.5": {
+            "cases": 8,
+            "identity": 0.4179070070385933,
+            "independent_age": 65.1680793762207,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "source_channels_100/scale_7.5": {
+            "cases": 8,
+            "identity": 0.4231496937572956,
+            "independent_age": 65.19009160995483,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "projected_e4e/scale_10": {
+            "cases": 8,
+            "identity": 0.3506539650261402,
+            "independent_age": 70.24367570877075,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "source_channels_50/scale_10": {
+            "cases": 8,
+            "identity": 0.3611436076462269,
+            "independent_age": 70.15260219573975,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "source_channels_100/scale_10": {
+            "cases": 8,
+            "identity": 0.36357657611370087,
+            "independent_age": 70.12927150726318,
+            "target_proxy_mae": null,
+            "missing": 0
+          }
+        },
+        "aggregate": {
+          "projected_e4e": {
+            "identity": 0.4932773169130087,
+            "span20to75": null,
+            "nonmonotonic_pairs": 0,
+            "target_proxy_mae": null,
+            "older_younger_proxy_mae": null,
+            "missing": 0
+          },
+          "source_channels_50": {
+            "identity": 0.4958919631317258,
+            "span20to75": null,
+            "nonmonotonic_pairs": 0,
+            "target_proxy_mae": null,
+            "older_younger_proxy_mae": null,
+            "missing": 0
+          },
+          "source_channels_100": {
+            "identity": 0.4990355744957924,
+            "span20to75": null,
+            "nonmonotonic_pairs": 0,
+            "target_proxy_mae": null,
+            "older_younger_proxy_mae": null,
+            "missing": 0
+          }
+        },
+        "source_ages": {
+          "ffhq_64376": 24.617202758789062,
+          "ffhq_61908": 31.332361221313477,
+          "ffhq_62644": 24.25365447998047,
+          "ffhq_64919": 49.32725143432617,
+          "ffhq_65817": 27.923721313476562,
+          "ffhq_67140": 81.6224594116211,
+          "ffhq_60764": 68.67528533935547,
+          "ffhq_68335": 85.07337951660156
+        },
+        "original_groups": {},
+        "promotion": false,
+        "visual_review_pending": true,
+        "targets_not_calibrated": true
+      },
+      "attribute_comparisons": {
+        "source_channels_50": {
+          "age_change": -0.06813573837280273,
+          "mean_abs_age_change": 0.39223941167195636,
+          "identity_change": 0.0034861949582894645,
+          "identity_worst_change": -0.02414765954017639,
+          "identity_drop_gt002": 1,
+          "age_span_ratio": 0.9937945491899631
+        },
+        "source_channels_100": {
+          "age_change": 0.019568920135498047,
+          "mean_abs_age_change": 0.6830128033955892,
+          "identity_change": 0.007677676777044932,
+          "identity_worst_change": -0.01739296317100525,
+          "identity_drop_gt002": 0,
+          "age_span_ratio": 0.9979334015375122
+        }
+      },
+      "validation": {
+        "raw": 96,
+        "color": 96,
+        "size": [
+          1024,
+          1024
+        ],
+        "all_decodable": true,
+        "raw_hashes_verified": true
+      },
+      "browser": {
+        "url": "http://127.0.0.1:65512/age-e4e-glasses-review/",
+        "status": 200,
+        "cases": 8,
+        "conditions": 4,
+        "all_conditions_switch": true,
+        "all_cases_switch": true,
+        "color_switch": true,
+        "native_crop": true,
+        "download": [
+          1024,
+          1024
+        ],
+        "mobile_width": 390,
+        "errors": []
+      },
+      "parity": {
+        "checks": [
+          {
+            "name": "ffhq_64376",
+            "scale": 0.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_64376",
+            "scale": 5.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_64376",
+            "scale": 7.5,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_64376",
+            "scale": 10.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_61908",
+            "scale": 0.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_61908",
+            "scale": 5.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_61908",
+            "scale": 7.5,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_61908",
+            "scale": 10.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_62644",
+            "scale": 0.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_62644",
+            "scale": 5.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_62644",
+            "scale": 7.5,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_62644",
+            "scale": 10.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_64919",
+            "scale": 0.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_64919",
+            "scale": 5.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_64919",
+            "scale": 7.5,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_64919",
+            "scale": 10.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_65817",
+            "scale": 0.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_65817",
+            "scale": 5.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_65817",
+            "scale": 7.5,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_65817",
+            "scale": 10.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_67140",
+            "scale": 0.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_67140",
+            "scale": 5.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_67140",
+            "scale": 7.5,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_67140",
+            "scale": 10.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_60764",
+            "scale": 0.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_60764",
+            "scale": 5.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_60764",
+            "scale": 7.5,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_60764",
+            "scale": 10.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_68335",
+            "scale": 0.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_68335",
+            "scale": 5.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_68335",
+            "scale": 7.5,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_68335",
+            "scale": 10.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          }
+        ],
+        "exact": true
+      },
+      "repeatability": {
+        "checks": [
+          {
+            "name": "ffhq_64376",
+            "scale": 10.0,
+            "alpha": 1.0,
+            "pixels_equal": true
+          }
+        ],
+        "equal": true
+      },
+      "frozen_verification": {
+        "before": "1954247285ae9fba47131adc84631540ce87460a00a16d5353654a7d7c43132f",
+        "after": "1954247285ae9fba47131adc84631540ce87460a00a16d5353654a7d7c43132f",
+        "equal": true
+      },
+      "independent_age_json_sha256": "1dce1ced91db478735670b9620cd71084369b32ed984e064ea87c5f29bbb31c4",
+      "baseline_age_reused": 32,
+      "raw_outputs": 96,
+      "color_outputs": 96,
+      "output_records": [
+        {
+          "name": "ffhq_64376",
+          "route": "projected_e4e",
+          "scale": 0.0,
+          "raw_sha256": "a4d44700a31045700c4fe17d782c51447f3e5f3bcd85ff7e7baad6ae742752e2",
+          "color_sha256": "a4d44700a31045700c4fe17d782c51447f3e5f3bcd85ff7e7baad6ae742752e2",
+          "identity": 0.7008810043334961,
+          "independent_apparent_age": 23.379596710205078
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "source_channels_50",
+          "scale": 0.0,
+          "raw_sha256": "a4d44700a31045700c4fe17d782c51447f3e5f3bcd85ff7e7baad6ae742752e2",
+          "color_sha256": "a4d44700a31045700c4fe17d782c51447f3e5f3bcd85ff7e7baad6ae742752e2",
+          "identity": 0.7008810043334961,
+          "independent_apparent_age": 23.379596710205078
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "source_channels_100",
+          "scale": 0.0,
+          "raw_sha256": "a4d44700a31045700c4fe17d782c51447f3e5f3bcd85ff7e7baad6ae742752e2",
+          "color_sha256": "a4d44700a31045700c4fe17d782c51447f3e5f3bcd85ff7e7baad6ae742752e2",
+          "identity": 0.7008810043334961,
+          "independent_apparent_age": 23.379596710205078
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "projected_e4e",
+          "scale": 5.0,
+          "raw_sha256": "8bd8a9a4236d589864805ea502eacbd04df53cf9db3dfce204da71ec7014f5ad",
+          "color_sha256": "8bd8a9a4236d589864805ea502eacbd04df53cf9db3dfce204da71ec7014f5ad",
+          "identity": 0.5958218574523926,
+          "independent_apparent_age": 44.33268737792969
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "source_channels_50",
+          "scale": 5.0,
+          "raw_sha256": "f6c4d05eea0fab937605f0505fbe2b4f1206cea8f647f43160eda4c55537e56e",
+          "color_sha256": "f6c4d05eea0fab937605f0505fbe2b4f1206cea8f647f43160eda4c55537e56e",
+          "identity": 0.5925813913345337,
+          "independent_apparent_age": 44.27696990966797
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "source_channels_100",
+          "scale": 5.0,
+          "raw_sha256": "429409bdb8610ea53fddd2a6d6d4391fa52b984f33c435d750e4bec785b2e91e",
+          "color_sha256": "429409bdb8610ea53fddd2a6d6d4391fa52b984f33c435d750e4bec785b2e91e",
+          "identity": 0.5966402292251587,
+          "independent_apparent_age": 44.217002868652344
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "projected_e4e",
+          "scale": 7.5,
+          "raw_sha256": "a1be714805c2bbd00b56828035866d7b47be961fccbab4c334b2915207c3a2cd",
+          "color_sha256": "a1be714805c2bbd00b56828035866d7b47be961fccbab4c334b2915207c3a2cd",
+          "identity": 0.49152660369873047,
+          "independent_apparent_age": 55.00068664550781
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "source_channels_50",
+          "scale": 7.5,
+          "raw_sha256": "469aa19e12ab1df2f96692d460f11564b7aaaf0dcd59ac9ce49465f8ef69c3cd",
+          "color_sha256": "469aa19e12ab1df2f96692d460f11564b7aaaf0dcd59ac9ce49465f8ef69c3cd",
+          "identity": 0.48065876960754395,
+          "independent_apparent_age": 54.399131774902344
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "source_channels_100",
+          "scale": 7.5,
+          "raw_sha256": "298ad91646f142ff6cc6aa909eb7483d1e1fe86427972436656be2d610b58ae2",
+          "color_sha256": "298ad91646f142ff6cc6aa909eb7483d1e1fe86427972436656be2d610b58ae2",
+          "identity": 0.5007755756378174,
+          "independent_apparent_age": 54.043052673339844
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "projected_e4e",
+          "scale": 10.0,
+          "raw_sha256": "4577162bd45a6fad507501e163ceec19e6802b56e719de030dc995c455df639b",
+          "color_sha256": "ba6f01fa093291d91cf92013668db9922d8f80987d189831cd9ea370236eedfd",
+          "identity": 0.38318347930908203,
+          "independent_apparent_age": 64.27365112304688
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "source_channels_50",
+          "scale": 10.0,
+          "raw_sha256": "1c4d79e12549cfe6b17ad29eef3767d8496b764a87ecbfb722919483761045a8",
+          "color_sha256": "32c41ae37d3ebc4eeebab4b5c1261216b1533fb85f3bb998a1390d1fac6dab25",
+          "identity": 0.3890632092952728,
+          "independent_apparent_age": 64.42198944091797
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "source_channels_100",
+          "scale": 10.0,
+          "raw_sha256": "98dfbf46855247a57822f36edc50bfaeeece52f6113fc33238568adae698e28a",
+          "color_sha256": "0803b80b9dc223b13ac97f1b6d2efc8cbf718025345747edf296d918b15f13a2",
+          "identity": 0.4179963767528534,
+          "independent_apparent_age": 63.31111526489258
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "projected_e4e",
+          "scale": 0.0,
+          "raw_sha256": "6532350328f8222aa002a466fec9b9eaacc2c98a0fb1ef78a074c81ef32893e5",
+          "color_sha256": "b36e960d49140963e2f29bbdc6671c4564258c76d23fe1b1c4b5f5a97f626aaa",
+          "identity": 0.7277829647064209,
+          "independent_apparent_age": 31.924442291259766
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "source_channels_50",
+          "scale": 0.0,
+          "raw_sha256": "6532350328f8222aa002a466fec9b9eaacc2c98a0fb1ef78a074c81ef32893e5",
+          "color_sha256": "b36e960d49140963e2f29bbdc6671c4564258c76d23fe1b1c4b5f5a97f626aaa",
+          "identity": 0.7277829647064209,
+          "independent_apparent_age": 31.924442291259766
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "source_channels_100",
+          "scale": 0.0,
+          "raw_sha256": "6532350328f8222aa002a466fec9b9eaacc2c98a0fb1ef78a074c81ef32893e5",
+          "color_sha256": "b36e960d49140963e2f29bbdc6671c4564258c76d23fe1b1c4b5f5a97f626aaa",
+          "identity": 0.7277829647064209,
+          "independent_apparent_age": 31.924442291259766
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "projected_e4e",
+          "scale": 5.0,
+          "raw_sha256": "0a2e60c54dbbcdd0dea388ad61c213373ba32bb95898a0229e2be76c64166263",
+          "color_sha256": "0a2e60c54dbbcdd0dea388ad61c213373ba32bb95898a0229e2be76c64166263",
+          "identity": 0.5555287003517151,
+          "independent_apparent_age": 51.07002258300781
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "source_channels_50",
+          "scale": 5.0,
+          "raw_sha256": "8a3aa26b924c817900516ef216b70691ac18392dbbfe6ba298c172b6d64a8db0",
+          "color_sha256": "4dd3d03ac38a76fc31342426403f1629d15c106a7cdd7ccfbc5c53be7bf55bec",
+          "identity": 0.5988463163375854,
+          "independent_apparent_age": 51.083099365234375
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "source_channels_100",
+          "scale": 5.0,
+          "raw_sha256": "efe5d388ab8e277f4534fbde88b9c92c09a8942fe937325aebf9228fffef5baf",
+          "color_sha256": "798b6cccfe22eda5e02c56ca486e00c4677fcec408f5c93c1b4bf6238060a36d",
+          "identity": 0.5930439829826355,
+          "independent_apparent_age": 50.986183166503906
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "projected_e4e",
+          "scale": 7.5,
+          "raw_sha256": "8bfa7dbecc5594d7a12c3b663d89cd4cb91c59a0904d001748659a43457c65ef",
+          "color_sha256": "8dc15e023f1b768d4e46ec35423e9b886bf9efe7e72aa3ee691c8b615f8e85b3",
+          "identity": 0.4020181894302368,
+          "independent_apparent_age": 59.14179611206055
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "source_channels_50",
+          "scale": 7.5,
+          "raw_sha256": "fc829961ce273b489936f8bf5cce4bd383e15d77ea6361976b353be24f48548a",
+          "color_sha256": "943b9f16a83fc110e91759c860d637f3e4b696b8a214ca060ccb140ab096985b",
+          "identity": 0.3778705298900604,
+          "independent_apparent_age": 59.114315032958984
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "source_channels_100",
+          "scale": 7.5,
+          "raw_sha256": "7c3a549acd6c0d37f4b901259135fda19467fa7b604a8168a15f71515764f072",
+          "color_sha256": "2ba739948971f9eb01b294c0368dd51095549fcaa720968884b2d0d3976f6b75",
+          "identity": 0.38462522625923157,
+          "independent_apparent_age": 59.62118148803711
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "projected_e4e",
+          "scale": 10.0,
+          "raw_sha256": "17b1066a73d05c2eaab96d456180899548a21043d1247b08d77528a9f508a40b",
+          "color_sha256": "17b1066a73d05c2eaab96d456180899548a21043d1247b08d77528a9f508a40b",
+          "identity": 0.2998213768005371,
+          "independent_apparent_age": 67.72105407714844
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "source_channels_50",
+          "scale": 10.0,
+          "raw_sha256": "c9b984ddf4724d1848c11d3be60c781fdfe1ea5942031045f42022237781eab7",
+          "color_sha256": "1fe74cb11e2d647f994ef1c115e9e932e793febea3b46c81aa7097ad4286ef3c",
+          "identity": 0.3141298294067383,
+          "independent_apparent_age": 67.8303451538086
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "source_channels_100",
+          "scale": 10.0,
+          "raw_sha256": "f15f6c1d74df6d2e9b4de73fc76e2baa53f371e42f83a30e6336c75a90dffd33",
+          "color_sha256": "a2f65268992356466f8fdb213d8e56492a04cd0e0bf0c598e0c7b8f12d009080",
+          "identity": 0.3053150177001953,
+          "independent_apparent_age": 67.64799499511719
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "projected_e4e",
+          "scale": 0.0,
+          "raw_sha256": "9fead4ed27a5b177a6085fb378a1f806d438783aa9d3a30913b5b0ac4016fcb9",
+          "color_sha256": "9fead4ed27a5b177a6085fb378a1f806d438783aa9d3a30913b5b0ac4016fcb9",
+          "identity": 0.6546516418457031,
+          "independent_apparent_age": 26.15041732788086
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "source_channels_50",
+          "scale": 0.0,
+          "raw_sha256": "9fead4ed27a5b177a6085fb378a1f806d438783aa9d3a30913b5b0ac4016fcb9",
+          "color_sha256": "9fead4ed27a5b177a6085fb378a1f806d438783aa9d3a30913b5b0ac4016fcb9",
+          "identity": 0.6546516418457031,
+          "independent_apparent_age": 26.15041732788086
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "source_channels_100",
+          "scale": 0.0,
+          "raw_sha256": "9fead4ed27a5b177a6085fb378a1f806d438783aa9d3a30913b5b0ac4016fcb9",
+          "color_sha256": "9fead4ed27a5b177a6085fb378a1f806d438783aa9d3a30913b5b0ac4016fcb9",
+          "identity": 0.6546516418457031,
+          "independent_apparent_age": 26.15041732788086
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "projected_e4e",
+          "scale": 5.0,
+          "raw_sha256": "abec297314f2373c2fe29a606596ece699b524c0307f56192341d6750e8f7d60",
+          "color_sha256": "abec297314f2373c2fe29a606596ece699b524c0307f56192341d6750e8f7d60",
+          "identity": 0.49153071641921997,
+          "independent_apparent_age": 43.168704986572266
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "source_channels_50",
+          "scale": 5.0,
+          "raw_sha256": "2ebbcad36238fe27d3fa0308597dd0d58a45176f3873bc1bfe9829967fa658a7",
+          "color_sha256": "2ebbcad36238fe27d3fa0308597dd0d58a45176f3873bc1bfe9829967fa658a7",
+          "identity": 0.5011222958564758,
+          "independent_apparent_age": 43.6169548034668
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "source_channels_100",
+          "scale": 5.0,
+          "raw_sha256": "87d8e6e5abc4a9070c25c526f73840ca743e4584c1314362be1ff1a4d6c410f2",
+          "color_sha256": "87d8e6e5abc4a9070c25c526f73840ca743e4584c1314362be1ff1a4d6c410f2",
+          "identity": 0.5219510793685913,
+          "independent_apparent_age": 46.381141662597656
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "projected_e4e",
+          "scale": 7.5,
+          "raw_sha256": "36d6f5bbdc1887ba156ee2639a83abb07346718dc66aa76c52173f8fce01daa7",
+          "color_sha256": "36d6f5bbdc1887ba156ee2639a83abb07346718dc66aa76c52173f8fce01daa7",
+          "identity": 0.3769102096557617,
+          "independent_apparent_age": 53.29793930053711
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "source_channels_50",
+          "scale": 7.5,
+          "raw_sha256": "9410d89217b99ef5573e397c19286e75711649ec9f5795c6123f0b386db5d0d0",
+          "color_sha256": "9410d89217b99ef5573e397c19286e75711649ec9f5795c6123f0b386db5d0d0",
+          "identity": 0.3790392279624939,
+          "independent_apparent_age": 52.88060760498047
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "source_channels_100",
+          "scale": 7.5,
+          "raw_sha256": "b0f8beb17633139b88fe29f0018298b79b7edbb1000836969d462db7697cb64f",
+          "color_sha256": "b0f8beb17633139b88fe29f0018298b79b7edbb1000836969d462db7697cb64f",
+          "identity": 0.379742830991745,
+          "independent_apparent_age": 53.483421325683594
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "projected_e4e",
+          "scale": 10.0,
+          "raw_sha256": "649d6f964a9dfdc3302e05157ac2c90ea407f3341823d6518d627e9cd562dff5",
+          "color_sha256": "649d6f964a9dfdc3302e05157ac2c90ea407f3341823d6518d627e9cd562dff5",
+          "identity": 0.27109968662261963,
+          "independent_apparent_age": 61.76259994506836
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "source_channels_50",
+          "scale": 10.0,
+          "raw_sha256": "5ac4b010b073a566bf01db2e75615af66cb6583ba05c78fa9f6a7d3877380806",
+          "color_sha256": "5ac4b010b073a566bf01db2e75615af66cb6583ba05c78fa9f6a7d3877380806",
+          "identity": 0.272672176361084,
+          "independent_apparent_age": 61.4175910949707
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "source_channels_100",
+          "scale": 10.0,
+          "raw_sha256": "d7e02b6c65a5cf5756c6d440a806a67dce7197cdd5d4eb5bcfdf235f046708fe",
+          "color_sha256": "d7e02b6c65a5cf5756c6d440a806a67dce7197cdd5d4eb5bcfdf235f046708fe",
+          "identity": 0.29093098640441895,
+          "independent_apparent_age": 61.62651062011719
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "projected_e4e",
+          "scale": 0.0,
+          "raw_sha256": "fb193a9a5e5b08b6d7ef8382bd3bc3ceceacbb0108ef3dd92fd6f28b851b1ccc",
+          "color_sha256": "fd3515433fbb0c3c0bf9dbd498e72ca6d869d0cd3ea47921128d20123dbe293a",
+          "identity": 0.613734245300293,
+          "independent_apparent_age": 43.89594650268555
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "source_channels_50",
+          "scale": 0.0,
+          "raw_sha256": "fb193a9a5e5b08b6d7ef8382bd3bc3ceceacbb0108ef3dd92fd6f28b851b1ccc",
+          "color_sha256": "fd3515433fbb0c3c0bf9dbd498e72ca6d869d0cd3ea47921128d20123dbe293a",
+          "identity": 0.613734245300293,
+          "independent_apparent_age": 43.89594650268555
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "source_channels_100",
+          "scale": 0.0,
+          "raw_sha256": "fb193a9a5e5b08b6d7ef8382bd3bc3ceceacbb0108ef3dd92fd6f28b851b1ccc",
+          "color_sha256": "fd3515433fbb0c3c0bf9dbd498e72ca6d869d0cd3ea47921128d20123dbe293a",
+          "identity": 0.613734245300293,
+          "independent_apparent_age": 43.89594650268555
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "projected_e4e",
+          "scale": 5.0,
+          "raw_sha256": "bfe455018eef3ea1238420ccdf6cfa4b43371fb2b7446ba6b9b3ca412fdef937",
+          "color_sha256": "aed6ceb7d1e87ba10acf44370a11a7bba41de0d90c04c2a9b4b286426be4199d",
+          "identity": 0.4653722047805786,
+          "independent_apparent_age": 65.38679504394531
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "source_channels_50",
+          "scale": 5.0,
+          "raw_sha256": "83d3abc9381421bf2edd052a59899ab4d8c6837a0c12c6bf586ca11c08fb095f",
+          "color_sha256": "269bcf75f22b0c8aa153b199eba16ec011c0429c3a883dbd899385d92e0400b6",
+          "identity": 0.45720672607421875,
+          "independent_apparent_age": 64.55561828613281
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "source_channels_100",
+          "scale": 5.0,
+          "raw_sha256": "ed922e866e061652e0a73bc42254e88c279b4f63fa0a867a24d3dfaa48bc73c7",
+          "color_sha256": "3d476ccb1ddbc92633ed78b4c39c62958b83c2562b80a6421afbe053b0c7c769",
+          "identity": 0.48791250586509705,
+          "independent_apparent_age": 63.830528259277344
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "projected_e4e",
+          "scale": 7.5,
+          "raw_sha256": "774ac2f579724882a68ff4054de6a56e85d67e567ed52a8c0e80aac51ae44f31",
+          "color_sha256": "b73c9e08b8ffbd25626a3da1e9c0e788be25b9879624f3edb749f499307192a6",
+          "identity": 0.42276355624198914,
+          "independent_apparent_age": 68.08228302001953
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "source_channels_50",
+          "scale": 7.5,
+          "raw_sha256": "020d8f5499ff0ff31306d8599d2719ae34f8385ecfc20743c3d543e62a756fdb",
+          "color_sha256": "03e4ece7ddac6eb305b74a4d34e7eefc1768acfb609495e7b24af96c5cfc8e09",
+          "identity": 0.41342225670814514,
+          "independent_apparent_age": 68.4017333984375
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "source_channels_100",
+          "scale": 7.5,
+          "raw_sha256": "11e915b3e95c0836712d3bb890827612f3c7745db147fe089c8550c2e8214ee0",
+          "color_sha256": "03fa141b9d9498072477230a701656e9a5959666a2431ec1a6d5c04a6cc6259d",
+          "identity": 0.4072079360485077,
+          "independent_apparent_age": 68.45780181884766
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "projected_e4e",
+          "scale": 10.0,
+          "raw_sha256": "35d309bcc0279a486b01379191b6826fccc6a47feb06a5645a86c92a2341b619",
+          "color_sha256": "4e446e8a881d46d53c6f4d83cf04bcf3e729603a7c95efb97293c0d7eab7ca72",
+          "identity": 0.4073714315891266,
+          "independent_apparent_age": 72.74861907958984
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "source_channels_50",
+          "scale": 10.0,
+          "raw_sha256": "4954705151ff7c7ba03ff487705da2bf856916235a6b8d4a19fc3e3ef194c0e1",
+          "color_sha256": "7e260653db05807d6631c81c74b07b488d7662e9972e1d9f9c53a4552ef7a2d3",
+          "identity": 0.40376973152160645,
+          "independent_apparent_age": 72.41546630859375
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "source_channels_100",
+          "scale": 10.0,
+          "raw_sha256": "a1d4d842f1e2517b07be1fd7a9b12462895868212803bf0f8fb3174ef42056b3",
+          "color_sha256": "5593846853b2e58d25fc66612a1e88806d421921b9944c4726ff4772bd451f3e",
+          "identity": 0.39575856924057007,
+          "independent_apparent_age": 72.17448425292969
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "projected_e4e",
+          "scale": 0.0,
+          "raw_sha256": "33d98b24f9cfd52634c296d5e80140790c56f895fdfaef21392a81c47492c741",
+          "color_sha256": "33d98b24f9cfd52634c296d5e80140790c56f895fdfaef21392a81c47492c741",
+          "identity": 0.6925700306892395,
+          "independent_apparent_age": 28.597278594970703
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "source_channels_50",
+          "scale": 0.0,
+          "raw_sha256": "33d98b24f9cfd52634c296d5e80140790c56f895fdfaef21392a81c47492c741",
+          "color_sha256": "33d98b24f9cfd52634c296d5e80140790c56f895fdfaef21392a81c47492c741",
+          "identity": 0.6925700306892395,
+          "independent_apparent_age": 28.597278594970703
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "source_channels_100",
+          "scale": 0.0,
+          "raw_sha256": "33d98b24f9cfd52634c296d5e80140790c56f895fdfaef21392a81c47492c741",
+          "color_sha256": "33d98b24f9cfd52634c296d5e80140790c56f895fdfaef21392a81c47492c741",
+          "identity": 0.6925700306892395,
+          "independent_apparent_age": 28.597278594970703
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "projected_e4e",
+          "scale": 5.0,
+          "raw_sha256": "be043d12bb7faf7fe8ef99ec1509f3ea568b91a7dd81d995afd4a69954b98249",
+          "color_sha256": "be043d12bb7faf7fe8ef99ec1509f3ea568b91a7dd81d995afd4a69954b98249",
+          "identity": 0.53077232837677,
+          "independent_apparent_age": 39.011756896972656
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "source_channels_50",
+          "scale": 5.0,
+          "raw_sha256": "04dc0559518005bef229b5d8027247fb2ee74240cf21068594e46f573518828f",
+          "color_sha256": "04dc0559518005bef229b5d8027247fb2ee74240cf21068594e46f573518828f",
+          "identity": 0.5335996150970459,
+          "independent_apparent_age": 39.40927505493164
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "source_channels_100",
+          "scale": 5.0,
+          "raw_sha256": "dd245d8c3cf25bacfae559115fa302d9fe2e75e6f2db84cd7e8cb1135633bf34",
+          "color_sha256": "dd245d8c3cf25bacfae559115fa302d9fe2e75e6f2db84cd7e8cb1135633bf34",
+          "identity": 0.5304666757583618,
+          "independent_apparent_age": 39.74513626098633
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "projected_e4e",
+          "scale": 7.5,
+          "raw_sha256": "65993b75a1ac2914591030baaee6f59091dbd5166ac9ceb5ca877628b2cdacc0",
+          "color_sha256": "65993b75a1ac2914591030baaee6f59091dbd5166ac9ceb5ca877628b2cdacc0",
+          "identity": 0.4185400605201721,
+          "independent_apparent_age": 50.80606460571289
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "source_channels_50",
+          "scale": 7.5,
+          "raw_sha256": "c273b2cd1870e07366b0a61f93f93a9a4142e715d86d9dcff25e9d6f85f31ec2",
+          "color_sha256": "c273b2cd1870e07366b0a61f93f93a9a4142e715d86d9dcff25e9d6f85f31ec2",
+          "identity": 0.4148125648498535,
+          "independent_apparent_age": 51.25748825073242
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "source_channels_100",
+          "scale": 7.5,
+          "raw_sha256": "43adbf051c137964c5102d75411b6baf119aefb4ce5e9045029c1351f4b82899",
+          "color_sha256": "43adbf051c137964c5102d75411b6baf119aefb4ce5e9045029c1351f4b82899",
+          "identity": 0.41504645347595215,
+          "independent_apparent_age": 50.871910095214844
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "projected_e4e",
+          "scale": 10.0,
+          "raw_sha256": "b8e4c84e0106216e98b37e632ff235e18884d22c0e54d18138c1be2e9398df4e",
+          "color_sha256": "ce7f44c347200a5ca985fa32b75b3d7b4e0f37840647b7db762bf8d031ff77cf",
+          "identity": 0.30576062202453613,
+          "independent_apparent_age": 57.062225341796875
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "source_channels_50",
+          "scale": 10.0,
+          "raw_sha256": "d6ddc6a10accb408f66431b7d559dfa450eb8a6fb4a524735974d9c59acce4f1",
+          "color_sha256": "f56cd411db62c8194e5a5d12ac80f0859968915888fbdb78f942dfe3b3d02e9a",
+          "identity": 0.3235786557197571,
+          "independent_apparent_age": 57.52065658569336
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "source_channels_100",
+          "scale": 10.0,
+          "raw_sha256": "b911078f3417326326cc4fa4cde02310e4623c0dbd360d5b1b4cbcd05191f630",
+          "color_sha256": "b911078f3417326326cc4fa4cde02310e4623c0dbd360d5b1b4cbcd05191f630",
+          "identity": 0.32921501994132996,
+          "independent_apparent_age": 57.84933853149414
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "projected_e4e",
+          "scale": 0.0,
+          "raw_sha256": "71c78f2d006e73228b5f24152a628c33bcca78651fbbfadb19820b59ba048312",
+          "color_sha256": "71c78f2d006e73228b5f24152a628c33bcca78651fbbfadb19820b59ba048312",
+          "identity": 0.6695294380187988,
+          "independent_apparent_age": 66.84276580810547
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "source_channels_50",
+          "scale": 0.0,
+          "raw_sha256": "71c78f2d006e73228b5f24152a628c33bcca78651fbbfadb19820b59ba048312",
+          "color_sha256": "71c78f2d006e73228b5f24152a628c33bcca78651fbbfadb19820b59ba048312",
+          "identity": 0.6695294380187988,
+          "independent_apparent_age": 66.84276580810547
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "source_channels_100",
+          "scale": 0.0,
+          "raw_sha256": "71c78f2d006e73228b5f24152a628c33bcca78651fbbfadb19820b59ba048312",
+          "color_sha256": "71c78f2d006e73228b5f24152a628c33bcca78651fbbfadb19820b59ba048312",
+          "identity": 0.6695294380187988,
+          "independent_apparent_age": 66.84276580810547
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "projected_e4e",
+          "scale": 5.0,
+          "raw_sha256": "14b08b210417129d61b1fb03d836e7a8c8832caa9f0171f6b66dafc634254966",
+          "color_sha256": "14b08b210417129d61b1fb03d836e7a8c8832caa9f0171f6b66dafc634254966",
+          "identity": 0.5283379554748535,
+          "independent_apparent_age": 78.228515625
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "source_channels_50",
+          "scale": 5.0,
+          "raw_sha256": "6f520efa094094faf0b829598d27f1c9e58aac79bcede16a8a8c87900ce887e1",
+          "color_sha256": "6f520efa094094faf0b829598d27f1c9e58aac79bcede16a8a8c87900ce887e1",
+          "identity": 0.5350871086120605,
+          "independent_apparent_age": 78.64976501464844
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "source_channels_100",
+          "scale": 5.0,
+          "raw_sha256": "b0a94370b5928e39b4c479712b1f4766c224ca306ac29a37c1a5299a3319f540",
+          "color_sha256": "b0a94370b5928e39b4c479712b1f4766c224ca306ac29a37c1a5299a3319f540",
+          "identity": 0.5293378233909607,
+          "independent_apparent_age": 78.70164489746094
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "projected_e4e",
+          "scale": 7.5,
+          "raw_sha256": "1445c0b9b1ec2898eac0cbb22e415119f51f67406eec0630a168b52ecaa860d3",
+          "color_sha256": "1445c0b9b1ec2898eac0cbb22e415119f51f67406eec0630a168b52ecaa860d3",
+          "identity": 0.5025956034660339,
+          "independent_apparent_age": 81.10237884521484
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "source_channels_50",
+          "scale": 7.5,
+          "raw_sha256": "1d754322fe7a37cace3ebbf79bdc6d2ace81a772ba7f01b0f620055174914151",
+          "color_sha256": "1d754322fe7a37cace3ebbf79bdc6d2ace81a772ba7f01b0f620055174914151",
+          "identity": 0.5041191577911377,
+          "independent_apparent_age": 81.14080047607422
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "source_channels_100",
+          "scale": 7.5,
+          "raw_sha256": "fb6ce182ffaa1283fedd97a242add4fbcc6c24834cd5f00b97891c47d8d962c3",
+          "color_sha256": "fb6ce182ffaa1283fedd97a242add4fbcc6c24834cd5f00b97891c47d8d962c3",
+          "identity": 0.5025312304496765,
+          "independent_apparent_age": 81.15858459472656
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "projected_e4e",
+          "scale": 10.0,
+          "raw_sha256": "753501b317b0e814966816c2b42a45e7a96305481fdfa4cc3632934fcc7f826d",
+          "color_sha256": "753501b317b0e814966816c2b42a45e7a96305481fdfa4cc3632934fcc7f826d",
+          "identity": 0.43738436698913574,
+          "independent_apparent_age": 82.8065185546875
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "source_channels_50",
+          "scale": 10.0,
+          "raw_sha256": "454026a273a9637f12a5d0c43f6ec33e1ab3221338013f3f0a4b64529bf3c23d",
+          "color_sha256": "454026a273a9637f12a5d0c43f6ec33e1ab3221338013f3f0a4b64529bf3c23d",
+          "identity": 0.45360538363456726,
+          "independent_apparent_age": 82.60414123535156
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "source_channels_100",
+          "scale": 10.0,
+          "raw_sha256": "99596489a83c5870636bc4371a430394324ad55b026f60054320cf2d454c85cc",
+          "color_sha256": "99596489a83c5870636bc4371a430394324ad55b026f60054320cf2d454c85cc",
+          "identity": 0.4327492117881775,
+          "independent_apparent_age": 82.32720947265625
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "projected_e4e",
+          "scale": 0.0,
+          "raw_sha256": "2bcedae3ce3b3ac511f119de663d2f6e6800c1fca72aff4c3a04927c16af0b0a",
+          "color_sha256": "2bcedae3ce3b3ac511f119de663d2f6e6800c1fca72aff4c3a04927c16af0b0a",
+          "identity": 0.6456177234649658,
+          "independent_apparent_age": 65.08773040771484
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "source_channels_50",
+          "scale": 0.0,
+          "raw_sha256": "2bcedae3ce3b3ac511f119de663d2f6e6800c1fca72aff4c3a04927c16af0b0a",
+          "color_sha256": "2bcedae3ce3b3ac511f119de663d2f6e6800c1fca72aff4c3a04927c16af0b0a",
+          "identity": 0.6456177234649658,
+          "independent_apparent_age": 65.08773040771484
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "source_channels_100",
+          "scale": 0.0,
+          "raw_sha256": "2bcedae3ce3b3ac511f119de663d2f6e6800c1fca72aff4c3a04927c16af0b0a",
+          "color_sha256": "2bcedae3ce3b3ac511f119de663d2f6e6800c1fca72aff4c3a04927c16af0b0a",
+          "identity": 0.6456177234649658,
+          "independent_apparent_age": 65.08773040771484
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "projected_e4e",
+          "scale": 5.0,
+          "raw_sha256": "60c63718c4cf4b5d8ddd6e20815ef17cbacd436ff6e1bc494bd88c962b38a23e",
+          "color_sha256": "60c63718c4cf4b5d8ddd6e20815ef17cbacd436ff6e1bc494bd88c962b38a23e",
+          "identity": 0.35712701082229614,
+          "independent_apparent_age": 74.10110473632812
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "source_channels_50",
+          "scale": 5.0,
+          "raw_sha256": "49bdcc4a6be21a87e1394b28faab7761ac5a1ae08833e89036f1acaca23c7081",
+          "color_sha256": "49bdcc4a6be21a87e1394b28faab7761ac5a1ae08833e89036f1acaca23c7081",
+          "identity": 0.3644121289253235,
+          "independent_apparent_age": 74.21513366699219
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "source_channels_100",
+          "scale": 5.0,
+          "raw_sha256": "95dbda051f25292724588acde1475b1a760750664913a06a6067d07277511175",
+          "color_sha256": "95dbda051f25292724588acde1475b1a760750664913a06a6067d07277511175",
+          "identity": 0.36500734090805054,
+          "independent_apparent_age": 74.641357421875
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "projected_e4e",
+          "scale": 7.5,
+          "raw_sha256": "5c713377c210b52ba7f595f1e058082d8a2cfba04603129f8901f97e819f533b",
+          "color_sha256": "43d76e30ddb6ec1b8232f35728d725618e3e7f7f98a6df97dda73c4aca06c2a5",
+          "identity": 0.3108319044113159,
+          "independent_apparent_age": 76.44247436523438
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "source_channels_50",
+          "scale": 7.5,
+          "raw_sha256": "dbae914cee8909a839824a20af52ba079bc3f1fe24e420195a4c875529a1a349",
+          "color_sha256": "81facfab507797d8e11ce376005b98515acf10f00660e45ddd35e426018760bc",
+          "identity": 0.315377414226532,
+          "independent_apparent_age": 76.98323059082031
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "source_channels_100",
+          "scale": 7.5,
+          "raw_sha256": "1f3b55fc3e76698b49ea1b861fca24855c758b78bd88437decbc9f39310bbd47",
+          "color_sha256": "1f3b55fc3e76698b49ea1b861fca24855c758b78bd88437decbc9f39310bbd47",
+          "identity": 0.3012286424636841,
+          "independent_apparent_age": 77.44192504882812
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "projected_e4e",
+          "scale": 10.0,
+          "raw_sha256": "5cadfeadc304468f1fcce533d36c8f9cf6afac14cf9c1bda83439c460972cad7",
+          "color_sha256": "5cadfeadc304468f1fcce533d36c8f9cf6afac14cf9c1bda83439c460972cad7",
+          "identity": 0.2559601962566376,
+          "independent_apparent_age": 79.808837890625
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "source_channels_50",
+          "scale": 10.0,
+          "raw_sha256": "83a02c82169696270d4faa9ea4d603e655adf1508dbfeb450411df790e2e04c8",
+          "color_sha256": "83a02c82169696270d4faa9ea4d603e655adf1508dbfeb450411df790e2e04c8",
+          "identity": 0.27780741453170776,
+          "independent_apparent_age": 79.16108703613281
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "source_channels_100",
+          "scale": 10.0,
+          "raw_sha256": "2a58253f70ceac76abd1324e232467eb82adff9ca0ba9c90aa1be276077ece61",
+          "color_sha256": "2a58253f70ceac76abd1324e232467eb82adff9ca0ba9c90aa1be276077ece61",
+          "identity": 0.3005291223526001,
+          "independent_apparent_age": 80.17330169677734
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "projected_e4e",
+          "scale": 0.0,
+          "raw_sha256": "a6f094ade94e103fe1e4f20ca597b4e0597208b34d4bac183d2db9c3b1c732c1",
+          "color_sha256": "a6f094ade94e103fe1e4f20ca597b4e0597208b34d4bac183d2db9c3b1c732c1",
+          "identity": 0.6926429271697998,
+          "independent_apparent_age": 60.51468276977539
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "source_channels_50",
+          "scale": 0.0,
+          "raw_sha256": "a6f094ade94e103fe1e4f20ca597b4e0597208b34d4bac183d2db9c3b1c732c1",
+          "color_sha256": "a6f094ade94e103fe1e4f20ca597b4e0597208b34d4bac183d2db9c3b1c732c1",
+          "identity": 0.6926429271697998,
+          "independent_apparent_age": 60.51468276977539
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "source_channels_100",
+          "scale": 0.0,
+          "raw_sha256": "a6f094ade94e103fe1e4f20ca597b4e0597208b34d4bac183d2db9c3b1c732c1",
+          "color_sha256": "a6f094ade94e103fe1e4f20ca597b4e0597208b34d4bac183d2db9c3b1c732c1",
+          "identity": 0.6926429271697998,
+          "independent_apparent_age": 60.51468276977539
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "projected_e4e",
+          "scale": 5.0,
+          "raw_sha256": "f709082ee4495c261b6a29698fddd57bef516a2634958d22a7a351b49253136b",
+          "color_sha256": "f709082ee4495c261b6a29698fddd57bef516a2634958d22a7a351b49253136b",
+          "identity": 0.6625033617019653,
+          "independent_apparent_age": 76.47147369384766
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "source_channels_50",
+          "scale": 5.0,
+          "raw_sha256": "ef6db7d02843ce9814c503523240e6e2fe6d643dc92251c0edb7346650236e51",
+          "color_sha256": "ef6db7d02843ce9814c503523240e6e2fe6d643dc92251c0edb7346650236e51",
+          "identity": 0.6558723449707031,
+          "independent_apparent_age": 74.40852355957031
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "source_channels_100",
+          "scale": 5.0,
+          "raw_sha256": "2611097673c4855a0c0a419738858a836aa89103f1004b6ea43b080a6d3fa6c2",
+          "color_sha256": "2611097673c4855a0c0a419738858a836aa89103f1004b6ea43b080a6d3fa6c2",
+          "identity": 0.653558611869812,
+          "independent_apparent_age": 73.82780456542969
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "projected_e4e",
+          "scale": 7.5,
+          "raw_sha256": "0941a821d32f1b515b9f1c99780458fc915d7c08db5e41a20b366e25e92bbc9a",
+          "color_sha256": "0941a821d32f1b515b9f1c99780458fc915d7c08db5e41a20b366e25e92bbc9a",
+          "identity": 0.47005218267440796,
+          "independent_apparent_age": 76.82196044921875
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "source_channels_50",
+          "scale": 7.5,
+          "raw_sha256": "59417e865367ba486f1640d7cc89645a7b914b293884afe203b1cd4a241bed79",
+          "color_sha256": "59417e865367ba486f1640d7cc89645a7b914b293884afe203b1cd4a241bed79",
+          "identity": 0.45795613527297974,
+          "independent_apparent_age": 77.16732788085938
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "source_channels_100",
+          "scale": 7.5,
+          "raw_sha256": "1535d9096c366f3a78ebb182bd8a4367cda4792c5c22af425e7cbecb4f76d0fb",
+          "color_sha256": "1535d9096c366f3a78ebb182bd8a4367cda4792c5c22af425e7cbecb4f76d0fb",
+          "identity": 0.4940396547317505,
+          "independent_apparent_age": 76.44285583496094
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "projected_e4e",
+          "scale": 10.0,
+          "raw_sha256": "6be2146b224eaa9b175822dc14b09d14110b6074cc305d158407887713c874ab",
+          "color_sha256": "6be2146b224eaa9b175822dc14b09d14110b6074cc305d158407887713c874ab",
+          "identity": 0.4446505606174469,
+          "independent_apparent_age": 75.76589965820312
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "source_channels_50",
+          "scale": 10.0,
+          "raw_sha256": "164984395fd0efc8c240296bd25ebd6c5fd6b18f20aea2c64d1750fd781bfe56",
+          "color_sha256": "164984395fd0efc8c240296bd25ebd6c5fd6b18f20aea2c64d1750fd781bfe56",
+          "identity": 0.4545224606990814,
+          "independent_apparent_age": 75.84954071044922
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "source_channels_100",
+          "scale": 10.0,
+          "raw_sha256": "067df387e98ed4cb9dc937f8550df2c471c98825ecbc75e953b4f76bb7301ac2",
+          "color_sha256": "067df387e98ed4cb9dc937f8550df2c471c98825ecbc75e953b4f76bb7301ac2",
+          "identity": 0.43611830472946167,
+          "independent_apparent_age": 75.9242172241211
+        }
+      ]
+    },
+    "e4e-glasses-20261128-074728": {
+      "run": "deployment/training-runs/e4e-glasses-20261128-074728",
+      "receipt": {
+        "job_id": "j-1795852132-988998",
+        "name": "face-age-e4e-glasses-20261128-074728",
+        "run_dir": "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728",
+        "gpus": 1
+      },
+      "profile": "e4e_eyeglass_correction_sweep",
+      "scales": [
+        7.5,
+        10.0
+      ],
+      "routes": [
+        "projected_e4e",
+        "boundary_minus4",
+        "boundary_minus8",
+        "boundary_minus12",
+        "style_minus1",
+        "style_minus2",
+        "style_minus3"
+      ],
+      "upstream_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+      "source_commit": "183e3796ad8d433cdfe8673fa4bd046d3154c1b0",
+      "experiment_sha256": "d0a09d1bc3661f810aaf7fcf71060d231116602b5f9ebf76a519104baaeb9219",
+      "selection_sha256": "c7bf2fbbee2ab088bb58f38563e914de446a11e3e61b84eeb8caf409398ebdd2",
+      "frozen_inputs": {
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/source/probe_inversion.py": "febc5153b69994b5ba50ac7b7dc5ec721aeaddf5d430da8fdb6324c925d69d47",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/source/sfe_study.py": "e3f660aa246c3f16f1323dc32539e441a17d96200842aac18661f4e2c3e34ffc",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/source/e4e_glasses_study.py": "84f95f2ee3437dddb6dca00ff96fa94491b1ff99979fd6f56b20279df2310f2d",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/source/source_color.py": "1759c7a0a5fa842fa84af46e35ed0d72457b224c661f74de62495f0f026e3c54",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/eyeglasses.npy": "227c8edae45f8cf06a0578e8422ef2dc59de6fb741d55280746a63fd40d2936c",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/reference_filter.py": "c2cad790d29a6ed4e18913186195ec6fb4246633b6f05d22b6bbd0625efb2ade",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/LICENSE": "8e56d0978e2f499d0b7f2741f452c8cc94658cb530dcb6916e6e90b13629e43d",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/STYLEGANEX_LICENSE.md": "c5cdad6be69f31800b6e6c1a19869f2cad0eebaa3cfb12f1f20acb8e063ab77d",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/inference_only.py": "3336321812758018637827367b17e41a26c4c49199c13680be4074dda37d37c0",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/official_latent_editor.txt": "48832e493cc5b5be3f7f406392237a4824cf101be58af3026f664819dddf14ca",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/official_model_utils.txt": "115a7e2367e894457d4563b326caf2f7139122faecab86f78da0144aaf442765",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/stylespace.py": "749714e0fa798c6cf2308352ea18dbe98931c497c487d2b5e19be40d923aa503",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/age.pt": "50074516b1629707d89b5e43d6b8abd1792212fa3b961a87a11323d6a5222ae0",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/models/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/models/psp/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/models/psp/stylegan2/model.py": "937e9e6620f32e922f9b1115b3b7d4799eeae275f5b94f52a99f353143d55881",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/models/psp/stylegan2/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/models/psp/encoders/model_irse.py": "6c3445d4bd9596b074a6259cf122e786edaa67710a199ee294d885e9ba0f23ba",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/models/psp/encoders/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/models/psp/encoders/psp_encoders.py": "fafebaff1cc617495bdcfeea1868095c2ed038bcb822482b5e18b233c0476640",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/models/psp/encoders/feature_resnet.py": "c44517629b0777b194841df88ac9512f823790ffcb16cf8865b1caf5ea00c876",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/models/psp/encoders/helpers.py": "11668dc8e7fe500668a511bdaefc22d788efdc912b15b1a3ee5ee5ff933764e6",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/models/psp/stylegan2/op/upfirdn2d_kernel.cu": "b1dd3b18c7732cbbe8f0a23f1e62ea6cc657366d45bb884d16b8e744239d3e26",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/models/psp/stylegan2/op/upfirdn2d.py": "01a8fdd3a615ce2504e34ba5d7005c31b08bfe7367a5fc5ea6cfd4cb62426acf",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/models/psp/stylegan2/op/__init__.py": "d3bdebb6b1ea35ab8e7dd14af32919f11ae630ab9154d4c84f839397b98b2bf6",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/models/psp/stylegan2/op/fused_act.py": "58f52e84832f96aab487d63daa295c010113cbda59149912f9a2b2f1b1e43e7b",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/models/psp/stylegan2/op/fused_bias_act.cpp": "7a71b629f1c0e5ff1076410082d318390b56dad1ec8455501bd6fa15869351d8",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/models/psp/stylegan2/op/upfirdn2d.cpp": "3893aa4137b1e565e74997d72f49cbdf2860ed12a435f142e119c653224c8a88",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/upstream/models/psp/stylegan2/op/fused_bias_act_kernel.cu": "bd58d9c2eaf85aa1e12cb8bd6d6ee14e19d13303d2e8eae9a0e25efeb4441cad",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/selection.json": "c7bf2fbbee2ab088bb58f38563e914de446a11e3e61b84eeb8caf409398ebdd2",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/model-specs.json": "ec719ddaec6775bfeeecfd9571727ecfc08c5c838ad9299bc55bce19bf1e112b",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/report.json": "cfa219b2ad7584997a0bf2c20bee34a70e9fa7752ba58ba90368a6cb241ec2a7",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/independent-age.json": "531fb29281c5b5a0ebda150435e94ccd6f9d3888359ea703fc1683b70731ece2",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_64376/reference.png": "481aab21dd8d7a6f394b9f57c57b2bbeb1f9d4f74a35619a81e117c23632ac4b",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_61908/reference.png": "fc0f9a94113f96eea82fba07dbb05a49038dd3b98ea705d7ceb7e92bc360196e",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_62644/reference.png": "515967b15f41a0aabc098a9081734bca3456c2aeb333bb416f9a4080b13ba709",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_64919/reference.png": "6d0580d7afb3a377a550a3c12d898b3a9b77f9385dbc9b339f794c588c596210",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_65817/reference.png": "640a40190c00ea001e6a375732e9eb089e8a2afc0b2124d13e8cb8fcdcbf6dfa",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_67140/reference.png": "6c3e7d3bb3da9adcf36d684c573228870771674d996b4bc3b09184b72dce76ab",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_60764/reference.png": "481eacfa34bb430ab7655beef6bd73bab36e6006efada05543611816b45dcf18",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_68335/reference.png": "f22172802e0d5a8c04f4069cf10d22d6b149b1b90ee2301bee1e4ec0839e9ed1",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_64376/e4e_age_scale_0.png": "a4d44700a31045700c4fe17d782c51447f3e5f3bcd85ff7e7baad6ae742752e2",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_64376/e4e_age_scale_5.png": "8bd8a9a4236d589864805ea502eacbd04df53cf9db3dfce204da71ec7014f5ad",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_64376/e4e_age_scale_7.5.png": "a1be714805c2bbd00b56828035866d7b47be961fccbab4c334b2915207c3a2cd",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_64376/e4e_age_scale_10.png": "4577162bd45a6fad507501e163ceec19e6802b56e719de030dc995c455df639b",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_61908/e4e_age_scale_0.png": "6532350328f8222aa002a466fec9b9eaacc2c98a0fb1ef78a074c81ef32893e5",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_61908/e4e_age_scale_5.png": "0a2e60c54dbbcdd0dea388ad61c213373ba32bb95898a0229e2be76c64166263",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_61908/e4e_age_scale_7.5.png": "8bfa7dbecc5594d7a12c3b663d89cd4cb91c59a0904d001748659a43457c65ef",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_61908/e4e_age_scale_10.png": "17b1066a73d05c2eaab96d456180899548a21043d1247b08d77528a9f508a40b",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_62644/e4e_age_scale_0.png": "9fead4ed27a5b177a6085fb378a1f806d438783aa9d3a30913b5b0ac4016fcb9",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_62644/e4e_age_scale_5.png": "abec297314f2373c2fe29a606596ece699b524c0307f56192341d6750e8f7d60",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_62644/e4e_age_scale_7.5.png": "36d6f5bbdc1887ba156ee2639a83abb07346718dc66aa76c52173f8fce01daa7",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_62644/e4e_age_scale_10.png": "649d6f964a9dfdc3302e05157ac2c90ea407f3341823d6518d627e9cd562dff5",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_64919/e4e_age_scale_0.png": "fb193a9a5e5b08b6d7ef8382bd3bc3ceceacbb0108ef3dd92fd6f28b851b1ccc",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_64919/e4e_age_scale_5.png": "bfe455018eef3ea1238420ccdf6cfa4b43371fb2b7446ba6b9b3ca412fdef937",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_64919/e4e_age_scale_7.5.png": "774ac2f579724882a68ff4054de6a56e85d67e567ed52a8c0e80aac51ae44f31",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_64919/e4e_age_scale_10.png": "35d309bcc0279a486b01379191b6826fccc6a47feb06a5645a86c92a2341b619",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_65817/e4e_age_scale_0.png": "33d98b24f9cfd52634c296d5e80140790c56f895fdfaef21392a81c47492c741",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_65817/e4e_age_scale_5.png": "be043d12bb7faf7fe8ef99ec1509f3ea568b91a7dd81d995afd4a69954b98249",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_65817/e4e_age_scale_7.5.png": "65993b75a1ac2914591030baaee6f59091dbd5166ac9ceb5ca877628b2cdacc0",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_65817/e4e_age_scale_10.png": "b8e4c84e0106216e98b37e632ff235e18884d22c0e54d18138c1be2e9398df4e",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_67140/e4e_age_scale_0.png": "71c78f2d006e73228b5f24152a628c33bcca78651fbbfadb19820b59ba048312",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_67140/e4e_age_scale_5.png": "14b08b210417129d61b1fb03d836e7a8c8832caa9f0171f6b66dafc634254966",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_67140/e4e_age_scale_7.5.png": "1445c0b9b1ec2898eac0cbb22e415119f51f67406eec0630a168b52ecaa860d3",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_67140/e4e_age_scale_10.png": "753501b317b0e814966816c2b42a45e7a96305481fdfa4cc3632934fcc7f826d",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_60764/e4e_age_scale_0.png": "2bcedae3ce3b3ac511f119de663d2f6e6800c1fca72aff4c3a04927c16af0b0a",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_60764/e4e_age_scale_5.png": "60c63718c4cf4b5d8ddd6e20815ef17cbacd436ff6e1bc494bd88c962b38a23e",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_60764/e4e_age_scale_7.5.png": "5c713377c210b52ba7f595f1e058082d8a2cfba04603129f8901f97e819f533b",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_60764/e4e_age_scale_10.png": "5cadfeadc304468f1fcce533d36c8f9cf6afac14cf9c1bda83439c460972cad7",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_68335/e4e_age_scale_0.png": "a6f094ade94e103fe1e4f20ca597b4e0597208b34d4bac183d2db9c3b1c732c1",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_68335/e4e_age_scale_5.png": "f709082ee4495c261b6a29698fddd57bef516a2634958d22a7a351b49253136b",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_68335/e4e_age_scale_7.5.png": "0941a821d32f1b515b9f1c99780458fc915d7c08db5e41a20b366e25e92bbc9a",
+        "/root/face-age-transformation-course-project/deployment/training-runs/sfe-20261128-013310/evaluation/ffhq_68335/e4e_age_scale_10.png": "6be2146b224eaa9b175822dc14b09d14110b6074cc305d158407887713c874ab",
+        "/root/face-age-transformation-course-project/deployment/training-runs/e4e-glasses-20261128-074728/source/run_sfe.sh": "dfba84a717119a340463f020a544f775a66f696355f92e6732950011e547922f"
+      },
+      "model_specs": [
+        {
+          "name": "e4e_ffhq_encode.pt",
+          "bytes": 1201649680,
+          "sha256": "2ace1d9a8c05c10a399bcd500b8dda118f759ff1aac89dbdab7435f2136a0999",
+          "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+          "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+          "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/e4e_ffhq_encode.pt",
+          "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+          "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+          "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+        },
+        {
+          "name": "sfe_editor_light.pt",
+          "bytes": 649325957,
+          "sha256": "ced3e79813ec6ff1418404576cc43e3c92849ab124ec87cd72be42dcb25311ea",
+          "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+          "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+          "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/sfe_editor_light.pt",
+          "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+          "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+          "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+        },
+        {
+          "name": "stylegan2-ffhq-config-f.pt",
+          "bytes": 381462551,
+          "sha256": "bae494ef77e32a9cd1792a81a3c167692a0e64f6bcd8b06592ff42917e2ed46e",
+          "source_commit": "5a50cb1b78da946be8163b8b255d486996fd2c73",
+          "code_commit": "00996c309ba5f04eec9ad7456f521e1501f7cc67",
+          "url": "https://huggingface.co/AIRI-Institute/StyleFeatureEditor/resolve/5a50cb1b78da946be8163b8b255d486996fd2c73/pretrained_models/stylegan2-ffhq-config-f.pt",
+          "repository": "https://github.com/ControlGenAI/StyleFeatureEditor",
+          "hash_source": "Official AIRI-Institute/StyleFeatureEditor Hugging Face LFS SHA256 at the pinned model revision.",
+          "usage": "Research comparison. SFE code MIT; e4e/StyleGAN dependencies retain upstream terms. Age direction strength is not a chronological target age."
+        }
+      ],
+      "worker_seconds": 91.01928852498531,
+      "device": {
+        "python": "3.10.12 (main, Mar  3 2026, 11:56:32) [GCC 11.4.0]",
+        "torch": "2.6.0+cu124",
+        "cuda": "12.4",
+        "gpu": "NVIDIA H200",
+        "device_count": 1,
+        "peak_bytes": 2683322880
+      },
+      "inference_timing": {
+        "correction_calls": 96,
+        "mean_seconds": 0.038101838707613446,
+        "min_seconds": 0.03754469379782677,
+        "max_seconds": 0.03948144055902958,
+        "note": "Correction decoder-only timing after inversion, excludes PNG/color/SFace/queue/container setup. Reused baseline has no new inference timing."
+      },
+      "report_sha256": "67f3fb789586fee4fb8ccf08eee0c722d8346702ca7b7d101ca9e895dedd8610",
+      "summary": {
+        "groups": {
+          "projected_e4e/scale_7.5": {
+            "cases": 8,
+            "identity": 0.424404788762331,
+            "independent_age": 65.08694791793823,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "boundary_minus4/scale_7.5": {
+            "cases": 8,
+            "identity": 0.45267708227038383,
+            "independent_age": 64.1675353050232,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "boundary_minus8/scale_7.5": {
+            "cases": 8,
+            "identity": 0.48714815452694893,
+            "independent_age": 63.10444641113281,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "boundary_minus12/scale_7.5": {
+            "cases": 8,
+            "identity": 0.4837319664657116,
+            "independent_age": 61.55154514312744,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "style_minus1/scale_7.5": {
+            "cases": 8,
+            "identity": 0.4142771475017071,
+            "independent_age": 64.92477035522461,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "style_minus2/scale_7.5": {
+            "cases": 8,
+            "identity": 0.3969503566622734,
+            "independent_age": 65.24282169342041,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "style_minus3/scale_7.5": {
+            "cases": 8,
+            "identity": 0.38651879504323006,
+            "independent_age": 65.20849227905273,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "projected_e4e/scale_10": {
+            "cases": 8,
+            "identity": 0.3506539650261402,
+            "independent_age": 70.24367570877075,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "boundary_minus4/scale_10": {
+            "cases": 8,
+            "identity": 0.36986243724823,
+            "independent_age": 69.6071925163269,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "boundary_minus8/scale_10": {
+            "cases": 8,
+            "identity": 0.38874299451708794,
+            "independent_age": 69.15091705322266,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "boundary_minus12/scale_10": {
+            "cases": 8,
+            "identity": 0.40307582914829254,
+            "independent_age": 68.25204229354858,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "style_minus1/scale_10": {
+            "cases": 8,
+            "identity": 0.3518577367067337,
+            "independent_age": 69.72847700119019,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "style_minus2/scale_10": {
+            "cases": 8,
+            "identity": 0.3411980904638767,
+            "independent_age": 69.42712926864624,
+            "target_proxy_mae": null,
+            "missing": 0
+          },
+          "style_minus3/scale_10": {
+            "cases": 8,
+            "identity": 0.3400699123740196,
+            "independent_age": 69.64696550369263,
+            "target_proxy_mae": null,
+            "missing": 0
+          }
+        },
+        "aggregate": {
+          "projected_e4e": {
+            "identity": 0.3875293768942356,
+            "span20to75": null,
+            "nonmonotonic_pairs": 0,
+            "target_proxy_mae": null,
+            "older_younger_proxy_mae": null,
+            "missing": 0
+          },
+          "boundary_minus4": {
+            "identity": 0.4112697597593069,
+            "span20to75": null,
+            "nonmonotonic_pairs": 0,
+            "target_proxy_mae": null,
+            "older_younger_proxy_mae": null,
+            "missing": 0
+          },
+          "boundary_minus8": {
+            "identity": 0.43794557452201843,
+            "span20to75": null,
+            "nonmonotonic_pairs": 0,
+            "target_proxy_mae": null,
+            "older_younger_proxy_mae": null,
+            "missing": 0
+          },
+          "boundary_minus12": {
+            "identity": 0.44340389780700207,
+            "span20to75": null,
+            "nonmonotonic_pairs": 0,
+            "target_proxy_mae": null,
+            "older_younger_proxy_mae": null,
+            "missing": 0
+          },
+          "style_minus1": {
+            "identity": 0.3830674421042204,
+            "span20to75": null,
+            "nonmonotonic_pairs": 0,
+            "target_proxy_mae": null,
+            "older_younger_proxy_mae": null,
+            "missing": 0
+          },
+          "style_minus2": {
+            "identity": 0.36907422356307507,
+            "span20to75": null,
+            "nonmonotonic_pairs": 0,
+            "target_proxy_mae": null,
+            "older_younger_proxy_mae": null,
+            "missing": 0
+          },
+          "style_minus3": {
+            "identity": 0.36329435370862484,
+            "span20to75": null,
+            "nonmonotonic_pairs": 0,
+            "target_proxy_mae": null,
+            "older_younger_proxy_mae": null,
+            "missing": 0
+          }
+        },
+        "source_ages": {
+          "ffhq_64376": 24.617202758789062,
+          "ffhq_61908": 31.332361221313477,
+          "ffhq_62644": 24.25365447998047,
+          "ffhq_64919": 49.32725143432617,
+          "ffhq_65817": 27.923721313476562,
+          "ffhq_67140": 81.6224594116211,
+          "ffhq_60764": 68.67528533935547,
+          "ffhq_68335": 85.07337951660156
+        },
+        "original_groups": {},
+        "promotion": false,
+        "visual_review_pending": true,
+        "targets_not_calibrated": true
+      },
+      "attribute_comparisons": {
+        "boundary_minus4": {
+          "age_change": -0.7779479026794434,
+          "mean_abs_age_change": 1.274724006652832,
+          "identity_change": 0.023740382865071297,
+          "identity_worst_change": -0.010598152875900269,
+          "identity_drop_gt002": 0,
+          "age_span_ratio": null
+        },
+        "boundary_minus8": {
+          "age_change": -1.5376300811767578,
+          "mean_abs_age_change": 1.7118635177612305,
+          "identity_change": 0.05041619762778282,
+          "identity_worst_change": -0.030163288116455078,
+          "identity_drop_gt002": 1,
+          "age_span_ratio": null
+        },
+        "boundary_minus12": {
+          "age_change": -2.7635180950164795,
+          "mean_abs_age_change": 3.0260188579559326,
+          "identity_change": 0.05587452091276646,
+          "identity_worst_change": -0.04727104306221008,
+          "identity_drop_gt002": 2,
+          "age_span_ratio": null
+        },
+        "style_minus1": {
+          "age_change": -0.3386881351470947,
+          "mean_abs_age_change": 0.6549713611602783,
+          "identity_change": -0.004461934790015221,
+          "identity_worst_change": -0.052747100591659546,
+          "identity_drop_gt002": 4,
+          "age_span_ratio": null
+        },
+        "style_minus2": {
+          "age_change": -0.330336332321167,
+          "mean_abs_age_change": 1.0816500186920166,
+          "identity_change": -0.018455153331160545,
+          "identity_worst_change": -0.10875913500785828,
+          "identity_drop_gt002": 7,
+          "age_span_ratio": null
+        },
+        "style_minus3": {
+          "age_change": -0.23758292198181152,
+          "mean_abs_age_change": 1.1533496379852295,
+          "identity_change": -0.02423502318561077,
+          "identity_worst_change": -0.1360841989517212,
+          "identity_drop_gt002": 8,
+          "age_span_ratio": null
+        }
+      },
+      "validation": {
+        "raw": 112,
+        "color": 112,
+        "size": [
+          1024,
+          1024
+        ],
+        "all_decodable": true,
+        "raw_hashes_verified": true
+      },
+      "browser": {
+        "url": "http://127.0.0.1:65512/age-e4e-glasses-sweep/",
+        "status": 200,
+        "cases": 8,
+        "conditions": 2,
+        "all_conditions_switch": true,
+        "all_cases_switch": true,
+        "color_switch": true,
+        "native_crop": true,
+        "download": [
+          1024,
+          1024
+        ],
+        "mobile_width": 390,
+        "errors": []
+      },
+      "parity": {
+        "checks": [
+          {
+            "name": "ffhq_64376",
+            "scale": 7.5,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_64376",
+            "scale": 10.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_61908",
+            "scale": 7.5,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_61908",
+            "scale": 10.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_62644",
+            "scale": 7.5,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_62644",
+            "scale": 10.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_64919",
+            "scale": 7.5,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_64919",
+            "scale": 10.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_65817",
+            "scale": 7.5,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_65817",
+            "scale": 10.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_67140",
+            "scale": 7.5,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_67140",
+            "scale": 10.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_60764",
+            "scale": 7.5,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_60764",
+            "scale": 10.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_68335",
+            "scale": 7.5,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          },
+          {
+            "name": "ffhq_68335",
+            "scale": 10.0,
+            "max_pixel_error": 0,
+            "different_pixels": 0
+          }
+        ],
+        "exact": true
+      },
+      "repeatability": {
+        "checks": [
+          {
+            "name": "ffhq_64376",
+            "scale": 10.0,
+            "alpha": -9,
+            "pixels_equal": true
+          }
+        ],
+        "equal": true
+      },
+      "frozen_verification": {
+        "before": "1954247285ae9fba47131adc84631540ce87460a00a16d5353654a7d7c43132f",
+        "after": "1954247285ae9fba47131adc84631540ce87460a00a16d5353654a7d7c43132f",
+        "equal": true
+      },
+      "independent_age_json_sha256": "febe703cb85130d0b423cedc884276fc5d0a20051f85a7f1373e51502136f0c1",
+      "baseline_age_reused": 16,
+      "raw_outputs": 112,
+      "color_outputs": 112,
+      "output_records": [
+        {
+          "name": "ffhq_64376",
+          "route": "projected_e4e",
+          "scale": 7.5,
+          "raw_sha256": "a1be714805c2bbd00b56828035866d7b47be961fccbab4c334b2915207c3a2cd",
+          "color_sha256": "a1be714805c2bbd00b56828035866d7b47be961fccbab4c334b2915207c3a2cd",
+          "identity": 0.49152660369873047,
+          "independent_apparent_age": 55.00068664550781
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "boundary_minus4",
+          "scale": 7.5,
+          "raw_sha256": "6f47392a97f7f0c2abfb174ce49a0ccfc6a3b1232e1641726fd8c8c4338c794a",
+          "color_sha256": "6f47392a97f7f0c2abfb174ce49a0ccfc6a3b1232e1641726fd8c8c4338c794a",
+          "identity": 0.49126631021499634,
+          "independent_apparent_age": 52.79489517211914
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "boundary_minus8",
+          "scale": 7.5,
+          "raw_sha256": "551d41975d4006717ce1965b5fcc65a07068d007f0926805a6c0c0ead72ed77a",
+          "color_sha256": "551d41975d4006717ce1965b5fcc65a07068d007f0926805a6c0c0ead72ed77a",
+          "identity": 0.4864947497844696,
+          "independent_apparent_age": 51.69206237792969
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "boundary_minus12",
+          "scale": 7.5,
+          "raw_sha256": "c43735b48a5fbe6b47f13aa9400265aa5d0b73dd34528709dabf202bab5dd292",
+          "color_sha256": "c43735b48a5fbe6b47f13aa9400265aa5d0b73dd34528709dabf202bab5dd292",
+          "identity": 0.46121618151664734,
+          "independent_apparent_age": 50.413578033447266
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "style_minus1",
+          "scale": 7.5,
+          "raw_sha256": "3edfdbee31f37e8a7ebd972e942773ebf3cc1c1ef16ce08532b288e9c5477ebb",
+          "color_sha256": "30cee21c942a27757ba184c164b96c2edceb674cede0595a424d79908c560415",
+          "identity": 0.4387795031070709,
+          "independent_apparent_age": 54.30205535888672
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "style_minus2",
+          "scale": 7.5,
+          "raw_sha256": "68bbcfdc4208390d23dc2d55b65df0aaa68a7c927e5b451bc9b695a6f9e88d5d",
+          "color_sha256": "8effc08f00ee7a72853d2a2b6ebc347d128482c3c9225600c0efa1d4552a1693",
+          "identity": 0.3827674686908722,
+          "independent_apparent_age": 56.119110107421875
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "style_minus3",
+          "scale": 7.5,
+          "raw_sha256": "62e4bed1057a052e1ca8253bdb508a05f492357d1fe1e89d4f00efa422700191",
+          "color_sha256": "4360ebc3e0a27cbc19df80823ec3ae1a4baf3e2b6a68c1932592a252c91bc1e0",
+          "identity": 0.3554424047470093,
+          "independent_apparent_age": 56.41632843017578
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "projected_e4e",
+          "scale": 10.0,
+          "raw_sha256": "4577162bd45a6fad507501e163ceec19e6802b56e719de030dc995c455df639b",
+          "color_sha256": "ba6f01fa093291d91cf92013668db9922d8f80987d189831cd9ea370236eedfd",
+          "identity": 0.38318347930908203,
+          "independent_apparent_age": 64.27365112304688
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "boundary_minus4",
+          "scale": 10.0,
+          "raw_sha256": "565a5df88560d4b263da2b60305f3b67cad5fe577ceb1f6178b83dd456204877",
+          "color_sha256": "565a5df88560d4b263da2b60305f3b67cad5fe577ceb1f6178b83dd456204877",
+          "identity": 0.38395386934280396,
+          "independent_apparent_age": 63.59577941894531
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "boundary_minus8",
+          "scale": 10.0,
+          "raw_sha256": "1a3734b62d8935c701ee9874b43b0562a13ad04932255ab9c6ce4083ad2a1c2b",
+          "color_sha256": "1a3734b62d8935c701ee9874b43b0562a13ad04932255ab9c6ce4083ad2a1c2b",
+          "identity": 0.35302019119262695,
+          "independent_apparent_age": 61.77543258666992
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "boundary_minus12",
+          "scale": 10.0,
+          "raw_sha256": "3487c02674fd5696402609cc26e4ca62493b18c995fbbbf0d7bc210de3b9efe1",
+          "color_sha256": "3487c02674fd5696402609cc26e4ca62493b18c995fbbbf0d7bc210de3b9efe1",
+          "identity": 0.33591243624687195,
+          "independent_apparent_age": 59.78668975830078
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "style_minus1",
+          "scale": 10.0,
+          "raw_sha256": "323611daea07d6598ca874cd3165e73c20764114181e415f430d0cc6db2e3835",
+          "color_sha256": "be6a52c100b812c444826ce23ef9421b7a701237bcaf6c04dbd55c7cc207d99a",
+          "identity": 0.3426656126976013,
+          "independent_apparent_age": 62.41225051879883
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "style_minus2",
+          "scale": 10.0,
+          "raw_sha256": "9ceba271db8a5d6a345bfb1e838448d64732cfcaacce28df07c9c496bb49bfc1",
+          "color_sha256": "527cb9cf75535cf24ceee78dc99d89827ffca94505e3ec3a7e301af978d82965",
+          "identity": 0.29127711057662964,
+          "independent_apparent_age": 63.084747314453125
+        },
+        {
+          "name": "ffhq_64376",
+          "route": "style_minus3",
+          "scale": 10.0,
+          "raw_sha256": "a03c960d9be85d2cbce6ee3625670ba9809a75568ec389aaaa7535a594f0d103",
+          "color_sha256": "358ad2c4333d546b5c545c1fe8a0b3c07bc4c32bfc92180ee1fc1641c74937d9",
+          "identity": 0.25534161925315857,
+          "independent_apparent_age": 63.42184829711914
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "projected_e4e",
+          "scale": 7.5,
+          "raw_sha256": "8bfa7dbecc5594d7a12c3b663d89cd4cb91c59a0904d001748659a43457c65ef",
+          "color_sha256": "8dc15e023f1b768d4e46ec35423e9b886bf9efe7e72aa3ee691c8b615f8e85b3",
+          "identity": 0.4020181894302368,
+          "independent_apparent_age": 59.14179611206055
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "boundary_minus4",
+          "scale": 7.5,
+          "raw_sha256": "f606e8ddfbfd52990fd07d6c2f9d6f62ac5319928e14592e1ce8d04f384d50e0",
+          "color_sha256": "746c37599972320c6c1039b7773931745da95b2a2632f8f286ac2d80d82a765f",
+          "identity": 0.46202635765075684,
+          "independent_apparent_age": 59.022640228271484
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "boundary_minus8",
+          "scale": 7.5,
+          "raw_sha256": "2deeb510e401dd3c27ff6723beea6d7ae94638663eef1202371d780684afbe82",
+          "color_sha256": "063ccfd1cd6f5bd0d6f60a18b6a67f591a56c3085963612385406afd90c1af3c",
+          "identity": 0.4757070541381836,
+          "independent_apparent_age": 55.93266677856445
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "boundary_minus12",
+          "scale": 7.5,
+          "raw_sha256": "9aec1c4bd090d6286a243407e4f4b0cab6d09626dcd4c378d63865bbcef7f8d8",
+          "color_sha256": "e2bb078b74f8976c3b300990248edecf4fdb55b3618ba46f6d57bf545e51c39f",
+          "identity": 0.5030295252799988,
+          "independent_apparent_age": 52.61799621582031
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "style_minus1",
+          "scale": 7.5,
+          "raw_sha256": "3a12fa20f2226d60a9025ec386e6d9c3d63e3d12c3c5a8b938dc4de62a178f32",
+          "color_sha256": "f44043cc5e54a56eb1b92a8750570c00fde6b26cfeaea9ccbda6f8a9de4c7d38",
+          "identity": 0.4009842574596405,
+          "independent_apparent_age": 60.040130615234375
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "style_minus2",
+          "scale": 7.5,
+          "raw_sha256": "b5d6aadf3a029dd6174d6d1725b0852350a83b95354aec12817c510096a8353e",
+          "color_sha256": "7da494b2bf0e5bafe44a42ae5e4b2b9be755f4707b3f57bf4d162a87bfb3dc4b",
+          "identity": 0.38167285919189453,
+          "independent_apparent_age": 59.782554626464844
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "style_minus3",
+          "scale": 7.5,
+          "raw_sha256": "a87ab230fe0452f8864d12b01ff094cfcdbd443c9498925c8cb4b58be1ceebb2",
+          "color_sha256": "abc055d0070cccfcf4792323d539df13dd635df753e35322279dc6fc786faf6d",
+          "identity": 0.351315438747406,
+          "independent_apparent_age": 59.00191116333008
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "projected_e4e",
+          "scale": 10.0,
+          "raw_sha256": "17b1066a73d05c2eaab96d456180899548a21043d1247b08d77528a9f508a40b",
+          "color_sha256": "17b1066a73d05c2eaab96d456180899548a21043d1247b08d77528a9f508a40b",
+          "identity": 0.2998213768005371,
+          "independent_apparent_age": 67.72105407714844
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "boundary_minus4",
+          "scale": 10.0,
+          "raw_sha256": "b6da44225adc731567db8888da4e263607859e95d8d0e823867492eca98261a4",
+          "color_sha256": "ce42fd312436b263e0e3b8015e335066a307f1d3ab0893da6eddaa83b60681e7",
+          "identity": 0.3168450891971588,
+          "independent_apparent_age": 66.08094024658203
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "boundary_minus8",
+          "scale": 10.0,
+          "raw_sha256": "ed1531cee82a380f7cf476e1e67dc5e6292ffd8dae7439f35052693c0518b3ec",
+          "color_sha256": "71bce41717b17dd23ab39585637609d09e9f350070ac6cd738696d04bd9f4ab3",
+          "identity": 0.38480448722839355,
+          "independent_apparent_age": 65.94285583496094
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "boundary_minus12",
+          "scale": 10.0,
+          "raw_sha256": "eea989270c8757ef103fbf8394f96dbe23651ac3cb75f62fcb5bf4568f8f0097",
+          "color_sha256": "bd807d82ee6313276572d6916c94c6284fc17c9e981de7190489205c2b82c965",
+          "identity": 0.38514745235443115,
+          "independent_apparent_age": 63.62649917602539
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "style_minus1",
+          "scale": 10.0,
+          "raw_sha256": "99d3d182f7a490ddaf3ad82871a823d8a16b9360c1ea8b2f9554f2db69eca034",
+          "color_sha256": "45c6f60914c4d87153c09d96f305f78a76b2e757da8e56932da1c6137e4a4cd6",
+          "identity": 0.2898862063884735,
+          "independent_apparent_age": 68.0826187133789
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "style_minus2",
+          "scale": 10.0,
+          "raw_sha256": "b09d38ca19a0dfa41c974195ebc709504079ea1d7d539ad60b9533b53859d885",
+          "color_sha256": "2c1ba38c1b6e4932d991aab9d5039b1e3c32d133f271f55febd1c7a2d4bfdeaa",
+          "identity": 0.27577486634254456,
+          "independent_apparent_age": 66.17952728271484
+        },
+        {
+          "name": "ffhq_61908",
+          "route": "style_minus3",
+          "scale": 10.0,
+          "raw_sha256": "f45e0fd74d94894aeca65229b2c084d6e31d66f4a0170ea7b6603ff406b0f811",
+          "color_sha256": "f45e0fd74d94894aeca65229b2c084d6e31d66f4a0170ea7b6603ff406b0f811",
+          "identity": 0.25564542412757874,
+          "independent_apparent_age": 66.01097869873047
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "projected_e4e",
+          "scale": 7.5,
+          "raw_sha256": "36d6f5bbdc1887ba156ee2639a83abb07346718dc66aa76c52173f8fce01daa7",
+          "color_sha256": "36d6f5bbdc1887ba156ee2639a83abb07346718dc66aa76c52173f8fce01daa7",
+          "identity": 0.3769102096557617,
+          "independent_apparent_age": 53.29793930053711
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "boundary_minus4",
+          "scale": 7.5,
+          "raw_sha256": "5b4473d41b2178330620129ab85858384e41c0ff9a4297c2a6f70d1f4c11202a",
+          "color_sha256": "5b4473d41b2178330620129ab85858384e41c0ff9a4297c2a6f70d1f4c11202a",
+          "identity": 0.44248223304748535,
+          "independent_apparent_age": 51.573604583740234
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "boundary_minus8",
+          "scale": 7.5,
+          "raw_sha256": "7a9f0b0265cf0c9846e7a71f481819a52506f84db334ad36aa0cf6cf097e9036",
+          "color_sha256": "7a9f0b0265cf0c9846e7a71f481819a52506f84db334ad36aa0cf6cf097e9036",
+          "identity": 0.5300710797309875,
+          "independent_apparent_age": 50.487056732177734
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "boundary_minus12",
+          "scale": 7.5,
+          "raw_sha256": "3522b74bbc05ff4ed211a519d07a59f180b3e550306c9ec82f491fb408a85ec1",
+          "color_sha256": "3522b74bbc05ff4ed211a519d07a59f180b3e550306c9ec82f491fb408a85ec1",
+          "identity": 0.5049835443496704,
+          "independent_apparent_age": 47.94325637817383
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "style_minus1",
+          "scale": 7.5,
+          "raw_sha256": "5f816b33a0aefe2a7dfcd1ddc771c02b03d42fa9adbeb9603a7bb5c2b7ac680c",
+          "color_sha256": "5f816b33a0aefe2a7dfcd1ddc771c02b03d42fa9adbeb9603a7bb5c2b7ac680c",
+          "identity": 0.3790125250816345,
+          "independent_apparent_age": 53.2716064453125
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "style_minus2",
+          "scale": 7.5,
+          "raw_sha256": "85de02263f02b978597e446b036a8736a364a5285098af8eb11023e74904a617",
+          "color_sha256": "85de02263f02b978597e446b036a8736a364a5285098af8eb11023e74904a617",
+          "identity": 0.3407866358757019,
+          "independent_apparent_age": 52.38458251953125
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "style_minus3",
+          "scale": 7.5,
+          "raw_sha256": "52d96e396da3fadfd502d1a8253cc35a404b421293de74edbc5fa91d9b1e43d7",
+          "color_sha256": "52d96e396da3fadfd502d1a8253cc35a404b421293de74edbc5fa91d9b1e43d7",
+          "identity": 0.3337463438510895,
+          "independent_apparent_age": 52.388427734375
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "projected_e4e",
+          "scale": 10.0,
+          "raw_sha256": "649d6f964a9dfdc3302e05157ac2c90ea407f3341823d6518d627e9cd562dff5",
+          "color_sha256": "649d6f964a9dfdc3302e05157ac2c90ea407f3341823d6518d627e9cd562dff5",
+          "identity": 0.27109968662261963,
+          "independent_apparent_age": 61.76259994506836
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "boundary_minus4",
+          "scale": 10.0,
+          "raw_sha256": "96d4f66210264472794aebf3180d97325179046ee5f671dd4bb7c1dc6866091b",
+          "color_sha256": "96d4f66210264472794aebf3180d97325179046ee5f671dd4bb7c1dc6866091b",
+          "identity": 0.3266955316066742,
+          "independent_apparent_age": 59.115936279296875
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "boundary_minus8",
+          "scale": 10.0,
+          "raw_sha256": "b9f3aaca140766fe416897040fb4e65552b1907407444347084138e88aa2b5dc",
+          "color_sha256": "b9f3aaca140766fe416897040fb4e65552b1907407444347084138e88aa2b5dc",
+          "identity": 0.3712630569934845,
+          "independent_apparent_age": 59.93812942504883
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "boundary_minus12",
+          "scale": 10.0,
+          "raw_sha256": "d15e00b7ab691a65d6136c698c88462fbe953f1e73e7c62af695e554b46e3d6b",
+          "color_sha256": "d15e00b7ab691a65d6136c698c88462fbe953f1e73e7c62af695e554b46e3d6b",
+          "identity": 0.41832756996154785,
+          "independent_apparent_age": 58.23694610595703
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "style_minus1",
+          "scale": 10.0,
+          "raw_sha256": "c5e5d4c13b843d4fb120fbbaf123fd4b708f07adf896bbb81c16e49005018864",
+          "color_sha256": "c5e5d4c13b843d4fb120fbbaf123fd4b708f07adf896bbb81c16e49005018864",
+          "identity": 0.2911970913410187,
+          "independent_apparent_age": 62.07927703857422
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "style_minus2",
+          "scale": 10.0,
+          "raw_sha256": "443d247fb3c4e9c68bd583211b661efd64701d4d5da42a42b0093125b8ad35ec",
+          "color_sha256": "443d247fb3c4e9c68bd583211b661efd64701d4d5da42a42b0093125b8ad35ec",
+          "identity": 0.2664448320865631,
+          "independent_apparent_age": 61.1595573425293
+        },
+        {
+          "name": "ffhq_62644",
+          "route": "style_minus3",
+          "scale": 10.0,
+          "raw_sha256": "bcf6e5c6b77ef1f5696a8f2b8488de6acae667de7f48b94eeabcbdd3837a8639",
+          "color_sha256": "bcf6e5c6b77ef1f5696a8f2b8488de6acae667de7f48b94eeabcbdd3837a8639",
+          "identity": 0.2654351592063904,
+          "independent_apparent_age": 61.11480712890625
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "projected_e4e",
+          "scale": 7.5,
+          "raw_sha256": "774ac2f579724882a68ff4054de6a56e85d67e567ed52a8c0e80aac51ae44f31",
+          "color_sha256": "b73c9e08b8ffbd25626a3da1e9c0e788be25b9879624f3edb749f499307192a6",
+          "identity": 0.42276355624198914,
+          "independent_apparent_age": 68.08228302001953
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "boundary_minus4",
+          "scale": 7.5,
+          "raw_sha256": "27ccbf2ae31d57d9541b30845a74221d23745b5328b085c2f4c91a2ae184d077",
+          "color_sha256": "306bd0023a7bb2a3cf0c1df038e788709c1d76f219fc0f6996bad5b0ffc077ea",
+          "identity": 0.4207995533943176,
+          "independent_apparent_age": 69.02651977539062
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "boundary_minus8",
+          "scale": 7.5,
+          "raw_sha256": "77e3a04b8da09dbd0b8017070815de3f9c609ff421c3c63d098cfb04c09ea596",
+          "color_sha256": "c049697b901a66bcb3e67204096f37c26e79b1c5e4a4aecb13a6467968e78a35",
+          "identity": 0.4965018033981323,
+          "independent_apparent_age": 68.4833755493164
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "boundary_minus12",
+          "scale": 7.5,
+          "raw_sha256": "95abd69bc48b0b115fe0fe56692780f2e53b277854c13fa0aa17937197946750",
+          "color_sha256": "a302262593fd0a2f9cf2e0a3208e691a533ebf97ba3a423c0944fa61b2a65d9d",
+          "identity": 0.466461181640625,
+          "independent_apparent_age": 66.87393951416016
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "style_minus1",
+          "scale": 7.5,
+          "raw_sha256": "6c325e2c3c823f2391498448687439dc7df7f9ac2833b236caf8364bbc013b1f",
+          "color_sha256": "4cc08a57457a22fbd4fec6f3d1df553f56d664e2e04b8f39c01a86ac2971ed93",
+          "identity": 0.44242435693740845,
+          "independent_apparent_age": 67.8397216796875
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "style_minus2",
+          "scale": 7.5,
+          "raw_sha256": "e5bf7efcc26106800652df7b2d12e87491cd0f21c261253aa27115652b744caf",
+          "color_sha256": "71ae9a8083eed42ca67365cbfaee2fcb3aff8e95e2ce917765220c4b51b98d18",
+          "identity": 0.4505666494369507,
+          "independent_apparent_age": 67.55853271484375
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "style_minus3",
+          "scale": 7.5,
+          "raw_sha256": "d27ca9beba528c74675ae6da5cf13e7b7ac1900f960ddfb72bde1828d57a4d3e",
+          "color_sha256": "194a91183a6e62b6374241adc89e9443f8a00ffc3d98700b10bfc4b4be9c932e",
+          "identity": 0.4536561667919159,
+          "independent_apparent_age": 67.57168579101562
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "projected_e4e",
+          "scale": 10.0,
+          "raw_sha256": "35d309bcc0279a486b01379191b6826fccc6a47feb06a5645a86c92a2341b619",
+          "color_sha256": "4e446e8a881d46d53c6f4d83cf04bcf3e729603a7c95efb97293c0d7eab7ca72",
+          "identity": 0.4073714315891266,
+          "independent_apparent_age": 72.74861907958984
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "boundary_minus4",
+          "scale": 10.0,
+          "raw_sha256": "80df356677a83f0fc355ec5e1cc228437c9049b08e26739abd578478b2f54472",
+          "color_sha256": "2c1a8493e1912b37c7b0e4799f2e534165b21ba97ee78235a25b276e15cf4d9a",
+          "identity": 0.3967732787132263,
+          "independent_apparent_age": 71.214599609375
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "boundary_minus8",
+          "scale": 10.0,
+          "raw_sha256": "05718e5bc5456a0fc1d51249b2ed71a4a80b4d1bb8e56c2b84750f15094b313e",
+          "color_sha256": "76fc1c1f79f772b4d945378dc5947e8be04fa005869283d3ec7ff59c70694aaf",
+          "identity": 0.4071255028247833,
+          "independent_apparent_age": 72.79965209960938
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "boundary_minus12",
+          "scale": 10.0,
+          "raw_sha256": "fdf583f954b059bb25ecad30246dfad01dae61dc6054694f5247855ebdcce7c9",
+          "color_sha256": "ca63f18cc2bfb8ad0e0a21bd21e19c754379e0c080b93cdc862a85c5650a787e",
+          "identity": 0.4440838098526001,
+          "independent_apparent_age": 72.00201416015625
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "style_minus1",
+          "scale": 10.0,
+          "raw_sha256": "57dae9f44dda463075fcbc40f054f13fcd64ac5be7e51e20607d2350bf01e080",
+          "color_sha256": "8906cd0f85a58ab24c1bad5f078aa07511c8071b455bc398c845bda4f614a90f",
+          "identity": 0.41921934485435486,
+          "independent_apparent_age": 71.6712646484375
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "style_minus2",
+          "scale": 10.0,
+          "raw_sha256": "cf795eb1a013324d69221d294e61f789e871147fbc2a023e29c67abaedba163f",
+          "color_sha256": "cf84ad924670a041a0aff920b0edccaee3cd4adefceaaf7c15bf483e2373a806",
+          "identity": 0.4191747307777405,
+          "independent_apparent_age": 71.12466430664062
+        },
+        {
+          "name": "ffhq_64919",
+          "route": "style_minus3",
+          "scale": 10.0,
+          "raw_sha256": "ed2fd5aaa7d42350633759b02270eac233aa6545159518fe0e86ef3e54fa063a",
+          "color_sha256": "a256acb98ef2b866a3127b397bbeae5803b376228f11f0e98e3368373b3699b2",
+          "identity": 0.4506368637084961,
+          "independent_apparent_age": 70.06539154052734
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "projected_e4e",
+          "scale": 7.5,
+          "raw_sha256": "65993b75a1ac2914591030baaee6f59091dbd5166ac9ceb5ca877628b2cdacc0",
+          "color_sha256": "65993b75a1ac2914591030baaee6f59091dbd5166ac9ceb5ca877628b2cdacc0",
+          "identity": 0.4185400605201721,
+          "independent_apparent_age": 50.80606460571289
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "boundary_minus4",
+          "scale": 7.5,
+          "raw_sha256": "05f3a82fe9dfd13748c71545d15444c8f26796ba9cfbd573aa0cd8f910728923",
+          "color_sha256": "05f3a82fe9dfd13748c71545d15444c8f26796ba9cfbd573aa0cd8f910728923",
+          "identity": 0.4381937086582184,
+          "independent_apparent_age": 48.60192108154297
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "boundary_minus8",
+          "scale": 7.5,
+          "raw_sha256": "e0acb3a857cac39b7c77d3ef1074cadba55ac21d1c310bc9dd3973b57cba69d0",
+          "color_sha256": "e0acb3a857cac39b7c77d3ef1074cadba55ac21d1c310bc9dd3973b57cba69d0",
+          "identity": 0.48360949754714966,
+          "independent_apparent_age": 46.77660369873047
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "boundary_minus12",
+          "scale": 7.5,
+          "raw_sha256": "284d3d25e20fb96dfcadfcb9831de846f021ced5ac5a1d3f75099f295612d674",
+          "color_sha256": "a5ce635b90c27b72e0fc1f65eb9a6665ddf643d149d8e670a51a3464e19ac02f",
+          "identity": 0.5226314663887024,
+          "independent_apparent_age": 45.66224670410156
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "style_minus1",
+          "scale": 7.5,
+          "raw_sha256": "bf45b9cbde9b9bafa8373f3c1c510a4196afff1bdc66348d315fd77e33556889",
+          "color_sha256": "bf45b9cbde9b9bafa8373f3c1c510a4196afff1bdc66348d315fd77e33556889",
+          "identity": 0.4051132798194885,
+          "independent_apparent_age": 49.373291015625
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "style_minus2",
+          "scale": 7.5,
+          "raw_sha256": "1ef0ada562042ce25068132a0a019385a4cabc186e890805586e2ee86862d2f1",
+          "color_sha256": "788d0cac0c034e9d5113f668eb18734014203df9a7a36f457d674f4a22990176",
+          "identity": 0.4088175296783447,
+          "independent_apparent_age": 48.771766662597656
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "style_minus3",
+          "scale": 7.5,
+          "raw_sha256": "2946c6d5ab9b1124d547296fde3d17bb4d3052a20c3aecfc5b085f0d41706794",
+          "color_sha256": "ba796987db08d32c8de87e0ae19ed6958eb163ecfbe2802b45c8c00bc39d657d",
+          "identity": 0.39712607860565186,
+          "independent_apparent_age": 48.2880744934082
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "projected_e4e",
+          "scale": 10.0,
+          "raw_sha256": "b8e4c84e0106216e98b37e632ff235e18884d22c0e54d18138c1be2e9398df4e",
+          "color_sha256": "ce7f44c347200a5ca985fa32b75b3d7b4e0f37840647b7db762bf8d031ff77cf",
+          "identity": 0.30576062202453613,
+          "independent_apparent_age": 57.062225341796875
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "boundary_minus4",
+          "scale": 10.0,
+          "raw_sha256": "5faaafc7bdacedbe4b3c50048e8af66b5a2818f435e2ad3f620013b1eda907ed",
+          "color_sha256": "5faaafc7bdacedbe4b3c50048e8af66b5a2818f435e2ad3f620013b1eda907ed",
+          "identity": 0.35277602076530457,
+          "independent_apparent_age": 58.1373405456543
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "boundary_minus8",
+          "scale": 10.0,
+          "raw_sha256": "20c509b75ed1ad400550558d27708189c1cfbf4e657fbd3d2f2fd53083b615c7",
+          "color_sha256": "20c509b75ed1ad400550558d27708189c1cfbf4e657fbd3d2f2fd53083b615c7",
+          "identity": 0.3652152121067047,
+          "independent_apparent_age": 55.90045928955078
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "boundary_minus12",
+          "scale": 10.0,
+          "raw_sha256": "e23640fa97bbd5b051be9bce54404f1f3eac0480be50d29ed58ca57dfae509ad",
+          "color_sha256": "db5109dd0602289e0cea820d46ca81d2e8e32a379ca2124c9a4a1386e4fc956b",
+          "identity": 0.4068382978439331,
+          "independent_apparent_age": 53.903358459472656
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "style_minus1",
+          "scale": 10.0,
+          "raw_sha256": "34e5b395a01cd59ba1d914c7c747d54d2db971d38d9144b93c5d636577f74c3d",
+          "color_sha256": "362f9b7036602daaf52c47b744b23dc2beb663ad340fc46574bc55a89e5c6220",
+          "identity": 0.29932844638824463,
+          "independent_apparent_age": 57.12669372558594
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "style_minus2",
+          "scale": 10.0,
+          "raw_sha256": "9460f300a5368da0b635366cbee5512eb8cbcc23fda0119aa8f0884a5fa40f84",
+          "color_sha256": "a9ca16cd7fb4e812559a5247eabad35071404b8f4e10f0e545db7b4e56979a16",
+          "identity": 0.31144750118255615,
+          "independent_apparent_age": 57.45082092285156
+        },
+        {
+          "name": "ffhq_65817",
+          "route": "style_minus3",
+          "scale": 10.0,
+          "raw_sha256": "d131b32f676f7cce405b15572146e6bd048f3c91df943c04246f7362c204528d",
+          "color_sha256": "2741085951ec6406ddad7c7c5eb6de64c3114eb64e293ad7bdabe35aab7e73d7",
+          "identity": 0.3082694113254547,
+          "independent_apparent_age": 58.072410583496094
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "projected_e4e",
+          "scale": 7.5,
+          "raw_sha256": "1445c0b9b1ec2898eac0cbb22e415119f51f67406eec0630a168b52ecaa860d3",
+          "color_sha256": "1445c0b9b1ec2898eac0cbb22e415119f51f67406eec0630a168b52ecaa860d3",
+          "identity": 0.5025956034660339,
+          "independent_apparent_age": 81.10237884521484
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "boundary_minus4",
+          "scale": 7.5,
+          "raw_sha256": "d26fabc7a3d4d10375ca051ef3bb0954851df4a7c7163bece4b0a1e79fa8617c",
+          "color_sha256": "d26fabc7a3d4d10375ca051ef3bb0954851df4a7c7163bece4b0a1e79fa8617c",
+          "identity": 0.5008137226104736,
+          "independent_apparent_age": 79.9693603515625
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "boundary_minus8",
+          "scale": 7.5,
+          "raw_sha256": "96745bffb2234c4df206bf39977b641fd3750e03659f2d9fa67fa95402476d64",
+          "color_sha256": "96745bffb2234c4df206bf39977b641fd3750e03659f2d9fa67fa95402476d64",
+          "identity": 0.5463186502456665,
+          "independent_apparent_age": 81.10693359375
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "boundary_minus12",
+          "scale": 7.5,
+          "raw_sha256": "cb85b983b3561412a9551da9c0c33bc8fa4586f80297e882d0de9229e3ad5f04",
+          "color_sha256": "cb85b983b3561412a9551da9c0c33bc8fa4586f80297e882d0de9229e3ad5f04",
+          "identity": 0.5977311730384827,
+          "independent_apparent_age": 79.5037841796875
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "style_minus1",
+          "scale": 7.5,
+          "raw_sha256": "e188fb64df3b825d2e159b32b44aa8445dd62324f16793bc01dd26d0f11045e5",
+          "color_sha256": "e188fb64df3b825d2e159b32b44aa8445dd62324f16793bc01dd26d0f11045e5",
+          "identity": 0.4775314927101135,
+          "independent_apparent_age": 81.8571548461914
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "style_minus2",
+          "scale": 7.5,
+          "raw_sha256": "06571dd9714b73be9bf06dc8ea75219673d4da71050eebc5e369683e62eeb329",
+          "color_sha256": "06571dd9714b73be9bf06dc8ea75219673d4da71050eebc5e369683e62eeb329",
+          "identity": 0.4757004976272583,
+          "independent_apparent_age": 82.3340835571289
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "style_minus3",
+          "scale": 7.5,
+          "raw_sha256": "73fb65ae3c79444efc91ec39dcad8c83a4a2aa7746fec8cf006bc246876a69f6",
+          "color_sha256": "73fb65ae3c79444efc91ec39dcad8c83a4a2aa7746fec8cf006bc246876a69f6",
+          "identity": 0.4806654453277588,
+          "independent_apparent_age": 82.70526123046875
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "projected_e4e",
+          "scale": 10.0,
+          "raw_sha256": "753501b317b0e814966816c2b42a45e7a96305481fdfa4cc3632934fcc7f826d",
+          "color_sha256": "753501b317b0e814966816c2b42a45e7a96305481fdfa4cc3632934fcc7f826d",
+          "identity": 0.43738436698913574,
+          "independent_apparent_age": 82.8065185546875
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "boundary_minus4",
+          "scale": 10.0,
+          "raw_sha256": "31a12eca0994b2e31249b79978576d44629d126dc4173e59f09bfba1abf5d71d",
+          "color_sha256": "31a12eca0994b2e31249b79978576d44629d126dc4173e59f09bfba1abf5d71d",
+          "identity": 0.4509977698326111,
+          "independent_apparent_age": 82.00808715820312
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "boundary_minus8",
+          "scale": 10.0,
+          "raw_sha256": "02605e9fa0e8e736f43382585654ed46545ee3747c46c9114b57bcf21a6e1663",
+          "color_sha256": "02605e9fa0e8e736f43382585654ed46545ee3747c46c9114b57bcf21a6e1663",
+          "identity": 0.4525463879108429,
+          "independent_apparent_age": 80.46855163574219
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "boundary_minus12",
+          "scale": 10.0,
+          "raw_sha256": "0e00796891341683a4148ece118eeefd44eaeca7f4fdcb51b72c793e7e628a88",
+          "color_sha256": "0e00796891341683a4148ece118eeefd44eaeca7f4fdcb51b72c793e7e628a88",
+          "identity": 0.4938398003578186,
+          "independent_apparent_age": 81.86203002929688
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "style_minus1",
+          "scale": 10.0,
+          "raw_sha256": "b5f3fa54cdf01120506a846f9de6879272fa7739854dd4a71c1df4cc5db3a546",
+          "color_sha256": "b5f3fa54cdf01120506a846f9de6879272fa7739854dd4a71c1df4cc5db3a546",
+          "identity": 0.4466703236103058,
+          "independent_apparent_age": 82.75723266601562
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "style_minus2",
+          "scale": 10.0,
+          "raw_sha256": "f14cca797157522cbf95109a4683dff8e69cf651cc3cac52d179797d135c808f",
+          "color_sha256": "f14cca797157522cbf95109a4683dff8e69cf651cc3cac52d179797d135c808f",
+          "identity": 0.4502873122692108,
+          "independent_apparent_age": 82.04153442382812
+        },
+        {
+          "name": "ffhq_67140",
+          "route": "style_minus3",
+          "scale": 10.0,
+          "raw_sha256": "62e7de2de846d43ced88841ed0f99873b21065f34bd51d7b837b843ae0ea589c",
+          "color_sha256": "62e7de2de846d43ced88841ed0f99873b21065f34bd51d7b837b843ae0ea589c",
+          "identity": 0.46537888050079346,
+          "independent_apparent_age": 82.23004913330078
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "projected_e4e",
+          "scale": 7.5,
+          "raw_sha256": "5c713377c210b52ba7f595f1e058082d8a2cfba04603129f8901f97e819f533b",
+          "color_sha256": "43d76e30ddb6ec1b8232f35728d725618e3e7f7f98a6df97dda73c4aca06c2a5",
+          "identity": 0.3108319044113159,
+          "independent_apparent_age": 76.44247436523438
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "boundary_minus4",
+          "scale": 7.5,
+          "raw_sha256": "d7002880074f2c0669f013266756a7b9cf22cee5be4212ffbee827170351a2b4",
+          "color_sha256": "d7002880074f2c0669f013266756a7b9cf22cee5be4212ffbee827170351a2b4",
+          "identity": 0.31449252367019653,
+          "independent_apparent_age": 77.25389862060547
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "boundary_minus8",
+          "scale": 7.5,
+          "raw_sha256": "198ebfb405b8449a6967bf0a7945e2971b13ea8cf8abb1f311af7a9a899dd88b",
+          "color_sha256": "198ebfb405b8449a6967bf0a7945e2971b13ea8cf8abb1f311af7a9a899dd88b",
+          "identity": 0.3588852286338806,
+          "independent_apparent_age": 76.5721435546875
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "boundary_minus12",
+          "scale": 7.5,
+          "raw_sha256": "d897c91a6f231717a6ce4605e2f97e635c34735551a20fa23e64e1bd3cbf051c",
+          "color_sha256": "045213d8f80103f2dfe75b4eadc881ef10109090d84ee5f3eb87976b415668ab",
+          "identity": 0.3313128352165222,
+          "independent_apparent_age": 77.03291320800781
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "style_minus1",
+          "scale": 7.5,
+          "raw_sha256": "10bc333be4c5e0f291137680ccb4cc7e6b173fafab70fb52ab81e5a326563fc9",
+          "color_sha256": "10bc333be4c5e0f291137680ccb4cc7e6b173fafab70fb52ab81e5a326563fc9",
+          "identity": 0.2908100485801697,
+          "independent_apparent_age": 75.75779724121094
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "style_minus2",
+          "scale": 7.5,
+          "raw_sha256": "d9430dd0f16b4291e31a50481f8092244d262b673f69801c2ce07c5de77909ef",
+          "color_sha256": "d9430dd0f16b4291e31a50481f8092244d262b673f69801c2ce07c5de77909ef",
+          "identity": 0.2708160877227783,
+          "independent_apparent_age": 76.02363586425781
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "style_minus3",
+          "scale": 7.5,
+          "raw_sha256": "36861d0830988ec67645ceb70fccf2850bff4dacdf705be7249f089f710fa292",
+          "color_sha256": "002de46c44a99784510abe99e7f1da4335b003780e6ebc38660978e7ed463e0b",
+          "identity": 0.29101860523223877,
+          "independent_apparent_age": 76.79483795166016
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "projected_e4e",
+          "scale": 10.0,
+          "raw_sha256": "5cadfeadc304468f1fcce533d36c8f9cf6afac14cf9c1bda83439c460972cad7",
+          "color_sha256": "5cadfeadc304468f1fcce533d36c8f9cf6afac14cf9c1bda83439c460972cad7",
+          "identity": 0.2559601962566376,
+          "independent_apparent_age": 79.808837890625
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "boundary_minus4",
+          "scale": 10.0,
+          "raw_sha256": "a7b7f13f033ce496f0bc889deed37f0f08710ef416d3c0cb1c363143ebb17952",
+          "color_sha256": "fa3a62de9fc20d33b90e66603896adcafb4f0ae644c22fe1c438fdc89fa0df25",
+          "identity": 0.28742605447769165,
+          "independent_apparent_age": 79.79552459716797
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "boundary_minus8",
+          "scale": 10.0,
+          "raw_sha256": "708f492d46aaa06c65ccd898a8874199ee517628348b01b265edb27401187711",
+          "color_sha256": "52014a341f5eec0a494eedac69f47d7bd8f623df056ed8c96eb22ed6035eacfe",
+          "identity": 0.3204416036605835,
+          "independent_apparent_age": 80.37286376953125
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "boundary_minus12",
+          "scale": 10.0,
+          "raw_sha256": "4f7900928a6858fe1067b4667599540e81db5c2b37520c7da0dd05996629a02e",
+          "color_sha256": "85456e61abb2c210f494dfc3ad14fc05853a032ff8ccec871d57d5b0a068d26e",
+          "identity": 0.3156485855579376,
+          "independent_apparent_age": 81.31840515136719
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "style_minus1",
+          "scale": 10.0,
+          "raw_sha256": "63465bb386538907d8a007f736a7d12786ef09fe5a9868f8b2d00dd22a9f61a9",
+          "color_sha256": "63465bb386538907d8a007f736a7d12786ef09fe5a9868f8b2d00dd22a9f61a9",
+          "identity": 0.2973543405532837,
+          "independent_apparent_age": 77.97077178955078
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "style_minus2",
+          "scale": 10.0,
+          "raw_sha256": "ca66fc78b89931a9729822b6308d34caf66c990304328ab17528268b833224a6",
+          "color_sha256": "2b529c34d13ce83d91858f87da3049c757e4496831305400f06ad34ebbb08e6a",
+          "identity": 0.2824373245239258,
+          "independent_apparent_age": 78.12560272216797
+        },
+        {
+          "name": "ffhq_60764",
+          "route": "style_minus3",
+          "scale": 10.0,
+          "raw_sha256": "c9848d5c32468128d879b3ce8a93c944f3c0daa2420608639e2ce9e3f256ded1",
+          "color_sha256": "755a999a14faeb73c8a826ab56938ed60ae3490a66dc80cf6388f03b779c16ea",
+          "identity": 0.2738226354122162,
+          "independent_apparent_age": 79.22872924804688
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "projected_e4e",
+          "scale": 7.5,
+          "raw_sha256": "0941a821d32f1b515b9f1c99780458fc915d7c08db5e41a20b366e25e92bbc9a",
+          "color_sha256": "0941a821d32f1b515b9f1c99780458fc915d7c08db5e41a20b366e25e92bbc9a",
+          "identity": 0.47005218267440796,
+          "independent_apparent_age": 76.82196044921875
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "boundary_minus4",
+          "scale": 7.5,
+          "raw_sha256": "9c0c9e74db6d26248a67dc063a29305faac9445c3142376a6d8d04630092a4b8",
+          "color_sha256": "9c0c9e74db6d26248a67dc063a29305faac9445c3142376a6d8d04630092a4b8",
+          "identity": 0.551342248916626,
+          "independent_apparent_age": 75.09744262695312
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "boundary_minus8",
+          "scale": 7.5,
+          "raw_sha256": "43dc6beb4eee494341ad1223f1def16107acfda59f9e55ed28f78987dd13f3b7",
+          "color_sha256": "43dc6beb4eee494341ad1223f1def16107acfda59f9e55ed28f78987dd13f3b7",
+          "identity": 0.5195971727371216,
+          "independent_apparent_age": 73.78472900390625
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "boundary_minus12",
+          "scale": 7.5,
+          "raw_sha256": "c5b6b70430cdff0cac57dae731faea5886c42bc2728a125d2f673411c266398e",
+          "color_sha256": "c5b6b70430cdff0cac57dae731faea5886c42bc2728a125d2f673411c266398e",
+          "identity": 0.48248982429504395,
+          "independent_apparent_age": 72.3646469116211
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "style_minus1",
+          "scale": 7.5,
+          "raw_sha256": "bcc176df2154a8c84962825c598725080c7016a4625ea493cdb8cb4de6e44b7a",
+          "color_sha256": "bcc176df2154a8c84962825c598725080c7016a4625ea493cdb8cb4de6e44b7a",
+          "identity": 0.4795617163181305,
+          "independent_apparent_age": 76.95640563964844
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "style_minus2",
+          "scale": 7.5,
+          "raw_sha256": "4445ede61f4dd1b6d3a5791745de9849e29145c266f997e30f8fff1667a25e9b",
+          "color_sha256": "4445ede61f4dd1b6d3a5791745de9849e29145c266f997e30f8fff1667a25e9b",
+          "identity": 0.4644751250743866,
+          "independent_apparent_age": 78.96830749511719
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "style_minus3",
+          "scale": 7.5,
+          "raw_sha256": "c9dec53c22fab8e1f7df86589c0157ee833766b9fd8d8cd81b9077033535f032",
+          "color_sha256": "c9dec53c22fab8e1f7df86589c0157ee833766b9fd8d8cd81b9077033535f032",
+          "identity": 0.4291798770427704,
+          "independent_apparent_age": 78.50141143798828
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "projected_e4e",
+          "scale": 10.0,
+          "raw_sha256": "6be2146b224eaa9b175822dc14b09d14110b6074cc305d158407887713c874ab",
+          "color_sha256": "6be2146b224eaa9b175822dc14b09d14110b6074cc305d158407887713c874ab",
+          "identity": 0.4446505606174469,
+          "independent_apparent_age": 75.76589965820312
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "boundary_minus4",
+          "scale": 10.0,
+          "raw_sha256": "3456b66df614e1d9bfb44ae00a65cfd818ef2c2b61257a0f0b6980332dee11c9",
+          "color_sha256": "3456b66df614e1d9bfb44ae00a65cfd818ef2c2b61257a0f0b6980332dee11c9",
+          "identity": 0.44343188405036926,
+          "independent_apparent_age": 76.90933227539062
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "boundary_minus8",
+          "scale": 10.0,
+          "raw_sha256": "3a1b24656453807bc254c12451de165bfb3cd36fe815cd85074630f8f489f9a4",
+          "color_sha256": "3a1b24656453807bc254c12451de165bfb3cd36fe815cd85074630f8f489f9a4",
+          "identity": 0.45552751421928406,
+          "independent_apparent_age": 76.00939178466797
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "boundary_minus12",
+          "scale": 10.0,
+          "raw_sha256": "ed65562690ec5b0926e19aa982212f56f1dfe572d2cb5fd692125b1e3550064e",
+          "color_sha256": "ed65562690ec5b0926e19aa982212f56f1dfe572d2cb5fd692125b1e3550064e",
+          "identity": 0.42480868101119995,
+          "independent_apparent_age": 75.2803955078125
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "style_minus1",
+          "scale": 10.0,
+          "raw_sha256": "8b1a6f13fc6190e8a3320ded9ae4097e3901e2496efd914735da341dd4530aa4",
+          "color_sha256": "8b1a6f13fc6190e8a3320ded9ae4097e3901e2496efd914735da341dd4530aa4",
+          "identity": 0.42854052782058716,
+          "independent_apparent_age": 75.72770690917969
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "style_minus2",
+          "scale": 10.0,
+          "raw_sha256": "46f69a0175709e785d0261d5bbb217052361e8bee7ddcbad3ade67bb3092fa69",
+          "color_sha256": "46f69a0175709e785d0261d5bbb217052361e8bee7ddcbad3ade67bb3092fa69",
+          "identity": 0.43274104595184326,
+          "independent_apparent_age": 76.25057983398438
+        },
+        {
+          "name": "ffhq_68335",
+          "route": "style_minus3",
+          "scale": 10.0,
+          "raw_sha256": "cb775480a98aa327e14e6fef13fe080ce05cbb20f0085138be29740dfaf0b4ba",
+          "color_sha256": "cb775480a98aa327e14e6fef13fe080ce05cbb20f0085138be29740dfaf0b4ba",
+          "identity": 0.44602930545806885,
+          "independent_apparent_age": 77.03150939941406
+        }
+      ]
+    }
+  },
+  "job_status": {
+    "jobs": [
+      {
+        "run": "e4e-glasses-20261128-074348",
+        "job_id": "j-1795851887-32604",
+        "gpu": 1,
+        "phase": "Succeeded"
+      },
+      {
+        "run": "e4e-glasses-20261128-074728",
+        "job_id": "j-1795852132-988998",
+        "gpu": 1,
+        "phase": "Succeeded"
+      }
+    ],
+    "active": []
+  },
+  "raw_outputs": 208,
+  "color_outputs": 208,
+  "distinct_portraits": 8,
+  "unseen41_used": false,
+  "automatic_glasses_detector": false,
+  "manual_visual_review": {
+    "completed": true,
+    "blinded": false,
+    "development_only": true,
+    "reference_glasses": {
+      "present": [
+        "ffhq_65817"
+      ],
+      "absent": [
+        "ffhq_64376",
+        "ffhq_61908",
+        "ffhq_62644",
+        "ffhq_64919",
+        "ffhq_67140",
+        "ffhq_60764",
+        "ffhq_68335"
+      ]
+    },
+    "source_channel_result": "Insufficient improvement. Four published handles are not a complete semantic separation.",
+    "wplus_result": "Visible reduction in added glasses on multiple portraits. -8 leaves transparent lens/bridge residue on61908 and visible glasses on64919/67140; -12 removes more but changes the eye region and reduces apparent age.",
+    "existing_glasses_control": "Native crop review at7.5 and10 confirms frames remain visible on65817 even at-12; thickness/shape change. Do not claim complete removal or reliable preservation.",
+    "stylespace_negative_result": "No reliable added-glasses removal; some frames become more visible or change shape.",
+    "remaining_failures": "White hair/beard/hat loss on68335, low cross-age identity and individual regressions remain.",
+    "auto_score_visual_pending_note": "summary.visual_review_pending is the automatic-scoring checkpoint; this separate manual review does not promote any route."
+  },
+  "published_examples": [
+    {
+      "path": "integration/quality/evidence/e4e-glasses-correction-20261128.jpg",
+      "sha256": "fc09e2aa323b6acd37149198d24a7ce648a6c6bf875c46ac930550e28aff8368",
+      "changes": "Cropped/resized montage of sources and GAN age-edit derivatives; noncommercial research illustration.",
+      "sources": [
+        {
+          "name": "ffhq_64376",
+          "reference_sha256": "481aab21dd8d7a6f394b9f57c57b2bbeb1f9d4f74a35619a81e117c23632ac4b",
+          "photo_url": "https://www.flickr.com/photos/koreanwonders/36345325941/",
+          "photo_title": "20170715_113832__KRW0375_FullKR",
+          "author": "KRWonders",
+          "country": "",
+          "license": "Attribution License",
+          "license_url": "https://creativecommons.org/licenses/by/2.0/",
+          "date_uploaded": "2017-08-10",
+          "date_crawled": "2018-10-10"
+        },
+        {
+          "name": "ffhq_61908",
+          "reference_sha256": "fc0f9a94113f96eea82fba07dbb05a49038dd3b98ea705d7ceb7e92bc360196e",
+          "photo_url": "https://www.flickr.com/photos/sherwood411/12394588574/",
+          "photo_title": "Photoshot Meetup",
+          "author": "Sherwood411",
+          "country": "Canada",
+          "license": "Attribution-NonCommercial License",
+          "license_url": "https://creativecommons.org/licenses/by-nc/2.0/",
+          "date_uploaded": "2014-02-08",
+          "date_crawled": "2018-10-10"
+        },
+        {
+          "name": "ffhq_64919",
+          "reference_sha256": "6d0580d7afb3a377a550a3c12d898b3a9b77f9385dbc9b339f794c588c596210",
+          "photo_url": "https://www.flickr.com/photos/44328737@N08/37888253166/",
+          "photo_title": "IMG_0072",
+          "author": "Mỹ thuật trẻ",
+          "country": "",
+          "license": "Public Domain Mark",
+          "license_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+          "date_uploaded": "2017-10-26",
+          "date_crawled": "2018-10-10"
+        }
+      ]
+    },
+    {
+      "path": "integration/quality/evidence/e4e-glasses-preservation-20261128.jpg",
+      "sha256": "6755f7000b50d589fa6e7c816a6adbbc57a342428edf82299cffd3e2c388dc22",
+      "changes": "Cropped/resized montage of sources and GAN age-edit derivatives; noncommercial research illustration.",
+      "sources": [
+        {
+          "name": "ffhq_65817",
+          "reference_sha256": "640a40190c00ea001e6a375732e9eb089e8a2afc0b2124d13e8cb8fcdcbf6dfa",
+          "photo_url": "https://www.flickr.com/photos/tdd/3451732799/",
+          "photo_title": "IMG_7344",
+          "author": "Tomasz Dunn",
+          "country": "Hong Kong",
+          "license": "Attribution License",
+          "license_url": "https://creativecommons.org/licenses/by/2.0/",
+          "date_uploaded": "2009-04-18",
+          "date_crawled": "2018-10-10"
+        }
+      ]
+    }
+  ]
+}
